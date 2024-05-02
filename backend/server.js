@@ -3,6 +3,7 @@ import cors from "cors"
 import bodyParser from "body-parser"
 import mongoose from "mongoose";
 import { Employee } from "./models/Employee.js";
+import { ScheduleBatches } from "./models/ScheduleBatches.js";
 import { Events } from "./models/Event.js";
 import main from "./mongo.js";
 import path from "path";
@@ -197,6 +198,27 @@ app.get('/schedule-event', async (req, res) => {
   }
 })
 
+app.post('/schedule-event', async (req, res) => {
+ // console.log('req.body',req.body);
+ try{ const {
+    active,
+    eventId,
+    batches,
+  } = req.body;
+  console.log('batches',batches)
+  const scheduleBatches = new ScheduleBatches({
+    active : active,
+    eventId : eventId,
+    batches : batches
+  });
+
+  scheduleBatches.save();
+  res.send({ isSuccess: true}); 
+} catch (error) {
+    console.error(error);
+    res.send({ isSuccess: false, error: error });
+  }
+})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
