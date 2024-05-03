@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react'
 import AdminNavbar from "./AdminNavbar";
-import Card from "./card";
+import Card from "./eventcard";
 import "./ScheduleEvents.css"
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form"
 const AllEvents = () => {
   const [isSuccess, setSuccess] = useState(false);
   const [events, setEvent] = useState();
+  const [scheduleBatches, setScheduleBatches] = useState();
   const {
     register,
     handleSubmit,
@@ -27,12 +28,15 @@ const AllEvents = () => {
       }
     })
     let res = await r.json()
-    console.log('res ===', JSON.stringify(res));
-    if (res.isSuccess == true) {
+    console.log('res ===', res.isSuccess);
+    if (res.isSuccess) {
+    
          setSuccess(res.isSuccess);
-          setEvent(res.events);
+         setEvent(res.events);
+         setScheduleBatches(res.scheduleBatches);
+       
         }
-        console.log('events',events);
+        
   }
   return (
     <div>

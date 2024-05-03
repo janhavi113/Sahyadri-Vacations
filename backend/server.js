@@ -190,8 +190,9 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
 // Get All Event
 app.get('/schedule-event', async (req, res) => {
   try {
-    var events = await Events.find({ })
-    res.send({ isSuccess: true , events :events});
+    var events = await Events.find({ });
+    var scheduleBatches = await ScheduleBatches.find({ });
+    res.send({ isSuccess: true , events :events , scheduleBatches : scheduleBatches});
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
