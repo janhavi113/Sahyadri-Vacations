@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import "./EventDataPicker.css"
 const EventDatePicker = (props) => {
     const {
         register,
@@ -29,7 +30,7 @@ const EventDatePicker = (props) => {
         var formData = {
             "Edit":isEditable,
             "Data": data,
-            "key": props.count
+            "key": props.count,
         }
         if(isEditable){
             setEditVisible(false);
@@ -41,9 +42,8 @@ const EventDatePicker = (props) => {
         <div>
             {
                 < form action="" onSubmit={handleSubmit(onSubmit)}>
-                    <div className="container">
+                    <div className="datapicker container">
                         <div className="content">
-                        {props.datapass}
                             <div className="thicker ">Batch {props.count}</div>
                             <div className="user-details">
                                 <div className="input-box-column ">
@@ -57,7 +57,7 @@ const EventDatePicker = (props) => {
                                 <div className="schedule-input input-box ">
                                     <span className="details">Cost Per Person</span>
                                     <input  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="text" required />
-                                </div>
+                                </div>                                
                             </div>
                             <div className="button-edit-container">
                                 <div className="button">

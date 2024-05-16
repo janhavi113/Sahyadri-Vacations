@@ -1,0 +1,19 @@
+.carousel-item1{
+background-image: url(./Images/Screen_4.webp);
+height: 100px;
+}
+.carousel-item2{
+    background-image: url(./Images/Screen_2.jpg);
+    height: 100px;
+}
+.carousel-item3{
+    background-image: url(./Images/Screen_3.webp);
+    height: 100px;
+}
+
+.carousel-item1,
+.carousel-item2,
+.carousel-item3{
+    background-size: cover;
+    background-position : center;
+}

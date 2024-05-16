@@ -41,7 +41,7 @@ function CreateEvents() {
   }
 
   const removeFile = name => {
-    //setcurrentImages(currentImages => currentImages.filter(file => file !== name))
+    setcurrentImages(currentImages => currentImages.filter(file => file !== name))
   }
   const addUploadedInages = () => {
     console.log('file', file);

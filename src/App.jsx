@@ -1,6 +1,7 @@
 import Home from "./components/Home";
 import Login from "./components/Login";
-import About from "./components/About";
+import About from "./components/AboutUs/About";
+import CustomisedTour from "./components/CustomiseTour/CustomisedTour";
 import AdminLogin from "./components/AdminLogin";
 import Dashboard from "./components/AdminDashboard";
 import AllEvents from  "./components/AllEvents";     
@@ -8,6 +9,8 @@ import ScheduledEvents from "./components/ScheduledEvents";
 import EventDetails from "./components/EventDetails";
 import CreateEvent from "./components/CreateEvents" ;  
 import ScheduleEvents from "./components/ScheduleEvents" ;
+import ContactUs from "./components/Contact_Us/ContactUs" ;
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 function App() {
@@ -52,6 +55,14 @@ function App() {
     {
       path: "/create-event/event-details/:eventId",
       element: <EventDetails />,
+    },
+    {
+      path: "/contact-us",
+      element: <ContactUs />,
+    },
+    {
+      path: "/customised-tour",
+      element: <CustomisedTour />,
     },
   ]);
   return (

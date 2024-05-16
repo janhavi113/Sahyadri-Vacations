@@ -1,10 +1,12 @@
 import express from "express"
 import cors from "cors"
 import bodyParser from "body-parser"
+import nodemailer from "nodemailer"
 import mongoose from "mongoose";
 import { Employee } from "./models/Employee.js";
 import { ScheduleBatches } from "./models/ScheduleBatches.js";
 import { Events } from "./models/Event.js";
+import { CustomisedRequest } from "./models/CustomisedRequest.js";
 import main from "./mongo.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -27,8 +29,14 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage })
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+app.get('/', async(req, res) => {
+  try{
+  let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true });
+  res.send({isSuccess : true, events :ScheduleBatchesRecords});
+}catch (error) {
+    console.error(error);
+    res.send({ isSuccess: false, error: error });
+  }
 })
 
 //Login to System
@@ -45,12 +53,12 @@ app.get('/create-event/event-details/:eventId', async (req, res) => {
     var events = await Events.find({ eventId: event_Id })
     var imageList = events[0]?.images;
     images = imageList;
-    console.log('events',events);
-    if(events && events.length > 0){
-    res.send({ isSuccess: true, events: events })
-     }else{
-      res.send({ isSuccess: false});
-     }
+    console.log('events', events);
+    if (events && events.length > 0) {
+      res.send({ isSuccess: true, events: events })
+    } else {
+      res.send({ isSuccess: false });
+    }
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
@@ -63,11 +71,11 @@ app.post('/create-event/event-details/:eventId', async (req, res) => {
     let event_Id = Number(req.params.eventId.toString().replace(':', ''));
     var myquery = { eventId: event_Id };
     var events = await Events.deleteOne(myquery);
-    if(events && events.length > 0){
+    if (events && events.length > 0) {
       res.send({ isSuccess: true, events: events })
-       }else{
-        res.send({ isSuccess: false});
-       }
+    } else {
+      res.send({ isSuccess: false });
+    }
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
@@ -114,11 +122,11 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       images: imageList
     };
     var events = await Events.updateOne(myquery, updateDoc, options);
-    if(events && events.length > 0){
+    if (events && events.length > 0) {
       res.send({ isSuccess: true, events: events })
-       }else{
-        res.send({ isSuccess: false});
-       }
+    } else {
+      res.send({ isSuccess: false });
+    }
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
@@ -128,8 +136,8 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
 // Get All Event
 app.get('/all-events', async (req, res) => {
   try {
-    var events = await Events.find({ })
-    res.send({ isSuccess: true , events :events});
+    var events = await Events.find({})
+    res.send({ isSuccess: true, events: events });
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
@@ -190,36 +198,86 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
 // Get All Event
 app.get('/schedule-event', async (req, res) => {
   try {
-    var events = await Events.find({ });
-    var scheduleBatches = await ScheduleBatches.find({ });
-    res.send({ isSuccess: true , events :events , scheduleBatches : scheduleBatches});
+    var events = await Events.find({});
+    var scheduleBatches = await ScheduleBatches.find({});
+    res.send({ isSuccess: true, events: events, scheduleBatches: scheduleBatches });
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
 })
 
-app.post('/schedule-event', async (req, res) => {
- // console.log('req.body',req.body);
- try{ const {
-    active,
-    eventId,
-    batches,
-  } = req.body;
-  console.log('batches',batches)
-  const scheduleBatches = new ScheduleBatches({
-    active : active,
-    eventId : eventId,
-    batches : batches
-  });
+app.post('/schedule-event', upload.single('file'), async (req, res) => {
+  try {
+    var currUrl ='';
+    if (req.file) {
+      currUrl = req.headers.origin + "/" + req.file.path.toString().replaceAll('\\', '/');
+    }
+    const {
+      active,
+      eventId,
+      eventname,
+      batches,
+    } = req.body;
+    var batchList = [];
+    if(Array.isArray(batches)){
+    for (let i = 0; i < batches.length; i++) {
+      batchList.push(JSON.parse(batches[i]));
+    }
+  }else{
+    batchList.push(JSON.parse(batches));
+  }
+    const scheduleBatches = new ScheduleBatches({
+      active: active,
+      eventId: eventId,
+      batches: batchList,
+      eventname: eventname,
+      images: currUrl
+    });
 
-  scheduleBatches.save();
-  res.send({ isSuccess: true}); 
-} catch (error) {
+    scheduleBatches.save();
+    res.send({ isSuccess: true });
+  } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
 })
+
+//Customised Tour
+app.post('/customised-tour', async (req, res) => {
+  console.log('req.body', req.body);
+  console.log('req.body', req.file);
+  try {
+    const {
+      name,
+      phone,
+      traveldate,
+      durationoftour,
+      numberofpeople,
+      email,
+      message,
+    } = req.body;
+
+    const customisedRequest = new CustomisedRequest({
+      name: name,
+      phone: phone,
+      traveldate: traveldate,
+      durationoftour: durationoftour,
+      numberofpeople: numberofpeople,
+      email: email,
+      message: message,
+      status: 'new'
+
+    });
+
+    customisedRequest.save();
+    res.send({ isSuccess: true });
+  } catch (error) {
+    console.error(error);
+    res.send({ isSuccess: false, error: error });
+  }
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

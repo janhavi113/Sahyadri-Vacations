@@ -3,7 +3,9 @@
 .card-display{ 
     display: flex;
 }
-
+.button-group{
+  padding: 10px;
+}
 .input-box select{ 
     height: 65px;
     width: 100%;
@@ -54,7 +56,11 @@
    .schedule-input{
      padding: 0;
    }
+   .schedule-form{
+    margin-bottom: 0;
+    padding-bottom: 0;
 
+   }
    .schedule-button-icon-container{
     width: 9% !important;
     margin: 0px 30px 0px 0px !important;

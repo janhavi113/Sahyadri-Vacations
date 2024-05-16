@@ -1,0 +1,223 @@
+.slide-image {
+  height: 900px;
+  width: 100%;
+}
+
+.Phone {
+  position: -webkit-sticky;
+  position: fixed;
+  bottom: 56px;
+  right: 25px;
+  z-index: 99;
+}
+
+
+.dropdown,
+.dropend,
+.dropstart,
+.dropup {
+  position: relative;
+}
+
+
+.dropdown-menu {
+  position: absolute;
+  z-index: 1000;
+  display: none;
+  min-width: 10rem;
+  padding: .5rem 0;
+  margin: 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #ffffffb0;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, .15);
+  border-radius: .25rem;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: .25rem 1rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+
+}
+
+.dropdown-menu.show {
+  display: block;
+  position: absolute;
+  inset: auto auto -20px -56px;
+  margin: 0px;
+  transform: translate3d(-82px, -66.6667px, 0px);
+
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.btn:hover {
+  color: #212529;
+}
+
+
+.event-cards-list {
+  display: flex;
+}
+
+.react-multi-carousel-list {
+  max-width: 96%;
+  margin: auto;
+}
+
+.react-multi-carousel-track {
+  padding: 1.5% !important;
+}
+
+.react-multi-carousel-list button {
+  background-color: transparent !important;
+}
+
+.react-multiple-carousel__arrow--left:before {
+  content: none !important;
+}
+
+.react-multiple-carousel__arrow--left {
+  width: 50px;
+  left: -12px !important;
+  top: 50%;
+  position: absolute;
+  height: 50px;
+  background-image: url(./Images/leftarrow.svg ) !important;
+  z-index: 1000 !important;
+}
+
+.react-multiple-carousel__arrow {
+  border: none !important;
+}
+
+.react-multiple-carousel__arrow--right {
+  width: 0px;
+  right: -0.3% !important;
+  top: 54%;
+  position: absolute;
+  background-image: url(./Images/rightarrow.svg ) !important;
+  height: 50px;
+  z-index: 1000 !important;
+  content: none !important;
+}
+
+.react-multiple-carousel__arrow--right:before {
+  content: none !important;
+}
+
+.section-header {
+  display: flex;
+  margin: 2% 0 0 3%;
+  flex-wrap: wrap;
+}
+.col-6 {
+  flex: 0 0 auto;
+  width: 50%;
+}
+
+.text-end {
+  text-align: right !important;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.section-header .section-header-img{
+  height: 50px;
+}
+.section-header-btn{
+  display: flex;
+  color: orange;
+  font-weight: 500;
+}
+.react-multiple-carousel__arrow--right:hover,
+.react-multiple-carousel__arrow--right:focus {
+  color: transparent;
+  outline: none;
+  background-image: url(./Images/rightarrow.svg );
+}
+
+.react-multiple-carousel__arrow--left:focus,
+.react-multiple-carousel__arrow--left:hover {
+  color: transparent;
+  outline: none;
+  background-image: url(./Images/leftarrow.svg );
+}
+
+.product-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.contact-Section{
+  margin: 20px 0px 0 26px;
+}
+@media only screen and (max-width: 600px) {
+  .home-header-text-viewall {
+      font-size: 14px;
+      margin-right: -20px;
+      font-weight: 600;
+  }
+}
+@media screen and (max-width: 768px) {
+  .Phone {
+    right: 0px;
+  }
+
+  .react-multiple-carousel__arrow--right {
+    display: none;
+  }
+
+  .react-multiple-carousel__arrow--left {
+    display: none;
+  }
+
+}

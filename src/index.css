@@ -1,5 +1,5 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -14,7 +14,9 @@
 }
 
 
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 
 h1 {
@@ -103,3 +105,13 @@ button:focus-visible {
  /* trans: scale(0.99); */
  background: orange;
  }
+ .home{
+
+  margin: -100px 0 0 0;
+ }
+ 
+.slide-image {
+  height: 700px;
+  width: 100%;
+  margin-top: -30px;
+}
