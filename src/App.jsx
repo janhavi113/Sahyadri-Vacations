@@ -9,6 +9,7 @@ import ScheduledEvents from "./components/ScheduledEvents";
 import EventDetails from "./components/EventDetails";
 import CreateEvent from "./components/CreateEvents" ;  
 import ScheduleEvents from "./components/ScheduleEvents" ;
+import Gallery from "./components/Gallery/PhotoGallery" ;
 import ContactUs from "./components/Contact_Us/ContactUs" ;
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -63,6 +64,10 @@ function App() {
     {
       path: "/customised-tour",
       element: <CustomisedTour />,
+    },
+    {
+      path: "/gallery",
+      element: <Gallery />,
     },
   ]);
   return (

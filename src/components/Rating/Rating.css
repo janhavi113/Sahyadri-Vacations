@@ -1,0 +1,91 @@
+.rating-header{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: row;
+    padding-bottom: 8px;
+    justify-content: center;
+}
+.rating-header-section{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: row;
+    padding-bottom: 8px;
+    justify-content: center;
+}
+.rating-text {
+    font-size: 18px;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    line-height: 150%;
+    margin: 0 8px 0 0px;
+}
+
+.rating-review-text {
+    padding: 0 0px 16px 16px;
+}
+
+.rating-card{
+    height: 220px !important;
+    border-radius: 4px !important;
+    padding: 24px;
+}
+
+.verified-icon{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.muiCardMedia-img {
+    width: 38px; height: 38px; margin-right: 12px; margin-bottom: 8px; border-radius: 100%;
+}
+.review-profile-header{
+    display: flex;
+    flex-direction: row;
+}
+.review-profile-name {
+    font-size: 14px;
+    font-style: normal;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    line-height: 17px;
+    letter-spacing: 0.00938em;
+}
+.rating-profile-date {
+    font-size: 14px;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    line-height: 150%;
+    letter-spacing: 0.00735em;
+}
+.review-body-container {
+    margin: 0;
+}
+
+.review-header {
+    margin: 0;
+    display: flex;
+    padding: 0;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.review-body {
+    height: auto;
+    overflow: auto;
+    padding-bottom: 24px;
+}
+
+.review-body-text {
+    font-size: 14px;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    line-height: 17px;
+    letter-spacing: 0.00938em;
+    padding: 3% 0px 3% 0 !important;
+}
+.review-container{background-color: rgb(228, 232, 232);}

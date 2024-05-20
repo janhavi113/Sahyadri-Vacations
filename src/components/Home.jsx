@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Footer from "./footer";
 import Navbar from "./Navbar";
 import Contact_Us from "./Contact_Us/Contact_Us";
+import Rating from "./Rating/RatingSection";
 import slide1 from './Images/Screen_2.jpg';
 import slide2 from './Images/Screen_3.webp';
 import slide3 from './Images/Screen_4.webp';
 import slide4 from './Images/Screen_1.jpg';
 import Card from "./card"
 import Whatsapp from './Images/whatsapp.svg';
+import ContactUs from './Images/contactUs.svg';
 import ViewAll from './Images/viewAll.svg'
 import upcomingEvent from './Images/upcomingEvent.svg'
 // import Slider from "react-slick";
@@ -225,7 +227,7 @@ const Home = () => {
             <div className="col-6 text-end">
               <a className="btn home-header-text-viewall" role="button" >
                 <div className='section-header-btn'><span>View All</span>
-                <img  style={{'margin': '4px'}} loading="lazy" src={ViewAll} />
+                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
                 </div>
               </a>
             </div>
@@ -239,10 +241,7 @@ const Home = () => {
           </Carousel>;
         </div>
       </div>
-      <div className="container-bottom contact-Section">
-          <h2 className='thicker'>CONTACT US</h2>
-          </div>
-      <Contact_Us/>
+      <Rating />
       <Footer />
     </div>
 
