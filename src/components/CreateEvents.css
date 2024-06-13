@@ -131,7 +131,14 @@
 ul .details-list  {
   list-style-type: disc;
 }
- 
+
+.display-bulletin{
+  list-style: revert !important;
+}
+ .ql-p{
+  padding: 0 !important;
+  text-align: left;
+ }
   .thicker {
     font-weight: 900;
     padding-top: 10px;

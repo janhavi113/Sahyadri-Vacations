@@ -47,10 +47,11 @@ function ScheduleEvents() {
       }
     })
     let res = await r.json()
-    console.log('res ===', JSON.stringify(res));
+    console.log('res ===', JSON.stringify(res.events[0]));
     if (res.isSuccess == true) {
       setSuccess(res.isSuccess);
       setEvent(res.events);
+
     }
     console.log('events', events);
   }
@@ -87,7 +88,7 @@ function ScheduleEvents() {
       });
       console.log('search',search);
       formData.append('eventname', search[0].name);
-
+      formData.append('eventType', search[0].eventType);
       const url = `http://localhost:3000/schedule-event`;
       let r = await fetch(url, {
         method: "POST",
@@ -141,7 +142,7 @@ function ScheduleEvents() {
 
     setDataFromChild(newArray); // Triggers a re-render with the new array
   };
-
+  
   return (
     <div>
       <AdminNavbar />
@@ -166,12 +167,11 @@ function ScheduleEvents() {
               <div className="user-details">
                 <div className="input-box ">
                   <span className="details">Event Name</span>
-                  <select  {...register("Event")} >
+                  <select  {...register("Event")}>
                     {events.map(event => (
                       <option value={event.eventId} key={event.eventId}>{event.name}</option>
                     ))}
                   </select>
-
                 </div>
                 <div >
                   <span className="details">Active</span>

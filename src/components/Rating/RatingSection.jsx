@@ -6,6 +6,11 @@ import './Rating.css';
 import Ratingcard from './RatingCard'
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css/bundle';
+// import required modules
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
@@ -23,7 +28,12 @@ const responsive = {
     slidesToSlide: 1 // optional, default to 1.
   }
 };
+
 const RatingSection = () => {
+  const onAutoplayTimeLeft = (s, time, progress) => {
+    // progressCircle.current.style.setProperty('--progress', 1 - progress);
+    // progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+  };
   var reviewList = [{
     name: 'Shivani Kasar',
     Date: 'May 13, 2024',
@@ -59,12 +69,53 @@ const RatingSection = () => {
               <strong>219</strong> Reviews</span>
           </div>
         </div>
-        <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={5000} customTransition="all 0.5s linear 0s;"
-          transitionDuration={800}>
+        <Swiper
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+          },
+          400:{
+            slidesPerView:1,
+          },
+          639: {
+            slidesPerView: 2,
+          },
+          865:{
+            slidesPerView:2
+          },
+          1000:{
+            slidesPerView:3
+          },
+          1500:{
+            slidesPerView:3
+          },
+          1700:{
+            slidesPerView:3
+          }
+        }}
+          spaceBetween={50}
+          slidesPerView={3}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+          loop={true}
+          navigation
+          pagination={{ clickable: true }}
+          scrollbar={{ draggable: true }}
+          modules={[Autoplay, Pagination, Navigation]}
+          onAutoplayTimeLeft={onAutoplayTimeLeft}
+          className='rating-section'
+        >
+          {console.log('reviewList===='+reviewList)}
           {reviewList.map((event, index) => (
-            <Ratingcard key={index} event={event} />
+
+            <SwiperSlide key={index}>
+              <Ratingcard key={index} event={event} />
+            </SwiperSlide>
           ))}
-        </Carousel>;
+
+        </Swiper>
       </div>
     </>
   )

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import AdminNavbar from "./AdminNavbar";
+import Editor from "./Editor";
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import "./CreateEvents.css"
@@ -14,6 +15,11 @@ function CreateEvents() {
   const navigate = useNavigate();
   const [currentImages, setcurrentImages] = useState();
   const [file, setFiles] = useState(null);
+  const [itinerary, setItinerary] = useState();
+  const [highlights, setHighlights] = useState();
+  const [pickupPoints, setPickupPoints] = useState();
+  const [thingsToCarry, setThingsToCarry] = useState();
+  const [costIncludes, setCostIncludes] = useState();
   const onSubmit = async (data) => {
     const formData = new FormData();
     if (file) {
@@ -21,13 +27,14 @@ function CreateEvents() {
         formData.append("file", file[index]);
       }
     }
-    formData.append("costIncludes", data.costIncludes);
+    formData.append("costIncludes", costIncludes);
     formData.append("eventDetails", data.eventDetails);
     formData.append("eventName", data.eventName);
-    formData.append("highlights", data.highlights);
-    formData.append("itinerary", data.itinerary);
-    formData.append("pickupPoints", data.pickupPoints);
-    formData.append("thingsToCarry", data.thingsToCarry);
+    formData.append("eventType", data.eventType);
+    formData.append("highlights", highlights);
+    formData.append("itinerary", itinerary);
+    formData.append("pickupPoints", pickupPoints);
+    formData.append("thingsToCarry", thingsToCarry);
     let r = await fetch("http://localhost:3000/create-event", {
       method: "POST",
       body: formData,
@@ -45,7 +52,7 @@ function CreateEvents() {
   }
   const addUploadedInages = () => {
     console.log('file', file);
-    var allFiles =[];
+    var allFiles = [];
     if (file) {
       for (let index = 0; index < file.length; index++) {
         const url = URL.createObjectURL(file[index])
@@ -56,6 +63,7 @@ function CreateEvents() {
     }
     setcurrentImages(allFiles);
   }
+
   return (
     <div>
       <AdminNavbar />
@@ -70,7 +78,12 @@ function CreateEvents() {
                 <input {...register("eventName", { required: { value: true, message: "This field is required" }, })} type="text" required />
               </div>
               <div className="input-box ">
-                <span className="details"></span>
+                <span className="details">Event Type</span>
+                <select  {...register("eventType", { required: { value: true, message: "This field is required" }, })} >
+                  <option value={"TrekEvent"} >Trekking Event</option>
+                  <option value={"CampingEvent"}>Camping Event</option>
+                  <option value={"BackPackingTrip"} >BackPacking Trip</option>
+                </select>
               </div>
               <div className="input-select-box ">
                 <span className="details">Event Details</span>
@@ -78,23 +91,23 @@ function CreateEvents() {
               </div>
               <div className="input-select-box">
                 <span className="details">Itinerary</span>
-                <textarea {...register("itinerary", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                <Editor sendDataToParent={setItinerary} />
               </div>
               <div className="input-select-box">
                 <span className="details">Highlights</span>
-                <textarea type="text" {...register("highlights", { required: { value: true, message: "This field is required" }, })} required />
+                <Editor sendDataToParent={setHighlights} />
               </div>
               <div className="input-select-box">
                 <span className="details">Cost Includes</span>
-                <textarea {...register("costIncludes")} type="text" required />
+                <Editor sendDataToParent={setCostIncludes} />
               </div>
               <div className="input-select-box">
                 <span className="details">Things To Carry</span>
-                <textarea {...register("thingsToCarry")} type="text" required />
+                <Editor sendDataToParent={setThingsToCarry} />
               </div>
               <div className="input-select-box">
                 <span className="details">Pickup Points</span>
-                <textarea  {...register("pickupPoints")} type="text" required />
+                <Editor sendDataToParent={setPickupPoints} />
               </div>
             </div>
             <div className="input-box">

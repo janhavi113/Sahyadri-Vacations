@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-function Editor() {
+function Editor(props){
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [{ size: [] }],
       [{ font: [] }],
-      [{ align: ["right", "center", "justify"] }],
+      [{ align: [] }],
       [{ list: "ordered" }, { list: "bullet" }],
       ["link", "image"],
       [{ color: [] }],
@@ -34,12 +34,20 @@ function Editor() {
     "font"
   ];
 
- 
+  useEffect(() => {
+    setValue(props.value);
+  }, []);
+
   const [value, setValue] = useState('');
+  const changeValue= async (data) => {
+    props.sendDataToParent(value);
+  }
+  const handleProcedureContentChange = (content, delta, source, editor) => {
+    setValue(content);
+  };
   return (
     <>
-      {console.log(value)}
-      <ReactQuill theme="snow" modules={modules} formats={formats} value={value} onChange={setValue} />
+      <ReactQuill theme="snow" modules={modules} formats={formats} value={value} onChange={handleProcedureContentChange} onBlur={changeValue}/>
     
     </>
   );

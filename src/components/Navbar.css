@@ -123,6 +123,7 @@
 .topnav {
   overflow: hidden;
   display: flex;
+  height: 0;
 }
 
 .topnav a {

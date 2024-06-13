@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const eventSchema = new mongoose.Schema({
     name:  { type :String},
+    eventType : { type :String},
     apiname:  { type :String},
     itinerary:  { type :String},
     eventDetails:  { type :String},
@@ -11,6 +12,7 @@ const eventSchema = new mongoose.Schema({
     highlights:  { type :String},
     url: { type :String},
     eventId: { type :Number},
+    location: { type :String},
     images: [{
         type: String
     }]

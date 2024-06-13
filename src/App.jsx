@@ -7,8 +7,10 @@ import Dashboard from "./components/AdminDashboard";
 import AllEvents from  "./components/AllEvents";     
 import ScheduledEvents from "./components/ScheduledEvents";
 import EventDetails from "./components/EventDetails";
+import ShowEventDetails from "./components/ShowEventDetails/ShowEventDetails";
 import CreateEvent from "./components/CreateEvents" ;  
 import ScheduleEvents from "./components/ScheduleEvents" ;
+import UserAgreement from "./components/UserAgreement";
 import Gallery from "./components/Gallery/PhotoGallery" ;
 import ContactUs from "./components/Contact_Us/ContactUs" ;
 
@@ -21,6 +23,10 @@ function App() {
       path: "/",
       element: <Home />,
     },
+    {
+      path: "/login",
+      element: <Login />,
+    }, 
     {
       path: "/login",
       element: <Login />,
@@ -50,8 +56,12 @@ function App() {
       element: <CreateEvent />,
     },
     {
-      path: "/schedule-event",
-      element: <ScheduleEvents />,
+      path: "/event-details",
+      element: <ShowEventDetails />,
+    },
+    {
+      path: "/user-agreement",
+      element: <UserAgreement />,
     },
     {
       path: "/create-event/event-details/:eventId",

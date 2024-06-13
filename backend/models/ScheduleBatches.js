@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
-const batchesSchema = new mongoose.Schema({ eventCostPerPerson : { type :Number},
+const batchesSchema = new mongoose.Schema({ 
+        eventCostPerPerson : { type :Number},
         eventEndDate  :{type: Date  },
         eventStartDate  :{type: Date },
+        eventBatchCount : { type :Number}
         });
 const scheduleBatchesSchema = new mongoose.Schema({
     active: { type: Boolean},

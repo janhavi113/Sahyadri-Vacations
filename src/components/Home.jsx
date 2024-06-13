@@ -9,9 +9,11 @@ import slide3 from './Images/Screen_4.webp';
 import slide4 from './Images/Screen_1.jpg';
 import Card from "./card"
 import Whatsapp from './Images/whatsapp.svg';
-import ContactUs from './Images/contactUs.svg';
+import Allevents from './Images/Allevents.svg';
 import ViewAll from './Images/viewAll.svg'
+import Camping from './Images/camping.svg'
 import upcomingEvent from './Images/upcomingEvent.svg'
+import Backpacking from './Images/Backpacking.svg'
 // import Slider from "react-slick";
 // import "slick-carousel/slick/slick.css";
 // import "slick-carousel/slick/slick-theme.css";
@@ -119,6 +121,9 @@ const Home = () => {
   const [show, setShow] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [events, setEvent] = useState();
+  const [backPackingEvents, setBackPackingEvents] = useState();
+  const [campingEvents, setCampingEvents] = useState();
+  const [trekkingEvents, setTrekkingEvents] = useState();
   useEffect(() => {
     let currentIndex = 0;
     const chageBackgroundImage = () => {
@@ -139,7 +144,7 @@ const Home = () => {
 
   }
   const getNextBatchDate = (event) => {
-    //console.log('event',event);
+    console.log('event--',event);
     var liveEvent = '';
     let batchdate;
     let eventCostPerPerson;
@@ -155,9 +160,12 @@ const Home = () => {
       liveEvent = {
         eventId: event.eventId,
         eventname: event.eventname,
+        eventType: event.eventType,
+        url:event.Url,
         images: event.images,
         batchdate: batchdate,
-        eventCostPerPerson: eventCostPerPerson
+        eventCostPerPerson: eventCostPerPerson,
+
       }
     }
     return liveEvent;
@@ -166,6 +174,9 @@ const Home = () => {
 
     // alert("ok"); 
     let liveEvents = [];
+    let trekkingEvents = [];
+    let campingEvents = [];
+    let backPackingEvents = [];
     let r = await fetch(`http://localhost:3000/`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
@@ -176,11 +187,22 @@ const Home = () => {
     if (res.isSuccess == true) {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {
+        console.log('res.events['+i+'] ---',res.events[i]);
         if (getNextBatchDate(res.events[i]) != '') {
           liveEvents.push(getNextBatchDate(res.events[i]));
         }
+        if(res.events[i].eventType =='TrekEvent'){
+          trekkingEvents.push(getNextBatchDate(res.events[i]));
+        }else  if(res.events[i].eventType =='CampingEvent'){
+          campingEvents.push(getNextBatchDate(res.events[i]));
+        }else  if(res.events[i].eventType =='BackPackingTrip'){
+          backPackingEvents.push(getNextBatchDate(res.events[i]));
+        }
       }
       setEvent(liveEvents);
+      setTrekkingEvents(trekkingEvents);
+      setCampingEvents(campingEvents);
+      setBackPackingEvents(backPackingEvents);
     }
 
   }
@@ -223,7 +245,7 @@ const Home = () => {
         <div>
           <div className='section-header'>
             <img className='section-header-img' loading="lazy" src={upcomingEvent} />
-            <h1 className='thicker' >Upcoming Weekend Events</h1>
+            <h1 className='thicker' >Upcoming Events</h1>
             <div className="col-6 text-end">
               <a className="btn home-header-text-viewall" role="button" >
                 <div className='section-header-btn'><span>View All</span>
@@ -232,10 +254,50 @@ const Home = () => {
               </a>
             </div>
           </div>
-          {console.log("events---", events)}
+          {console.log("===events---", events)}
           <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={5000} customTransition="all .5"
             transitionDuration={500}>
             {isSuccess && events.map((event, index) => (
+              <Card key={index} event={event} />
+            ))}
+          </Carousel>;
+        </div>
+        <div>
+          <div className='section-header'>
+            <img className='camping section-header-img ' loading="lazy" src={Camping} />
+            <h1 className='thicker' >Camping</h1>
+            <div className="col-6 text-end">
+              <a className="btn home-header-text-viewall" role="button" >
+                <div className='section-header-btn'><span>View All</span>
+                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
+                </div>
+              </a>
+            </div>
+          </div>
+          {console.log("events---", campingEvents)}
+          <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={5000} customTransition="all .5"
+            transitionDuration={500}>
+            {isSuccess && campingEvents.map((event, index) => (
+              <Card key={index} event={event} />
+            ))}
+          </Carousel>;
+        </div>
+        <div>
+          <div className='section-header'>
+            <img className='section-header-img' loading="lazy" src={Backpacking} />
+            <h1 className='thicker' >BackPacking Events</h1>
+            <div className="col-6 text-end">
+              <a className="btn home-header-text-viewall" role="button" >
+                <div className='section-header-btn'><span>View All</span>
+                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
+                </div>
+              </a>
+            </div>
+          </div>
+          {console.log("events---", backPackingEvents)}
+          <Carousel responsive={responsive} infinite={true} autoPlay={true} autoPlaySpeed={5000} customTransition="all .5"
+            transitionDuration={500}>
+            {isSuccess && backPackingEvents.map((event, index) => (
               <Card key={index} event={event} />
             ))}
           </Carousel>;

@@ -28,17 +28,17 @@ const footer = () => {
         
           <div className='thicker' style={{color: 'white'}}>Follow us on</div>
           <a href="https://m.facebook.com/people/Sahyadri-Vacations/100085021143109/" title="facebook" target="_blank">
-            <FontAwesomeIcon className="icon" icon={faSquareFacebook} />
+            <FontAwesomeIcon className="icon" icon={faSquareFacebook} style={{color: "white",}}/>
             {/* <i className="fa fa-facebook-square" aria-hidden="true"></i> */}
           </a>
           <a href="https://www.instagram.com/sahyadri_vacations/" title="instagram" target="_blank">
-            <FontAwesomeIcon className="icon" icon={faInstagram} />
+            <FontAwesomeIcon className="icon" icon={faInstagram} style={{color: "white",}} /> 
           </a>
           <a href="https://t.me/sahyadri_vacations" title="telegram" target="_blank">
-            <FontAwesomeIcon className="icon" icon={faTelegram} />
+            <FontAwesomeIcon className="icon" icon={faTelegram} style={{color: "white",}}/>
           </a>
           <a href="https://www.youtube.com/channel/UCLY1fnNaABNhYilv4s1ehLQ" title="youtube" target="_blank">
-            <FontAwesomeIcon className="icon" icon={faSquareYoutube} />
+            <FontAwesomeIcon className="icon" icon={faSquareYoutube} style={{color: "white",}}/>
           </a>
           <div className="copyright">
             <hr />

@@ -6,11 +6,13 @@ import mongoose from "mongoose";
 import { Employee } from "./models/Employee.js";
 import { ScheduleBatches } from "./models/ScheduleBatches.js";
 import { Events } from "./models/Event.js";
+import { Bookings } from "./models/Bookings.js";
 import { CustomisedRequest } from "./models/CustomisedRequest.js";
 import main from "./mongo.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
+import { Console } from "console";
 
 const app = express()
 const port = 3000;
@@ -44,7 +46,54 @@ app.post('/admin-login', async (req, res) => {
   let employee = await Employee.find({ Username: req.body.username });
   res.send(employee);
 })
+app.get('/event-details/eventid/:eventId/:apiName', async (req, res) => {
+  console.log('req.params--',req.params);
+  let event_Id = req.params.eventId;
+  let apiname = req.params.apiName;
+  var events = await Events.findOne({eventId : event_Id ,apiname : apiname })
+  let ScheduleBatchesRecords = await ScheduleBatches.findOne({ eventId : event_Id  });
+  if(events  && ScheduleBatchesRecords ){
+    console.log('event_Id--',events ,'ScheduleBatchesRecords',ScheduleBatchesRecords);
+      res.send({ isSuccess: true, events: events ,ScheduleBatchesRecords : ScheduleBatchesRecords})
+  } else {
+    res.send({ isSuccess: false });
+  }
+})
+//Login to System
+app.post('/event-details/eventid/:eventId/:apiName', async (req, res) => {
+  console.log(req.body);
+  try {
+    const {
+      fullName,
+      emailId,
+    whatsappNumber,
+    selectDate,
+    eventId,
+    eventName,
+    numberOfPeoples,
+    amountPaid,
+    } = req.body;
+  
+    const bookingRequest = new Bookings({
+      name: fullName,
+      mobileNumber: whatsappNumber,
+      batch: selectDate,
+      eventId: eventId,
+      eventName:eventName,
+      numberOfPeoples: numberOfPeoples,
+      email: emailId,
+      amountPaid: amountPaid,
+      status: 'new'
 
+    });
+
+    bookingRequest.save();
+    res.send({ isSuccess: true });
+  } catch (error) {
+    console.error(error);
+    res.send({ isSuccess: false, error: error });
+  }
+})
 // Get current Event Details 
 app.get('/create-event/event-details/:eventId', async (req, res) => {
 
@@ -53,7 +102,7 @@ app.get('/create-event/event-details/:eventId', async (req, res) => {
     var events = await Events.find({ eventId: event_Id })
     var imageList = events[0]?.images;
     images = imageList;
-    console.log('events', events);
+   // console.log('events', events);
     if (events && events.length > 0) {
       res.send({ isSuccess: true, events: events })
     } else {
@@ -69,6 +118,7 @@ app.get('/create-event/event-details/:eventId', async (req, res) => {
 app.post('/create-event/event-details/:eventId', async (req, res) => {
   try {
     let event_Id = Number(req.params.eventId.toString().replace(':', ''));
+   // console.log('event_Id'+event_Id);
     var myquery = { eventId: event_Id };
     var events = await Events.deleteOne(myquery);
     if (events && events.length > 0) {
@@ -90,6 +140,7 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       eventName,
       eventDetails,
       itinerary,
+      eventType,
       highlights,
       costIncludes,
       thingsToCarry,
@@ -97,17 +148,23 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       currentImages
     } = req.body;
     var imageList = [];
-    if (currentImages != undefined && currentImages.length == 1) {
-      imageList.push(currentImages);
-    } else if (currentImages != undefined && currentImages.length > 1) {
+    if (currentImages != undefined && !Array.isArray( currentImages)) {      
+      imageList.push(currentImages.toString().replace('blob:',''));
+    } else if (currentImages != undefined && currentImages.length > 1) {      
       for (let index = 0; index < currentImages.length; index++) {
-        imageList.push(currentImages[index]);
+       // console.log('currentImages['+index+'].toString().replace(blob:)'+currentImages[index])
+    
+     // console.log('currentImages['+index+'].toString().replace(blob:)'+currentImages[index].toString().replace('blob:',''))
+        imageList.push(currentImages[index].toString().replace('blob:',''));
       }
     }
     var hostname = req.headers.origin;
+   
     for (let index = 0; index < req.files.length; index++) {
+     // console.log('req.files['+index+'].path--'+req.files[index].path);
       imageList.push(hostname + "/" + req.files[index].path.toString().replaceAll('\\', '/'));
     }
+  
 
     var myquery = { eventId: event_Id };
     var options = { upsert: true };
@@ -115,6 +172,7 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       name: eventName,
       itinerary: itinerary,
       eventDetails: eventDetails,
+      eventType:eventType,
       costIncludes: costIncludes,
       thingsToCarry: thingsToCarry,
       pickupPoints: pickupPoints,
@@ -122,6 +180,8 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       images: imageList
     };
     var events = await Events.updateOne(myquery, updateDoc, options);
+    events = await Events.find(myquery);
+   //console.log('events --',events);
     if (events && events.length > 0) {
       res.send({ isSuccess: true, events: events })
     } else {
@@ -245,8 +305,8 @@ app.post('/schedule-event', upload.single('file'), async (req, res) => {
 
 //Customised Tour
 app.post('/customised-tour', async (req, res) => {
-  console.log('req.body', req.body);
-  console.log('req.body', req.file);
+ // console.log('req.body', req.body);
+ // console.log('req.body', req.file);
   try {
     const {
       name,
@@ -279,6 +339,6 @@ app.post('/customised-tour', async (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+ // console.log(`Example app listening on port ${port}`)
 })
 

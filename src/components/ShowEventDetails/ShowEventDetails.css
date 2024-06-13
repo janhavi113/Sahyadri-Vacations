@@ -1,0 +1,257 @@
+.event-section-header-img {
+    width: 100%;
+    height: 75vh;
+    object-fit: cover;
+    object-position: center;
+}
+
+.header-center-aligned {
+    position: absolute;
+    z-index: 299;
+}
+
+.inner-content {
+    position: absolute;
+    z-index: 2;
+    bottom: 50px;
+    left: 50px;
+    text-align: left;
+    max-width: 750px;
+}
+
+.inner-content h3 {
+    color: #fff;
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    letter-spacing: 1px;
+    font-weight: 900;
+    font-size: calc(1.3rem + .6vw);
+    margin-bottom: 15px;
+}
+select{
+    height: 45px;
+}
+.content-row {
+    margin: 0;
+    padding: 30px;
+    width: 100%;
+    position: relative;
+    border-radius: 50px 50px 0px 0px;
+    z-index: 9;
+    margin-top: -50px;
+    background-color: white;
+}
+
+.nav-tabs {
+    --bs-nav-link-color: rgb(1, 0, 0) !important;
+    --bs-nav-link-hover-color: orange !important;
+}
+
+.nav-color {
+    background-color: transparent;
+}
+
+.nav-link {
+    font-size: medium;
+    font-weight: 700;
+}
+
+.h3,
+h3 {
+    font-size: calc(1.3rem + .6vw);
+    font-weight: 650;
+}
+
+.section-details {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+}
+
+.pt-4 {
+    padding-top: 1rem !important;
+}
+
+.pb-1 {
+    padding-bottom: 1rem !important;
+}
+
+.px-2 {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+}
+
+.row2 {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+}
+
+.content-right-side {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.event-price {
+    font-weight: 700 !important;
+    font-size: 25px;
+    color: orange;
+}
+
+.booking-header {
+    font-size: 20px;
+}
+
+.modal-header .btn-close {
+    margin-top: -20% !important;
+    padding: 0 !important;
+}
+
+.button {
+    margin: 15px !important;
+}
+
+.justify-content-md-center {
+    justify-content: center !important;
+}
+
+.sticky-top {
+    top: 55%;
+}
+
+.card-info {
+    margin-left: 20%;
+    margin-top: -20px;
+}
+
+.booking-card {
+    z-index: 1;
+    margin-top: -60%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    box-shadow: 0px 8px 32px #00000029;
+    border-radius: 16px;
+}
+
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+.text-dark {
+    color: #212529 !important;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 1rem 1rem;
+}
+
+.modal-content {
+    top: 0 !important;
+}
+
+.noOftrekkers {
+    display: flex;
+    gap: 20px;
+}
+
+.hr {
+    background-color: orange;
+    height: 2px;
+    width: 100%;
+}
+.flex{
+    display: flex;
+    gap: 5px;
+    color: orange;
+    font-weight: bold;
+}
+.rating-section{
+    max-width: 93%;
+}
+.finalCalculation {
+    display: flex;
+    font-size: 22px;
+    font-weight: bold;
+    width: 100%;
+}
+
+.termsAndCondition {
+    display: flex;
+    gap: 5px;
+    font-weight: bold;
+}
+
+.display-bulletin {
+    list-style: revert !important;
+}
+
+.finalCalculation span:nth-of-type(1) {
+    flex-grow: 1;
+}
+
+.finalCalculation span:nth-of-type(2) {
+    flex-grow: 3;
+}
+
+.finalCalculation span:nth-of-type(3) {
+    flex-grow: 1;
+}
+
+.finalCalculation div:nth-of-type(1) {
+    flex-grow: 1;
+}
+
+.finalCalculation div:nth-of-type(2) {
+    flex-grow: 3;
+}
+
+.finalCalculation div:nth-of-type(3) {
+    flex-grow: 1;
+}
+
+.container {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.float-parent-element {
+    width: 50%;
+}
+
+.float-child-element {
+    float: left;
+    width: 50%;
+}
+
+.red {
+    margin-left: 50%;
+}
+
+.yellow {
+    margin-left: 50%;
+}
+.link{
+    color: orange !important;
+}
+
+.swiper-button-prev, .swiper-button-next {
+    color: gray !important;
+    margin-right: -15px !important;
+    margin-left: -15px !important;
+   
+}
+.swiper-button-prev:after, .swiper-button-next:after {
+    font-size: 25px !important;
+    font-weight: bold !important;
+}
+.swiper-slide {
+    margin-right: 45px !important;
+}
+@media (min-width: 1200px) {
+    .h3,
+    h3 {
+        font-size: 1.75rem;
+    }
+}

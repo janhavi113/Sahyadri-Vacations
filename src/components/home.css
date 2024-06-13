@@ -90,6 +90,9 @@
   display: flex;
 }
 
+.camping{
+  margin-top: 7px;
+}
 .react-multi-carousel-list {
   max-width: 96%;
   margin: auto;
