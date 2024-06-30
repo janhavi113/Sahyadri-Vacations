@@ -1,0 +1,139 @@
+.hero{
+    background: lightgray ; 
+}
+.hero .wrapper{
+max-width: 1366px;
+height: 100%;
+margin: 25% 0 0 10% ;
+position: absolute;
+color: white;
+}
+.hero .wrapper .social-icon{
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    margin-left: 10px;
+    top: 280px;
+    z-index: 5999;
+}
+
+.hero .wrapper .social-icon a .icon{
+	line-height:20px;
+  font-size:20px;
+  -webkit-transition: all 200ms ease-in;
+  -webkit-transform: scale(1); 
+  -ms-transition: all 200ms ease-in;
+  -ms-transform: scale(1); 
+  -moz-transition: all 200ms ease-in;
+  -moz-transform: scale(1);
+  transition: all 200ms ease-in;
+  transform: scale(1);
+}
+.hero .wrapper .social-icon a:hover .icon{
+  box-shadow: 0px 0px 150px #000000;
+  z-index: 2;
+  -webkit-transition: all 200ms ease-in;
+  -webkit-transform: scale(1.5);
+  -ms-transition: all 200ms ease-in;
+  -ms-transform: scale(1.5);   
+  -moz-transition: all 200ms ease-in;
+  -moz-transform: scale(1.5);
+  transition: all 200ms ease-in;
+  transform: scale(1.5);
+}
+
+  
+.hero .sliderTextContainer{
+    position: absolute;
+    bottom: -13px;
+    font-size: 50vh;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color:#f5deb324 ;
+    width: 50%;
+}
+.hero .imageContainer{
+    height: 100%;
+    top: 0;
+    right: 0;
+}
+.hero .wrapper h2{
+    font-weight: bold;
+    font-size: large;
+    text-shadow: 2px 2px 8px #120202b0;
+}
+.hero .wrapper h1{
+    font-weight: bold;
+    font-size: 82px;
+    text-shadow: 2px 2px 8px #120202b0;
+}
+.hero .wrapper span{ 
+    font-size: 25px;
+    letter-spacing: 5px;
+    text-shadow: 2px 2px 8px #120202b0;
+}
+.hero .wrapper .buttons{
+    position: absolute;
+    display: flex;
+    z-index: 4999;
+}
+.hero .wrapper .buttons a{
+     margin-top: 20px;
+     padding: 20px;
+     border-radius: 10px;
+     background-color: rgba(255, 115, 0, 0.726);;
+     color: white;
+     margin-right: 10px;
+     text-transform: uppercase;
+    
+}
+.hero .imageContainer img {
+    height: 650px;
+   }
+@media only screen and (max-width: 767px) {
+    .hero .wrapper h1{
+        font-weight: bold;
+        font-size: 30px;
+    }
+    .hero .wrapper h2{
+        font-weight: bold;
+        font-size: medium;
+    }
+    .hero .wrapper span{ 
+        font-size: 15px;
+        letter-spacing: 1px;
+    }
+    .hero .wrapper {
+        margin: 60% 0 0 10% ;
+    }
+   .hero .wrapper .buttons a{
+        margin-top: 20px;
+        padding: 9px;
+        border-radius: 10px;
+        background-color: rgba(255, 115, 0, 0.58);;
+        color: white;
+        margin-right: 10px;
+        font-size: 11px;
+        text-transform: uppercase;
+   }
+   .hero .imageContainer img {
+    height: 533px;
+   }
+   .hero .wrapper .social-icon {
+    position: absolute;
+    display: flex;
+    gap: 10px;
+    margin-left: 2px;
+    top: 250px;
+}
+  
+.hero .sliderTextContainer{
+    position: absolute;
+    bottom: 385px;
+    font-size: 30vh;
+    white-space: nowrap;
+    text-transform: uppercase;
+    color: #f5deb324;
+    width: 50%;
+}
+}

@@ -90,16 +90,17 @@
   display: flex;
 }
 
-.camping{
+.camping {
   margin-top: 7px;
 }
+
 .react-multi-carousel-list {
   max-width: 96%;
   margin: auto;
 }
 
 .react-multi-carousel-track {
-  padding: 1.5% !important;
+  padding: 0.5% !important;
 }
 
 .react-multi-carousel-list button {
@@ -141,9 +142,10 @@
 
 .section-header {
   display: flex;
-  margin: 2% 0 0 3%;
+  margin: 2% 0 0 0;
   flex-wrap: wrap;
 }
+
 .col-6 {
   flex: 0 0 auto;
   width: 50%;
@@ -173,14 +175,17 @@
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
-.section-header .section-header-img{
-  height: 50px;
+.section-header .section-header-img {
+  height: 45px !important;
+  padding: 0 15px 0 0;
 }
-.section-header-btn{
+
+.section-header-btn {
   display: flex;
   color: orange;
   font-weight: 500;
 }
+
 .react-multiple-carousel__arrow--right:hover,
 .react-multiple-carousel__arrow--right:focus {
   color: transparent;
@@ -200,17 +205,77 @@
   justify-content: space-between;
 }
 
-.contact-Section{
+.col-8 {
+  flex: 0 0 auto;
+  width: 66.6666666667%;
+}
+
+.col-3 {
+  flex: 0 0 auto;
+}
+
+.home-header-text {
+  margin: -6px 0px 0 -20px;
+}
+.home-header-backpacking{
+  margin: -6px 0px 0 -20px;
+}
+.col-9 {
+  flex: 0 0 auto;
+  width: 75%;
+}
+
+.contact-Section {
   margin: 20px 0px 0 26px;
   display: flex;
 }
+
+.home-thicker {
+  font-weight: 700 !important;
+  font-size: 1.75rem;
+  padding-top: 7px;
+ }
+
+.home-header-text-padding {
+  padding-top: 22px !important
+}
+.contactUsSection{
+  margin: 0% 10% 0% 6%;
+}
+
 @media only screen and (max-width: 600px) {
   .home-header-text-viewall {
-      font-size: 14px;
-      margin-right: -20px;
-      font-weight: 600;
+    font-size: 14px;
+    margin-right: -20px;
+    font-weight: 600;
+  }
+
+  .home-header-text {
+    margin: 0px 0px 0 -13px;
+    font-size: 20px;
+  }
+  .home-header-backpacking{
+    margin: 5px 0px 0 -10px;
+    font-size: 20px;
+  }
+  .col-3 {
+    flex: 0 0 auto;
+    width: 25%;
   }
 }
+
+@media only screen and (min-width: 600px) {
+  .col-7 {
+    flex: 0 0 auto;
+    width: 70% !important;
+}
+}
+@media only screen and (max-width: 600px) {
+  .px-heading {
+    padding-left: 10px;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .Phone {
     right: 0px;
@@ -223,5 +288,11 @@
   .react-multiple-carousel__arrow--left {
     display: none;
   }
+  .home-header-text {
+    margin: 0px 0px 0 -15px;
+    font-size: 20px;
+  }
+  
+
 
 }

@@ -1,0 +1,47 @@
+.contentbody {
+    width: 100%;
+    border-radius: 32px 32px 0px 0px;
+    margin-top: -8%;
+    position: relative;
+    background-color: white;
+}
+.all-events-card{
+    width: 300px;
+}
+.all-event-card-footer {
+    bottom: 18px;
+}
+.all-event-header {
+    text-align: left !important;
+}
+.event .imageContainer img {
+    height: 400px !important;
+    width: 100%;
+}
+.event .wrapper{
+    max-width: 1366px;
+    height: 100%;
+    margin: 10% 0 0 10% ;
+    position: absolute;
+    color: white;
+    }
+.event .wrapper h1{
+        font-weight: bold;
+        font-size: 65px;
+        text-shadow: 2px 2px 8px #120202b0;
+    }
+.row>* {
+    padding: 0 !important;
+}
+
+@media (min-width: 768px) {
+    .py-md-5 {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .event .imageContainer img {
+        height: 100px !important;
+    }
+}

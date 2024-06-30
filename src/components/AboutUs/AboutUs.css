@@ -4,27 +4,122 @@
 }
 
 .team-section{
-    background-color:#00506b8c;
-    height: 1000px;
+    background-color:rgba(255, 166, 0, 0.523);
     text-align: center;
    
 }
+.multiimage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: contain;
+    object-position: center;
+    margin: 2% 0 0 5%;
+}
+.multiimage1 {
+    position: relative;
+    top: 0;
+    left: 0;
+    object-position: center;
+    object-fit: contain;    
+    
+}
+.team-header{
+    padding-bottom: 30px;
+    text-transform: uppercase;
+}
+.founder {
+    text-align: left;
+    padding: 0% 10% 0% 10% !important;
+}
+.founder h2 {
+    line-height: 3;
+    font-weight:bold;
+    color: orange;
+}
+.founder .designation{
+    font-size:20px; 
+    letter-spacing: 0px;
+    color: white;
+    margin-top: -35px;
+    padding-bottom: 20px;
+}
+.founder .links{
+    padding: 0px 5% 0 0;
+}
+.team-members {
+    padding: 28px;
+    margin: 0px;
+    /* background-color: red; */
+}
+.card-img, .card-img-top {
+    border-radius: 5%;
+    
+}
+.team-members .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.about .team-section h1{
+    font-weight: bold !important;
+    font-size: 65px !important;
+    color: black
+}
+.team-info{
+    right: 8px;
+    font-size: 18px;
+    margin-bottom: 1rem;
+    margin-top: 0;
+    font-family: 'Poppins', sans-serif !important;
+}
 
+.multiimage2 {
+    position: absolute;
+    width: 50%;
+    top: 20%;
+    left: 10%;
+    border-radius: 4%;
+    height:75%;
+}
+.multiimage3 {
+    position: absolute;
+    width: 40%;
+    top: 10%;
+    left: 50%;
+    border-radius: 4%;
+}
 .thicker {
     font-size: 35px;
     font-weight: bold;
     color: #000;
     padding-top: 30px;
   }
-  
-  .container {
+  .about{
+    margin-right: 0%;
+  }
+  .aboutus-container {
     margin: 50px auto;
     box-shadow: none;
     max-width: 85%;
   }
+
+  .aboutus-container h2{
+    color: rgba(255, 115, 0, 0.726);
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 8px;
+   }
+   .aboutus-container p{
+    font-size: 18px;
+    font-weight: 400;
+    }
   .home-container{
     width: 100%;
-    height: 100vh;
+    height: 75vh !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,4 +186,13 @@
 }
 .caption .social-links i:hover{
     color: #0c52a1;
+}
+.team {
+    padding: 0% 5% 0% 5% !important;
+}
+@media only screen and (max-width: 600px) {
+   
+    .team {
+        padding: 0% 10% 0% 10% !important;
+    }
 }

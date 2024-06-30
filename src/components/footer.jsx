@@ -18,8 +18,8 @@ const footer = () => {
            <li> <NavLink  to="/"><li className="info-block">Home</li></NavLink></li>
            <li> <NavLink  to="/events"><li className="info-block">Events</li></NavLink></li>
            <li> <NavLink  to="/gallery"><li className="info-block">Gallery</li></NavLink></li>
-           <li> <NavLink  to="/customise-tours"><li className="info-block">Customise Tours</li></NavLink></li>
-           <li> <NavLink  to="/our-team"><li className="info-block">Our Team</li></NavLink></li>
+           <li> <NavLink  to="/customised-tour"><li className="info-block">Customise Tours</li></NavLink></li>
+           <li> <NavLink  to="/about"><li className="info-block">Our Team</li></NavLink></li>
            <li> <NavLink  to="/about"><li className="info-block">About</li></NavLink></li>
            <li> <NavLink  to="/contact-us"><li className="info-block">Contact Us</li></NavLink></li>
           </ul>

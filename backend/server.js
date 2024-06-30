@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import bodyParser from "body-parser"
 import nodemailer from "nodemailer"
+import google from "googleapis"
 import mongoose from "mongoose";
 import { Employee } from "./models/Employee.js";
 import { ScheduleBatches } from "./models/ScheduleBatches.js";
@@ -13,7 +14,14 @@ import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
 import { Console } from "console";
-
+import dotenv from "dotenv";
+dotenv.config();
+let clientSceret = process.env.MONGOODB_CLIENT_SCERET;
+let clientId = process.env.MONGOODB_CLIENT_ID;
+let refreshToken = process.env.MONGOODB_REFRESH_TOKEN;
+//const OAuth2 = google.auth.OAuth2;
+// const OAuth2_Client = new OAuth2(clientId,clientSceret);
+// OAuth2_Client.setCredentials({refresh_token: refreshToken})
 const app = express()
 const port = 3000;
 var images = {};
@@ -41,6 +49,20 @@ app.get('/', async(req, res) => {
   }
 })
 
+app.get('/search-event/:serchText', async(req, res) => {
+  try{
+    console.log('req.params--',req.params.serchText);
+  
+    console.log('serchText--',{ $regex: '.*' + req.params.serchText.toLowerCase() + '.*' } );
+   let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true, eventApi: { $regex: '.*' + req.params.serchText.toLowerCase()  + '.*' }});
+   console.log('ScheduleBatchesRecords--',ScheduleBatchesRecords);
+   res.send({isSuccess : true, events :ScheduleBatchesRecords});
+}catch (error) {
+    console.error(error);
+    res.send({ isSuccess: false, error: error });
+  }
+})
+
 //Login to System
 app.post('/admin-login', async (req, res) => {
   let employee = await Employee.find({ Username: req.body.username });
@@ -50,7 +72,7 @@ app.get('/event-details/eventid/:eventId/:apiName', async (req, res) => {
   console.log('req.params--',req.params);
   let event_Id = req.params.eventId;
   let apiname = req.params.apiName;
-  var events = await Events.findOne({eventId : event_Id ,apiname : apiname })
+  var events = await Events.findOne({apiname : apiname })
   let ScheduleBatchesRecords = await ScheduleBatches.findOne({ eventId : event_Id  });
   if(events  && ScheduleBatchesRecords ){
     console.log('event_Id--',events ,'ScheduleBatchesRecords',ScheduleBatchesRecords);
@@ -140,13 +162,14 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       eventName,
       eventDetails,
       itinerary,
-      eventType,
       highlights,
       costIncludes,
       thingsToCarry,
       pickupPoints,
+      eventType,
       currentImages
     } = req.body;
+   
     var imageList = [];
     if (currentImages != undefined && !Array.isArray( currentImages)) {      
       imageList.push(currentImages.toString().replace('blob:',''));
@@ -207,11 +230,14 @@ app.get('/all-events', async (req, res) => {
 // Create Event 
 app.post('/create-event', upload.array('file', 12), async (req, res) => {
   try {
+    console.log('create req.body --',req.body);
     var imageList = [];
     var currUrl = req.headers.origin;
+    if(req.files){
     for (let index = 0; index < req.files.length; index++) {
       imageList.push(currUrl + "/" + req.files[index].path.toString().replaceAll('\\', '/'));
     }
+  }
 
     var events = await Events.find().sort([['_id', -1]]).limit(1)
     if (events.length > 0) {
@@ -219,6 +245,7 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
     } else {
       recordcount = 0;
     }
+   
     const {
       eventName,
       eventDetails,
@@ -226,14 +253,16 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
       highlights,
       costIncludes,
       thingsToCarry,
-      pickupPoints
+      pickupPoints,
+      eventType
     } = req.body;
-
+    console.log('create req.body --',req.body);
     let apiName = req.body.eventName;
-    apiName = apiName.toString().replace(/\s/g, '-');
+    apiName = apiName.toString().replace(/\s/g, '-').toLowerCase();
     const event = new Events({
       name: eventName,
       apiname: apiName,
+      eventType: eventType,
       itinerary: itinerary,
       eventDetails: eventDetails,
       costIncludes: costIncludes,
@@ -269,15 +298,18 @@ app.get('/schedule-event', async (req, res) => {
 
 app.post('/schedule-event', upload.single('file'), async (req, res) => {
   try {
+   
     var currUrl ='';
     if (req.file) {
       currUrl = req.headers.origin + "/" + req.file.path.toString().replaceAll('\\', '/');
     }
+     //console.log('schedule-event --',req.body);
     const {
       active,
       eventId,
       eventname,
       batches,
+      eventtype,
     } = req.body;
     var batchList = [];
     if(Array.isArray(batches)){
@@ -287,12 +319,22 @@ app.post('/schedule-event', upload.single('file'), async (req, res) => {
   }else{
     batchList.push(JSON.parse(batches));
   }
+  let scheduleRecordcount = 0;
+  var events = await ScheduleBatches.find().sort([['_id', -1]]).limit(1)
+    if (events.length > 0) {
+      scheduleRecordcount = events[0].eventId;
+    } else {
+      scheduleRecordcount = 0;
+    }
     const scheduleBatches = new ScheduleBatches({
       active: active,
-      eventId: eventId,
+      eventId: scheduleRecordcount + 1,
       batches: batchList,
       eventname: eventname,
-      images: currUrl
+      images: currUrl,
+      Url: '/event-details?eventid='+(scheduleRecordcount + 1).toString()+'/'+eventname.toString().replace(/\s/g, '-').toLowerCase(),
+      eventType: eventtype,
+      eventApi:eventname.toString().replace(/\s/g, '-').toLowerCase()
     });
 
     scheduleBatches.save();
@@ -337,7 +379,73 @@ app.post('/customised-tour', async (req, res) => {
     res.send({ isSuccess: false, error: error });
   }
 })
+// Bookings
+app.post('/booking', async (req, res) => {
+  try {
+    console.log('create req.body --',req.body);
+       
+    const {
+      fullName,
+      numberOfPeoples,
+      amountPaid,
+      eventId,
+      eventName,
+      batch,
+      emailId,
+      whatsappNumber,
+      selectDate
+    } = req.body;
+    console.log('create req.body --',req.body);
+    
+    const booking = new Bookings({
+    name: fullName,
+    email : emailId,
+    mobileNumber:  whatsappNumber,
+    batch:  batch,
+    eventId: eventId,
+    eventName:  eventName,
+    numberOfPeoples: numberOfPeoples,
+    amountPaid: amountPaid,
+    });
+     
+    booking.save();
+    // console.log('booking._id',booking._id);
+    // if(booking._id){
+    //   const accessToken = OAuth2_Client
+    //   console.log('in booking._id',booking._id);
+    //   var transporter = nodemailer.createTransport({
+    //     service: 'gmail',
+    //     host:'smtp.gmail.com',
+    //     secure:true,
+    //     port:465,
+    //     auth: {
+    //       user: 'janhavi9826@gmail.com',
+    //       pass: 'Black@9808'
+    //     }
+    //   });
+      
+    //   var mailOptions = {
+    //     from: 'janhavi9826@gmail.com',
+    //     to: 'janhavijadhav9812@gmail.com',
+    //     subject: 'Sending Email using Node.js',
+    //     text: 'That was easy!'
+    //   };
+    //   console.log('transporter',transporter);
+    //   transporter.sendMail(mailOptions, function(error, info){
+    //     if (error) {
+    //       console.log('error',error);
+    //     } else {
+    //       console.log('Email sent: ' + info.response);
+    //     }
+    //   });
+    // res.send({  isSuccess: true });
+    // }
+  } catch (error) {
+    console.error(error);
+    res.send({ isSuccess: false, error: error });
+  }
 
+})
 app.listen(port, () => {
  // console.log(`Example app listening on port ${port}`)
 })

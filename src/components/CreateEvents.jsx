@@ -21,6 +21,7 @@ function CreateEvents() {
   const [thingsToCarry, setThingsToCarry] = useState();
   const [costIncludes, setCostIncludes] = useState();
   const onSubmit = async (data) => {
+    console.log('data--'+data);
     const formData = new FormData();
     if (file) {
       for (let index = 0; index < file.length; index++) {
@@ -28,9 +29,9 @@ function CreateEvents() {
       }
     }
     formData.append("costIncludes", costIncludes);
-    formData.append("eventDetails", data.eventDetails);
-    formData.append("eventName", data.eventName);
-    formData.append("eventType", data.eventType);
+    formData.append("eventDetails", data.eventDetails.toString());
+    formData.append("eventName", data.eventName.toString());
+    formData.append("eventType", data.eventType.toString());
     formData.append("highlights", highlights);
     formData.append("itinerary", itinerary);
     formData.append("pickupPoints", pickupPoints);

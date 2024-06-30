@@ -1,5 +1,5 @@
 :root {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', sans-serif !important;
   line-height: 1.5;
   font-weight: 400;
 
@@ -113,7 +113,7 @@ button:focus-visible {
  }
  
 .slide-image {
-  height: 700px;
+  height: 430px;
   width: 100%;
   margin-top: -30px;
 }

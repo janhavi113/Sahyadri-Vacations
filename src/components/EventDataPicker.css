@@ -4,3 +4,14 @@
     margin-bottom: 0;
     padding-bottom: 0;
 }
+.event-picker input[type="checkbox"]{
+    height: 15px;
+    width: 5%;
+}
+
+.show-error{
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}

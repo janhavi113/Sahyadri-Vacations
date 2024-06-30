@@ -4,6 +4,7 @@ import Footer from "../footer";
 import Navbar from "../Navbar";
 import Contact_Us from "./Contact_Us";
 import slide3 from '../Images/Screen_4.webp';
+import EventHeader from './ContactUsHeader'
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -27,13 +28,8 @@ const ContactUs = () => {
   return (
     <>
       <Navbar />
-      <div className="header">
-        <img className='slide-image' src={slide3}></img>
-        <div className="text team-text-blk team-head-text">Contact Us</div>
-      </div>
-      <div className="container-bottom container">
-          <h2 className="title-header">CONTACT US</h2>
-          </div>
+     <EventHeader/>
+     <br />
       <Contact_Us/>
       <Footer />
     </>

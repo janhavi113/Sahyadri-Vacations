@@ -1,0 +1,68 @@
+.funfact-area .style-2 {
+    background-image: none;
+    position: relative;
+}
+.pb-90 {
+    padding-bottom: 90px;
+}
+.pt-170 {
+    padding-top: 170px;
+}
+.section-title-funfact h2 {
+    font-size: 40px;
+    line-height: initial;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    color: white;
+}
+.funfact-area {
+    background-image: url(../Images/funfact.jpg);
+    background-size: cover;
+    position: relative;
+
+}
+.single-fact {
+    border:none;
+    border-radius: 10%;
+    background-color: hsla(32, 100%, 46%, 0.703);
+    height: 174px;
+    position: relative;
+    transition: .5s;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: bolder;
+}
+.funfact-container{
+    background-color: rgba(0, 0, 0, 0.514) !important;
+    max-width: 100% !important;
+}
+.text-center {
+    text-align: center !important;
+}
+.single-fact .fact-info, .single-quick-icon .quick-icon-content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 100%;
+}
+.fact-info span{
+    font-size: xx-large;
+}
+.row {
+     margin-left: 6% !important;
+    margin-right: 6% !important;    
+}
+.add-gap{
+    gap: 4%;
+}
+@media screen and (max-width: 768px) {
+    .single-fact {
+        width: 125px;
+        height: 125px;
+        margin-left: 27%;
+    }
+    .fact-info span {
+        font-size: x-large;
+    }
+}

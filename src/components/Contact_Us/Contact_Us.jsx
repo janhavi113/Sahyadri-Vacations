@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './ContactForm.css';
-import { faLocationDot, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faEnvelope, faPhone ,faPhoneVolume} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const Contact_Us = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -73,23 +74,22 @@ const Contact_Us = () => {
                 ></textarea>
               </div>
               <div className="button-edit-container">
-                <div className="button">
+                <div className="contact-button button">
                   <input disabled={isSubmitting} type="submit" value="Submit" />
                 </div>
               </div>
             </form>
           </div>
         </div>
-        <hr />
-        <div className=" container-top container">
-          <h2 className='thicker'> FIND US HERE! </h2>
+        <div className="container-top container">
+          <h2 className='thicker'> Find us here! </h2>
           <div className="user-details">
             <div className='address-show'>
               <FontAwesomeIcon className="location icon" icon={faLocationDot} size="1x" />
               <div className='address'>
                 1, opp to Komal Sweets,
                 Gulabnagar,
-                Dhankawadi, Pune - 43
+                Dhankawadi, Pune , Maharashtra - 411043
               </div>
             </div>
             <div className='address-show '>

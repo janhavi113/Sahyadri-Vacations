@@ -16,16 +16,23 @@
     padding-bottom: 8px;
     justify-content: center;
 }
+.google{
+        width: 100px;
+    margin-top: 20px;
+}
+.star{
+ padding: 0px 0px 0 7px;
+}
 .rating-text {
     font-size: 18px;
-    font-family: Inter, Helvetica, Arial, sans-serif;
+   font-family: 'Poppins', sans-serif !important;
     font-weight: 600;
     line-height: 150%;
-    margin: 0 8px 0 0px;
+    margin: 0px;
 }
 
 .rating-review-text {
-    padding: 0 0px 16px 16px;
+    padding: 0px;
 }
 
 .rating-card{
@@ -33,7 +40,10 @@
     border-radius: 4px !important;
     padding: 24px;
 }
-
+.card-width {
+    width: 84% !important;
+    margin-left: 7%;
+}
 .verified-icon{
     position: absolute;
     top: 5px;
@@ -50,14 +60,14 @@
 .review-profile-name {
     font-size: 14px;
     font-style: normal;
-    font-family: Inter, Helvetica, Arial, sans-serif;
+   font-family: 'Poppins', sans-serif !important;
     font-weight: 600;
     line-height: 17px;
     letter-spacing: 0.00938em;
 }
 .rating-profile-date {
     font-size: 14px;
-    font-family: Inter, Helvetica, Arial, sans-serif;
+   font-family: 'Poppins', sans-serif !important;
     font-weight: 400;
     line-height: 150%;
     letter-spacing: 0.00735em;
@@ -82,7 +92,7 @@
 
 .review-body-text {
     font-size: 14px;
-    font-family: Inter, Helvetica, Arial, sans-serif;
+   font-family: 'Poppins', sans-serif !important;
     font-weight: 400;
     line-height: 17px;
     letter-spacing: 0.00938em;

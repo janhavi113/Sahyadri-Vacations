@@ -3,13 +3,18 @@ const batchesSchema = new mongoose.Schema({
         eventCostPerPerson : { type :Number},
         eventEndDate  :{type: Date  },
         eventStartDate  :{type: Date },
-        eventBatchCount : { type :Number}
+        eventBatchCount : { type :Number},
+        everyWeekend: { type: Boolean}, 
+        notScheduleYet: { type: Boolean},        
         });
 const scheduleBatchesSchema = new mongoose.Schema({
     active: { type: Boolean},
     wishlist: { type: Boolean},
     eventname:{ type :String},
     eventId: { type :Number},
+    eventApi:{ type :String},
+    Url: { type :String},    
+    eventType: { type :String},
     batches: [ batchesSchema
      ],
      images:{type: String }

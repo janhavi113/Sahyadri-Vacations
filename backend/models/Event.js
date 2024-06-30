@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 const eventSchema = new mongoose.Schema({
     name:  { type :String},
-    eventType : { type :String},
-    apiname:  { type :String},
+    eventType: { type :String},
+    apiname:  { type :String , unique : true, dropDups: true},
     itinerary:  { type :String},
     eventDetails:  { type :String},
     costIncludes:  { type :String},

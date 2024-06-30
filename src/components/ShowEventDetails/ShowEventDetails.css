@@ -1,6 +1,6 @@
 .event-section-header-img {
     width: 100%;
-    height: 75vh;
+    height: 65vh;
     object-fit: cover;
     object-position: center;
 }
@@ -31,6 +31,9 @@
 select{
     height: 45px;
 }
+.react-datepicker-wrapper {
+    width: 100%;
+}
 .content-row {
     margin: 0;
     padding: 30px;
@@ -41,7 +44,16 @@ select{
     margin-top: -50px;
     background-color: white;
 }
+.button-edit-container .button-margin button ,input{
+    background-color: rgb(255, 115, 0) ;
+    color: white;
+    margin-right: 2%;
+    width: 48%;
+}
 
+.addGap{
+
+}
 .nav-tabs {
     --bs-nav-link-color: rgb(1, 0, 0) !important;
     --bs-nav-link-hover-color: orange !important;
@@ -107,7 +119,7 @@ h3 {
     padding: 0 !important;
 }
 
-.button {
+.button-margin {
     margin: 15px !important;
 }
 
@@ -133,11 +145,18 @@ h3 {
     box-shadow: 0px 8px 32px #00000029;
     border-radius: 16px;
 }
-
+.booking-card-mb {
+    z-index: 1;
+    background-color: white;
+    box-shadow: 0px -4px 32px #00000029;
+    border-radius: 16px 16px 0px 0px;
+}
 .mb-3 {
     margin-bottom: 1rem !important;
 }
-
+.button-edit-container .button .button-input {
+    width: 48% !important;
+}   
 .text-dark {
     color: #212529 !important;
 }
@@ -246,12 +265,66 @@ h3 {
     font-size: 25px !important;
     font-weight: bold !important;
 }
-.swiper-slide {
-    margin-right: 45px !important;
+.button button {
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgb(255, 115, 0);
 }
+.booking-section{
+    margin: 25px;
+}
+.button button:hover{
+    /* trans: scale(0.99); */
+    background: orange;
+    }
+    .Phone {
+        bottom: 10px;
+        z-index: 3000;
+    }
 @media (min-width: 1200px) {
     .h3,
     h3 {
         font-size: 1.75rem;
     }
 }
+@media screen and (max-width: 768px) {
+    .content-row {
+        padding: 0 !important;
+    }
+    .section-details {
+        margin-right: 0 !important;
+    }
+    .fixed-bottom {position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+    }
+    .sticky-top{
+        display: none;
+    }
+    
+.footer {
+    color: #FFF;
+    position: relative;
+    z-index: 2000;
+}
+.Phone {
+    bottom: 160px;
+    z-index: 3000;
+}
+ .swiper-button-prev, .swiper-button-next {
+    content: none;
+}
+.swiper-button-prev:after, .swiper-button-next:after {
+    content: none;
+}
+}  

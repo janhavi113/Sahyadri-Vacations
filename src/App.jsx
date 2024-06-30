@@ -6,10 +6,12 @@ import AdminLogin from "./components/AdminLogin";
 import Dashboard from "./components/AdminDashboard";
 import AllEvents from  "./components/AllEvents";     
 import ScheduledEvents from "./components/ScheduledEvents";
+import ScheduleEvents from "./components/ScheduleEvents";
 import EventDetails from "./components/EventDetails";
 import ShowEventDetails from "./components/ShowEventDetails/ShowEventDetails";
 import CreateEvent from "./components/CreateEvents" ;  
-import ScheduleEvents from "./components/ScheduleEvents" ;
+import Events from "./components/ShowAllEvents/Events" ;
+import SearchEvent from "./components/SearchEvent/SearchEvent" ;
 import UserAgreement from "./components/UserAgreement";
 import Gallery from "./components/Gallery/PhotoGallery" ;
 import ContactUs from "./components/Contact_Us/ContactUs" ;
@@ -28,12 +30,20 @@ function App() {
       element: <Login />,
     }, 
     {
+      path: "/search-event",
+      element: <SearchEvent />,
+    }, 
+    {
       path: "/login",
       element: <Login />,
     },
     {
       path: "/about",
       element: <About />,
+    },
+     {
+      path: "/events",
+      element: <Events />,
     },
     {
       path: "/admin-login",
@@ -50,6 +60,10 @@ function App() {
     {
       path: "/scheduled-event",
       element: <ScheduledEvents />,
+    },
+    {
+      path: "/schedule-event",
+      element: <ScheduleEvents />,
     },
     {
       path: "/create-event",

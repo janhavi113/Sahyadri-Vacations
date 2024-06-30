@@ -6,7 +6,7 @@ const RatingCard = (props) => {
  
   return (
     <>
-      <div className="rating-card card">
+      <div className="rating-card card-width card">
         <div className='verified-icon'>
           <FontAwesomeIcon icon={faCircleCheck} size="lg" style={{ color: "#028322", }} />
         </div>

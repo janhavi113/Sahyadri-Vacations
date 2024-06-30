@@ -9,12 +9,16 @@
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
-
+.contactimg img{
+  height: 300px !important;
+  width: 100%;
+}
 .form-group label {
   display: block;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .form-group input[type="text"],
@@ -24,11 +28,14 @@
 .form-group input[type="number"],
 .form-group textarea {
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  background-color: #d3d3d38a;
 }
-
+.contact-button {
+  margin: 0px !important;
+}
 .form-group textarea {
   height: 100px;
 }
@@ -66,8 +73,8 @@
 }
 
 .thicker {
-  font-size: 35px;
-  font-weight: bold;
+  font-size: 25px !important;
+  font-weight: 600 !important;
   padding-top: 10px;
 }
 
@@ -76,9 +83,11 @@
   padding-left: 10px;
 
 }
+
 .container-top{
   margin-top: 0px;
   padding-top: 0px;
+  text-align: left;
 }
 .container-bottom{
   margin-bottom: 0px;
@@ -90,7 +99,7 @@
 }
 .address-show {
   display: flex;
-  margin: 35px 0px 0px 0px;
+  margin: 15px 0px 0px 0px;
 }
 
 @media screen and (min-width: 768px) {
