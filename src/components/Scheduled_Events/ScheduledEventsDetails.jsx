@@ -79,7 +79,7 @@ const ScheduledEventsDetails = () => {
         }
       }
       const getAllRecord = async () => {
-        let r = await fetch(`http://localhost:3000/event-details/eventid/${params[0]}/${params[1]}`, {
+        let r = await fetch(`https://sahyadri-vacations.vercel.app/event-details/eventid/${params[0]}/${params[1]}`, {
           method: "GET", headers: {
             "Content-Type": "application/json",
           }

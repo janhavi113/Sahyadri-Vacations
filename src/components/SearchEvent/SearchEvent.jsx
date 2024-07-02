@@ -81,7 +81,7 @@ const SearchEvent = (props) => {
   }
   const getAllRecord = async (query) => {
     let liveEvents = [];
-    let r = await fetch(`http://localhost:3000/search-event/${query}`, {
+    let r = await fetch(`https://sahyadri-vacations.vercel.app/search-event/${query}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }

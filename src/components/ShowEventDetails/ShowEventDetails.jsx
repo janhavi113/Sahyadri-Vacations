@@ -90,7 +90,7 @@ const ShowEventDetails = () => {
     data.eventName = eventDetails.name;
     data.batch = selectedDate;
     console.log('---data---'+data);
-    let r = await fetch(`http://localhost:3000/booking`, {
+    let r = await fetch(`https://sahyadri-vacations.vercel.app/booking`, {
       method: "POST", headers: {
         "Content-Type": "application/json",
       }, body: JSON.stringify(data)
@@ -183,7 +183,7 @@ const ShowEventDetails = () => {
     }
   })
   const getAllRecord = async () => {
-    let r = await fetch(`http://localhost:3000/event-details/eventid/${params[0]}/${params[1]}`, {
+    let r = await fetch(`https://sahyadri-vacations.vercel.app/event-details/eventid/${params[0]}/${params[1]}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
