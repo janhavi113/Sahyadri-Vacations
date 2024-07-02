@@ -51,7 +51,7 @@ const ScheduledEvents = () => {
     }
     const getAllRecord = async () => {
         let liveEvents = [];
-        let r = await fetch(`https://sahyadri-vacations.vercel.app/scheduled-events`, {
+        let r = await fetch(`https://sahyadri-vacations-5e5s.vercel.app/scheduled-events`, {
             method: "GET", headers: {
                 "Content-Type": "application/json",
             }

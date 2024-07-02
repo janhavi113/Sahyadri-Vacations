@@ -23,7 +23,7 @@ const AllEvents = () => {
   const getCurrentrecord = async () => {
 
     // alert("ok"); 
-    let r = await fetch(`https://sahyadri-vacations.vercel.app/schedule-event`, {
+    let r = await fetch(`https://sahyadri-vacations-5e5s.vercel.app/schedule-event`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }

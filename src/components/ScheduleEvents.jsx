@@ -43,7 +43,7 @@ function ScheduleEvents() {
   const getCurrentrecord = async () => {
 
     // alert("ok"); 
-    let r = await fetch(`https://sahyadri-vacations.vercel.app/schedule-event`, {
+    let r = await fetch(`https://sahyadri-vacations-5e5s.vercel.app/schedule-event`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
@@ -91,7 +91,7 @@ function ScheduleEvents() {
       console.log('search--',search);
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
-      const url = `https://sahyadri-vacations.vercel.app/schedule-event`;
+      const url = `https://sahyadri-vacations-5e5s.vercel.app/schedule-event`;
       let r = await fetch(url, {
         method: "POST",
         body: formData,

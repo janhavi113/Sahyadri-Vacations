@@ -36,7 +36,7 @@ function CreateEvents() {
     formData.append("itinerary", itinerary);
     formData.append("pickupPoints", pickupPoints);
     formData.append("thingsToCarry", thingsToCarry);
-    let r = await fetch("https://sahyadri-vacations.vercel.app/create-event", {
+    let r = await fetch("https://sahyadri-vacations-5e5s.vercel.app/create-event", {
       method: "POST",
       body: formData,
     })

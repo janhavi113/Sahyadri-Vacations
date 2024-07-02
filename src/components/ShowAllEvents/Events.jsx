@@ -47,7 +47,7 @@ const Events = () => {
         let trekkingEvents = [];
         let campingEvents = [];
         let backPackingEvents = [];
-        let r = await fetch(`https://sahyadri-vacations.vercel.app/`, {
+        let r = await fetch(`https://sahyadri-vacations-5e5s.vercel.app/`, {
             method: "GET", headers: {
                 "Content-Type": "application/json",
             }
