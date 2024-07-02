@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import AdminNavbar from "./AdminNavbar";
 import Card from "./eventcard";
 import "./ScheduleEvents.css"
+import "./AllEvents.css"
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form"
 const AllEvents = () => {
@@ -14,9 +15,9 @@ const AllEvents = () => {
     setError,
     formState: { errors, isSubmitting },
   } = useForm();
-
+  const navigate = useNavigate();
   useEffect(() => {
-   getCurrentrecord();
+    getCurrentrecord();
   }, []);
 
   const getCurrentrecord = async () => {
@@ -28,26 +29,46 @@ const AllEvents = () => {
       }
     })
     let res = await r.json()
-    console.log('res ===', res.isSuccess);
+    console.log('res ===', res.events);
     if (res.isSuccess) {
-    
-         setSuccess(res.isSuccess);
-         setEvent(res.events);
-         setScheduleBatches(res.scheduleBatches);
-       
-        }
-        
+
+      setSuccess(res.isSuccess);
+      setEvent(res.events);
+      setScheduleBatches(res.scheduleBatches);
+
+    }
+
   }
   return (
     <div>
-        <AdminNavbar />
-        <div className="title-header">All Avilable Events </div>
-         <div className='card-display'>
-         {isSuccess && events.map(event=> (
-          <Card event = {event} key = {event.name}/>
-         ))
-         }
+      <AdminNavbar />
+      <div className="scheduled-contentbody contentbody">
+        <div className="container justify-content-center py-md-5">
+          <h1><b>All Available Events</b></h1>
+          <div className="row justify-content- py-4" >
+
+            {isSuccess && events.map((event, index) => (
+              <>
+                <div className="event-card card all-events-card">
+                
+                    <img className="event-card-image" src={event.images[0]} alt="Avatar" width="100%" />
+                    <div className="event-card-container">
+                      <h2 className='all-event-header event-card-header bg-transparent'><b>{event.name}</b></h2>
+                      <div className='show-event-card-footer event-card-footer'>
+                        <div className="button-edit-container">
+                          <div className="button">
+                            <input type="submit" value="Edit Event" onClick={() => navigate(event.url.includes("http://localhost:5173") ? event.url.replace( "http://localhost:5173","") : event.url)}/>
+                            <input type="submit" value=" Schedule Event " onClick={() => navigate('/schedule-event')} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </>
+            ))}
+          </div>
         </div>
+      </div>
     </div>
   )
 }

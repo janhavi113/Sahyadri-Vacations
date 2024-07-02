@@ -12,25 +12,25 @@ const ScheduledEvents = () => {
         }
     })
     const getNextBatchDate = (event) => {
-       
+
         var liveEvent = '';
-        let batchdate ='';
+        let batchdate = '';
         let eventCostPerPerson;
 
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         for (let i = 0; i < event.batches.length; i++) {
-             if(event.batches[i].everyWeekend == true){
+            if (event.batches[i].everyWeekend == true) {
                 batchdate = 'Available On All Weekends';
                 eventCostPerPerson = event.batches[i].eventCostPerPerson;
-              }else if (event.batches[i].notScheduleYet == true) {
+            } else if (event.batches[i].notScheduleYet == true) {
                 batchdate = 'On Public Demand';
                 eventCostPerPerson = event.batches[i].eventCostPerPerson;
-              }else {
-               
-                batchdate = batchdate +  new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' '+new Date(event.batches[i].eventStartDate).getFullYear() + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] +' '+ new Date(event.batches[i].eventEndDate).getFullYear() + ' | ';
+            } else {
+
+                batchdate = batchdate + new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear() + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventEndDate).getFullYear() + ' | ';
                 eventCostPerPerson = event.batches[i].eventCostPerPerson;
                 console.log('batchdate --', batchdate);
-            } 
+            }
         }
 
         if (batchdate && eventCostPerPerson) {
@@ -46,7 +46,7 @@ const ScheduledEvents = () => {
 
             }
         }
-      //  console.log('liveEvent==', liveEvent);
+        //  console.log('liveEvent==', liveEvent);
         return liveEvent;
     }
     const getAllRecord = async () => {
@@ -57,7 +57,7 @@ const ScheduledEvents = () => {
             }
         })
         let res = await r.json()
-        
+
         if (res.isSuccess == true) {
             setSuccess(true);
             for (let i = 0; i < res.events.length; i++) {
@@ -67,36 +67,36 @@ const ScheduledEvents = () => {
             }
             setEvent(liveEvents);
         }
-    } 
+    }
     const navigate = useNavigate();
     return (
         <div>
             <AdminNavbar />
             <div className="scheduled-contentbody contentbody">
                 <div className="container justify-content-center py-md-5">
-           <h1><b>All Scheduled Events</b></h1>
+                    <h1><b>All Scheduled Events</b></h1>
                     <div className="row justify-content- py-4" >
-                       
-                    {isSuccess && events.map((event, index) => (
-                         <>
-                         <div className="event-card card all-events-card">
-                             <a onClick={() => navigate(event.url)}>
-                                 <img className="event-card-image" src={event.images} alt="Avatar" width="100%" />
-                                 <div className="event-card-container">
-                                     <h2 className='all-event-header event-card-header bg-transparent'><b>{event.eventname}</b></h2>
-                                     <div className='all-event-card-footer event-card-footer'>
-                                     <div> Status : {event.status}</div>
-                                     <div >{event.batchdate}</div>
-                                     <div ><strong className='price'>₹{event.eventCostPerPerson} </strong><i>per person</i></div>
-                                     </div>
-                                 </div>
-                             </a>
-                         </div>
-                         </>
-                    ))}
-                        </div>
+
+                        {isSuccess && events.map((event, index) => (
+                            <>
+                                <div className="event-card card all-events-card">
+                                    <a onClick={() => navigate(event.url)}>
+                                        <img className="event-card-image" src={event.images} alt="Avatar" width="100%" />
+                                        <div className="event-card-container">
+                                            <h2 className='all-event-header event-card-header bg-transparent'><b>{event.eventname}</b></h2>
+                                            <div className='all-event-card-footer event-card-footer'>
+                                                <div> Status : {event.status}</div>
+                                                <div >{event.batchdate}</div>
+                                                <div ><strong className='price'>₹{event.eventCostPerPerson} </strong><i>per person</i></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </>
+                        ))}
                     </div>
                 </div>
+            </div>
         </div>
     )
 }
