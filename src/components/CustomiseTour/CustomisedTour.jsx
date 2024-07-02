@@ -32,7 +32,7 @@ const CustomisedTour = () => {
         setSubmitting(true);
         console.log('data', JSON.stringify(data));
         // Add your logic for form submission here
-        let r = await fetch("https://sahyadri-vacations-5e5s.vercel.app/customised-tour",{
+        let r = await fetch("http://localhost:3000/customised-tour",{
             method: "POST", headers: {
                 "Content-Type": "application/json",
             }, body: JSON.stringify(data)
