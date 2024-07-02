@@ -5,7 +5,8 @@ import CustomisedTour from "./components/CustomiseTour/CustomisedTour";
 import AdminLogin from "./components/AdminLogin";
 import Dashboard from "./components/AdminDashboard";
 import AllEvents from  "./components/AllEvents";     
-import ScheduledEvents from "./components/ScheduledEvents";
+import ScheduledEvents from "./components/Scheduled_Events/ScheduledEvents";
+import ScheduledEventsDetails from "./components/Scheduled_Events/ScheduledEventsDetails";
 import ScheduleEvents from "./components/ScheduleEvents";
 import EventDetails from "./components/EventDetails";
 import ShowEventDetails from "./components/ShowEventDetails/ShowEventDetails";
@@ -58,8 +59,12 @@ function App() {
       element: <AllEvents />,
     },
     {
-      path: "/scheduled-event",
+      path: "/scheduled-events",
       element: <ScheduledEvents />,
+    },
+    {
+      path: "/scheduled-event-details",
+      element: <ScheduledEventsDetails />,
     },
     {
       path: "/schedule-event",

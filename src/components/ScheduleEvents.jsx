@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import AdminNavbar from "./AdminNavbar";
+import AdminNavbar from "./AdminDashboard";
 import "./ScheduleEvents.css"
 import "./CreateEvents.css"
 import DatePicker from "./EventDatePicker";
@@ -7,11 +7,13 @@ import card from "./card"
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form"
 import Dropzone from "react-dropzone";
+import { redirect,useNavigate } from "react-router-dom";
 function ScheduleEvents() {
   const [isSuccess, setSuccess] = useState(false);
   const [events, setEvent] = useState();
   const [activeError, setActiveError] = useState({ disply: false });
   const [count, setCount] = useState(1);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -86,7 +88,7 @@ function ScheduleEvents() {
         console.log('item',item.eventId == data.Event)
         return item.eventId == data.Event;
       });
-      console.log('search',search);
+      console.log('search--',search);
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
       const url = `http://localhost:3000/schedule-event`;
@@ -97,7 +99,7 @@ function ScheduleEvents() {
       let res = await r.json()
       console.log('res ===', JSON.stringify(res));
       if (res.isSuccess == true) {
-        //
+        navigate("/scheduled-event"); 
       }
     }
   }

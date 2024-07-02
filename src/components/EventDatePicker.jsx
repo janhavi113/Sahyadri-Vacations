@@ -91,12 +91,12 @@ const EventDatePicker = (props) => {
                                 {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
                                 <div className="input-box-column event-picker ">
                                     <span className="details">Every Weekend </span>
-                                    <input type="checkbox" value={false} {...register("everyWeekend")} />
+                                    <input type="checkbox"  {...register("everyWeekend")} />
                                 </div>
 
                                 <div className="input-box-column event-picker ">
                                     <span className="details">On Public Demand </span>
-                                    <input type="checkbox"  value={false} {...register("notScheduleYet")}  />
+                                    <input type="checkbox"   {...register("notScheduleYet")}  />
                                 </div>
                                 {errors.multipleError && <p className='show-error'>{errors.multipleError.message}</p>}
                                 <div className="schedule-input input-box ">

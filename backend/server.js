@@ -39,25 +39,35 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage })
-app.get('/', async(req, res) => {
-  try{
-  let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true });
-  res.send({isSuccess : true, events :ScheduleBatchesRecords});
-}catch (error) {
+app.get('/', async (req, res) => {
+  try {
+    let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true });
+    res.send({ isSuccess: true, events: ScheduleBatchesRecords });
+  } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
 })
 
-app.get('/search-event/:serchText', async(req, res) => {
-  try{
-    console.log('req.params--',req.params.serchText);
-  
-    console.log('serchText--',{ $regex: '.*' + req.params.serchText.toLowerCase() + '.*' } );
-   let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true, eventApi: { $regex: '.*' + req.params.serchText.toLowerCase()  + '.*' }});
-   console.log('ScheduleBatchesRecords--',ScheduleBatchesRecords);
-   res.send({isSuccess : true, events :ScheduleBatchesRecords});
-}catch (error) {
+app.get('/scheduled-events', async (req, res) => {
+  try {
+    let ScheduleBatchesRecords = await ScheduleBatches.find({  });
+    res.send({ isSuccess: true, events: ScheduleBatchesRecords });
+  } catch (error) {
+    console.error(error);
+    res.send({ isSuccess: false, error: error });
+  }
+})
+
+app.get('/search-event/:serchText', async (req, res) => {
+  try {
+    console.log('req.params--', req.params.serchText);
+
+    console.log('serchText--', { $regex: '.*' + req.params.serchText.toLowerCase() + '.*' });
+    let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true, eventApi: { $regex: '.*' + req.params.serchText.toLowerCase() + '.*' } });
+    console.log('ScheduleBatchesRecords--', ScheduleBatchesRecords);
+    res.send({ isSuccess: true, events: ScheduleBatchesRecords });
+  } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
@@ -69,14 +79,14 @@ app.post('/admin-login', async (req, res) => {
   res.send(employee);
 })
 app.get('/event-details/eventid/:eventId/:apiName', async (req, res) => {
-  console.log('req.params--',req.params);
+  console.log('req.params--', req.params);
   let event_Id = req.params.eventId;
   let apiname = req.params.apiName;
-  var events = await Events.findOne({apiname : apiname })
-  let ScheduleBatchesRecords = await ScheduleBatches.findOne({ eventId : event_Id  });
-  if(events  && ScheduleBatchesRecords ){
-    console.log('event_Id--',events ,'ScheduleBatchesRecords',ScheduleBatchesRecords);
-      res.send({ isSuccess: true, events: events ,ScheduleBatchesRecords : ScheduleBatchesRecords})
+  var events = await Events.findOne({ apiname: apiname })
+  let ScheduleBatchesRecords = await ScheduleBatches.findOne({ eventId: event_Id });
+  if (events && ScheduleBatchesRecords) {
+    console.log('event_Id--', events, 'ScheduleBatchesRecords', ScheduleBatchesRecords);
+    res.send({ isSuccess: true, events: events, ScheduleBatchesRecords: ScheduleBatchesRecords })
   } else {
     res.send({ isSuccess: false });
   }
@@ -88,20 +98,20 @@ app.post('/event-details/eventid/:eventId/:apiName', async (req, res) => {
     const {
       fullName,
       emailId,
-    whatsappNumber,
-    selectDate,
-    eventId,
-    eventName,
-    numberOfPeoples,
-    amountPaid,
+      whatsappNumber,
+      selectDate,
+      eventId,
+      eventName,
+      numberOfPeoples,
+      amountPaid,
     } = req.body;
-  
+
     const bookingRequest = new Bookings({
       name: fullName,
       mobileNumber: whatsappNumber,
       batch: selectDate,
       eventId: eventId,
-      eventName:eventName,
+      eventName: eventName,
       numberOfPeoples: numberOfPeoples,
       email: emailId,
       amountPaid: amountPaid,
@@ -124,7 +134,7 @@ app.get('/create-event/event-details/:eventId', async (req, res) => {
     var events = await Events.find({ eventId: event_Id })
     var imageList = events[0]?.images;
     images = imageList;
-   // console.log('events', events);
+    // console.log('events', events);
     if (events && events.length > 0) {
       res.send({ isSuccess: true, events: events })
     } else {
@@ -140,7 +150,7 @@ app.get('/create-event/event-details/:eventId', async (req, res) => {
 app.post('/create-event/event-details/:eventId', async (req, res) => {
   try {
     let event_Id = Number(req.params.eventId.toString().replace(':', ''));
-   // console.log('event_Id'+event_Id);
+    // console.log('event_Id'+event_Id);
     var myquery = { eventId: event_Id };
     var events = await Events.deleteOne(myquery);
     if (events && events.length > 0) {
@@ -169,25 +179,25 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       eventType,
       currentImages
     } = req.body;
-   
+
     var imageList = [];
-    if (currentImages != undefined && !Array.isArray( currentImages)) {      
-      imageList.push(currentImages.toString().replace('blob:',''));
-    } else if (currentImages != undefined && currentImages.length > 1) {      
+    if (currentImages != undefined && !Array.isArray(currentImages)) {
+      imageList.push(currentImages.toString().replace('blob:', ''));
+    } else if (currentImages != undefined && currentImages.length > 1) {
       for (let index = 0; index < currentImages.length; index++) {
-       // console.log('currentImages['+index+'].toString().replace(blob:)'+currentImages[index])
-    
-     // console.log('currentImages['+index+'].toString().replace(blob:)'+currentImages[index].toString().replace('blob:',''))
-        imageList.push(currentImages[index].toString().replace('blob:',''));
+        // console.log('currentImages['+index+'].toString().replace(blob:)'+currentImages[index])
+
+        // console.log('currentImages['+index+'].toString().replace(blob:)'+currentImages[index].toString().replace('blob:',''))
+        imageList.push(currentImages[index].toString().replace('blob:', ''));
       }
     }
     var hostname = req.headers.origin;
-   
+
     for (let index = 0; index < req.files.length; index++) {
-     // console.log('req.files['+index+'].path--'+req.files[index].path);
+      // console.log('req.files['+index+'].path--'+req.files[index].path);
       imageList.push(hostname + "/" + req.files[index].path.toString().replaceAll('\\', '/'));
     }
-  
+
 
     var myquery = { eventId: event_Id };
     var options = { upsert: true };
@@ -195,7 +205,7 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       name: eventName,
       itinerary: itinerary,
       eventDetails: eventDetails,
-      eventType:eventType,
+      eventType: eventType,
       costIncludes: costIncludes,
       thingsToCarry: thingsToCarry,
       pickupPoints: pickupPoints,
@@ -204,7 +214,7 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
     };
     var events = await Events.updateOne(myquery, updateDoc, options);
     events = await Events.find(myquery);
-   //console.log('events --',events);
+    //console.log('events --',events);
     if (events && events.length > 0) {
       res.send({ isSuccess: true, events: events })
     } else {
@@ -230,14 +240,14 @@ app.get('/all-events', async (req, res) => {
 // Create Event 
 app.post('/create-event', upload.array('file', 12), async (req, res) => {
   try {
-    console.log('create req.body --',req.body);
+    console.log('create req.body --', req.body);
     var imageList = [];
     var currUrl = req.headers.origin;
-    if(req.files){
-    for (let index = 0; index < req.files.length; index++) {
-      imageList.push(currUrl + "/" + req.files[index].path.toString().replaceAll('\\', '/'));
+    if (req.files) {
+      for (let index = 0; index < req.files.length; index++) {
+        imageList.push(currUrl + "/" + req.files[index].path.toString().replaceAll('\\', '/'));
+      }
     }
-  }
 
     var events = await Events.find().sort([['_id', -1]]).limit(1)
     if (events.length > 0) {
@@ -245,7 +255,7 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
     } else {
       recordcount = 0;
     }
-   
+
     const {
       eventName,
       eventDetails,
@@ -256,7 +266,7 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
       pickupPoints,
       eventType
     } = req.body;
-    console.log('create req.body --',req.body);
+    console.log('create req.body --', req.body);
     let apiName = req.body.eventName;
     apiName = apiName.toString().replace(/\s/g, '-').toLowerCase();
     const event = new Events({
@@ -298,29 +308,29 @@ app.get('/schedule-event', async (req, res) => {
 
 app.post('/schedule-event', upload.single('file'), async (req, res) => {
   try {
-   
-    var currUrl ='';
+
+    var currUrl = '';
     if (req.file) {
       currUrl = req.headers.origin + "/" + req.file.path.toString().replaceAll('\\', '/');
     }
-     //console.log('schedule-event --',req.body);
+    console.log('schedule-event --', req.body);
     const {
       active,
       eventId,
       eventname,
       batches,
-      eventtype,
+      eventType,
     } = req.body;
     var batchList = [];
-    if(Array.isArray(batches)){
-    for (let i = 0; i < batches.length; i++) {
-      batchList.push(JSON.parse(batches[i]));
+    if (Array.isArray(batches)) {
+      for (let i = 0; i < batches.length; i++) {
+        batchList.push(JSON.parse(batches[i]));
+      }
+    } else {
+      batchList.push(JSON.parse(batches));
     }
-  }else{
-    batchList.push(JSON.parse(batches));
-  }
-  let scheduleRecordcount = 0;
-  var events = await ScheduleBatches.find().sort([['_id', -1]]).limit(1)
+    let scheduleRecordcount = 0;
+    var events = await ScheduleBatches.find().sort([['_id', -1]]).limit(1)
     if (events.length > 0) {
       scheduleRecordcount = events[0].eventId;
     } else {
@@ -332,13 +342,15 @@ app.post('/schedule-event', upload.single('file'), async (req, res) => {
       batches: batchList,
       eventname: eventname,
       images: currUrl,
-      Url: '/event-details?eventid='+(scheduleRecordcount + 1).toString()+'/'+eventname.toString().replace(/\s/g, '-').toLowerCase(),
-      eventType: eventtype,
-      eventApi:eventname.toString().replace(/\s/g, '-').toLowerCase()
+      Url: '/event-details?eventid=' + (scheduleRecordcount + 1).toString() + '/' + eventname.toString().replace(/\s/g, '-').toLowerCase(),
+      eventType: eventType,
+      eventApi: eventname.toString().replace(/\s/g, '-').toLowerCase()
     });
 
     scheduleBatches.save();
-    res.send({ isSuccess: true });
+    if (scheduleBatches._id) {
+      res.send({ isSuccess: true });
+    }
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
@@ -347,8 +359,8 @@ app.post('/schedule-event', upload.single('file'), async (req, res) => {
 
 //Customised Tour
 app.post('/customised-tour', async (req, res) => {
- // console.log('req.body', req.body);
- // console.log('req.body', req.file);
+  // console.log('req.body', req.body);
+  // console.log('req.body', req.file);
   try {
     const {
       name,
@@ -382,8 +394,8 @@ app.post('/customised-tour', async (req, res) => {
 // Bookings
 app.post('/booking', async (req, res) => {
   try {
-    console.log('create req.body --',req.body);
-       
+    console.log('create req.body --', req.body);
+
     const {
       fullName,
       numberOfPeoples,
@@ -395,19 +407,19 @@ app.post('/booking', async (req, res) => {
       whatsappNumber,
       selectDate
     } = req.body;
-    console.log('create req.body --',req.body);
-    
+    console.log('create req.body --', req.body);
+
     const booking = new Bookings({
-    name: fullName,
-    email : emailId,
-    mobileNumber:  whatsappNumber,
-    batch:  batch,
-    eventId: eventId,
-    eventName:  eventName,
-    numberOfPeoples: numberOfPeoples,
-    amountPaid: amountPaid,
+      name: fullName,
+      email: emailId,
+      mobileNumber: whatsappNumber,
+      batch: batch,
+      eventId: eventId,
+      eventName: eventName,
+      numberOfPeoples: numberOfPeoples,
+      amountPaid: amountPaid,
     });
-     
+
     booking.save();
     // console.log('booking._id',booking._id);
     // if(booking._id){
@@ -423,7 +435,7 @@ app.post('/booking', async (req, res) => {
     //       pass: 'Black@9808'
     //     }
     //   });
-      
+
     //   var mailOptions = {
     //     from: 'janhavi9826@gmail.com',
     //     to: 'janhavijadhav9812@gmail.com',
@@ -447,6 +459,6 @@ app.post('/booking', async (req, res) => {
 
 })
 app.listen(port, () => {
- // console.log(`Example app listening on port ${port}`)
+  // console.log(`Example app listening on port ${port}`)
 })
 
