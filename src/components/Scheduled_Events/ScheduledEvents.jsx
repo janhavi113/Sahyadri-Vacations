@@ -51,7 +51,7 @@ const ScheduledEvents = () => {
     }
     const getAllRecord = async () => {
         let liveEvents = [];
-        let r = await fetch(`${window.location.origin}/scheduled-events`, {
+        let r = await fetch(`http://localhost:3000/scheduled-events`, {
             method: "GET", headers: {
                 "Content-Type": "application/json",
             }

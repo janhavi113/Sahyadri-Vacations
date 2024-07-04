@@ -32,7 +32,7 @@ const CustomisedTour = () => {
         setSubmitting(true);
         console.log('data', JSON.stringify(data));
         // Add your logic for form submission here
-        let r = await fetch(`${window.location.origin}/customised-tour`,{
+        let r = await fetch(`http://localhost:3000/customised-tour`,{
             method: "POST", headers: {
                 "Content-Type": "application/json",
             }, body: JSON.stringify(data)

@@ -99,7 +99,7 @@ const Home = () => {
     let trekkingEvents = [];
     let campingEvents = [];
     let backPackingEvents = [];
-    let r = await fetch(`${window.location.origin}/`, {
+    let r = await fetch(`http://localhost:3000/`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }

@@ -43,7 +43,7 @@ function ScheduleEvents() {
   const getCurrentrecord = async () => {
 
     // alert("ok"); 
-    let r = await fetch(`${window.location.origin}/schedule-event`, {
+    let r = await fetch(`http://localhost:3000/schedule-event`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
@@ -91,7 +91,7 @@ function ScheduleEvents() {
       console.log('search--',search);
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
-      const url = `${window.location.origin}/schedule-event`;
+      const url = `http://localhost:3000/schedule-event`;
       let r = await fetch(url, {
         method: "POST",
         body: formData,

@@ -36,7 +36,7 @@ function CreateEvents() {
     formData.append("itinerary", itinerary);
     formData.append("pickupPoints", pickupPoints);
     formData.append("thingsToCarry", thingsToCarry);
-    let r = await fetch(`${window.location.origin}/create-event`, {
+    let r = await fetch(`http://localhost:3000/create-event`, {
       method: "POST",
       body: formData,
     })

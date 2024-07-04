@@ -13,7 +13,7 @@ const AdminLogin = () => {
  const navigate = useNavigate();
   
   const onSubmit = async (data) => {
-    let r = await fetch(`${window.location.origin}/admin-login`, {method: "POST",  headers: {
+    let r = await fetch(`http://localhost:3000/admin-login`, {method: "POST",  headers: {
       "Content-Type": "application/json", 
     }, body: JSON.stringify(data)})
     let res = await r.json()
