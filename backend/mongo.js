@@ -6,5 +6,18 @@ let password = process.env.MONGOODB_PASSWORD;
 console.log('userName--',userName);
 console.log('password--',password);
 let url =`mongodb+srv://${userName}:${password}@testdb.90vgjim.mongodb.net/Sahyadri-Vacations`;
-let conn = await mongoose.connect(url)
-export default conn;
+const main = async () => {
+    try {
+      await mongoose.connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
+      console.log('Successfully connected to MongoDB');
+    } catch (error) {
+      console.error('Error connecting to MongoDB:', error);
+    }
+  };
+  
+  main().catch(console.error);
+  
+  export default main;

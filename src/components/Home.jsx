@@ -55,6 +55,7 @@ const Home = () => {
   const [campingEvents, setCampingEvents] = useState();
   const [trekkingEvents, setTrekkingEvents] = useState();
   useEffect(() => {
+    console.log('isSuccess'+isSuccess);
     if (isSuccess == false) {
       getAllRecord();
     }
@@ -95,6 +96,7 @@ const Home = () => {
     return liveEvent;
   }
   const getAllRecord = async () => {
+    console.log('getAllRecord');
     let liveEvents = [];
     let trekkingEvents = [];
     let campingEvents = [];
@@ -104,7 +106,9 @@ const Home = () => {
         "Content-Type": "application/json",
       }
     })
+    
     let res = await r.json()
+    console.log('res'+res);
     if (res.isSuccess == true) {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {

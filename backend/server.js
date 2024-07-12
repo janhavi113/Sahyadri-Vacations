@@ -13,21 +13,30 @@ import main from "./mongo.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
-import { Console } from "console";
 import dotenv from "dotenv";
+
 dotenv.config();
 let clientSceret = process.env.MONGOODB_CLIENT_SCERET;
 let clientId = process.env.MONGOODB_CLIENT_ID;
 let refreshToken = process.env.MONGOODB_REFRESH_TOKEN;
-//const OAuth2 = google.auth.OAuth2;
-// const OAuth2_Client = new OAuth2(clientId,clientSceret);
-// OAuth2_Client.setCredentials({refresh_token: refreshToken})
-const app = express()
-const port = 3000;
+const app = express();
+const port = process.env.PORT || 3000;
 var images = {};
 var recordcount;
 app.use(cors())
 app.use(bodyParser.json())
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Assuming your frontend folder is at the same level as your backend folder
+const frontendDir = path.join(__dirname, '../frontend/dist');
+console.log('Frontend directory:', frontendDir);
+
+// Serve static files from the frontend dist directory
+ app.use(express.static(frontendDir));
+
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/Images/')
@@ -40,6 +49,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 app.get('/', async (req, res) => {
+  console.log('i am in');
   try {
     let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true });
     res.send({ isSuccess: true, events: ScheduleBatchesRecords });
@@ -458,7 +468,13 @@ app.post('/booking', async (req, res) => {
   }
 
 })
-app.listen(port, () => {
-  // console.log(`Example app listening on port ${port}`)
-})
 
+// Handle all other routes and serve index.html
+app.get('*', (req, res) => {
+  console.log('path--',path.join(frontendDir, 'index.html'));
+  res.sendFile(path.join(frontendDir, 'index.html'));
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
