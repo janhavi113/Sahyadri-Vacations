@@ -26,7 +26,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 const Events = () => {
-    
+    const apiUrl = import.meta.env.VITE_API_URL;
     const [backgroundImage, setBackgroundImage] = useState(slide1);
     const [show, setShow] = useState(false);
     const [isSuccess, setSuccess] = useState(false);
@@ -47,7 +47,7 @@ const Events = () => {
         let trekkingEvents = [];
         let campingEvents = [];
         let backPackingEvents = [];
-        let r = await fetch(`http://localhost:3000/`, {
+        let r = await fetch(`${apiUrl}`, {
             method: "GET", headers: {
                 "Content-Type": "application/json",
             }

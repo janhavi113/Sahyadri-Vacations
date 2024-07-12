@@ -8,6 +8,7 @@ import "./CreateEvents.css"
 import "./Modal.css";
 import Editor from "./Editor";
 function EventDetails() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [modal, setModal] = useState(false);
   const [file, setFiles] = useState(null);
   const [itinerary, setItinerary] = useState();
@@ -55,7 +56,7 @@ function EventDetails() {
 
 
   const getCurrentrecord = async () => {
-    fetch(`http://localhost:3000/create-event/event-details/:${eventId}`, {
+    fetch(`${apiUrl}create-event/event-details/:${eventId}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
@@ -77,7 +78,7 @@ function EventDetails() {
   }
 
   const onDelete = async (data) => {
-    let r = await fetch(`http://localhost:3000/create-event/event-details/:${eventId}`,
+    let r = await fetch(`${apiUrl}create-event/event-details/:${eventId}`,
       {
         method: "POST", headers: {
           "Content-Type": "application/json",
@@ -133,7 +134,7 @@ function EventDetails() {
     console.log("pickupPoints --> " + pickupPoints);
     console.log("thingsToCarry --> " + thingsToCarry);
     // fake request to upload file
-    const url = `http://localhost:3000/create-event/event-details/:${eventId}`;
+    const url = `${apiUrl}create-event/event-details/:${eventId}`;
     const formData = new FormData();
     if (file) {
       for (let index = 0; index < file.length; index++) {

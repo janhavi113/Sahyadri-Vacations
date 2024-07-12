@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 const ScheduledEventsDetails = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
     const [searchParams, setSearchParams] = useSearchParams();
     const queryParameters = new URLSearchParams(window.location.search);
     const [type, setType] = useState(queryParameters.get("eventid"));
@@ -79,7 +80,7 @@ const ScheduledEventsDetails = () => {
         }
       }
       const getAllRecord = async () => {
-        let r = await fetch(`http://localhost:3000/event-details/eventid/${params[0]}/${params[1]}`, {
+        let r = await fetch(`${apiUrl}event-details/eventid/${params[0]}/${params[1]}`, {
           method: "GET", headers: {
             "Content-Type": "application/json",
           }

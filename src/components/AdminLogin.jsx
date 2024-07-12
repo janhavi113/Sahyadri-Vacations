@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form"
 import { redirect,useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const {
     register,
     handleSubmit,
@@ -13,7 +13,7 @@ const AdminLogin = () => {
  const navigate = useNavigate();
   
   const onSubmit = async (data) => {
-    let r = await fetch(`http://localhost:3000/admin-login`, {method: "POST",  headers: {
+    let r = await fetch(`${apiUrl}admin-login`, {method: "POST",  headers: {
       "Content-Type": "application/json", 
     }, body: JSON.stringify(data)})
     let res = await r.json()

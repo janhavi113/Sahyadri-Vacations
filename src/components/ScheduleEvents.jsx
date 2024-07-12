@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form"
 import Dropzone from "react-dropzone";
 import { redirect,useNavigate } from "react-router-dom";
 function ScheduleEvents() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isSuccess, setSuccess] = useState(false);
   const [events, setEvent] = useState();
   const [activeError, setActiveError] = useState({ disply: false });
@@ -43,7 +44,7 @@ function ScheduleEvents() {
   const getCurrentrecord = async () => {
 
     // alert("ok"); 
-    let r = await fetch(`http://localhost:3000/schedule-event`, {
+    let r = await fetch(`${apiUrl}schedule-event`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
@@ -91,7 +92,7 @@ function ScheduleEvents() {
       console.log('search--',search);
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
-      const url = `http://localhost:3000/schedule-event`;
+      const url = `${apiUrl}schedule-event`;
       let r = await fetch(url, {
         method: "POST",
         body: formData,

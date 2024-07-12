@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from "react-hook-form"
 import sadface from '../Images/sad-face.svg'
 const CustomisedTour = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const {
         register,
         handleSubmit,
@@ -32,7 +33,7 @@ const CustomisedTour = () => {
         setSubmitting(true);
         console.log('data', JSON.stringify(data));
         // Add your logic for form submission here
-        let r = await fetch(`http://localhost:3000/customised-tour`,{
+        let r = await fetch(`${apiUrl}customised-tour`,{
             method: "POST", headers: {
                 "Content-Type": "application/json",
             }, body: JSON.stringify(data)

@@ -41,6 +41,7 @@ const responsive = {
   }
 };
 const Home = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const images = [
     slide1,
     slide2,
@@ -101,7 +102,7 @@ const Home = () => {
     let trekkingEvents = [];
     let campingEvents = [];
     let backPackingEvents = [];
-    let r = await fetch(`http://localhost:3000/`, {
+    let r = await fetch(`${apiUrl}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }

@@ -12,6 +12,7 @@ import './SearchEvent.css'
 import { useNavigate } from "react-router-dom";
 
 const SearchEvent = (props) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParameters = new URLSearchParams(window.location.search)
   //alert('queryParameters',queryParameters);
@@ -81,7 +82,7 @@ const SearchEvent = (props) => {
   }
   const getAllRecord = async (query) => {
     let liveEvents = [];
-    let r = await fetch(`http://localhost:3000/search-event/${query}`, {
+    let r = await fetch(`${apiUrl}search-event/${query}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }

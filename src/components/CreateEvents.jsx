@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./CreateEvents.css"
 import Dropzone from "react-dropzone";
 function CreateEvents() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const {
     register,
     handleSubmit,
@@ -36,7 +37,7 @@ function CreateEvents() {
     formData.append("itinerary", itinerary);
     formData.append("pickupPoints", pickupPoints);
     formData.append("thingsToCarry", thingsToCarry);
-    let r = await fetch(`http://localhost:3000/create-event`, {
+    let r = await fetch(`${apiUrl}create-event`, {
       method: "POST",
       body: formData,
     })

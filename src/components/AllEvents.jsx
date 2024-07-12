@@ -6,6 +6,7 @@ import "./AllEvents.css"
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form"
 const AllEvents = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [isSuccess, setSuccess] = useState(false);
   const [events, setEvent] = useState();
   const [scheduleBatches, setScheduleBatches] = useState();
@@ -23,7 +24,7 @@ const AllEvents = () => {
   const getCurrentrecord = async () => {
 
     // alert("ok"); 
-    let r = await fetch(`http://localhost:3000/schedule-event`, {
+    let r = await fetch(`${apiUrl}schedule-event`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }

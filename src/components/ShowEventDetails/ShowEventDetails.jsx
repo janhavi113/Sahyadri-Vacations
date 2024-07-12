@@ -21,6 +21,7 @@ import DatePicker from "react-datepicker";
 import {addDays ,isWeekend } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 const ShowEventDetails = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParameters = new URLSearchParams(window.location.search);
   const [type, setType] = useState(queryParameters.get("eventid"));
@@ -90,7 +91,7 @@ const ShowEventDetails = () => {
     data.eventName = eventDetails.name;
     data.batch = selectedDate;
     console.log('---data---'+data);
-    let r = await fetch(`http://localhost:3000/booking`, {
+    let r = await fetch(`${apiUrl}booking`, {
       method: "POST", headers: {
         "Content-Type": "application/json",
       }, body: JSON.stringify(data)
@@ -183,7 +184,7 @@ const ShowEventDetails = () => {
     }
   })
   const getAllRecord = async () => {
-    let r = await fetch(`http://localhost:3000/event-details/eventid/${params[0]}/${params[1]}`, {
+    let r = await fetch(`${apiUrl}event-details/eventid/${params[0]}/${params[1]}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }

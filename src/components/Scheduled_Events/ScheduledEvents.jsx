@@ -3,6 +3,7 @@ import AdminNavbar from "../AdminDashboard";
 import { useNavigate } from "react-router-dom";
 import '../ShowAllEvents/Events.css'
 const ScheduledEvents = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const [isSuccess, setSuccess] = useState(false);
     const [events, setEvent] = useState();
     useEffect(() => {
@@ -51,7 +52,7 @@ const ScheduledEvents = () => {
     }
     const getAllRecord = async () => {
         let liveEvents = [];
-        let r = await fetch(`http://localhost:3000/scheduled-events`, {
+        let r = await fetch(`${apiUrl}scheduled-events`, {
             method: "GET", headers: {
                 "Content-Type": "application/json",
             }
