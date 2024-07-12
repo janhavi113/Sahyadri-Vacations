@@ -143,8 +143,7 @@ app.get('/create-event/event-details/:eventId', async (req, res) => {
     var events = await Events.find({ eventId: event_Id })
     var imageList = events[0]?.images;
     images = imageList;
-    // console.log('events', events);
-    if (events && events.length > 0) {
+     if (events && events.length > 0) {
       res.send({ isSuccess: true, events: events })
     } else {
       res.send({ isSuccess: false });
@@ -159,7 +158,6 @@ app.get('/create-event/event-details/:eventId', async (req, res) => {
 app.post('/create-event/event-details/:eventId', async (req, res) => {
   try {
     let event_Id = Number(req.params.eventId.toString().replace(':', ''));
-    // console.log('event_Id'+event_Id);
     var myquery = { eventId: event_Id };
     var events = await Events.deleteOne(myquery);
     if (events && events.length > 0) {
@@ -194,16 +192,12 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
       imageList.push(currentImages.toString().replace('blob:', ''));
     } else if (currentImages != undefined && currentImages.length > 1) {
       for (let index = 0; index < currentImages.length; index++) {
-        // console.log('currentImages['+index+'].toString().replace(blob:)'+currentImages[index])
-
-        // console.log('currentImages['+index+'].toString().replace(blob:)'+currentImages[index].toString().replace('blob:',''))
-        imageList.push(currentImages[index].toString().replace('blob:', ''));
+          imageList.push(currentImages[index].toString().replace('blob:', ''));
       }
     }
     var hostname = req.headers.origin;
 
     for (let index = 0; index < req.files.length; index++) {
-      // console.log('req.files['+index+'].path--'+req.files[index].path);
       imageList.push(hostname + "/" + req.files[index].path.toString().replaceAll('\\', '/'));
     }
 
@@ -223,8 +217,7 @@ app.put('/create-event/event-details/:eventId', upload.array('file', 12), async 
     };
     var events = await Events.updateOne(myquery, updateDoc, options);
     events = await Events.find(myquery);
-    //console.log('events --',events);
-    if (events && events.length > 0) {
+      if (events && events.length > 0) {
       res.send({ isSuccess: true, events: events })
     } else {
       res.send({ isSuccess: false });
@@ -368,9 +361,7 @@ app.post('/schedule-event', upload.single('file'), async (req, res) => {
 
 //Customised Tour
 app.post('/customised-tour', async (req, res) => {
-  // console.log('req.body', req.body);
-  // console.log('req.body', req.file);
-  try {
+   try {
     const {
       name,
       phone,
@@ -430,37 +421,7 @@ app.post('/booking', async (req, res) => {
     });
 
     booking.save();
-    // console.log('booking._id',booking._id);
-    // if(booking._id){
-    //   const accessToken = OAuth2_Client
-    //   console.log('in booking._id',booking._id);
-    //   var transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     host:'smtp.gmail.com',
-    //     secure:true,
-    //     port:465,
-    //     auth: {
-    //       user: 'janhavi9826@gmail.com',
-    //       pass: 'Black@9808'
-    //     }
-    //   });
-
-    //   var mailOptions = {
-    //     from: 'janhavi9826@gmail.com',
-    //     to: 'janhavijadhav9812@gmail.com',
-    //     subject: 'Sending Email using Node.js',
-    //     text: 'That was easy!'
-    //   };
-    //   console.log('transporter',transporter);
-    //   transporter.sendMail(mailOptions, function(error, info){
-    //     if (error) {
-    //       console.log('error',error);
-    //     } else {
-    //       console.log('Email sent: ' + info.response);
-    //     }
-    //   });
-    // res.send({  isSuccess: true });
-    // }
+    
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
