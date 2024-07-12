@@ -30,11 +30,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Assuming your frontend folder is at the same level as your backend folder
-// const frontendDir = path.join(__dirname, '../frontend/dist');
-// console.log('Frontend directory:', frontendDir);
-
-// // Serve static files from the frontend dist directory
-//  app.use(express.static(frontendDir));
+const frontendDir = path.join(__dirname, '../frontend/dist');
+console.log('Frontend directory:', frontendDir);
+// Serve static files from the frontend dist directory
+ app.use(express.static(frontendDir));
 
 
 const storage = multer.diskStorage({
