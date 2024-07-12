@@ -8,8 +8,10 @@
     "start:backend": "node backend/server.js",
     "start:frontend": "vite",
     "start:all": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "build": "npm run build:frontend",
-    "serve": "vite preview"
+    //"build": "npm run build:frontend",
+   "dev": "vite",
+     "build": "vite build",
+  "serve": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
