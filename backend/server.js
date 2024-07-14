@@ -1,8 +1,8 @@
-import express from "express"
-import cors from "cors"
-import bodyParser from "body-parser"
-import nodemailer from "nodemailer"
-import google from "googleapis"
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import nodemailer from "nodemailer";
+import google from "googleapis";
 import mongoose from "mongoose";
 import { Employee } from "./models/Employee.js";
 import { ScheduleBatches } from "./models/ScheduleBatches.js";
@@ -10,6 +10,7 @@ import { Events } from "./models/Event.js";
 import { Bookings } from "./models/Bookings.js";
 import { CustomisedRequest } from "./models/CustomisedRequest.js";
 import main from "./mongo.js";
+import fs from "fs"; // Import fs for file system operations
 import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
@@ -23,32 +24,46 @@ const app = express();
 const port = process.env.PORT || 3000;
 var images = {};
 var recordcount;
-app.use(cors())
-app.use(bodyParser.json())
+app.use(cors());
+app.use(bodyParser.json());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Assuming your frontend folder is at the same level as your backend folder
-//const frontendDir = path.join(__dirname, '../frontend/dist');
-//console.log('Frontend directory:', frontendDir);
-// Serve static files from the frontend dist directory
- //app.use(express.static(frontendDir));
+const frontendDir = path.join(__dirname, "../frontend/dist");
+console.log("Frontend directory:", frontendDir);
 
+if (fs.existsSync(frontendDir)) {
+  console.log("Frontend directory exists:");
+  fs.readdirSync(frontendDir).forEach(file => {
+    console.log(file);
+  });
+} else {
+  console.log("Frontend directory does not exist");
+}
+
+app.use(express.static(frontendDir));
+
+// Example API route for testing
+app.get("/api/test", (req, res) => {
+  console.log("API /api/test route hit");
+  res.json({ message: "API route is working" });
+});
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/Images/')
+    cb(null, "public/Images/");
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + path.extname(file.originalname)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
-  }
-})
+    const uniqueSuffix = Date.now() + "-" + path.extname(file.originalname);
+    cb(null, file.fieldname + "-" + uniqueSuffix);
+  },
+});
 
-const upload = multer({ storage: storage })
-app.get('/', async (req, res) => {
-  console.log('i am in');
+const upload = multer({ storage: storage });
+
+app.get("/show-all-events", async (req, res) => {
+  console.log("i am in");
   try {
     let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true });
     res.send({ isSuccess: true, events: ScheduleBatchesRecords });
@@ -56,52 +71,70 @@ app.get('/', async (req, res) => {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 
-app.get('/scheduled-events', async (req, res) => {
+app.get("/scheduled-events", async (req, res) => {
   try {
-    let ScheduleBatchesRecords = await ScheduleBatches.find({  });
+    let ScheduleBatchesRecords = await ScheduleBatches.find({});
     res.send({ isSuccess: true, events: ScheduleBatchesRecords });
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 
-app.get('/search-event/:serchText', async (req, res) => {
+app.get("/search-event/:serchText", async (req, res) => {
   try {
-    console.log('req.params--', req.params.serchText);
+    console.log("req.params--", req.params.serchText);
 
-    console.log('serchText--', { $regex: '.*' + req.params.serchText.toLowerCase() + '.*' });
-    let ScheduleBatchesRecords = await ScheduleBatches.find({ active: true, eventApi: { $regex: '.*' + req.params.serchText.toLowerCase() + '.*' } });
-    console.log('ScheduleBatchesRecords--', ScheduleBatchesRecords);
+    console.log("serchText--", {
+      $regex: ".*" + req.params.serchText.toLowerCase() + ".*",
+    });
+    let ScheduleBatchesRecords = await ScheduleBatches.find({
+      active: true,
+      eventApi: {
+        $regex: ".*" + req.params.serchText.toLowerCase() + ".*",
+      },
+    });
+    console.log("ScheduleBatchesRecords--", ScheduleBatchesRecords);
     res.send({ isSuccess: true, events: ScheduleBatchesRecords });
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 
 //Login to System
-app.post('/admin-login', async (req, res) => {
+app.post("/admin-login", async (req, res) => {
   let employee = await Employee.find({ Username: req.body.username });
   res.send(employee);
-})
-app.get('/event-details/eventid/:eventId/:apiName', async (req, res) => {
-  console.log('req.params--', req.params);
+});
+app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
+  console.log("req.params--", req.params);
   let event_Id = req.params.eventId;
   let apiname = req.params.apiName;
-  var events = await Events.findOne({ apiname: apiname })
-  let ScheduleBatchesRecords = await ScheduleBatches.findOne({ eventId: event_Id });
+  var events = await Events.findOne({ apiname: apiname });
+  let ScheduleBatchesRecords = await ScheduleBatches.findOne({
+    eventId: event_Id,
+  });
   if (events && ScheduleBatchesRecords) {
-    console.log('event_Id--', events, 'ScheduleBatchesRecords', ScheduleBatchesRecords);
-    res.send({ isSuccess: true, events: events, ScheduleBatchesRecords: ScheduleBatchesRecords })
+    console.log(
+      "event_Id--",
+      events,
+      "ScheduleBatchesRecords",
+      ScheduleBatchesRecords
+    );
+    res.send({
+      isSuccess: true,
+      events: events,
+      ScheduleBatchesRecords: ScheduleBatchesRecords,
+    });
   } else {
     res.send({ isSuccess: false });
   }
-})
+});
 //Login to System
-app.post('/event-details/eventid/:eventId/:apiName', async (req, res) => {
+app.post("/event-details/eventid/:eventId/:apiName", async (req, res) => {
   console.log(req.body);
   try {
     const {
@@ -124,8 +157,7 @@ app.post('/event-details/eventid/:eventId/:apiName', async (req, res) => {
       numberOfPeoples: numberOfPeoples,
       email: emailId,
       amountPaid: amountPaid,
-      status: 'new'
-
+      status: "new",
     });
 
     bookingRequest.save();
@@ -134,17 +166,16 @@ app.post('/event-details/eventid/:eventId/:apiName', async (req, res) => {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
-// Get current Event Details 
-app.get('/create-event/event-details/:eventId', async (req, res) => {
-
+});
+// Get current Event Details
+app.get("/create-event/event-details/:eventId", async (req, res) => {
   try {
-    let event_Id = Number(req.params.eventId.toString().replace(':', ''));
-    var events = await Events.find({ eventId: event_Id })
+    let event_Id = Number(req.params.eventId.toString().replace(":", ""));
+    var events = await Events.find({ eventId: event_Id });
     var imageList = events[0]?.images;
     images = imageList;
-     if (events && events.length > 0) {
-      res.send({ isSuccess: true, events: events })
+    if (events && events.length > 0) {
+      res.send({ isSuccess: true, events: events });
     } else {
       res.send({ isSuccess: false });
     }
@@ -152,16 +183,16 @@ app.get('/create-event/event-details/:eventId', async (req, res) => {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 
-// Delete Event 
-app.post('/create-event/event-details/:eventId', async (req, res) => {
+// Delete Event
+app.post("/create-event/event-details/:eventId", async (req, res) => {
   try {
-    let event_Id = Number(req.params.eventId.toString().replace(':', ''));
+    let event_Id = Number(req.params.eventId.toString().replace(":", ""));
     var myquery = { eventId: event_Id };
     var events = await Events.deleteOne(myquery);
     if (events && events.length > 0) {
-      res.send({ isSuccess: true, events: events })
+      res.send({ isSuccess: true, events: events });
     } else {
       res.send({ isSuccess: false });
     }
@@ -169,89 +200,96 @@ app.post('/create-event/event-details/:eventId', async (req, res) => {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 
 // Update Event Details
-app.put('/create-event/event-details/:eventId', upload.array('file', 12), async (req, res) => {
-  try {
-    let event_Id = Number(req.params.eventId.toString().replace(':', ''));
-    const {
-      eventName,
-      eventDetails,
-      itinerary,
-      highlights,
-      costIncludes,
-      thingsToCarry,
-      pickupPoints,
-      eventType,
-      currentImages
-    } = req.body;
+app.put(
+  "/create-event/event-details/:eventId",
+  upload.array("file", 12),
+  async (req, res) => {
+    try {
+      let event_Id = Number(req.params.eventId.toString().replace(":", ""));
+      const {
+        eventName,
+        eventDetails,
+        itinerary,
+        highlights,
+        costIncludes,
+        thingsToCarry,
+        pickupPoints,
+        eventType,
+        currentImages,
+      } = req.body;
 
-    var imageList = [];
-    if (currentImages != undefined && !Array.isArray(currentImages)) {
-      imageList.push(currentImages.toString().replace('blob:', ''));
-    } else if (currentImages != undefined && currentImages.length > 1) {
-      for (let index = 0; index < currentImages.length; index++) {
-          imageList.push(currentImages[index].toString().replace('blob:', ''));
+      var imageList = [];
+      if (currentImages != undefined && !Array.isArray(currentImages)) {
+        imageList.push(currentImages.toString().replace("blob:", ""));
+      } else if (currentImages != undefined && currentImages.length > 1) {
+        for (let index = 0; index < currentImages.length; index++) {
+          imageList.push(currentImages[index].toString().replace("blob:", ""));
+        }
       }
-    }
-    var hostname = req.headers.origin;
+      var hostname = req.headers.origin;
 
-    for (let index = 0; index < req.files.length; index++) {
-      imageList.push(hostname + "/" + req.files[index].path.toString().replaceAll('\\', '/'));
-    }
+      for (let index = 0; index < req.files.length; index++) {
+        imageList.push(
+          hostname + "/" + req.files[index].path.toString().replaceAll("\\", "/")
+        );
+      }
 
-
-    var myquery = { eventId: event_Id };
-    var options = { upsert: true };
-    var updateDoc = {
-      name: eventName,
-      itinerary: itinerary,
-      eventDetails: eventDetails,
-      eventType: eventType,
-      costIncludes: costIncludes,
-      thingsToCarry: thingsToCarry,
-      pickupPoints: pickupPoints,
-      highlights: highlights,
-      images: imageList
-    };
-    var events = await Events.updateOne(myquery, updateDoc, options);
-    events = await Events.find(myquery);
+      var myquery = { eventId: event_Id };
+      var options = { upsert: true };
+      var updateDoc = {
+        name: eventName,
+        itinerary: itinerary,
+        eventDetails: eventDetails,
+        eventType: eventType,
+        costIncludes: costIncludes,
+        thingsToCarry: thingsToCarry,
+        pickupPoints: pickupPoints,
+        highlights: highlights,
+        images: imageList,
+      };
+      var events = await Events.updateOne(myquery, updateDoc, options);
+      events = await Events.find(myquery);
       if (events && events.length > 0) {
-      res.send({ isSuccess: true, events: events })
-    } else {
-      res.send({ isSuccess: false });
+        res.send({ isSuccess: true, events: events });
+      } else {
+        res.send({ isSuccess: false });
+      }
+    } catch (error) {
+      console.error(error);
+      res.send({ isSuccess: false, error: error });
     }
-  } catch (error) {
-    console.error(error);
-    res.send({ isSuccess: false, error: error });
   }
-})
+);
 
 // Get All Event
-app.get('/all-events', async (req, res) => {
+app.get("/all-events", async (req, res) => {
   try {
-    var events = await Events.find({})
+    var events = await Events.find({});
     res.send({ isSuccess: true, events: events });
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 
-// Create Event 
-app.post('/create-event', upload.array('file', 12), async (req, res) => {
+// Create Event
+app.post("/create-event", upload.array("file", 12), async (req, res) => {
   try {
-    console.log('create req.body --', req.body);
+    console.log("create req.body --", req.body);
     var imageList = [];
     var currUrl = req.headers.origin;
     if (req.files) {
       for (let index = 0; index < req.files.length; index++) {
-        imageList.push(currUrl + "/" + req.files[index].path.toString().replaceAll('\\', '/'));
+        imageList.push(
+          currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
+        );
       }
     }
 
-    var events = await Events.find().sort([['_id', -1]]).limit(1)
+    var events = await Events.find().sort([["_id", -1]]).limit(1);
     if (events.length > 0) {
       recordcount = events[0].eventId;
     } else {
@@ -266,11 +304,11 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
       costIncludes,
       thingsToCarry,
       pickupPoints,
-      eventType
+      eventType,
     } = req.body;
-    console.log('create req.body --', req.body);
+    console.log("create req.body --", req.body);
     let apiName = req.body.eventName;
-    apiName = apiName.toString().replace(/\s/g, '-').toLowerCase();
+    apiName = apiName.toString().replace(/\s/g, "-").toLowerCase();
     const event = new Events({
       name: eventName,
       apiname: apiName,
@@ -283,8 +321,7 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
       highlights: highlights,
       eventId: recordcount + 1,
       url: currUrl + "/create-event/event-details/" + (recordcount + 1),
-      images: imageList
-
+      images: imageList,
     });
 
     event.save();
@@ -293,11 +330,10 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-
-})
+});
 
 // Get All Event
-app.get('/schedule-event', async (req, res) => {
+app.get("/schedule-event", async (req, res) => {
   try {
     var events = await Events.find({});
     var scheduleBatches = await ScheduleBatches.find({});
@@ -306,23 +342,17 @@ app.get('/schedule-event', async (req, res) => {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 
-app.post('/schedule-event', upload.single('file'), async (req, res) => {
+app.post("/schedule-event", upload.single("file"), async (req, res) => {
   try {
-
-    var currUrl = '';
+    var currUrl = "";
     if (req.file) {
-      currUrl = req.headers.origin + "/" + req.file.path.toString().replaceAll('\\', '/');
+      currUrl =
+        req.headers.origin + "/" + req.file.path.toString().replaceAll("\\", "/");
     }
-    console.log('schedule-event --', req.body);
-    const {
-      active,
-      eventId,
-      eventname,
-      batches,
-      eventType,
-    } = req.body;
+    console.log("schedule-event --", req.body);
+    const { active, eventId, eventname, batches, eventType } = req.body;
     var batchList = [];
     if (Array.isArray(batches)) {
       for (let i = 0; i < batches.length; i++) {
@@ -332,7 +362,7 @@ app.post('/schedule-event', upload.single('file'), async (req, res) => {
       batchList.push(JSON.parse(batches));
     }
     let scheduleRecordcount = 0;
-    var events = await ScheduleBatches.find().sort([['_id', -1]]).limit(1)
+    var events = await ScheduleBatches.find().sort([["_id", -1]]).limit(1);
     if (events.length > 0) {
       scheduleRecordcount = events[0].eventId;
     } else {
@@ -344,9 +374,13 @@ app.post('/schedule-event', upload.single('file'), async (req, res) => {
       batches: batchList,
       eventname: eventname,
       images: currUrl,
-      Url: '/event-details?eventid=' + (scheduleRecordcount + 1).toString() + '/' + eventname.toString().replace(/\s/g, '-').toLowerCase(),
+      Url:
+        "/event-details?eventid=" +
+        (scheduleRecordcount + 1).toString() +
+        "/" +
+        eventname.toString().replace(/\s/g, "-").toLowerCase(),
       eventType: eventType,
-      eventApi: eventname.toString().replace(/\s/g, '-').toLowerCase()
+      eventApi: eventname.toString().replace(/\s/g, "-").toLowerCase(),
     });
 
     scheduleBatches.save();
@@ -357,11 +391,11 @@ app.post('/schedule-event', upload.single('file'), async (req, res) => {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 
 //Customised Tour
-app.post('/customised-tour', async (req, res) => {
-   try {
+app.post("/customised-tour", async (req, res) => {
+  try {
     const {
       name,
       phone,
@@ -380,8 +414,7 @@ app.post('/customised-tour', async (req, res) => {
       numberofpeople: numberofpeople,
       email: email,
       message: message,
-      status: 'new'
-
+      status: "new",
     });
 
     customisedRequest.save();
@@ -390,11 +423,11 @@ app.post('/customised-tour', async (req, res) => {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
-})
+});
 // Bookings
-app.post('/booking', async (req, res) => {
+app.post("/booking", async (req, res) => {
   try {
-    console.log('create req.body --', req.body);
+    console.log("create req.body --", req.body);
 
     const {
       fullName,
@@ -405,9 +438,9 @@ app.post('/booking', async (req, res) => {
       batch,
       emailId,
       whatsappNumber,
-      selectDate
+      selectDate,
     } = req.body;
-    console.log('create req.body --', req.body);
+    console.log("create req.body --", req.body);
 
     const booking = new Bookings({
       name: fullName,
@@ -421,18 +454,25 @@ app.post('/booking', async (req, res) => {
     });
 
     booking.save();
-    
   } catch (error) {
     console.error(error);
     res.send({ isSuccess: false, error: error });
   }
+});
 
-})
+/// Add other routes here...
 
 // Handle all other routes and serve index.html
-app.get('*', (req, res) => {
-  console.log('path--',path.join(frontendDir, 'index.html'));
-  res.sendFile(path.join(frontendDir, 'index.html'));
+app.get("*", (req, res) => {
+ // console.log("Serving index.html for route:", req);
+  const indexPath = path.join(frontendDir, "index.html");
+  if (fs.existsSync(indexPath)) {
+ //   console.log("indexPath", indexPath);
+    res.sendFile(indexPath);
+  } else {
+    console.error("index.html not found in frontend directory");
+    res.status(404).send("404 Not Found");
+  }
 });
 
 app.listen(port, () => {

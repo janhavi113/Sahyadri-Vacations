@@ -47,11 +47,12 @@ const Events = () => {
         let trekkingEvents = [];
         let campingEvents = [];
         let backPackingEvents = [];
-        let r = await fetch(`${apiUrl}`, {
+        let r = await fetch(`${apiUrl}show-all-events`, {
             method: "GET", headers: {
                 "Content-Type": "application/json",
             }
         })
+       
         let res = await r.json()
         console.log('res +==', JSON.stringify(res));
         if (res.isSuccess == true) {
