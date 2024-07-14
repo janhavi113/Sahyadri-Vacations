@@ -9,8 +9,7 @@ let url =`mongodb+srv://${userName}:${password}@testdb.90vgjim.mongodb.net/Sahya
 const main = async () => {
     try {
       await mongoose.connect(url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
+        useNewUrlParser: true
       });
       console.log('Successfully connected to MongoDB');
     } catch (error) {
