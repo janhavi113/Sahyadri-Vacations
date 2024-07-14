@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import nodemailer from "nodemailer";
-import google from "googleapis";
 import mongoose from "mongoose";
 import { Employee } from "./models/Employee.js";
 import { ScheduleBatches } from "./models/ScheduleBatches.js";
