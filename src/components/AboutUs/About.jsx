@@ -120,6 +120,23 @@ const About = () => {
                   </div>
                 </div>
 
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={multiimage3} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Shivraj Chirmure</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
 
               </div>
             </div>
