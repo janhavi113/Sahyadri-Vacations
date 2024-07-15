@@ -8,7 +8,7 @@ const EventHeader = () => {
                 <div className="wrapper">
                     <h1>Upcoming Events</h1>
                 </div>
-                <div className="imageContainer" >
+                <div className="adjust-margin imageContainer" >
                     <img src={slide1} alt="header" />
                 </div>
             </div>

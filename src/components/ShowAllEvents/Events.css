@@ -50,4 +50,7 @@
         font-size: 35px !important;
         text-shadow: 2px 2px 8px #120202b0;
     }
+    .adjust-margin{
+        margin: 15% 0 0 0 !important;
+    }
 }
