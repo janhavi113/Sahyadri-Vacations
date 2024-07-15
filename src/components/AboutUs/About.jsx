@@ -81,7 +81,6 @@ const About = () => {
                   </div>
                 </div>
 
-                <div className="row justify-content-around">
                 <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
                   <div className="bg-transparent text-center" >
                     <img src={multiimage3} className="card-img-top" alt="Shivraj Chirmure Leader" />
@@ -99,7 +98,7 @@ const About = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
                   <div className="bg-transparent text-center" >
                     <img src={multiimage3} className="card-img-top" alt="Shivraj Chirmure Leader" />
