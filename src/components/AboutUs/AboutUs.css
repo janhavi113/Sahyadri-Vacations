@@ -79,12 +79,9 @@
 }
 
 .multiimage2 {
-    position: absolute;
-    width: 50%;
-    top: 20%;
-    left: 10%;
+    width: 60%;
     border-radius: 4%;
-    height:75%;
+    margin: auto;
 }
 .multiimage3 {
     position: absolute;
@@ -191,7 +188,12 @@
 .team {
     padding: 0% 5% 0% 5% !important;
 }
-
+.card-title{
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 2px 2px 8px #120202b0;
+}
 @media only screen and (max-width: 600px) {
    
     .team {
@@ -208,9 +210,16 @@
         padding-top: 1px !important;
       }
       .about .team-section h1 {
-        font-size: .875em !important;
+        font-size: 1.45em !important;
       }
       .team-section {
         padding-top: 17px !important;
       }
+      .card-img-top{
+        margin: auto;
+        width: 75%;
+      }
+      .founder {
+        text-align: center;
+    }
 }

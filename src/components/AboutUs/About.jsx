@@ -4,6 +4,10 @@ import Navbar from "../Navbar";
 import slide3 from '../Images/Screen_4.webp';
 import multiimage1 from '../Images/Team/team_background_circles.svg';
 import multiimage3 from '../Images/Team/pravin.jpg';
+import venkatesh from '../Images/Team/venkatesh.jpg';
+import dheeraj from '../Images/Team/dheeraj.jpg';
+import sandeep from '../Images/Team/sandeep.png';
+import rajesh from '../Images/Team/rajesh.jpg';
 import multiimage2 from '../Images/Team/sahane.jpg';
 import './AboutUs.css'
 import EventHeader from './AboutUsHeader'
@@ -39,9 +43,9 @@ const About = () => {
             <div className="home-container">
               <div><div className="team row">
                 <div className="col multiimage">
-                  <img className="multiimage1" src={multiimage1} />
+                  {/* <img className="multiimage1" src={multiimage1} /> */}
                   <img className="multiimage2" src={multiimage2} />
-                  <img className="multiimage3" src={multiimage3} />
+                  {/* <img className="multiimage3" src={multiimage3} /> */}
                 </div>
                 <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 founder py-5">
                   <h2 className="h2">Pravin Sahane</h2>
@@ -61,13 +65,68 @@ const About = () => {
             <br />
             <br />
             <div className="team justify-content-around" >
+            <div className="row justify-content-around">
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={rajesh} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Rajesh Mahatme</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
 
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={dheeraj} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Vikas Chalke</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={sandeep} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Kunal Sahane</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
               <div className="row justify-content-around">
                 <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
                   <div className="bg-transparent text-center" >
-                    <img src={multiimage3} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <img src={venkatesh} className="card-img-top" alt="Shivraj Chirmure Leader" />
                     <div className="card-body all-team">
-                      <h5 className="card-title">Shivraj Chirmure</h5>
+                      <h5 className="card-title">Venkatesh Lagade</h5>
                       <p className="card-text">Trek Leader 🌄</p>
                       <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -83,9 +142,9 @@ const About = () => {
 
                 <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
                   <div className="bg-transparent text-center" >
-                    <img src={multiimage3} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <img src={dheeraj} className="card-img-top" alt="Shivraj Chirmure Leader" />
                     <div className="card-body all-team">
-                      <h5 className="card-title">Shivraj Chirmure</h5>
+                      <h5 className="card-title">Dheeraj Damare</h5>
                       <p className="card-text">Trek Leader 🌄</p>
                       <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -101,9 +160,9 @@ const About = () => {
 
                 <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
                   <div className="bg-transparent text-center" >
-                    <img src={multiimage3} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <img src={sandeep} className="card-img-top" alt="Shivraj Chirmure Leader" />
                     <div className="card-body all-team">
-                      <h5 className="card-title">Shivraj Chirmure</h5>
+                      <h5 className="card-title">Sandeep Borude</h5>
                       <p className="card-text">Trek Leader 🌄</p>
                       <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -117,6 +176,134 @@ const About = () => {
                   </div>
                 </div>
 
+              </div>
+              <div className="row justify-content-around">
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={rajesh} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Sairaj Mhaske</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={dheeraj} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Rutvik Gavhane</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={dheeraj} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Vijay Tamhankar</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row justify-content-around">
+              <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={sandeep} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Nikita Bankar</h5>
+                      <p className="card-text">Content Creator 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={sandeep} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Mayuri Nikam</h5>
+                      <p className="card-text">Content Creator 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={rajesh} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Shivam Shinde</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+              <div className="row justify-content-around">
+              <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
+                  <div className="bg-transparent text-center" >
+                    <img src={sandeep} className="card-img-top" alt="Shivraj Chirmure Leader" />
+                    <div className="card-body all-team">
+                      <h5 className="card-title">Aditya Thakre</h5>
+                      <p className="card-text">Trek Leader 🌄</p>
+                      <a href="https://www.linkedin.com/in/ankit-sakhare-1077ba214" target="_blank" className="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <g id="Group_789" data-name="Group 789" transform="translate(-1385 -625)">
+                            <rect id="Rectangle_4" data-name="Rectangle 4" width="24" height="24" transform="translate(1385 625)" fill="none"></rect>
+                            <path id="Subtraction_4" data-name="Subtraction 4" d="M20,24H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0H20a4,4,0,0,1,4,4V20A4.005,4.005,0,0,1,20,24ZM15.274,11.875c1.96,0,1.96,1.858,1.96,3.215V21H21l0-6.669c0-3-.547-5.776-4.516-5.776a3.977,3.977,0,0,0-3.567,1.96h-.053V8.86H9.248V21h3.766V14.988C13.014,13.448,13.282,11.875,15.274,11.875ZM3.3,8.861V21H7.07V8.861ZM5.184,3A2.194,2.194,0,1,0,7.367,5.183,2.186,2.186,0,0,0,5.184,3Z" transform="translate(1385 625)" fill="#ff9900"></path>
+                          </g>
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
