@@ -245,7 +245,7 @@ const ShowEventDetails = () => {
 
             <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={event} />
               <div className="inner-content">
-                <h3>{eventDetails.name}</h3>
+                <h3>{`${apiUrl}`+ eventDetails.name}</h3>
               </div>
             </SwiperSlide>
           ))}
