@@ -8,13 +8,7 @@
     text-align: center;
    
 }
-.contentbody-about-us {
-    width: 100%;
-    border-radius: 8px 8px 0px 0px;
-    margin-top: -28%;
-    position: relative;
-    background-color: white;
-  }
+
 .multiimage {
     position: relative;
     width: 100%;
@@ -197,9 +191,17 @@
 .team {
     padding: 0% 5% 0% 5% !important;
 }
+
 @media only screen and (max-width: 600px) {
    
     .team {
         padding: 0% 10% 0% 10% !important;
     }
+    .contentbody-about-us {
+        width: 100%;
+        border-radius: 8px 8px 0px 0px;
+        margin-top: -22%;
+        position: relative;
+        background-color: white;
+      }
 }
