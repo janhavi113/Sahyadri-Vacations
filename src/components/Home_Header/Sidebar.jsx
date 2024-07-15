@@ -54,7 +54,7 @@ const Sidebar = () => {
       <div className="wrapper">
         <motion.div className="textContainer" variants={textVariants} initial="initial" animate="animate">
           <h2 > Welcome to</h2>
-          <h1 >Sahydri Vacations</h1>
+          <h1 >Sahyadri Vacations</h1>
           <span >Enrich your experience </span>
           <div className="buttons">
             <a  href="/events" role="button" >Upcomming Events</a>
