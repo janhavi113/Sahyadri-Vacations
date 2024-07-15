@@ -16,33 +16,25 @@ import slide4 from '../Images/Screen_1.jpg';
 const About = () => {
   return (
     <>
-    <EventHeader />
-    <Navbar />
-    
-    <div className="contentbody">
-    <div className='about'>
-   
-      {/* <div className="header">
-        <img className='slide-image' src={slide3}></img>
-        <div className="text team-text-blk team-head-text">About Us</div>
-      </div> */}
-      
-     
-      <div className="aboutus-container">
-        <h2 >Who We Are ?</h2>
-        <p className="info" >In November 2021, we embarked on a remarkable journey with a simple yet powerful belief: that people should passionately pursue their hobby of trekking. With this vision in mind, Sahyadri Vacations and Adventures born. Our primary objective was to introduce people to the hidden gems of Maharashtra and India in long term At Sahaydri Vacations, we strive to create unforgettable memories for our participants. We carefully curate each trek, tour, and camping experience to showcase the hidden treasures of Maharashtra, from the majestic forts perched atop rugged mountains to the serene valleys and pristine lakes that adorn the landscape. We believe in the transformative power of nature and adventure, and our aim is to provide you with immersive experiences that leave a lasting impact.Welcome to Sahyadri Vacations And Adventures, where we specialize in creating unforgettable travel experiences across Maharashtra, and beyond. Founded with a passion for exploration and a commitment to excellence, we are dedicated to follow the Virtues set by Chhatrapati Shivaji Maharaj. Whether you're seeking cultural immersion, adventure, or relaxation, our expert team ensures every detail of your trip is meticulously planned for an enriching and seamless experience.</p>
-      </div>
+      <EventHeader />
+      <Navbar />
+      <div className="contentbody">
+        <div className='about'>
+          <div className="aboutus-container">
+            <h2 >Who We Are ?</h2>
+            <p className="info" >In November 2021, we embarked on a remarkable journey with a simple yet powerful belief: that people should passionately pursue their hobby of trekking. With this vision in mind, Sahyadri Vacations and Adventures born. Our primary objective was to introduce people to the hidden gems of Maharashtra and India in long term At Sahaydri Vacations, we strive to create unforgettable memories for our participants. We carefully curate each trek, tour, and camping experience to showcase the hidden treasures of Maharashtra, from the majestic forts perched atop rugged mountains to the serene valleys and pristine lakes that adorn the landscape. We believe in the transformative power of nature and adventure, and our aim is to provide you with immersive experiences that leave a lasting impact.Welcome to Sahyadri Vacations And Adventures, where we specialize in creating unforgettable travel experiences across Maharashtra, and beyond. Founded with a passion for exploration and a commitment to excellence, we are dedicated to follow the Virtues set by Chhatrapati Shivaji Maharaj. Whether you're seeking cultural immersion, adventure, or relaxation, our expert team ensures every detail of your trip is meticulously planned for an enriching and seamless experience.</p>
+          </div>
 
-      <div className="aboutus-container">
-        <h2 >Our Mission</h2>
-        <p className="info" >At Sahyadri Vacations and Adventures, our mission is to inspire and empower travellers to discover the beauty India. By fostering meaningful connections with our guests and local communities, we aim to promote sustainable tourism practices and preserve the natural and cultural heritage of the regions we explore.</p>
-        <p>Our prime goal is to make you feel safe while you're having the best adventure of your life. And make each journey of yours memorable for life long. Also we respect and are very proud of our ancient heritage and aim to provide you all with the necessary information about our culture, tradition, historical Places events</p>
-      </div>
-      <div className="aboutus-container">
-        <h2 >Our History</h2>
-        <p className="info" >Established in Nov 2021, Sahyadri Vacations began as a vision to showcase the hidden gems and vibrant culture of India and with One simple belief — Everyone Must Travel. Over the years, we have grown from a passionate idea into a trusted travel partner, known for our commitment to Quality, Integrity, and Customer satisfaction. With each journey we curate, we build upon our expertise and continue to evolve, ensuring that every traveller’s experience with us is nothing short of extraordinary.</p>
-      </div>
-      {/* <div className='team-section'>
+          <div className="aboutus-container">
+            <h2 >Our Mission</h2>
+            <p className="info" >At Sahyadri Vacations and Adventures, our mission is to inspire and empower travellers to discover the beauty India. By fostering meaningful connections with our guests and local communities, we aim to promote sustainable tourism practices and preserve the natural and cultural heritage of the regions we explore.</p>
+            <p>Our prime goal is to make you feel safe while you're having the best adventure of your life. And make each journey of yours memorable for life long. Also we respect and are very proud of our ancient heritage and aim to provide you all with the necessary information about our culture, tradition, historical Places events</p>
+          </div>
+          <div className="aboutus-container">
+            <h2 >Our History</h2>
+            <p className="info" >Established in Nov 2021, Sahyadri Vacations began as a vision to showcase the hidden gems and vibrant culture of India and with One simple belief — Everyone Must Travel. Over the years, we have grown from a passionate idea into a trusted travel partner, known for our commitment to Quality, Integrity, and Customer satisfaction. With each journey we curate, we build upon our expertise and continue to evolve, ensuring that every traveller’s experience with us is nothing short of extraordinary.</p>
+          </div>
+          {/* <div className='team-section'>
         <h1 className='team-header' > Sahyadri Vacations Team </h1>
         <div className="home-container">
           <div><div className="team row">
@@ -132,11 +124,11 @@ const About = () => {
           </div>
         </div>
       </div> */}
-      
-     
-    </div>
-    </div>
-    <Footer />
+
+
+        </div>
+      </div>
+      <Footer />
     </>
   )
 }
