@@ -38,6 +38,8 @@ app.use(bodyParser.json());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// Serve static files from the 'public' directory
+app.use('/public', express.static(path.join(__dirname, '../public')));
 
 const frontendDir = path.join(__dirname, "../frontend/dist");
 console.log("Frontend directory:", frontendDir);
