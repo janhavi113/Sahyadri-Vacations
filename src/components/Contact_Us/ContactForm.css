@@ -114,4 +114,8 @@
 .contact-us-container{
   display: flex;
 }
+.contactimg img{
+  height: 225px !important;
+  width: 100%;
+}
 }
