@@ -1,22 +1,22 @@
-import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
-import nodemailer from "nodemailer";
-import mongoose from "mongoose";
-import { Employee } from "./models/Employee.js";
-import { ScheduleBatches } from "./models/ScheduleBatches.js";
-import { Events } from "./models/Event.js";
-import { Bookings } from "./models/Bookings.js";
-import { CustomisedRequest } from "./models/CustomisedRequest.js";
-import main from "./mongo.js";
-import fs from "fs"; // Import fs for file system operations
-import path from "path";
-import { fileURLToPath } from "url";
-import multer from "multer";
-import dotenv from "dotenv";
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import nodemailer from 'nodemailer';
+import mongoose from 'mongoose';
+import { Employee } from './models/Employee.js';
+import { ScheduleBatches } from './models/ScheduleBatches.js';
+import { Events } from './models/Event.js';
+import { Bookings } from './models/Bookings.js';
+import { CustomisedRequest } from './models/CustomisedRequest.js';
+import main from './mongo.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import multer from 'multer';
+import dotenv from 'dotenv';
 
 dotenv.config();
-let clientSceret = process.env.MONGOODB_CLIENT_SCERET;
+let clientSecret = process.env.MONGOODB_CLIENT_SECRET;  // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
 let refreshToken = process.env.MONGOODB_REFRESH_TOKEN;
 const app = express();
@@ -29,7 +29,7 @@ app.use(cors({
   origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],  // Allow frontend IP and localhost
   methods: 'GET,POST,PUT,DELETE,OPTIONS',
   allowedHeaders: 'Content-Type, Authorization',
-  credentials: true
+  credentials: true,
 }));
 
 app.use(express.json());
@@ -70,6 +70,14 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
+// Add the API route with the correct CORS settings
+app.use('/api', cors({
+  origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials: true,
+}));
 
 app.get("/show-all-events", async (req, res) => {
   console.log("i am in");
@@ -113,11 +121,12 @@ app.get("/search-event/:serchText", async (req, res) => {
   }
 });
 
-//Login to System
+// Login to System
 app.post("/admin-login", async (req, res) => {
   let employee = await Employee.find({ Username: req.body.username });
   res.send(employee);
 });
+
 app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
   console.log("req.params--", req.params);
   let event_Id = req.params.eventId;
@@ -142,7 +151,8 @@ app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
     res.send({ isSuccess: false });
   }
 });
-//Login to System
+
+// Login to System
 app.post("/event-details/eventid/:eventId/:apiName", async (req, res) => {
   console.log(req.body);
   try {
@@ -176,6 +186,7 @@ app.post("/event-details/eventid/:eventId/:apiName", async (req, res) => {
     res.send({ isSuccess: false, error: error });
   }
 });
+
 // Get current Event Details
 app.get("/create-event/event-details/:eventId", async (req, res) => {
   try {
@@ -200,8 +211,8 @@ app.post("/create-event/event-details/:eventId", async (req, res) => {
     let event_Id = Number(req.params.eventId.toString().replace(":", ""));
     var myquery = { eventId: event_Id };
     var events = await Events.deleteOne(myquery);
-    if (events && events.length > 0) {
-      res.send({ isSuccess: true, events: events });
+    if (events && events.deletedCount > 0) {
+      res.send({ isSuccess: true });
     } else {
       res.send({ isSuccess: false });
     }
@@ -402,7 +413,7 @@ app.post("/schedule-event", upload.single("file"), async (req, res) => {
   }
 });
 
-//Customised Tour
+// Customised Tour
 app.post("/customised-tour", async (req, res) => {
   try {
     const {
@@ -433,6 +444,7 @@ app.post("/customised-tour", async (req, res) => {
     res.send({ isSuccess: false, error: error });
   }
 });
+
 // Bookings
 app.post("/booking", async (req, res) => {
   try {
@@ -469,14 +481,12 @@ app.post("/booking", async (req, res) => {
   }
 });
 
-/// Add other routes here...
-
 // Handle all other routes and serve index.html
 app.get("*", (req, res) => {
- // console.log("Serving index.html for route:", req);
+  // console.log("Serving index.html for route:", req);
   const indexPath = path.join(frontendDir, "index.html");
   if (fs.existsSync(indexPath)) {
- //   console.log("indexPath", indexPath);
+    //   console.log("indexPath", indexPath);
     res.sendFile(indexPath);
   } else {
     console.error("index.html not found in frontend directory");
