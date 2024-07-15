@@ -1,0 +1,12 @@
+{
+  "apps": [{
+    "name": "sahyadri-vacations",
+    "script": "backend/server.js",
+    "watch": true,
+    "ignore_watch": ["node_modules", "public", "build"],
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }]
+}
+
