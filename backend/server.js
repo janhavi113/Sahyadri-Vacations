@@ -23,11 +23,13 @@ const app = express();
 const port = process.env.PORT || 3000;
 var images = {};
 var recordcount;
+
 // Configure CORS
 app.use(cors({
-  origin: 'http://157.173.222.166', // Allow requests from this origin
-  methods: 'GET,POST,PUT,DELETE',   // Allow specific methods
-  allowedHeaders: 'Content-Type,Authorization'  // Allow specific headers
+  origin: 'http://157.173.222.166',  // Replace with your frontend's public IP or domain
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization',
+  credentials: true
 }));
 
 app.use(bodyParser.json());
