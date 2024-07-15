@@ -18,7 +18,7 @@ const About = () => {
     <>
       <EventHeader />
       <Navbar />
-      <div className="contentbody">
+      <div className="contentbody-about-us">
         <div className='about'>
           <div className="aboutus-container">
             <h2 >Who We Are ?</h2>
