@@ -5,10 +5,10 @@ const EventHeader = () => {
     return (
         <div>
             <div className='event'>
-                <div className="wrapper">
+                <div className="adjust-margin wrapper">
                     <h1>Upcoming Events</h1>
                 </div>
-                <div className="adjust-margin imageContainer" >
+                <div className="imageContainer" >
                     <img src={slide1} alt="header" />
                 </div>
             </div>
