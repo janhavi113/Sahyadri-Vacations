@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",                           
-    "build": "vite build --outDir frontend/dist",                  
-    "preview": "vite preview"               
+    "dev": "vite",
+    "build": "vite build --outDir frontend/dist",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

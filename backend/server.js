@@ -23,7 +23,13 @@ const app = express();
 const port = process.env.PORT || 3000;
 var images = {};
 var recordcount;
-app.use(cors());
+// Configure CORS
+app.use(cors({
+  origin: 'http://157.173.222.166', // Allow requests from this origin
+  methods: 'GET,POST,PUT,DELETE',   // Allow specific methods
+  allowedHeaders: 'Content-Type,Authorization'  // Allow specific headers
+}));
+
 app.use(bodyParser.json());
 
 const __filename = fileURLToPath(import.meta.url);
