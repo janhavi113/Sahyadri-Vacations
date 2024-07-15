@@ -88,7 +88,7 @@ const Home = () => {
         eventname: event.eventname,
         eventType: event.eventType,
         url: event.Url,
-        images: base_url + event.images,
+        images: `${apiUrl}event.images`,
         batchdate: batchdate,
         eventCostPerPerson: eventCostPerPerson,
 
