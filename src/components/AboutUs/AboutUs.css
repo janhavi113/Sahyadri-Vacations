@@ -200,8 +200,11 @@
     .contentbody-about-us {
         width: 100%;
         border-radius: 8px 8px 0px 0px;
-        margin-top: -22%;
+        margin-top: -8%;
         position: relative;
         background-color: white;
+      }
+      .about {
+        padding-top: 1px !important;
       }
 }
