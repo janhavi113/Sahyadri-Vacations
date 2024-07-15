@@ -96,7 +96,7 @@ const Events = () => {
                 eventname: event.eventname,
                 eventType: event.eventType,
                 url: event.Url,
-                images: event.images,
+                images: `${apiUrl}`+event.images,
                 batchdate: batchdate,
                 eventCostPerPerson: eventCostPerPerson,
 
