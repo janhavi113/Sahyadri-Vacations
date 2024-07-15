@@ -15,6 +15,7 @@ import slide2 from '../Images/Screen_3.webp';
 import slide4 from '../Images/Screen_1.jpg';
 const About = () => {
   return (
+    <div className="contentbody">
     <div className='about'>
       <Navbar />
       {/* <div className="header">
@@ -22,7 +23,7 @@ const About = () => {
         <div className="text team-text-blk team-head-text">About Us</div>
       </div> */}
       <EventHeader />
-      <div className="contentbody">
+     
       <div className="aboutus-container">
         <h2 >Who We Are ?</h2>
         <p className="info" >In November 2021, we embarked on a remarkable journey with a simple yet powerful belief: that people should passionately pursue their hobby of trekking. With this vision in mind, Sahyadri Vacations and Adventures born. Our primary objective was to introduce people to the hidden gems of Maharashtra and India in long term At Sahaydri Vacations, we strive to create unforgettable memories for our participants. We carefully curate each trek, tour, and camping experience to showcase the hidden treasures of Maharashtra, from the majestic forts perched atop rugged mountains to the serene valleys and pristine lakes that adorn the landscape. We believe in the transformative power of nature and adventure, and our aim is to provide you with immersive experiences that leave a lasting impact.Welcome to Sahyadri Vacations And Adventures, where we specialize in creating unforgettable travel experiences across Maharashtra, and beyond. Founded with a passion for exploration and a commitment to excellence, we are dedicated to follow the Virtues set by Chhatrapati Shivaji Maharaj. Whether you're seeking cultural immersion, adventure, or relaxation, our expert team ensures every detail of your trip is meticulously planned for an enriching and seamless experience.</p>
@@ -127,8 +128,9 @@ const About = () => {
           </div>
         </div>
       </div> */}
-       </div>
+      
       <Footer />
+    </div>
     </div>
   )
 }
