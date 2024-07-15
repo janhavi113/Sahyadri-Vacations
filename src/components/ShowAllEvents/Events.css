@@ -44,4 +44,9 @@
     .event .imageContainer img {
         height: 225px !important;
     }
+    .event .wrapper h1 {
+        font-weight: 700;
+        font-size: 35px !important;
+        text-shadow: 2px 2px 8px #120202b0;
+    }
 }
