@@ -114,8 +114,17 @@
 .contact-us-container{
   display: flex;
 }
-.contactimg img{
-  height: 225px !important;
-  width: 100%;
+
+}
+
+@media only screen and (max-width: 767px) {
+  .contactimg img{
+    height: 225px !important;
+    width: 100%;
+  }
+  .event .wrapper h1 {
+    font-weight: 700;
+    font-size: 35px !important;
+    text-shadow: 2px 2px 8px #120202b0;
 }
 }
