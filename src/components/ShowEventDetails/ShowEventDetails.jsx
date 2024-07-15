@@ -243,9 +243,9 @@ const ShowEventDetails = () => {
           {isSuccess && console.log('eventDetails.images-- ' + eventDetails.images)}
           {isSuccess && eventDetails.images.map((event, index) => (
 
-            <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={event} />
+            <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}`+event} />
               <div className="inner-content">
-                <h3>{`${apiUrl}`+ eventDetails.name}</h3>
+                <h3>{eventDetails.name}</h3>
               </div>
             </SwiperSlide>
           ))}
