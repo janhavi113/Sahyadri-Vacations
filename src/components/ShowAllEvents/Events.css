@@ -1,10 +1,4 @@
-.contentbody {
-    width: 100%;
-    border-radius: 32px 32px 0px 0px;
-    margin-top: -8%;
-    position: relative;
-    background-color: white;
-}
+
 .all-events-card{
     width: 300px;
 }
@@ -52,5 +46,12 @@
     }
     .adjust-margin{
         margin: 0% 0% 0% 10% !important;
+    }
+    .contentbody {
+        width: 100%;
+        border-radius: 32px 32px 0px 0px;
+        margin-top: -8%;
+        position: relative;
+        background-color: white;
     }
 }

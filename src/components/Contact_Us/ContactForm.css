@@ -98,13 +98,7 @@
   display: flex;
   margin: 15px 0px 0px 0px;
 }
-.contentbody {
-  width: 100%;
-  border-radius: 8px 8px 0px 0px;
-  margin-top: -8%;
-  position: relative;
-  background-color: white;
-}
+
 @media screen and (min-width: 768px) {
   .thicker {
     font-size: 25px;
@@ -133,5 +127,12 @@
     font-weight: 700;
     font-size: 35px !important;
     text-shadow: 2px 2px 8px #120202b0;
+}
+.contentbody {
+  width: 100%;
+  border-radius: 8px 8px 0px 0px;
+  margin-top: -8%;
+  position: relative;
+  background-color: white;
 }
 }

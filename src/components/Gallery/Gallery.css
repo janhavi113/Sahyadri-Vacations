@@ -16,13 +16,7 @@
 .fadeIn-bottom {
     top: 80%;
 }
-.contentbody {
-    width: 100%;
-    border-radius: 8px 8px 0px 0px !important;
-    margin-top: -8%;
-    position: relative;
-    background-color: white;
-}
+
 .content-details {
     position: absolute;
     text-align: center;
@@ -51,6 +45,16 @@ margin: 20px;
     .content {
         position: static;
     }
+}
+@media (max-width: 728px) {
+.contentbody {
+    width: 100%;
+    border-radius: 8px 8px 0px 0px !important;
+    margin-top: -8%;
+    position: relative;
+    background-color: white;
+}
+
 }
 @media (min-width: 640px) and (max-width: 1023px) {
     .res-community-title h6 {
