@@ -11,10 +11,7 @@
 .form-group {
   margin-bottom: 8px;
 }
-.contactimg img{
-  height: 300px !important;
-  width: 100%;
-}
+
 .form-group label {
   display: block;
   margin-bottom: 5px;
@@ -114,7 +111,10 @@
 .contact-us-container{
   display: flex;
 }
-
+.contactimg img{
+  height: 300px !important;
+  width: 100%;
+}
 }
 
 @media only screen and (max-width: 767px) {
