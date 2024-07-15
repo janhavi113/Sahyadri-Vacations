@@ -15,14 +15,18 @@ import slide2 from '../Images/Screen_3.webp';
 import slide4 from '../Images/Screen_1.jpg';
 const About = () => {
   return (
+    <>
+    <EventHeader />
+    <Navbar />
+    
     <div className="contentbody">
     <div className='about'>
-      <Navbar />
+   
       {/* <div className="header">
         <img className='slide-image' src={slide3}></img>
         <div className="text team-text-blk team-head-text">About Us</div>
       </div> */}
-      <EventHeader />
+      
      
       <div className="aboutus-container">
         <h2 >Who We Are ?</h2>
@@ -129,9 +133,11 @@ const About = () => {
         </div>
       </div> */}
       
-      <Footer />
+     
     </div>
     </div>
+    <Footer />
+    </>
   )
 }
 
