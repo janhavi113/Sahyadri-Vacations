@@ -123,8 +123,8 @@ margin: 0 0px 0 -750px;
 }
 
 @media only screen and (max-width: 767px) {
-  .event .imageContainer img {
-    height: 100px !important;
+  .search .imageContainer img {
+    height: 225px !important;
   }
   
   .search .wrapper {

@@ -42,6 +42,6 @@
 }
 @media only screen and (max-width: 767px) {
     .event .imageContainer img {
-        height: 100px !important;
+        height: 225px !important;
     }
 }
