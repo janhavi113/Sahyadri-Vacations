@@ -44,7 +44,8 @@ const photos = [
 export default function Gallery() {
 
   return (
-    <>
+    <>  
+    <div className="contentbody">
       <div className="gallery">
         <div className="col-md-3">
           <a href="" target="_blank">
@@ -140,7 +141,7 @@ export default function Gallery() {
 
 
         </div>
-
+        </div>
 
       </div>
     </>
