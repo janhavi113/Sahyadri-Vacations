@@ -30,7 +30,9 @@ const ContactUs = () => {
       <Navbar />
      <EventHeader/>
      <br />
+     <div className="contentbody">
       <Contact_Us/>
+      </div>
       <Footer />
     </>
   );
