@@ -81,14 +81,14 @@ const Home = () => {
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
       }
     }
-    
+   var base_url = window.location.origin; 
     if (batchdate && eventCostPerPerson) {
       liveEvent = {
         eventId: event.eventId,
         eventname: event.eventname,
         eventType: event.eventType,
         url: event.Url,
-        images: event.images,
+        images: base_url + event.images,
         batchdate: batchdate,
         eventCostPerPerson: eventCostPerPerson,
 
