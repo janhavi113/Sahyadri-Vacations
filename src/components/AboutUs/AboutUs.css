@@ -207,4 +207,7 @@
       .about {
         padding-top: 1px !important;
       }
+      .about .team-section h1 {
+        font-size: 25px !important;
+      }
 }
