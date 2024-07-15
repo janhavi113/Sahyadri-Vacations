@@ -24,11 +24,11 @@ const port = process.env.PORT || 3000;
 var images = {};
 var recordcount;
 
-// Configure CORS
+// CORS configuration
 app.use(cors({
-  origin: 'http://157.173.222.166',  // Replace with your frontend's public IP or domain
+  origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],  // Allow frontend IP and localhost
   methods: 'GET,POST,PUT,DELETE,OPTIONS',
-  allowedHeaders: 'Content-Type,Authorization',
+  allowedHeaders: 'Content-Type, Authorization',
   credentials: true
 }));
 
