@@ -3,7 +3,7 @@ import Login from "./components/Login";
 import About from "./components/AboutUs/About";
 import CustomisedTour from "./components/CustomiseTour/CustomisedTour";
 import AdminLogin from "./components/AdminLogin";
-import Dashboard from "./components/AdminDashboard";
+import Dashboard from "./components/AdminDashboard/AdminDashboard";
 import AllEvents from  "./components/AllEvents";     
 import ScheduledEvents from "./components/Scheduled_Events/ScheduledEvents";
 import ScheduledEventsDetails from "./components/Scheduled_Events/ScheduledEventsDetails";
@@ -16,7 +16,7 @@ import SearchEvent from "./components/SearchEvent/SearchEvent" ;
 import UserAgreement from "./components/UserAgreement";
 import Gallery from "./components/Gallery/PhotoGallery" ;
 import ContactUs from "./components/Contact_Us/ContactUs" ;
-
+import Register from './components/Register/Register';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 function App() {
@@ -97,6 +97,10 @@ function App() {
     {
       path: "/gallery",
       element: <Gallery />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
     },
   ]);
   return (

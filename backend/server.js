@@ -14,7 +14,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import dotenv from 'dotenv';
-
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET;  // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
@@ -23,14 +24,14 @@ const app = express();
 const port = process.env.PORT || 3000;
 var images = {};
 var recordcount;
-
+app.use(cors({}));
 // CORS configuration
-app.use(cors({
-  origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],  // Allow frontend IP and localhost
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
-  allowedHeaders: 'Content-Type, Authorization',
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],  // Allow frontend IP and localhost
+//   methods: 'GET,POST,PUT,DELETE,OPTIONS',
+//   allowedHeaders: 'Content-Type, Authorization',
+//   credentials: true,
+// }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -54,6 +55,57 @@ if (fs.existsSync(frontendDir)) {
 }
 
 app.use(express.static(frontendDir));
+// Middleware to protect routes
+
+const auth = (req, res, next) => {
+  const token = req.header('Authorization');
+  if (!token) return res.status(401).send('Access denied');
+  try {
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = verified;
+    next();
+  } catch (err) {
+    res.status(400).send('Invalid token');
+  }
+};
+
+// Register route
+app.post('/register', async (req, res) => {
+  
+  const { username, password } = req.body;
+  console.log('username',username);
+  console.log('password',password);
+  const hashedPassword = await bcrypt.hash(password, 10);
+  console.log('hashedPassword',hashedPassword);
+  const user = new Employee({ Username: username, Password: hashedPassword });
+  console.log('user',user);
+  await user.save();
+  res.send('User registered!');
+});
+
+// Login route
+
+app.post('/admin-login', async (req, res) => {
+  const { username, password } = req.body;
+  console.log('req.body',req.body);
+  let userDetails = await Employee.findOne({ Username: username });
+  
+  if (!userDetails){ 
+    return res.status(400).send('Invalid credentials');
+  }else{
+     let userPassword = JSON.parse(JSON.stringify(userDetails)).Password;
+    console.log('password',password);
+    console.log('userPassword',userPassword);
+    console.log('user',JSON.parse(JSON.stringify(userDetails)).Password);
+  const isPasswordValid = await bcrypt.compare(password, userPassword);
+  console.log('isPasswordValid--',isPasswordValid);
+  if (!isPasswordValid) return res.status(400).send('Invalid credentials');
+  const token = jwt.sign({ userId: userDetails._id }, process.env.JWT_SECRET);
+
+  res.json({ token });
+}
+});
+
 
 // Example API route for testing
 app.get("/api/test", (req, res) => {
@@ -74,12 +126,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Add the API route with the correct CORS settings
-app.use('/api', cors({
-  origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
-  allowedHeaders: 'Content-Type, Authorization',
-  credentials: true,
-}));
+// app.use('/api', cors({
+//   origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
+//   methods: 'GET,POST,PUT,DELETE,OPTIONS',
+//   allowedHeaders: 'Content-Type, Authorization',
+//   credentials: true,
+// }));
 
 app.get("/show-all-events", async (req, res) => {
   console.log("i am in");
@@ -123,11 +175,6 @@ app.get("/search-event/:serchText", async (req, res) => {
   }
 });
 
-// Login to System
-app.post("/admin-login", async (req, res) => {
-  let employee = await Employee.find({ Username: req.body.username });
-  res.send(employee);
-});
 
 app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
   console.log("req.params--", req.params);
@@ -311,6 +358,7 @@ app.post("/create-event", upload.array("file", 12), async (req, res) => {
       }
     }
 
+    console.log('imageList---',imageList);
     var events = await Events.find().sort([["_id", -1]]).limit(1);
     if (events.length > 0) {
       recordcount = events[0].eventId;

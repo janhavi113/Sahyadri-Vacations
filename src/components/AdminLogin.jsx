@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form"
 import { redirect,useNavigate } from "react-router-dom";
-
 const AdminLogin = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  
   const {
     register,
     handleSubmit,
@@ -11,40 +13,54 @@ const AdminLogin = () => {
     formState: { errors, isSubmitting },
   } = useForm();
  const navigate = useNavigate();
-  
-  const onSubmit = async (data) => {
-    let r = await fetch(`${apiUrl}admin-login`, {method: "POST",  headers: {
-      "Content-Type": "application/json", 
-    }, body: JSON.stringify(data)})
-    let res = await r.json()
-    
-    console.log(data, res)
-     if(data.password !== res[0].Password){
-       setError("myform", {message: "Invalid Password and UserName. Please contact Syatem Admin"})
-     }
-     else{
-      navigate("/dashboard");      
-     }
-    // if(data.username === "rohan"){
-    //   setError("blocked", {message: "Sorry this user is blocked"})
-    // }
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  console.log('username---'+username);
+  console.log('password---'+password);
+  const response = await fetch(`${apiUrl}admin-login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+
+  const data = await response.json();
+  if (response.ok) {
+    localStorage.setItem('token', data.token);
+    navigate("/dashboard");      
+  } else {
+    setError("myform", {message: "Invalid Password and UserName. Please contact Syatem Admin"})
   }
+};
+ 
   
   return (
     <> 
     {isSubmitting && <div>Loading...</div>}
-       <div className="container">
-        <form action="" onSubmit={handleSubmit(onSubmit)}>
-          <input placeholder='username' {...register("username", { required: {value: true, message: "This field is required"}, })} type="text"   />
-          <br />
-          <input placeholder='password'  {...register("password", {minLength: {value: 7, message: "Min length of password is 7"},})} type="password"/>
-          {errors.password && <div className='red'>{errors.password.message}</div>}
-          <br />
-          <input disabled={isSubmitting} type="submit" value="Submit" />
-          {errors.myform && <div className='red'>{errors.myform.message}</div>}
-          {errors.blocked && <div className='red'>{errors.blocked.message}</div>}
-        </form>
-       </div>
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <div>
+          <label>Username: </label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Password: </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <input disabled={isSubmitting} type="submit" value="Login" />
+        {errors.myform && <div className='red'>{errors.myform.message}</div>}
+      </form>
+    </div>
     </>
   )
 }
