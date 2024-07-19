@@ -26,12 +26,12 @@ var images = {};
 var recordcount;
 app.use(cors({}));
 // CORS configuration
-// app.use(cors({
-//   origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],  // Allow frontend IP and localhost
-//   methods: 'GET,POST,PUT,DELETE,OPTIONS',
-//   allowedHeaders: 'Content-Type, Authorization',
-//   credentials: true,
-// }));
+app.use(cors({
+  origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],  // Allow frontend IP and localhost
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials: true,
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -125,13 +125,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Add the API route with the correct CORS settings
-// app.use('/api', cors({
-//   origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
-//   methods: 'GET,POST,PUT,DELETE,OPTIONS',
-//   allowedHeaders: 'Content-Type, Authorization',
-//   credentials: true,
-// }));
+//Add the API route with the correct CORS settings
+app.use('/api', cors({
+  origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type, Authorization',
+  credentials: true,
+}));
 
 app.get("/show-all-events", async (req, res) => {
   console.log("i am in");
