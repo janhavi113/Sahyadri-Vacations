@@ -64,7 +64,7 @@ const About = () => {
             </div>
             <br />
             <br />
-            <div className="team justify-content-around" >
+            {/* <div className="team justify-content-around" >
             <div className="row justify-content-around">
                 <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
                   <div className="bg-transparent text-center" >
@@ -305,7 +305,7 @@ const About = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
 
