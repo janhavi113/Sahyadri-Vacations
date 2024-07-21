@@ -22,7 +22,7 @@ function CreateEvents() {
   const [thingsToCarry, setThingsToCarry] = useState();
   const [costIncludes, setCostIncludes] = useState();
   const onSubmit = async (data) => {
-    console.log('data--'+data);
+    console.log('data--',data);
     const formData = new FormData();
     if (file) {
       for (let index = 0; index < file.length; index++) {
