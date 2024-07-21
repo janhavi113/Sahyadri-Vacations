@@ -256,6 +256,7 @@ app.get("/create-event/event-details/:eventId", async (req, res) => {
 
 // Delete Event
 app.post("/create-event/event-details/:eventId", async (req, res) => {
+  console.log('post create event ');
   try {
     let event_Id = Number(req.params.eventId.toString().replace(":", ""));
     var myquery = { eventId: event_Id };
@@ -276,6 +277,7 @@ app.put(
   "/create-event/event-details/:eventId",
   upload.array("file", 12),
   async (req, res) => {
+    console.log('put create event ');
     try {
       let event_Id = Number(req.params.eventId.toString().replace(":", ""));
       const {
@@ -321,6 +323,7 @@ app.put(
       };
       var events = await Events.updateOne(myquery, updateDoc, options);
       events = await Events.find(myquery);
+      console.log('events--',events);
       if (events && events.length > 0) {
         res.send({ isSuccess: true, events: events });
       } else {
