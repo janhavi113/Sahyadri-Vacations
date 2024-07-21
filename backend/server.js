@@ -349,6 +349,7 @@ app.get("/all-events", async (req, res) => {
 
 // Create Event
 app.post("/create-event", upload.array("file", 12), async (req, res) => {
+  console.log('create event ');
   try {
     console.log("create req.body --", req.body);
     var imageList = [];
