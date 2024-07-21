@@ -114,19 +114,42 @@ app.post('/admin-login', async (req, res) => {
 //   res.json({ message: "API route is working" });
 // });
 
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "public/Images/");
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now() + "-" + path.extname(file.originalname);
+//     cb(null, file.fieldname + "-" + uniqueSuffix);
+//   },
+// });
+// console.log('storage---',storage);
+// //const upload = multer({ storage: storage });
+// const upload = multer({ dest: 'public/Images/' });
+// console.log('upload---',upload);
+
+// Set up storage engine
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/Images/");
+  destination: (req, file, cb) => {
+      cb(null, 'uploads/'); // Directory to save uploaded files
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
-  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + path.extname(file.originalname)); // File name with timestamp
+  }
 });
-console.log('storage---',storage);
-//const upload = multer({ storage: storage });
-const upload = multer({ dest: 'public/Images/' });
-console.log('upload---',upload);
+
+// Initialize multer with storage options
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 }, // Limit file size to 1MB
+});
+
+// Route to handle file uploads
+app.post('/create-event', upload.array('file', 12), (req, res) => {
+  // req.files contains the uploaded files
+  console.log(req.files);
+  res.send('Files uploaded successfully');
+});
 
 //Add the API route with the correct CORS settings
 app.use('/api', cors({
@@ -351,63 +374,63 @@ app.get("/all-events", async (req, res) => {
 });
 
 // Create Event
-app.post("/create-event",  upload.array("file", 12), async (req, res) => {
-  console.log('create event ');
-  try {
-    console.log("create req.body --", req.body);
-    var imageList = [];
-    var currUrl = req.headers.origin;
-    // if (req.files) {
-    //   for (let index = 0; index < req.files.length; index++) {
-    //     imageList.push(
-    //       currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
-    //     );
-    //   }
-    // }
+// app.post("/create-event", async (req, res) => {
+//   console.log('create event ');
+//   try {
+//     console.log("create req.body --", req.body);
+//     var imageList = [];
+//     var currUrl = req.headers.origin;
+//     // if (req.files) {
+//     //   for (let index = 0; index < req.files.length; index++) {
+//     //     imageList.push(
+//     //       currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
+//     //     );
+//     //   }
+//     // }
 
-    console.log('imageList---',imageList);
-    var events = await Events.find().sort([["_id", -1]]).limit(1);
-    if (events.length > 0) {
-      recordcount = events[0].eventId;
-    } else {
-      recordcount = 0;
-    }
+//     console.log('imageList---',imageList);
+//     var events = await Events.find().sort([["_id", -1]]).limit(1);
+//     if (events.length > 0) {
+//       recordcount = events[0].eventId;
+//     } else {
+//       recordcount = 0;
+//     }
 
-    const {
-      eventName,
-      eventDetails,
-      itinerary,
-      highlights,
-      costIncludes,
-      thingsToCarry,
-      pickupPoints,
-      eventType,
-    } = req.body;
-    console.log("create req.body --", req.body);
-    let apiName = req.body.eventName;
-    apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
-    const event = new Events({
-      name: eventName,
-      apiname: apiName,
-      eventType: eventType,
-      itinerary: itinerary,
-      eventDetails: eventDetails,
-      costIncludes: costIncludes,
-      thingsToCarry: thingsToCarry,
-      pickupPoints: pickupPoints,
-      highlights: highlights,
-      eventId: recordcount + 1,
-      url: currUrl + "/create-event/event-details/" + (recordcount + 1),
-      images: imageList,
-    });
+//     const {
+//       eventName,
+//       eventDetails,
+//       itinerary,
+//       highlights,
+//       costIncludes,
+//       thingsToCarry,
+//       pickupPoints,
+//       eventType,
+//     } = req.body;
+//     console.log("create req.body --", req.body);
+//     let apiName = req.body.eventName;
+//     apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
+//     const event = new Events({
+//       name: eventName,
+//       apiname: apiName,
+//       eventType: eventType,
+//       itinerary: itinerary,
+//       eventDetails: eventDetails,
+//       costIncludes: costIncludes,
+//       thingsToCarry: thingsToCarry,
+//       pickupPoints: pickupPoints,
+//       highlights: highlights,
+//       eventId: recordcount + 1,
+//       url: currUrl + "/create-event/event-details/" + (recordcount + 1),
+//       images: imageList,
+//     });
 
-    event.save();
-    res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
-  } catch (error) {
-    console.error(error);
-    res.send({ isSuccess: false, error: error });
-  }
-});
+//     event.save();
+//     res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
+//   } catch (error) {
+//     console.error(error);
+//     res.send({ isSuccess: false, error: error });
+//   }
+// });
 
 // Get All Event
 app.get("/schedule-event", async (req, res) => {
