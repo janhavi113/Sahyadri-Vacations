@@ -145,7 +145,7 @@ const upload = multer({
 });
 
 // Route to handle file uploads
-app.post('/create-event', upload.array('file', 12), (req, res) => {
+app.post('/create-event', (req, res) => {
   // req.files contains the uploaded files
   console.log(req.files);
   res.send('Files uploaded successfully');
