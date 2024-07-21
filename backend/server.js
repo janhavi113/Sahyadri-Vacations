@@ -124,7 +124,8 @@ const storage = multer.diskStorage({
   },
 });
 console.log('storage---',storage);
-const upload = multer({ storage: storage });
+//const upload = multer({ storage: storage });
+const upload = multer({ dest: 'public/Images/' });
 console.log('upload---',upload);
 
 //Add the API route with the correct CORS settings
