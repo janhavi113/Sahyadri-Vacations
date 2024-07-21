@@ -25,6 +25,7 @@ const port = process.env.PORT || 3000;
 var images = {};
 var recordcount;
 app.use(cors({}));
+
 // CORS configuration
 app.use(cors({
   origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],  // Allow frontend IP and localhost
@@ -36,7 +37,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // Serve static files from the 'public' directory
@@ -546,6 +547,11 @@ app.get("*", (req, res) => {
     console.error("index.html not found in frontend directory");
     res.status(404).send("404 Not Found");
   }
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 app.listen(port, () => {
