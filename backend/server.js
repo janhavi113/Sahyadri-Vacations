@@ -109,8 +109,8 @@ app.post('/admin-login', async (req, res) => {
 
 
 // Example API route for testing
-app.get("/api/test", (req, res) => {
-  console.log("API /api/test route hit");
+app.post("/create-event", (req, res) => {
+  console.log("API /create-event route hit");
   res.json({ message: "API route is working" });
 });
 
@@ -349,63 +349,63 @@ app.get("/all-events", async (req, res) => {
 });
 
 // Create Event
-app.post("/create-event", upload.array("file", 12), async (req, res) => {
-  console.log('create event ');
-  try {
-    console.log("create req.body --", req.body);
-    var imageList = [];
-    var currUrl = req.headers.origin;
-    if (req.files) {
-      for (let index = 0; index < req.files.length; index++) {
-        imageList.push(
-          currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
-        );
-      }
-    }
+// app.post("/create-event", upload.array("file", 12), async (req, res) => {
+//   console.log('create event ');
+//   try {
+//     console.log("create req.body --", req.body);
+//     var imageList = [];
+//     var currUrl = req.headers.origin;
+//     if (req.files) {
+//       for (let index = 0; index < req.files.length; index++) {
+//         imageList.push(
+//           currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
+//         );
+//       }
+//     }
 
-    console.log('imageList---',imageList);
-    var events = await Events.find().sort([["_id", -1]]).limit(1);
-    if (events.length > 0) {
-      recordcount = events[0].eventId;
-    } else {
-      recordcount = 0;
-    }
+//     console.log('imageList---',imageList);
+//     var events = await Events.find().sort([["_id", -1]]).limit(1);
+//     if (events.length > 0) {
+//       recordcount = events[0].eventId;
+//     } else {
+//       recordcount = 0;
+//     }
 
-    const {
-      eventName,
-      eventDetails,
-      itinerary,
-      highlights,
-      costIncludes,
-      thingsToCarry,
-      pickupPoints,
-      eventType,
-    } = req.body;
-    console.log("create req.body --", req.body);
-    let apiName = req.body.eventName;
-    apiName = apiName.toString().replace(/\s/g, "-").toLowerCase();
-    const event = new Events({
-      name: eventName,
-      apiname: apiName,
-      eventType: eventType,
-      itinerary: itinerary,
-      eventDetails: eventDetails,
-      costIncludes: costIncludes,
-      thingsToCarry: thingsToCarry,
-      pickupPoints: pickupPoints,
-      highlights: highlights,
-      eventId: recordcount + 1,
-      url: currUrl + "/create-event/event-details/" + (recordcount + 1),
-      images: imageList,
-    });
+//     const {
+//       eventName,
+//       eventDetails,
+//       itinerary,
+//       highlights,
+//       costIncludes,
+//       thingsToCarry,
+//       pickupPoints,
+//       eventType,
+//     } = req.body;
+//     console.log("create req.body --", req.body);
+//     let apiName = req.body.eventName;
+//     apiName = apiName.toString().replace(/\s/g, "-").toLowerCase();
+//     const event = new Events({
+//       name: eventName,
+//       apiname: apiName,
+//       eventType: eventType,
+//       itinerary: itinerary,
+//       eventDetails: eventDetails,
+//       costIncludes: costIncludes,
+//       thingsToCarry: thingsToCarry,
+//       pickupPoints: pickupPoints,
+//       highlights: highlights,
+//       eventId: recordcount + 1,
+//       url: currUrl + "/create-event/event-details/" + (recordcount + 1),
+//       images: imageList,
+//     });
 
-    event.save();
-    res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
-  } catch (error) {
-    console.error(error);
-    res.send({ isSuccess: false, error: error });
-  }
-});
+//     event.save();
+//     res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
+//   } catch (error) {
+//     console.error(error);
+//     res.send({ isSuccess: false, error: error });
+//   }
+// });
 
 // Get All Event
 app.get("/schedule-event", async (req, res) => {
