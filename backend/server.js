@@ -384,7 +384,7 @@ app.post("/create-event", async (req, res) => {
     } = req.body;
     console.log("create req.body --", req.body);
     let apiName = req.body.eventName;
-    apiName = apiName.toString().replace(/\s/g, "-").toLowerCase();
+    apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
     const event = new Events({
       name: eventName,
       apiname: apiName,
