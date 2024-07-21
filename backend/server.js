@@ -123,8 +123,9 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + "-" + uniqueSuffix);
   },
 });
-
+console.log('storage---',storage);
 const upload = multer({ storage: storage });
+console.log('upload---',upload);
 
 //Add the API route with the correct CORS settings
 app.use('/api', cors({
