@@ -131,7 +131,7 @@ app.post('/admin-login', async (req, res) => {
 // Set up storage engine
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, 'uploads/'); // Directory to save uploaded files
+      cb(null, 'public/Images/'); // Directory to save uploaded files
   },
   filename: (req, file, cb) => {
       cb(null, Date.now() + path.extname(file.originalname)); // File name with timestamp
