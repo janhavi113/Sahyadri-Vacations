@@ -3,6 +3,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import nodemailer from 'nodemailer';
 import mongoose from 'mongoose';
+import fileUpload from 'express-fileupload';
 import { Employee } from './models/Employee.js';
 import { ScheduleBatches } from './models/ScheduleBatches.js';
 import { Events } from './models/Event.js';
@@ -157,6 +158,25 @@ function handleError(err, res) {
 //   console.log('req.file---', req.files);
 //   res.send({ isSuccess: true, message: 'Files uploaded successfully' });
 // });
+
+app.use(fileUpload());
+
+app.post('/create-event', (req, res) => {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  let sampleFile = req.files.sampleFile;
+  console.log('sampleFile',sampleFile);
+  let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
+
+  sampleFile.mv(uploadPath, (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    res.send('File uploaded!');
+  });
+});
 
 //Add the API route with the correct CORS settings
 app.use('/api', cors({
@@ -381,64 +401,64 @@ app.get("/all-events", async (req, res) => {
 });
 
 // Route to handle file uploads
-app.post('/create-event', upload.array('file', 12), async (req, res) => {
+// app.post('/create-event', upload.array('file', 12), async (req, res) => {
   
   
-    console.log('req---', req.body);
-  if (!req.files) {
-    return res.status(400).send('No files were uploaded.');
-  }
-    console.log("create req.body --", req.body);
-    var imageList = [];
-    var currUrl = req.headers.origin;
-    if (req.files) {
-      for (let index = 0; index < req.files.length; index++) {
-        imageList.push(
-          currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
-        );
-      }
-    }
+//     console.log('req---', req.body);
+//   if (!req.files) {
+//     return res.status(400).send('No files were uploaded.');
+//   }
+//     console.log("create req.body --", req.body);
+//     var imageList = [];
+//     var currUrl = req.headers.origin;
+//     if (req.files) {
+//       for (let index = 0; index < req.files.length; index++) {
+//         imageList.push(
+//           currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
+//         );
+//       }
+//     }
 
-    console.log('imageList---', imageList);
-    var events = await Events.find().sort([["_id", -1]]).limit(1);
-    if (events.length > 0) {
-      recordcount = events[0].eventId;
-    } else {
-      recordcount = 0;
-    }
+//     console.log('imageList---', imageList);
+//     var events = await Events.find().sort([["_id", -1]]).limit(1);
+//     if (events.length > 0) {
+//       recordcount = events[0].eventId;
+//     } else {
+//       recordcount = 0;
+//     }
 
-    const {
-      eventName,
-      eventDetails,
-      itinerary,
-      highlights,
-      costIncludes,
-      thingsToCarry,
-      pickupPoints,
-      eventType,
-    } = req.body;
-    console.log("create req.body --", req.body);
-    let apiName = req.body.eventName;
-    apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
-    const event = new Events({
-      name: eventName,
-      apiname: apiName,
-      eventType: eventType,
-      itinerary: itinerary,
-      eventDetails: eventDetails,
-      costIncludes: costIncludes,
-      thingsToCarry: thingsToCarry,
-      pickupPoints: pickupPoints,
-      highlights: highlights,
-      eventId: recordcount + 1,
-      url: currUrl + "/create-event/event-details/" + (recordcount + 1),
-      images: imageList,
-    });
+//     const {
+//       eventName,
+//       eventDetails,
+//       itinerary,
+//       highlights,
+//       costIncludes,
+//       thingsToCarry,
+//       pickupPoints,
+//       eventType,
+//     } = req.body;
+//     console.log("create req.body --", req.body);
+//     let apiName = req.body.eventName;
+//     apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
+//     const event = new Events({
+//       name: eventName,
+//       apiname: apiName,
+//       eventType: eventType,
+//       itinerary: itinerary,
+//       eventDetails: eventDetails,
+//       costIncludes: costIncludes,
+//       thingsToCarry: thingsToCarry,
+//       pickupPoints: pickupPoints,
+//       highlights: highlights,
+//       eventId: recordcount + 1,
+//       url: currUrl + "/create-event/event-details/" + (recordcount + 1),
+//       images: imageList,
+//     });
 
-    event.save();
-    res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
+//     event.save();
+//     res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
   
-});
+// });
 
 // Get All Event
 app.get("/schedule-event", async (req, res) => {
