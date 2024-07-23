@@ -144,11 +144,18 @@ const upload = multer({
   limits: { fileSize: 1000000 }, // Limit file size to 1MB
 });
 
-// Route to handle file uploads
-app.post('/create-event', (req, res) => {
-  // req.files contains the uploaded files
+// Error handling middleware
+function handleError(err, res) {
+  res.status(500).contentType("text/plain").end("Something went wrong!");
+}
+ // Route to handle file uploads
+app.post('/create-event', upload.array('file', 12), (req, res) => {
+  if (!req.files) {
+      return res.status(400).send('No files were uploaded.');
+  }
+  // Files are available in req.files
   console.log(req.files);
-  res.send('Files uploaded successfully');
+  res.send({ isSuccess: true, message: 'Files uploaded successfully' });
 });
 
 //Add the API route with the correct CORS settings
@@ -574,9 +581,14 @@ app.get("*", (req, res) => {
   }
 });
 
+// Error handling middleware for multer
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+  if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: err.message });
+  } else if (err) {
+      return res.status(500).json({ error: "An unknown error occurred" });
+  }
+  next();
 });
 
 app.listen(port, () => {
