@@ -162,37 +162,6 @@ function handleError(err, res) {
 
 app.use(fileUpload());
 
-app.post('/create-event', (req, res) => {
-
- 
-    console.log('sampleFile--', req.files.files);
-    let sampleFile = req.files.files;
-    console.log('sampleFile.length > 1', sampleFile.length > 1);
-    if( sampleFile.length == 1){
-    let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-    console.log('uploadPath', uploadPath);
-    sampleFile.mv(uploadPath, (err) => {
-      if (err) {
-       // return res.status(500).send(err);
-      }
-      res.send('File uploaded!');
-    });
-  }else{
-    console.log('sampleFile.length()', sampleFile.length);
-    for(let i=0 ; i < sampleFile.length; i++){
-      let uploadPath = path.join(__dirname, '../public/Images', sampleFile[i].name);
-      console.log('uploadPath', uploadPath);
-      sampleFile[0].mv(uploadPath, (err) => {
-        if (err) {
-         // return res.status(500).send(err);
-        }
-       
-      });
-    }
-    res.send('File uploaded!');
-  }
-});
-
 //Add the API route with the correct CORS settings
 app.use('/api', cors({
   origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
@@ -416,64 +385,74 @@ app.get("/all-events", async (req, res) => {
 });
 
 // Route to handle file uploads
-// app.post('/create-event', upload.array('file', 12), async (req, res) => {
+app.post('/create-event', async (req, res) => {
+  var imageList = [];
+  let sampleFile = req.files.files;
+  console.log('sampleFile.length > 1', sampleFile.length > 1);
+  if (sampleFile.length == 1) {
+    let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
+    console.log('uploadPath', uploadPath);
+    imageList.push('/public/Images/'+ sampleFile.name);
+    sampleFile.mv(uploadPath, (err) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+    });
+  } else {
+    console.log('sampleFile.length()', sampleFile.length);
+    for (let i = 0; i < sampleFile.length; i++) {
+      let uploadPath = path.join(__dirname, '../public/Images', sampleFile[i].name);
+      console.log('uploadPath', uploadPath);
+      imageList.push('/public/Images/'+ sampleFile[i].name);
+      sampleFile[0].mv(uploadPath, (err) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+      });
+    }
 
+  }
+ 
+  console.log('imageList---', imageList);
+  var events = await Events.find().sort([["_id", -1]]).limit(1);
+  if (events.length > 0) {
+    recordcount = events[0].eventId;
+  } else {
+    recordcount = 0;
+  }
 
-//     console.log('req---', req.body);
-//   if (!req.files) {
-//     return res.status(400).send('No files were uploaded.');
-//   }
-//     console.log("create req.body --", req.body);
-//     var imageList = [];
-//     var currUrl = req.headers.origin;
-//     if (req.files) {
-//       for (let index = 0; index < req.files.length; index++) {
-//         imageList.push(
-//           currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
-//         );
-//       }
-//     }
+  const {
+    eventName,
+    eventDetails,
+    itinerary,
+    highlights,
+    costIncludes,
+    thingsToCarry,
+    pickupPoints,
+    eventType,
+  } = req.body;
+  console.log("create req.body --", req.body);
+  let apiName = req.body.eventName;
+  apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
+  const event = new Events({
+    name: eventName,
+    apiname: apiName,
+    eventType: eventType,
+    itinerary: itinerary,
+    eventDetails: eventDetails,
+    costIncludes: costIncludes,
+    thingsToCarry: thingsToCarry,
+    pickupPoints: pickupPoints,
+    highlights: highlights,
+    eventId: recordcount + 1,
+    url: "/create-event/event-details/" + (recordcount + 1),
+    images: imageList,
+  });
 
-//     console.log('imageList---', imageList);
-//     var events = await Events.find().sort([["_id", -1]]).limit(1);
-//     if (events.length > 0) {
-//       recordcount = events[0].eventId;
-//     } else {
-//       recordcount = 0;
-//     }
+  event.save();
+  res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
 
-//     const {
-//       eventName,
-//       eventDetails,
-//       itinerary,
-//       highlights,
-//       costIncludes,
-//       thingsToCarry,
-//       pickupPoints,
-//       eventType,
-//     } = req.body;
-//     console.log("create req.body --", req.body);
-//     let apiName = req.body.eventName;
-//     apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
-//     const event = new Events({
-//       name: eventName,
-//       apiname: apiName,
-//       eventType: eventType,
-//       itinerary: itinerary,
-//       eventDetails: eventDetails,
-//       costIncludes: costIncludes,
-//       thingsToCarry: thingsToCarry,
-//       pickupPoints: pickupPoints,
-//       highlights: highlights,
-//       eventId: recordcount + 1,
-//       url: currUrl + "/create-event/event-details/" + (recordcount + 1),
-//       images: imageList,
-//     });
-
-//     event.save();
-//     res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
-
-// });
+});
 
 // Get All Event
 app.get("/schedule-event", async (req, res) => {
