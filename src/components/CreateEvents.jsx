@@ -23,6 +23,8 @@ function CreateEvents() {
   const [costIncludes, setCostIncludes] = useState();
   const onSubmit = async (data) => {
     console.log('data--',data);
+    
+    console.log('file--',file); 
     const formData = new FormData();
     if (file) {
       for (let index = 0; index < file.length; index++) {
@@ -37,6 +39,9 @@ function CreateEvents() {
     formData.append("itinerary", itinerary);
     formData.append("pickupPoints", pickupPoints);
     formData.append("thingsToCarry", thingsToCarry);
+
+    console.log('formData--',formData); 
+
     let r = await fetch(`${apiUrl}create-event`, {
       method: "POST",
       body: formData,
