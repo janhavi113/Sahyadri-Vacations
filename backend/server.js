@@ -150,11 +150,12 @@ function handleError(err, res) {
 }
  // Route to handle file uploads
 app.post('/create-event', upload.array('file', 12), (req, res) => {
+  console.log('req---',req.body);
   if (!req.files) {
       return res.status(400).send('No files were uploaded.');
   }
   // Files are available in req.files
-  console.log(req.files);
+  console.log('req.file---',req.files);
   res.send({ isSuccess: true, message: 'Files uploaded successfully' });
 });
 
