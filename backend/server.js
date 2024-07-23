@@ -72,14 +72,14 @@ const auth = (req, res, next) => {
 
 // Register route
 app.post('/register', async (req, res) => {
-  
+
   const { username, password } = req.body;
-  console.log('username',username);
-  console.log('password',password);
+  console.log('username', username);
+  console.log('password', password);
   const hashedPassword = await bcrypt.hash(password, 10);
-  console.log('hashedPassword',hashedPassword);
+  console.log('hashedPassword', hashedPassword);
   const user = new Employee({ Username: username, Password: hashedPassword });
-  console.log('user',user);
+  console.log('user', user);
   await user.save();
   res.send('User registered!');
 });
@@ -88,23 +88,23 @@ app.post('/register', async (req, res) => {
 
 app.post('/admin-login', async (req, res) => {
   const { username, password } = req.body;
-  console.log('req.body',req.body);
+  console.log('req.body', req.body);
   let userDetails = await Employee.findOne({ Username: username });
-  
-  if (!userDetails){ 
-    return res.status(400).send('Invalid credentials');
-  }else{
-     let userPassword = JSON.parse(JSON.stringify(userDetails)).Password;
-    console.log('password',password);
-    console.log('userPassword',userPassword);
-    console.log('user',JSON.parse(JSON.stringify(userDetails)).Password);
-  const isPasswordValid = await bcrypt.compare(password, userPassword);
-  console.log('isPasswordValid--',isPasswordValid);
-  if (!isPasswordValid) return res.status(400).send('Invalid credentials');
-  const token = jwt.sign({ userId: userDetails._id }, process.env.JWT_SECRET);
 
-  res.json({ token });
-}
+  if (!userDetails) {
+    return res.status(400).send('Invalid credentials');
+  } else {
+    let userPassword = JSON.parse(JSON.stringify(userDetails)).Password;
+    console.log('password', password);
+    console.log('userPassword', userPassword);
+    console.log('user', JSON.parse(JSON.stringify(userDetails)).Password);
+    const isPasswordValid = await bcrypt.compare(password, userPassword);
+    console.log('isPasswordValid--', isPasswordValid);
+    if (!isPasswordValid) return res.status(400).send('Invalid credentials');
+    const token = jwt.sign({ userId: userDetails._id }, process.env.JWT_SECRET);
+
+    res.json({ token });
+  }
 });
 
 
@@ -131,10 +131,10 @@ app.post('/admin-login', async (req, res) => {
 // Set up storage engine
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-      cb(null, '/root/Sahyadri-Vacations/public/Images/'); // Directory to save uploaded files
+    cb(null, '/root/Sahyadri-Vacations/public/Images/'); // Directory to save uploaded files
   },
   filename: (req, file, cb) => {
-      cb(null, Date.now() + path.extname(file.originalname)); // File name with timestamp
+    cb(null, Date.now() + path.extname(file.originalname)); // File name with timestamp
   }
 });
 
@@ -147,16 +147,16 @@ const upload = multer({
 function handleError(err, res) {
   res.status(500).contentType("text/plain").end("Something went wrong!");
 }
- // Route to handle file uploads
-app.post('/create-event', upload.array('file', 12), (req, res) => {
-  console.log('req---',req.body);
-  if (!req.files) {
-      return res.status(400).send('No files were uploaded.');
-  }
-  // Files are available in req.files
-  console.log('req.file---',req.files);
-  res.send({ isSuccess: true, message: 'Files uploaded successfully' });
-});
+// Route to handle file uploads
+// app.post('/create-event', upload.array('file', 12), (req, res) => {
+//   console.log('req---', req.body);
+//   if (!req.files) {
+//     return res.status(400).send('No files were uploaded.');
+//   }
+//   // Files are available in req.files
+//   console.log('req.file---', req.files);
+//   res.send({ isSuccess: true, message: 'Files uploaded successfully' });
+// });
 
 //Add the API route with the correct CORS settings
 app.use('/api', cors({
@@ -356,7 +356,7 @@ app.put(
       };
       var events = await Events.updateOne(myquery, updateDoc, options);
       events = await Events.find(myquery);
-      console.log('events--',events);
+      console.log('events--', events);
       if (events && events.length > 0) {
         res.send({ isSuccess: true, events: events });
       } else {
@@ -380,64 +380,67 @@ app.get("/all-events", async (req, res) => {
   }
 });
 
-// Create Event
-// app.post("/create-event", async (req, res) => {
-//   console.log('create event ');
-//   try {
-//     console.log("create req.body --", req.body);
-//     var imageList = [];
-//     var currUrl = req.headers.origin;
-//     // if (req.files) {
-//     //   for (let index = 0; index < req.files.length; index++) {
-//     //     imageList.push(
-//     //       currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
-//     //     );
-//     //   }
-//     // }
+// Route to handle file uploads
+app.post('/create-event', upload.array('file', 12), async (req, res) => {
+  console.log('req---', req.body);
+  if (!req.files) {
+    return res.status(400).send('No files were uploaded.');
+  }
+  try {
+    console.log("create req.body --", req.body);
+    var imageList = [];
+    var currUrl = req.headers.origin;
+    if (req.files) {
+      for (let index = 0; index < req.files.length; index++) {
+        imageList.push(
+          currUrl + "/" + req.files[index].path.toString().replaceAll("\\", "/")
+        );
+      }
+    }
 
-//     console.log('imageList---',imageList);
-//     var events = await Events.find().sort([["_id", -1]]).limit(1);
-//     if (events.length > 0) {
-//       recordcount = events[0].eventId;
-//     } else {
-//       recordcount = 0;
-//     }
+    console.log('imageList---', imageList);
+    var events = await Events.find().sort([["_id", -1]]).limit(1);
+    if (events.length > 0) {
+      recordcount = events[0].eventId;
+    } else {
+      recordcount = 0;
+    }
 
-//     const {
-//       eventName,
-//       eventDetails,
-//       itinerary,
-//       highlights,
-//       costIncludes,
-//       thingsToCarry,
-//       pickupPoints,
-//       eventType,
-//     } = req.body;
-//     console.log("create req.body --", req.body);
-//     let apiName = req.body.eventName;
-//     apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
-//     const event = new Events({
-//       name: eventName,
-//       apiname: apiName,
-//       eventType: eventType,
-//       itinerary: itinerary,
-//       eventDetails: eventDetails,
-//       costIncludes: costIncludes,
-//       thingsToCarry: thingsToCarry,
-//       pickupPoints: pickupPoints,
-//       highlights: highlights,
-//       eventId: recordcount + 1,
-//       url: currUrl + "/create-event/event-details/" + (recordcount + 1),
-//       images: imageList,
-//     });
+    const {
+      eventName,
+      eventDetails,
+      itinerary,
+      highlights,
+      costIncludes,
+      thingsToCarry,
+      pickupPoints,
+      eventType,
+    } = req.body;
+    console.log("create req.body --", req.body);
+    let apiName = req.body.eventName;
+    apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
+    const event = new Events({
+      name: eventName,
+      apiname: apiName,
+      eventType: eventType,
+      itinerary: itinerary,
+      eventDetails: eventDetails,
+      costIncludes: costIncludes,
+      thingsToCarry: thingsToCarry,
+      pickupPoints: pickupPoints,
+      highlights: highlights,
+      eventId: recordcount + 1,
+      url: currUrl + "/create-event/event-details/" + (recordcount + 1),
+      images: imageList,
+    });
 
-//     event.save();
-//     res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
-//   } catch (error) {
-//     console.error(error);
-//     res.send({ isSuccess: false, error: error });
-//   }
-// });
+    event.save();
+    res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
+  } catch (error) {
+    console.error(error);
+    res.send({ isSuccess: false, error: error });
+  }
+});
 
 // Get All Event
 app.get("/schedule-event", async (req, res) => {
@@ -584,9 +587,9 @@ app.get("*", (req, res) => {
 // Error handling middleware for multer
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: err.message });
+    return res.status(400).json({ error: err.message });
   } else if (err) {
-      return res.status(500).json({ error: "An unknown error occurred" });
+    return res.status(500).json({ error: "An unknown error occurred" });
   }
   next();
 });
