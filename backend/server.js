@@ -382,11 +382,12 @@ app.get("/all-events", async (req, res) => {
 
 // Route to handle file uploads
 app.post('/create-event', upload.array('file', 12), async (req, res) => {
-  console.log('req---', req.body);
+  
+  
+    console.log('req---', req.body);
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
   }
-  try {
     console.log("create req.body --", req.body);
     var imageList = [];
     var currUrl = req.headers.origin;
@@ -436,10 +437,7 @@ app.post('/create-event', upload.array('file', 12), async (req, res) => {
 
     event.save();
     res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
-  } catch (error) {
-    console.error(error);
-    res.send({ isSuccess: false, error: error });
-  }
+  
 });
 
 // Get All Event
