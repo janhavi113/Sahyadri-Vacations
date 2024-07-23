@@ -159,6 +159,7 @@ function handleError(err, res) {
 //   res.send({ isSuccess: true, message: 'Files uploaded successfully' });
 // });
 
+
 app.use(fileUpload());
 
 app.post('/create-event', (req, res) => {
@@ -169,7 +170,7 @@ app.post('/create-event', (req, res) => {
   let sampleFile = req.files.sampleFile;
   console.log('sampleFile',sampleFile);
   let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-
+  console.log('uploadPath',uploadPath);
   sampleFile.mv(uploadPath, (err) => {
     if (err) {
       return res.status(500).send(err);
