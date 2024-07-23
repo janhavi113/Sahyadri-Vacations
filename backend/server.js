@@ -388,10 +388,8 @@ app.get("/all-events", async (req, res) => {
 app.post('/create-event', async (req, res) => {
   var imageList = [];
   let sampleFile = req.files.files;
-  console.log('sampleFile.length > 1', sampleFile.length > 1);
   if (sampleFile.length == 1) {
     let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-    console.log('uploadPath', uploadPath);
     imageList.push('/public/Images/'+ sampleFile.name);
     sampleFile.mv(uploadPath, (err) => {
       if (err) {
@@ -399,11 +397,10 @@ app.post('/create-event', async (req, res) => {
       }
     });
   } else {
-    console.log('sampleFile.length()', sampleFile.length);
     for (let i = 0; i < sampleFile.length; i++) {
       let uploadPath = path.join(__dirname, '../public/Images', sampleFile[i].name);
-      console.log('uploadPath', uploadPath);
-      imageList.push('/public/Images/'+ sampleFile[i].name);
+      imageList.push('/public/Images/'+
+         sampleFile[i].name);
       sampleFile[0].mv(uploadPath, (err) => {
         if (err) {
           return res.status(500).send(err);
@@ -412,8 +409,7 @@ app.post('/create-event', async (req, res) => {
     }
 
   }
- 
-  console.log('imageList---', imageList);
+
   var events = await Events.find().sort([["_id", -1]]).limit(1);
   if (events.length > 0) {
     recordcount = events[0].eventId;
@@ -431,7 +427,7 @@ app.post('/create-event', async (req, res) => {
     pickupPoints,
     eventType,
   } = req.body;
-  console.log("create req.body --", req.body);
+  
   let apiName = req.body.eventName;
   apiName = apiName?.toString().replace(/\s/g, "-").toLowerCase();
   const event = new Events({
@@ -448,8 +444,9 @@ app.post('/create-event', async (req, res) => {
     url: "/create-event/event-details/" + (recordcount + 1),
     images: imageList,
   });
-
+  
   event.save();
+  console.log('event----', event);
   res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
 
 });
