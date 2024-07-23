@@ -163,20 +163,34 @@ function handleError(err, res) {
 app.use(fileUpload());
 
 app.post('/create-event', (req, res) => {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
 
-  let sampleFile = req.files.sampleFile;
-  console.log('sampleFile',sampleFile);
-  let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-  console.log('uploadPath',uploadPath);
-  sampleFile.mv(uploadPath, (err) => {
-    if (err) {
-      return res.status(500).send(err);
+ 
+    console.log('sampleFile--', req.files.files);
+    let sampleFile = req.files.files;
+    console.log('sampleFile.length > 1', sampleFile.length > 1);
+    if( sampleFile.length == 1){
+    let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
+    console.log('uploadPath', uploadPath);
+    sampleFile.mv(uploadPath, (err) => {
+      if (err) {
+       // return res.status(500).send(err);
+      }
+      res.send('File uploaded!');
+    });
+  }else{
+    console.log('sampleFile.length()', sampleFile.length);
+    for(let i=0 ; i < sampleFile.length; i++){
+      let uploadPath = path.join(__dirname, '../public/Images', sampleFile[i].name);
+      console.log('uploadPath', uploadPath);
+      sampleFile[0].mv(uploadPath, (err) => {
+        if (err) {
+         // return res.status(500).send(err);
+        }
+       
+      });
     }
     res.send('File uploaded!');
-  });
+  }
 });
 
 //Add the API route with the correct CORS settings
@@ -403,8 +417,8 @@ app.get("/all-events", async (req, res) => {
 
 // Route to handle file uploads
 // app.post('/create-event', upload.array('file', 12), async (req, res) => {
-  
-  
+
+
 //     console.log('req---', req.body);
 //   if (!req.files) {
 //     return res.status(400).send('No files were uploaded.');
@@ -458,7 +472,7 @@ app.get("/all-events", async (req, res) => {
 
 //     event.save();
 //     res.send({ eventId: recordcount + 1, apiname: apiName, isSuccess: true });
-  
+
 // });
 
 // Get All Event
@@ -608,7 +622,7 @@ app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     return res.status(400).json({ error: err.message });
   } else if (err) {
-    return res.status(500).json({ error: "An unknown error occurred" });
+    return res.status(500).json({ error: err });
   }
   next();
 });

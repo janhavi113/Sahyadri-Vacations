@@ -28,7 +28,7 @@ function CreateEvents() {
     const formData = new FormData();
     if (file) {
       for (let index = 0; index < file.length; index++) {
-        formData.append("file", file[index]);
+        formData.append("files", file[index]);
       }
     }
     formData.append("costIncludes", costIncludes);
