@@ -415,7 +415,8 @@ app.put(	"/create-event/event-details/:eventId",	async (req, res) => {
 				}
 			}
 			var hostname = req.headers.origin;
-      let sampleFile = req.files.files;
+      let sampleFile = req.files.file;
+      console.log('sampleFile',sampleFile);
       for (let i = 0; i < sampleFile.length; i++) {
         let uploadPath = path.join(__dirname, '../public/Images', sampleFile[i].name);
         imageList.push('/public/Images/' + sampleFile[i].name);
@@ -425,7 +426,7 @@ app.put(	"/create-event/event-details/:eventId",	async (req, res) => {
           }
         });
       }
-
+      console.log('imageList',imageList);
 			var myquery = {
 				eventId: event_Id
 			};
@@ -575,13 +576,19 @@ app.get("/schedule-event", async (req, res) => {
 	}
 });
 
-app.post("/schedule-event", upload.single("file"), async (req, res) => {
+app.post("/schedule-event", async (req, res) => {
 	try {
+
 		var currUrl = "";
-		if (req.file) {
-			currUrl =
-				req.headers.origin + "/" + req.file.path.toString().replaceAll("\\", "/");
-		}
+    let sampleFile = req.files.file;
+		let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
+		imageList.push('/public/Images/' + sampleFile.name);
+		sampleFile.mv(uploadPath, (err) => {
+			if (err) {
+				return res.status(500).send(err);
+			}
+		});
+		
 		console.log("schedule-event --", req.body);
 		const {
 			active,
