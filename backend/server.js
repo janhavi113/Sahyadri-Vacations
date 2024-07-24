@@ -746,6 +746,12 @@ app.use((err, req, res, next) => {
 	next();
 });
 
-app.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
+const options = {
+    key: fs.readFileSync(path.join(__dirname, 'path/to/your/private.key')),
+    cert: fs.readFileSync(path.join(__dirname, 'path/to/your/certificate.crt')),
+    ca: fs.readFileSync(path.join(__dirname, 'path/to/your/ca_bundle.crt'))  // optional, for certificate chain
+};
+
+https.createServer(options, app).listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 });
