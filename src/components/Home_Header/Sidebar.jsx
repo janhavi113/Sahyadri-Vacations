@@ -77,10 +77,6 @@ const Sidebar = () => {
           </a>
         </motion.div>
       </div>
-      <motion.div className="sliderTextContainer" variants={sliderVariants} initial="initial" animate="animate">
-        Sahyadri Vacations
-      </motion.div>
-
       <div className="imageContainer" >
         <img src={slide1} alt="header" />
       </div>
