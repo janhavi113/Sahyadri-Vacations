@@ -390,81 +390,81 @@ app.post("/create-event/event-details/:eventId", async (req, res) => {
 });
 
 // Update Event Details
-app.put(	"/create-event/event-details/:eventId",	async (req, res) => {
-		console.log('put create event ');
-		try {
-			let event_Id = Number(req.params.eventId.toString().replace(":", ""));
-			const {
-				eventName,
-				eventDetails,
-				itinerary,
-				highlights,
-				costIncludes,
-				thingsToCarry,
-				pickupPoints,
-				eventType,
-				currentImages,
-			} = req.body;
+app.put("/create-event/event-details/:eventId", async (req, res) => {
+	console.log('put create event ');
+	try {
+		let event_Id = Number(req.params.eventId.toString().replace(":", ""));
+		const {
+			eventName,
+			eventDetails,
+			itinerary,
+			highlights,
+			costIncludes,
+			thingsToCarry,
+			pickupPoints,
+			eventType,
+			currentImages,
+		} = req.body;
 
-			var imageList = [];
-			if (currentImages != undefined && !Array.isArray(currentImages)) {
-				imageList.push(currentImages.toString().replace("blob:", ""));
-			} else if (currentImages != undefined && currentImages.length > 1) {
-				for (let index = 0; index < currentImages.length; index++) {
-					imageList.push(currentImages[index].toString().replace("blob:", ""));
+		var imageList = [];
+		if (currentImages != undefined && !Array.isArray(currentImages)) {
+			imageList.push(currentImages.toString().replace("blob:", ""));
+		} else if (currentImages != undefined && currentImages.length > 1) {
+			for (let index = 0; index < currentImages.length; index++) {
+				imageList.push(currentImages[index].toString().replace("blob:", ""));
+			}
+		}
+		var hostname = req.headers.origin;
+		let sampleFile = req.files.file;
+		console.log('sampleFile', sampleFile);
+		for (let i = 0; i < sampleFile.length; i++) {
+			let uploadPath = path.join(__dirname, '../public/Images', sampleFile[i].name);
+			imageList.push('/public/Images/' + sampleFile[i].name);
+			sampleFile[0].mv(uploadPath, (err) => {
+				if (err) {
+					return res.status(500).send(err);
 				}
-			}
-			var hostname = req.headers.origin;
-      let sampleFile = req.files.file;
-      console.log('sampleFile',sampleFile);
-      for (let i = 0; i < sampleFile.length; i++) {
-        let uploadPath = path.join(__dirname, '../public/Images', sampleFile[i].name);
-        imageList.push('/public/Images/' + sampleFile[i].name);
-        sampleFile[0].mv(uploadPath, (err) => {
-          if (err) {
-            return res.status(500).send(err);
-          }
-        });
-      }
-      console.log('imageList',imageList);
-			var myquery = {
-				eventId: event_Id
-			};
-			var options = {
-				upsert: true
-			};
-			var updateDoc = {
-				name: eventName,
-				itinerary: itinerary,
-				eventDetails: eventDetails,
-				eventType: eventType,
-				costIncludes: costIncludes,
-				thingsToCarry: thingsToCarry,
-				pickupPoints: pickupPoints,
-				highlights: highlights,
-				images: imageList,
-			};
-			var events = await Events.updateOne(myquery, updateDoc, options);
-			events = await Events.find(myquery);
-			console.log('events--', events);
-			if (events && events.length > 0) {
-				res.send({
-					isSuccess: true,
-					events: events
-				});
-			} else {
-				res.send({
-					isSuccess: false
-				});
-			}
-		} catch (error) {
-			console.error(error);
-			res.send({
-				isSuccess: false,
-				error: error
 			});
 		}
+		console.log('imageList', imageList);
+		var myquery = {
+			eventId: event_Id
+		};
+		var options = {
+			upsert: true
+		};
+		var updateDoc = {
+			name: eventName,
+			itinerary: itinerary,
+			eventDetails: eventDetails,
+			eventType: eventType,
+			costIncludes: costIncludes,
+			thingsToCarry: thingsToCarry,
+			pickupPoints: pickupPoints,
+			highlights: highlights,
+			images: imageList,
+		};
+		var events = await Events.updateOne(myquery, updateDoc, options);
+		events = await Events.find(myquery);
+		console.log('events--', events);
+		if (events && events.length > 0) {
+			res.send({
+				isSuccess: true,
+				events: events
+			});
+		} else {
+			res.send({
+				isSuccess: false
+			});
+		}
+	} catch (error) {
+		console.error(error);
+		res.send({
+			isSuccess: false,
+			error: error
+		});
 	}
+}
 );
 
 // Get All Event
@@ -580,15 +580,15 @@ app.post("/schedule-event", async (req, res) => {
 	try {
 
 		var currUrl = "";
-    let sampleFile = req.files.file;
+		let sampleFile = req.files.file;
 		let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-		imageList.push('/public/Images/' + sampleFile.name);
+		currUrl ='/public/Images/' + sampleFile.name;
 		sampleFile.mv(uploadPath, (err) => {
 			if (err) {
 				return res.status(500).send(err);
 			}
 		});
-		
+
 		console.log("schedule-event --", req.body);
 		const {
 			active,
