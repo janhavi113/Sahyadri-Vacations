@@ -53,7 +53,7 @@ const footer = () => {
           </a>
           <div className="copyright">
             <hr />
-            <br />Copyright &copy; Sahyadri Vacations
+            <br />&copy; 2024 Sahyadri Vacations. All Rights Reserved.
           </div>
         </div>
       </div>
