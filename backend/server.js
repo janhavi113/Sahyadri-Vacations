@@ -41,7 +41,7 @@ app.use(cors({}));
 
 // CORS configuration
 app.use(cors({
-	origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1', 'https://www.sahyadrivacations.com', 'https://sahyadrivacations.com'], // Allow frontend IP and localhost
+	origin: ['http://sahyadrivacations.com', 'http://www.sahyadrivacations.com','http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'], // Allow frontend IP and localhost
 	methods: 'GET,POST,PUT,DELETE,OPTIONS',
 	allowedHeaders: 'Content-Type, Authorization',
 	credentials: true,
@@ -196,7 +196,7 @@ app.use(fileUpload());
 
 //Add the API route with the correct CORS settings
 app.use('/api', cors({
-	origin: ['http://157.173.222.166', 'http://localhost', 'http://127.0.0.1', 'https://www.sahyadrivacations.com', 'https://sahyadrivacations.com'],
+	origin:  ['http://sahyadrivacations.com', 'http://www.sahyadrivacations.com','http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
 	methods: 'GET,POST,PUT,DELETE,OPTIONS',
 	allowedHeaders: 'Content-Type, Authorization',
 	credentials: true,
