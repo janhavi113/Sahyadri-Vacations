@@ -13,7 +13,9 @@ import ShowEventDetails from "./components/ShowEventDetails/ShowEventDetails";
 import CreateEvent from "./components/CreateEvents" ;  
 import Events from "./components/ShowAllEvents/Events" ;
 import SearchEvent from "./components/SearchEvent/SearchEvent" ;
-import UserAgreement from "./components/UserAgreement";
+import UserAgreement from "./components/UserAgreement/UserAgreement";
+import CancellationPolicy from "./components/UserAgreement/CancellationPolicy";
+import PrivacyPolicy from "./components/UserAgreement/PrivacyPolicy";
 import Gallery from "./components/Gallery/PhotoGallery" ;
 import ContactUs from "./components/Contact_Us/ContactUs" ;
 import Register from './components/Register/Register';
@@ -81,6 +83,12 @@ function App() {
     {
       path: "/user-agreement",
       element: <UserAgreement />,
+    },{
+      path: "/cancellation-policy",
+      element: <CancellationPolicy />,
+    },{
+      path: "/privacy-policy",
+      element: <PrivacyPolicy />,
     },
     {
       path: "/create-event/event-details/:eventId",
