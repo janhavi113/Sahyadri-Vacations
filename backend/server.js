@@ -751,8 +751,10 @@ const options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
   };
 
-https.createServer(options, app).listen(3001, () => {
+  https.createServer(options, app).listen(3001, () => {
 	console.log('HTTPS Server running on port 3001');
+  }).on('error', (err) => {
+	console.error('Server error:', err);
   });
 
 /*app.listen(port, () => {
