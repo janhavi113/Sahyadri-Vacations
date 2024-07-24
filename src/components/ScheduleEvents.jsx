@@ -54,7 +54,7 @@ function ScheduleEvents() {
     if (res.isSuccess == true) {
       setSuccess(res.isSuccess);
       setEvent(res.events);
-
+      navigate('/scheduled-events')
     }
     console.log('events', events);
   }
