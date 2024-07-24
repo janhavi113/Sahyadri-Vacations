@@ -91,7 +91,7 @@ color: white;
     height: 800px;
    }
    .hero .wrapper .social-icon {       
-    top: 475px !important;
+    top: 475px;
 }
 @media only screen and (max-width: 777px) {
     .hero .imageContainer img {
@@ -135,7 +135,7 @@ color: white;
     display: flex;
     gap: 10px;
     margin-left: 2px;
-    top: 250px;
+    top: 250px !important;
 }
   
 .hero .sliderTextContainer{
