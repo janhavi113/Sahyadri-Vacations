@@ -19,7 +19,7 @@ color: white;
 
 .hero .wrapper .social-icon a .icon{
 	line-height:20px;
-  font-size:3vh;
+  font-size:4vh;
   -webkit-transition: all 200ms ease-in;
   -webkit-transform: scale(1); 
   -ms-transition: all 200ms ease-in;
