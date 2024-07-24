@@ -90,7 +90,7 @@ color: white;
 .hero .imageContainer img {
     height: 800px;
    }
-@media only screen and (max-width: 775px) {
+@media only screen and (max-width: 767px) {
     .hero .wrapper h1{
         font-weight: bold;
         font-size: 30px;
