@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://www.sahyadrivacations.com:3001/',
+        target: 'https://www.sahyadrivacations.com:3001',
         changeOrigin: true,
         secure: false,
         ws: true,
