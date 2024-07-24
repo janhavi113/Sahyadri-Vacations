@@ -54,6 +54,9 @@ select{
 .addGap{
 
 }
+sub {
+    color: black;
+}
 .nav-tabs {
     --bs-nav-link-color: rgb(1, 0, 0) !important;
     --bs-nav-link-hover-color: orange !important;
