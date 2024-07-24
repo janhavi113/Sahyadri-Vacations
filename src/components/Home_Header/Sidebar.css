@@ -91,16 +91,9 @@ color: white;
     height: 800px;
    }
    .hero .wrapper .social-icon {       
-    top: 475px;
+    top: 340px;
 }
-@media only screen and (max-width: 1280px) {
-    .hero .imageContainer img {
-        height: 714px !important;
-       }
-       .hero .wrapper .social-icon {       
-        top: 430px !important;
-    }
-}
+
 
 @media only screen and (max-width: 777px) {
     .hero .imageContainer img {
