@@ -46,7 +46,7 @@ color: white;
 .hero .sliderTextContainer{
     position: absolute;
     bottom: -13px;
-    font-size: 50vh;
+    font-size: 150px;
     white-space: nowrap;
     text-transform: uppercase;
     color:#f5deb324 ;
@@ -128,7 +128,7 @@ color: white;
 .hero .sliderTextContainer{
     position: absolute;
     bottom: 385px;
-    font-size: 30vh;
+    font-size: 40px;
     white-space: nowrap;
     text-transform: uppercase;
     color: #f5deb324;
