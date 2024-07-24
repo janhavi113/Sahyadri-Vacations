@@ -103,7 +103,7 @@ const Home = () => {
     let campingEvents = [];
     let backPackingEvents = [];
     console.log('show-all-events');
-    console.log(`${apiUrl}`);
+    console.log(`${apiUrl}show-all-events`);
     let r = await fetch(`${apiUrl}show-all-events`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
