@@ -41,7 +41,6 @@ function ScheduleEvents() {
     }
     setcurrentImages(allFiles);
   }
-  const getCurrentrecord = async () => {
 
     // alert("ok"); 
     let r = await fetch(`${apiUrl}schedule-event`, {
@@ -54,7 +53,6 @@ function ScheduleEvents() {
     if (res.isSuccess == true) {
       setSuccess(res.isSuccess);
       setEvent(res.events);
-      navigate('/scheduled-events')
     }
     console.log('events', events);
   }
@@ -99,8 +97,8 @@ function ScheduleEvents() {
       })
       let res = await r.json()
       console.log('res ===', JSON.stringify(res));
-      if (res.isSuccess == true) {
-        navigate("/scheduled-event"); 
+      if (res.isSuccess == true) {     
+        navigate('/scheduled-events')
       }
     }
   }
