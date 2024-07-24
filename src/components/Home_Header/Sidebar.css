@@ -87,7 +87,9 @@ color: white;
      text-transform: uppercase;
     
 }
-
+.hero .imageContainer img {
+    height: 800px;
+   }
 @media only screen and (max-width: 767px) {
     .hero .wrapper h1{
         font-weight: bold;
@@ -115,7 +117,7 @@ color: white;
         text-transform: uppercase;
    }
    .hero .imageContainer img {
-    height: 533px;
+    height: 533px !important;
    }
    .hero .wrapper .social-icon {
     position: absolute;
