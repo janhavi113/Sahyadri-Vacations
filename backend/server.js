@@ -746,6 +746,15 @@ app.use((err, req, res, next) => {
 	next();
 });
 
-app.listen(port, () => {
+const options = {
+	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
+  };
+
+https.createServer(options, app).listen(3001, () => {
+	console.log('HTTPS Server running on port 3001');
+  });
+
+/*app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
-});
+});*/
