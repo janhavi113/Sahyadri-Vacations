@@ -41,6 +41,7 @@ function ScheduleEvents() {
     }
     setcurrentImages(allFiles);
   }
+  const getCurrentrecord = async () => {
 
     // alert("ok"); 
     let r = await fetch(`${apiUrl}schedule-event`, {
