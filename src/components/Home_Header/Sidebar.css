@@ -19,7 +19,7 @@ color: white;
 
 .hero .wrapper .social-icon a .icon{
 	line-height:20px;
-  font-size:20px;
+  font-size:5vh;
   -webkit-transition: all 200ms ease-in;
   -webkit-transform: scale(1); 
   -ms-transition: all 200ms ease-in;
@@ -102,6 +102,9 @@ color: white;
        .hero .wrapper .social-icon {       
         top: 475px !important;
     }
+    .hero .wrapper .social-icon a .icon{
+        font-size:25px !important;
+    }
 }
 
 @media only screen and (max-width: 767px) {
@@ -149,5 +152,8 @@ color: white;
     text-transform: uppercase;
     color: #f5deb324;
     width: 50%;
+}
+.hero .wrapper .social-icon a .icon{
+    font-size:20px !important;
 }
 }
