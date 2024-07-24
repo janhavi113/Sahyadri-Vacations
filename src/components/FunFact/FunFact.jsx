@@ -24,7 +24,7 @@ const FunFact = () => {
                         <div className="col-lg-2 col-sm-4">
                             <div className="single-fact text-center">
                                 <div className="fact-info">
-                                    <img src="img/funfact/7.png" alt=""/>
+                                  
                                          <span>8000
                                          </span>
                                         <span>+
@@ -37,7 +37,7 @@ const FunFact = () => {
                         <div className="col-lg-2 col-sm-4">
                             <div className="single-fact text-center">
                                 <div className="fact-info">
-                                    <img src="img/funfact/8.png" alt=""/>
+                                  
                                     <span> 600
                                     </span>
                                         <span>+
@@ -50,7 +50,7 @@ const FunFact = () => {
                         <div className="col-lg-2 col-sm-4">
                             <div className="single-fact text-center">
                                 <div className="fact-info">
-                                    <img src="img/funfact/9.png" alt=""/>
+                                 
                                     <span>100
                                         </span>
                                         <span>+
@@ -63,7 +63,7 @@ const FunFact = () => {
                         <div className="col-lg-2 col-sm-4">
                             <div className="single-fact text-center">
                                 <div className="fact-info">
-                                    <img src="img/funfact/11.png" alt=""/>
+                                  
                                     <span> 40
                                         </span>
                                         <span>+
@@ -76,7 +76,7 @@ const FunFact = () => {
                         <div className="col-lg-2 col-sm-4">
                             <div className="single-fact text-center">
                                 <div className="fact-info">
-                                    <img src="img/funfact/12.png" alt=""/>
+                                   
                                     <span> 5
                                         </span>
                                         <span><FontAwesomeIcon className="icon" icon={faStar} style={{color: "white",}} size= "2xs" /></span>
