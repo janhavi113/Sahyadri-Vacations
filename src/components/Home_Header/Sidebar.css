@@ -90,7 +90,9 @@ color: white;
 .hero .imageContainer img {
     height: 800px;
    }
-
+   .hero .wrapper .social-icon {       
+    top: 475px !important;
+}
 @media only screen and (max-width: 777px) {
     .hero .imageContainer img {
         height: 714px !important;
