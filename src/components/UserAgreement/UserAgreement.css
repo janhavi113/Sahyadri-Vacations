@@ -23,6 +23,7 @@
 .terms-list {
     margin: 25px 0;
 }
+
 .terms-list h3 {
     margin-bottom: 10px !important;
     font-size: 18px;
@@ -32,7 +33,7 @@
 .terms-list ul {
     list-style-type: disc; /* This is the default, you can also use circle, square, or none */
     padding-left: 2rem;
-}
+
 .policy-list ul li {
     font-size: 16px;
     color: #5a5656;
