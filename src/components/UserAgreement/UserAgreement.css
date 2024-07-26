@@ -30,10 +30,16 @@
     color: #333333;
     font-weight: bold;
 }
+.terms-list h4 {
+    margin-bottom: 10px !important;
+    font-size: 16px;
+    color: #333333;
+    font-weight: bold;
+}
 .terms-list ul {
     list-style-type: disc; /* This is the default, you can also use circle, square, or none */
     padding-left: 2rem;
-
+}
 .policy-list ul li {
     font-size: 16px;
     color: #5a5656;
