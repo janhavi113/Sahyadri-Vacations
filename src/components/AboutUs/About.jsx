@@ -38,14 +38,14 @@ const About = () => {
             <h2 >Our History</h2>
             <p className="info" >Established in Nov 2021, Sahyadri Vacations began as a vision to showcase the hidden gems and vibrant culture of India and with One simple belief — Everyone Must Travel. Over the years, we have grown from a passionate idea into a trusted travel partner, known for our commitment to Quality, Integrity, and Customer satisfaction. With each journey we curate, we build upon our expertise and continue to evolve, ensuring that every traveller’s experience with us is nothing short of extraordinary.</p>
           </div>
-          <div className='team-section'>
+          {/* <div className='team-section'>
             <h1 className='team-header' > Sahyadri Vacations Team </h1>
             <div className="home-container">
               <div><div className="team row">
                 <div className="col multiimage">
-                  {/* <img className="multiimage1" src={multiimage1} /> */}
+                 
                   <img className="multiimage2" src={multiimage2} />
-                  {/* <img className="multiimage3" src={multiimage3} /> */}
+                  
                 </div>
                 <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 founder py-5">
                   <h2 className="h2">Pravin Sahane</h2>
@@ -64,7 +64,7 @@ const About = () => {
             </div>
             <br />
             <br />
-            {/* <div className="team justify-content-around" >
+             <div className="team justify-content-around" >
             <div className="row justify-content-around">
                 <div className="mt-2 team-members col-lg-3 col-md-3 col-sm-3">
                   <div className="bg-transparent text-center" >
@@ -305,10 +305,10 @@ const About = () => {
                   </div>
                 </div>
               </div>
-            </div> */}
-          </div>
+            </div> }
+          </div>  */}
 
-
+        
         </div>
       </div>
       <Footer />
