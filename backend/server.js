@@ -747,7 +747,7 @@ app.use((err, req, res, next) => {
 	next();
 });
 
-/*const options = {
+const options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
   };
@@ -762,7 +762,7 @@ server.listen(3001, () => {
 server.on('error', (err) => {
   console.error('Server error:', err);
 });
-*/
-app.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
-});
+
+// app.listen(port, () => {
+// 	console.log(`Server is running on port ${port}`);
+// });
