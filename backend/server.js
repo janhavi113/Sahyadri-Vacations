@@ -265,7 +265,31 @@ app.get("/search-event/:serchText", async (req, res) => {
 	}
 });
 
-
+app.get("/delete-scheduled-events/eventid/:eventId", async (req, res) => {
+	let event_Id = req.params.eventId;
+	console.log('event_Id---'+event_Id);
+try{
+	var myquery = {
+		eventId: event_Id
+	};
+	var events = await ScheduleBatches.deleteOne(myquery);
+	if (events && events.deletedCount > 0) {
+		res.send({
+			isSuccess: true
+		});
+	} else {
+		res.send({
+			isSuccess: false
+		});
+	}
+} catch (error) {
+	console.error(error);
+	res.send({
+		isSuccess: false,
+		error: error
+	});
+}
+});
 app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	console.log("req.params--", req.params);
 	let event_Id = req.params.eventId;
@@ -762,7 +786,7 @@ server.listen(3001, () => {
 server.on('error', (err) => {
   console.error('Server error:', err);
 });
-
-// app.listen(port, () => {
-// 	console.log(`Server is running on port ${port}`);
-// });
+/*
+app.listen(port, () => {
+	console.log(`Server is running on port ${port}`);
+});*/

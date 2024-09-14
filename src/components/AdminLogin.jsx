@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form"
 import { redirect,useNavigate } from "react-router-dom";
+import './AdminLogin.css'
 const AdminLogin = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [username, setUsername] = useState('');
@@ -34,12 +35,13 @@ const AdminLogin = () => {
  
   
   return (
-    <> 
+    <div className='login-body'> 
     {isSubmitting && <div>Loading...</div>}
-    <div>
+    <div className="login-container">
+      <div className="login-box">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <div>
+      <div className="input-group">
           <label>Username: </label>
           <input
             type="text"
@@ -48,7 +50,7 @@ const AdminLogin = () => {
             required
           />
         </div>
-        <div>
+        <div className="input-group">
           <label>Password: </label>
           <input
             type="password"
@@ -56,12 +58,15 @@ const AdminLogin = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
+          </div>
+      <div className="input-group">
         <input disabled={isSubmitting} type="submit" value="Login" />
+          </div>
         {errors.myform && <div className='red'>{errors.myform.message}</div>}
       </form>
     </div>
-    </>
+    </div>
+    </div>
   )
 }
 

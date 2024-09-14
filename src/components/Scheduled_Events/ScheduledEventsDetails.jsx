@@ -1,13 +1,20 @@
 import React, { useRef, useEffect, useState } from 'react';
+import AdminNavbar from "../AdminDashboard/AdminDashboard";
 import { useSearchParams } from "react-router-dom";
 import '../ShowEventDetails/ShowEventDetails.css'
 import './ScheduledEvents.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-
+import { faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { Modal, Button } from "react-bootstrap";
+import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css/bundle';
+// import required modules
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 const ScheduledEventsDetails = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
     const [searchParams, setSearchParams] = useSearchParams();
+    const [showConfirm, setShowConfirm] = useState(false);
     const queryParameters = new URLSearchParams(window.location.search);
     const [type, setType] = useState(queryParameters.get("eventid"));
     const [startDate, setStartDate] = useState(new Date());
@@ -37,7 +44,7 @@ const ScheduledEventsDetails = () => {
         let batchSize = -1;
         let eventCostPerPerson;
         let batchDates = [];
-        let eventType = event.eventType;
+        //let eventType = event.eventType;
         const Q = new Date("2024-04-09");
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
@@ -99,6 +106,21 @@ const ScheduledEventsDetails = () => {
         }
     
       }
+      const deleteScheduleEvents = async () => {
+        console.log('Button clicked from class component!');
+        let r = await fetch(`${apiUrl}delete-scheduled-events/eventid/${params[0]}`, {
+          method: "GET", headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        let res = await r.json();
+        
+      };
+    
+      const openConfirmPopup = () => {
+        setShowConfirm(true);
+      };
+
       const displayList = (data) => {
         var splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
         splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
@@ -106,8 +128,38 @@ const ScheduledEventsDetails = () => {
         splitedList = splitedList.replaceAll('<p>', '<p class="ql-p">');
         return splitedList;
       }
+      const onAutoplayTimeLeft = (s, time, progress) => {
+        // progressCircle.current.style.setProperty('--progress', 1 - progress);
+        // progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+      };
   return (
     <div>
+       <AdminNavbar />
+      <div>
+        <Swiper
+          spaceBetween={50}
+          slidesPerView={1}
+          centeredSlides={true}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+
+          modules={[Autoplay, Pagination, Navigation]}
+          onAutoplayTimeLeft={onAutoplayTimeLeft}
+        >
+          {isSuccess && console.log('eventDetails.images-- ' + eventDetails.images)}
+          {isSuccess && eventDetails.images.map((event, index) => (
+
+            <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}`+event} />
+              <div className="inner-content">
+                <h3>{eventDetails.name}</h3>
+              </div>
+            </SwiperSlide>
+          ))}
+
+        </Swiper>
+      </div>
       {isSuccess &&
         <div>
           <div className="content-row row2">
@@ -173,50 +225,6 @@ const ScheduledEventsDetails = () => {
                   <h2 className="h3"> Pickup Points</h2>
                   <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
                 </div>
-
-                <div id="" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> FAQ's</h2>
-                  <div className="section-details">
-                    <ol class="display-bulletin">
-                      <li>
-                        <b>How many trek leaders will be available?</b><br />
-                        There will be 1 trek leader available for a group of 8 people in each trek.<br />
-                      </li>
-                      <li>
-                        <b>How do I get in touch with trek leaders and trek groups ?</b><br />
-                        We add participants in our Whatsapp group one day prior to the event.<br />
-                      </li>
-                      <li>
-                        <b>Can I cancel my booking?</b><br />
-                        You can check our cancel policy for the same.Or you can join us on the next trek (please inform us before 2 days)<br />
-                      </li>
-                      <li>
-                        <b>What is prohibited in this trek?</b><br />
-                        Smoking, Drinking and loud music is prohibited.<br />
-                      </li>
-                      <li>
-                        <b>Are changing rooms provided?</b><br />
-                        Yes, separate (Male/Female) changing rooms are provided. <br />
-                      </li>
-                      <li>
-                        <b> What is the type of bus ?</b><br />
-                        The bus is NON/AC Tempo Traveler with decent seating comfort.<br />
-                      </li>
-                      <li>
-                        <b>Are washrooms available on the trek?</b><br />
-                        Washrooms are available at the base village only. No facility is available during the trek.<br />
-                      </li>
-                      <li>
-                        <b>Is this trek safe for girls?</b><br />
-                        This trek is completely safe for girls. We have girl volunteers specially appointed for girls. And have separate changing rooms.<br />
-                      </li>
-                      <li>
-                        <b>Pick up points?</b><br />
-                        Pick up is available if your location comes in between our route for this you have to contact us before.<br />
-                      </li>
-                    </ol>
-                  </div>
-                </div>
               </div>
             </div>
             <div className="content-right-side col-sm-12 col-md-4  col-lg-4 col-xl-4 ">
@@ -233,19 +241,11 @@ const ScheduledEventsDetails = () => {
                         {!inquery && <> <div>
                           <center> {batchDate} </center></div>
                           
-                           <div className="button-margin button">
+                           <div className="button-margin button button-group-box">
                           {/* <input onClick={handleShow} type="submit" value="BOOK NOW" /> */}
-                          <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                          <button   type="button"> <strong>EDIT</strong> </button>
+                          <button  onClick={openConfirmPopup} type="button"> <strong>DELETE</strong> </button>
                         </div></>}
-                        {inquery && 
-                        <div className="button-margin button">
-                         <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
-                         </div>
-                      }
-                        <br />
-                        <div className='card-info'><FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Best Price Guaranteed <br /> <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Secure & Easy Booking
-                          <br />
-                          <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> 1000+ Happy Customers</div>
                       </div>
                     </div>
                   </div>
@@ -269,17 +269,30 @@ const ScheduledEventsDetails = () => {
                 <div className="button-edit-container">
                   <div className="button button-margin ">
                   { /* <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" /> */}
-                  {!inquery &&
-                   <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> 
-                  }
-                  {inquery &&                      
-                         <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>                        
-                      }
-                  <button  type="button"><a href="tel:07028740961"> <strong>&nbsp;CALL NOW </strong></a> </button>
+                  
+                   <button  type="button"> <strong>EDIT</strong> </button> 
+                  
+                  <button  onClick={openConfirmPopup} type="button"><strong>&nbsp;DELETE </strong> </button>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div>
+          <Modal show={showConfirm} >
+                <Modal.Header closeButton>
+
+                </Modal.Header>
+                <Modal.Body> <center><div>Do you want to delete event ?</div></center></Modal.Body>
+                <Modal.Footer>
+                  <div className="button-edit-container">
+                    <div className="button">
+                      <input type="submit" value=" Delete " onClick={deleteScheduleEvents} />
+                      <input type="submit" value=" Cancel " onClick={() => setShowConfirm(false)} />
+                    </div>
+                  </div>
+                </Modal.Footer>
+              </Modal>
           </div>
         </div>
       }

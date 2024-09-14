@@ -17,7 +17,7 @@ const ScheduledEvents = () => {
         var liveEvent = '';
         let batchdate = '';
         let eventCostPerPerson;
-
+         console.log('event------',event);
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         for (let i = 0; i < event.batches.length; i++) {
             if (event.batches[i].everyWeekend == true) {
