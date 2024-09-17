@@ -67,7 +67,7 @@ const Home = () => {
     var liveEvent = '';
     let batchdate;
     let eventCostPerPerson;
-    const Q = new Date("2024-04-09");
+    const Q = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     for (let i = 0; i < event.batches.length; i++) {
       if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
@@ -116,16 +116,18 @@ const Home = () => {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {
         console.log('res.events[' + i + '] ---', res.events[i]);
-        if (getNextBatchDate(res.events[i]) != '') {
+        let tempEvent = [];
+        tempEvent = getNextBatchDate(res.events[i]);
+        if (tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
           liveEvents.push(getNextBatchDate(res.events[i]));
         }
         if (res.events[i].eventType == 'TrekEvent') {
-          trekkingEvents.push(getNextBatchDate(res.events[i]));
+          trekkingEvents.push(tempEvent);
         } else if (res.events[i].eventType == 'CampingEvent') {
-          console.log('CampingEvent++==', getNextBatchDate(res.events[i]));
-          campingEvents.push(getNextBatchDate(res.events[i]));
+          console.log('CampingEvent++==', tempEvent);
+          campingEvents.push(tempEvent);
         } else if (res.events[i].eventType == 'BackPackingTrip') {
-          backPackingEvents.push(getNextBatchDate(res.events[i]));
+          backPackingEvents.push(tempEvent);
         }
       }
       setEvent(liveEvents);
@@ -232,7 +234,7 @@ const Home = () => {
             modules={[Autoplay, Navigation]}
             className='rating-section'
           >
-            {isSuccess && trekkingEvents.map((event, index) => (
+            {isSuccess && events.map((event, index) => (
               <SwiperSlide key={index}>
                 <Card key={index} event={event} />
               </SwiperSlide>
