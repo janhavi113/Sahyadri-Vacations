@@ -18,7 +18,18 @@
     text-align: left;
     max-width: 750px;
 }
-
+.radio-display input[type="radio"] {
+    display: block;
+    width: 15px !important;
+    margin: 0px 10px 0 10px;
+}
+.radio-display{
+    display: flex;
+    margin-left: 35px;
+}
+.termsAndCondition input[type="checkbox"] {
+    width: 15px;
+}
 .inner-content h3 {
     color: #fff;
     -webkit-backdrop-filter: blur(10px);
@@ -201,8 +212,9 @@ h3 {
 
 .termsAndCondition {
     display: flex;
-    gap: 5px;
+    gap: 7px;
     font-weight: bold;
+    margin-left: 35px;
 }
 
 .display-bulletin {

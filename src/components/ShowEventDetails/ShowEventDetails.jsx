@@ -23,6 +23,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const ShowEventDetails = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [searchParams, setSearchParams] = useSearchParams();
+  const [locationsArray ,setLocationsArray] = useState();
   const queryParameters = new URLSearchParams(window.location.search);
   const [type, setType] = useState(queryParameters.get("eventid"));
   const [startDate, setStartDate] = useState(new Date());
@@ -31,6 +32,7 @@ const ShowEventDetails = () => {
   const [inquery, setInquery] = useState(false);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
+  const[pickupPoints , setPickupPoints] = useState([]);
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
   const [scheduleBatch, setScheduleBatch] = useState();
@@ -43,6 +45,8 @@ const ShowEventDetails = () => {
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedDate , setSelectedDate] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [isBookingConfirmed, setBookingConfirmed] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleDateChange = (date) => {
@@ -73,24 +77,17 @@ const ShowEventDetails = () => {
     formState: { errors, isSubmitting },
   } = useForm();
   const onSubmit = async (data) => {
-    console.log('scheduleBatch---', scheduleBatch);
-    console.log('selectedDate---', selectedDate);
     const formData = new FormData();
-    formData.append('name', 'janhai');
-    //  formData.append('email', data.emailId);
-    //  formData.append('mobileNumber', data.whatsappNumber);
-    //  formData.append('batch', data.selectDate);
-    //  formData.append('eventId', eventDetails.eventId);
-    //  formData.append('eventName', eventDetails.name);
-    //  formData.append('numberOfPeoples',  noOfTrekkers);
-    //  formData.append('amountPaid', finalPrice);
-   // console.log('formData---', typeof data);
+      formData.append('name', 'janhai');
+    
     data.numberOfPeoples = noOfTrekkers;
     data.amountPaid = finalPrice;
     data.eventId = eventDetails.eventId;
     data.eventName = eventDetails.name;
     data.batch = selectedDate;
-    console.log('---data---'+data);
+    data.pickupLocation = selectedLocation;
+   // console.log('---data---'+data);
+   
     let r = await fetch(`${apiUrl}booking`, {
       method: "POST", headers: {
         "Content-Type": "application/json",
@@ -98,10 +95,14 @@ const ShowEventDetails = () => {
     })
     let res = await r.json()
    // console.log('res', JSON.stringify(res));
-    if (res.isSuccess == true) {
-      //navigate(`event-details/${res.eventId}`);
-    }
+   if (res.isSuccess == true) {
+    setBookingConfirmed(true);
   }
+  }
+
+  const handleSelection = (event) => {
+    setSelectedLocation(event.target.value);
+  };
 
   const increaseCount = async () => {
     if (availableSlot > noOfTrekkers) {
@@ -112,6 +113,7 @@ const ShowEventDetails = () => {
       setFinalPrice(price1 * count);
     }
   }
+  
   const decreaseCount = async () => {
     if (noOfTrekkers > 0) {
       let count = noOfTrekkers;
@@ -121,10 +123,12 @@ const ShowEventDetails = () => {
       setFinalPrice(price1 * count);
     }
   }
+
   const onAutoplayTimeLeft = (s, time, progress) => {
     // progressCircle.current.style.setProperty('--progress', 1 - progress);
     // progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
   };
+
   const displayList = (data) => {
     var splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
     splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
@@ -132,8 +136,9 @@ const ShowEventDetails = () => {
     splitedList = splitedList.replaceAll('<p>', '<p class="ql-p">');
     return splitedList;
   }
+
   const getNextBatchDate = (event) => {
-    console.log('event--', event);
+    //console.log('event--', event);
     let batchdate;
     let batchSize = -1;
     let eventCostPerPerson;
@@ -143,7 +148,7 @@ const ShowEventDetails = () => {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     for (let i = 0; i < event.batches.length; i++) {
-      console.log('event.batches[' + i + ']--' ,  event.batches[i]);
+     // console.log('event.batches[' + i + ']--' ,  event.batches[i]);
       if (batchSize == -1 && new Date(event.batches[i].eventStartDate) - Q >= 0 && event.batches[i].eventBatchCount > 0) {
         batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
@@ -156,7 +161,7 @@ const ShowEventDetails = () => {
       }
       else if(event.batches[i].notScheduleYet == true){
         batchdate ='On Demand';
-        setInquery(true);
+        setInquery(false);
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
         batchSize = event.batches[i].eventBatchCount;
       }
@@ -177,12 +182,37 @@ const ShowEventDetails = () => {
       setFinalPrice(eventCostPerPerson);
     }
   }
-  useEffect(() => {
 
+  useEffect(() => {
     if (isSuccess == false && type && params) {
       getAllRecord();
     }
   })
+
+  function convertHtmlToJSON(htmlString) {
+    // Create a temporary DOM element to parse the HTML string
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlString;
+  
+    // Select all the <li> elements from the temporary DOM
+    const listItems = tempDiv.querySelectorAll('li');
+    const locations = [];
+  
+    listItems.forEach((item, index) => {
+      // Extract the text content, which is in the form "Location : Time"
+      const [name, time] = item.textContent.split(' : ');
+  
+      // Create the object for each location and push it into the array
+      locations.push({
+        id: index + 1,
+        name: name.trim(),
+        time: time.trim()
+      });
+    });
+  
+    return locations;
+  }
+  
   const getAllRecord = async () => {
     let r = await fetch(`${apiUrl}event-details/eventid/${params[0]}/${params[1]}`, {
       method: "GET", headers: {
@@ -193,9 +223,13 @@ const ShowEventDetails = () => {
     // console.log( 'res ',res);
     if (res.isSuccess == true) {
       setSuccess(true);
-     // console.log('eventDetails ', res.events);
-     // console.log('scheduleBatch', res.ScheduleBatchesRecords);
+      console.log('eventDetails --', );
+     // 
       setEventDetails(res.events);
+      if(res.events.pickupPoints != null && res.events.pickupPoints != 'undefine'){
+      const jsonData = convertHtmlToJSON(res.events.pickupPoints);
+      setPickupPoints(jsonData);
+      }
       setScheduleBatch(res.ScheduleBatchesRecords);
       getNextBatchDate(res.ScheduleBatchesRecords);
 
@@ -203,27 +237,7 @@ const ShowEventDetails = () => {
     }
 
   }
-  var reviewList = [{
-    name: 'Shivani Kasar',
-    Date: 'May 13, 2024',
-    reviewBody: 'I recently joined "Sahyadri Vacations" for a Trek which was organised specially for women on the occasion of International Women\'s Day, and it was an absolute delight! The guides were knowledgeable, friendly and ensured everyone felt at ease. Kudos to Sahyadri Vacations - highly recommended !!!'
-  },
-  {
-    name: 'Shivani Kasar1',
-    Date: 'May 13, 2024',
-    reviewBody: 'I recently joined "Sahyadri Vacations" for a Trek which was organised specially for women on the occasion of International Women\'s Day, and it was an absolute delight! The guides were knowledgeable, friendly and ensured everyone felt at ease. Kudos to Sahyadri Vacations - highly recommended !!!'
-  }
-    ,
-  {
-    name: 'Shivani Kasar2',
-    Date: 'May 13, 2024',
-    reviewBody: 'I recently joined "Sahyadri Vacations" for a Trek which was organised specially for women on the occasion of International Women\'s Day, and it was an absolute delight! The guides were knowledgeable, friendly and ensured everyone felt at ease. Kudos to Sahyadri Vacations - highly recommended !!!'
-  },
-  {
-    name: 'Shivani Kasar3',
-    Date: 'May 13, 2024',
-    reviewBody: 'I recently joined "Sahyadri Vacations" for a Trek which was organised specially for women on the occasion of International Women\'s Day, and it was an absolute delight! The guides were knowledgeable, friendly and ensured everyone felt at ease. Kudos to Sahyadri Vacations - highly recommended !!!'
-  }];
+ 
   return (
     <div>
       <Navbar />
@@ -240,7 +254,6 @@ const ShowEventDetails = () => {
           modules={[Autoplay, Pagination, Navigation]}
           onAutoplayTimeLeft={onAutoplayTimeLeft}
         >
-          {isSuccess && console.log('eventDetails.images-- ' + eventDetails.images)}
           {isSuccess && eventDetails.images.map((event, index) => (
 
             <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}`+event} />
@@ -282,7 +295,6 @@ const ShowEventDetails = () => {
                   <br />
                   <div className='flex'> <FontAwesomeIcon icon={faCalendarDays} size="lg" /> <h3> Upcoming Batches </h3> </div>
                   <div className='section-details'>
-                    {availableBatches && console.log('availableBatches ' + availableBatches)}
                     {availableBatches && availableBatches.map((event, index) => (
                       <div key={index}><b>Batch {index + 1} :</b> {event}</div>
                     ))}
@@ -321,7 +333,7 @@ const ShowEventDetails = () => {
                 <div id="" className='pt-4 pb-1 px-2'>
                   <h2 className="h3"> FAQ's</h2>
                   <div className="section-details">
-                    <ol class="display-bulletin">
+                    <ol className="display-bulletin">
                       <li>
                         <b>How many trek leaders will be available?</b><br />
                         There will be 1 trek leader available for a group of 8 people in each trek.<br />
@@ -378,8 +390,8 @@ const ShowEventDetails = () => {
                           <center> {batchDate} </center></div>
                           
                            <div className="button-margin button">
-                          {/* <input onClick={handleShow} type="submit" value="BOOK NOW" /> */}
-                          <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                          <input onClick={handleShow} type="submit" value="BOOK NOW" />
+                           {/*<button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> */}
                         </div></>}
                         {inquery && 
                         <div className="button-margin button">
@@ -389,7 +401,7 @@ const ShowEventDetails = () => {
                         <br />
                         <div className='card-info'><FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Best Price Guaranteed <br /> <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Secure & Easy Booking
                           <br />
-                          <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> 1000+ Happy Customers</div>
+                          <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> 8000+ Happy Customers</div>
                       </div>
                     </div>
                   </div>
@@ -412,9 +424,9 @@ const ShowEventDetails = () => {
                 </div>
                 <div className="button-edit-container">
                   <div className="button button-margin ">
-                  { /* <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" /> */}
                   {!inquery &&
-                   <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> 
+                  <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
+                   /* <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> */
                   }
                   {inquery &&                      
                          <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>                        
@@ -457,7 +469,6 @@ const ShowEventDetails = () => {
                     { !everyWeekend && <div className="input-box">
                       <span className="details">Select Batch</span>
                       <select  {...register("selectDate", { required: { value: true, message: "This field is required" }, })} required>
-                        {console.log('availableBatches -----' + availableBatches)}
                         {availableBatches && availableBatches.map((event, index) => (
                           <option key={index} value={event} >{event}</option>
                         ))}
@@ -467,6 +478,28 @@ const ShowEventDetails = () => {
                       <span className="details">Select Batch</span>
                       <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange}  />
                     </div> }
+
+                    <div>
+                    <h3>Select a Location:</h3>
+                    <ul>
+                      {pickupPoints.map((location) => (
+                        <li key={location.id}>
+                          <label className='radio-display'>
+                            <input
+                              type="radio"
+                              name="location"
+                              value={location.name}
+                              onChange={handleSelection}
+                              checked={selectedLocation === location.name}
+                            />
+                            {location.name} : {location.time}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                    </div>
+                  
+
                     <div className="input-box finalCalculation">
                       <div className="details">Number of Trekkers</div>
                       <div></div>
@@ -503,6 +536,19 @@ const ShowEventDetails = () => {
         </Modal>
       }
       {show== false && <ContactSection />}
+      {
+        <Modal
+          show={isBookingConfirmed}
+          onHide={() => setBookingConfirmed(false)}
+        >
+            <Modal.Header closeButton>
+              <div className="title-header">
+                BOOKING CONFIRMED
+                <br />
+              </div>
+            </Modal.Header>
+        </Modal>
+      }
       <Footer />
     </div>
   )
