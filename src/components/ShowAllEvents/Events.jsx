@@ -82,7 +82,7 @@ const Events = () => {
         var liveEvent = '';
         let batchdate;
         let eventCostPerPerson;
-        const Q = new Date("2024-04-09");
+        const Q = new Date();
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         for (let i = 0; i < event.batches.length; i++) {
             if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
