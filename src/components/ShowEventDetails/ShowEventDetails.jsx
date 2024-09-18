@@ -148,7 +148,7 @@ const ShowEventDetails = () => {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     for (let i = 0; i < event.batches.length; i++) {
-     // console.log('event.batches[' + i + ']--' ,  event.batches[i]);
+     console.log('event.batches[' + i + ']--' ,  event.batches[i]);
       if (batchSize == -1 && new Date(event.batches[i].eventStartDate) - Q >= 0 && event.batches[i].eventBatchCount > 0) {
         batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
