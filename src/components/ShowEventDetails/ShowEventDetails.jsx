@@ -205,8 +205,8 @@ const ShowEventDetails = () => {
       // Create the object for each location and push it into the array
       locations.push({
         id: index + 1,
-        name: name.trim(),
-        time: time.trim()
+        name: name!= 'undefine' ? name.trim() : '',
+        time: name!= 'undefine' ? time.trim() : ''
       });
     });
   
