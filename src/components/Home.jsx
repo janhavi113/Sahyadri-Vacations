@@ -116,12 +116,13 @@ const Home = () => {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {
         console.log('res.events[' + i + '] ---', res.events[i]);
-        
+
         let tempEvent = [];
         tempEvent = getNextBatchDate(res.events[i]);
         if (tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
           liveEvents.push(getNextBatchDate(res.events[i]));
         }
+        console.log('liveEvents----'+liveEvents);
         if (res.events[i].eventType == 'TrekEvent') {
           trekkingEvents.push(tempEvent);
         } else if (res.events[i].eventType == 'CampingEvent') {
@@ -193,12 +194,6 @@ const Home = () => {
               </a>
             </div>
           </div>
-        
-          {/* <OwlCarousel className='owl-theme' loop margin={10} nav>
-          {isSuccess && events.map((event, index) => (
-              <Card key={index} event={event} />
-            ))}
-          </OwlCarousel>; */}
           <Swiper
             breakpoints={{
               0: {
