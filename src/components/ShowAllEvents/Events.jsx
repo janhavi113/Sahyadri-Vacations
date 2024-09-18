@@ -83,6 +83,7 @@ const Events = () => {
         let batchdate;
         let eventCostPerPerson;
         const Q = new Date();
+        console.log('Q---'+Q);
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         for (let i = 0; i < event.batches.length; i++) {
             if (new Date(event.batches[i].eventStartDate) - Q >= 0) {

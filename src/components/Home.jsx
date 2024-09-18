@@ -116,6 +116,7 @@ const Home = () => {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {
         console.log('res.events[' + i + '] ---', res.events[i]);
+        
         let tempEvent = [];
         tempEvent = getNextBatchDate(res.events[i]);
         if (tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
