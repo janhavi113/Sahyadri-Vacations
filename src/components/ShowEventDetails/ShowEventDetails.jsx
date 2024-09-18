@@ -138,13 +138,13 @@ const ShowEventDetails = () => {
   }
 
   const getNextBatchDate = (event) => {
-    //console.log('event--', event);
+    console.log('event--', event);
     let batchdate;
     let batchSize = -1;
     let eventCostPerPerson;
     let batchDates = [];
     let eventType = event.eventType;
-    const Q = new Date("2024-04-09");
+    const Q = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     for (let i = 0; i < event.batches.length; i++) {
