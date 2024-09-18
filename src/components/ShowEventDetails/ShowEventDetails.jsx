@@ -201,7 +201,7 @@ const ShowEventDetails = () => {
     listItems.forEach((item, index) => {
       // Extract the text content, which is in the form "Location : Time"
       const [name, time] = item.textContent.split(' : ');
-  
+       
       // Create the object for each location and push it into the array
       locations.push({
         id: index + 1,
@@ -223,7 +223,7 @@ const ShowEventDetails = () => {
     // console.log( 'res ',res);
     if (res.isSuccess == true) {
       setSuccess(true);
-      console.log('eventDetails --', );
+      console.log('eventDetails --', res);
      // 
       setEventDetails(res.events);
       if(res.events.pickupPoints != null && res.events.pickupPoints != 'undefine'){
