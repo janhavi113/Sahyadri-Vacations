@@ -161,7 +161,7 @@ const ShowEventDetails = () => {
       }
       else if(event.batches[i].notScheduleYet == true){
         batchdate ='On Demand';
-        setInquery(false);
+        setInquery(true);
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
         batchSize = event.batches[i].eventBatchCount;
       }
