@@ -66,6 +66,7 @@ const Home = () => {
   const getNextBatchDate = (event) => {
     var liveEvent = '';
     let batchdate;
+    let sortdate;
     let eventCostPerPerson;
     const Q = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -73,12 +74,16 @@ const Home = () => {
       if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
         batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()];
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
+        sortdate = new Date(event.batches[i].eventStartDate);
+
       } else if(event.batches[i].everyWeekend == true){
         batchdate = 'Available On All Weekends';
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
+        sortdate = 'Available On All Weekends';
       }else if (event.batches[i].notScheduleYet == true) {
         batchdate = 'On Public Demand';
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
+        sortdate = 'On Public Demand';
       }
     }
    var base_url = window.location.origin; 
@@ -91,7 +96,7 @@ const Home = () => {
         images: `${apiUrl}`+event.images,
         batchdate: batchdate,
         eventCostPerPerson: eventCostPerPerson,
-
+         sortDate : sortdate,
       }
     }
     return liveEvent;
@@ -122,7 +127,8 @@ const Home = () => {
         if (tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
           liveEvents.push(getNextBatchDate(res.events[i]));
         }
-        console.log('liveEvents----'+liveEvents);
+        
+        
         if (res.events[i].eventType == 'TrekEvent') {
           trekkingEvents.push(tempEvent);
         } else if (res.events[i].eventType == 'CampingEvent') {
@@ -132,13 +138,32 @@ const Home = () => {
           backPackingEvents.push(tempEvent);
         }
       }
-      setEvent(liveEvents);
-      setTrekkingEvents(trekkingEvents);
-      setCampingEvents(campingEvents);
-      setBackPackingEvents(backPackingEvents);
+     
+      setEvent(sortEventsBySortDate(liveEvents));
+      setTrekkingEvents(sortEventsBySortDate(trekkingEvents));
+      setCampingEvents(sortEventsBySortDate(campingEvents));
+      setBackPackingEvents(sortEventsBySortDate(backPackingEvents));
     }
 
   }
+
+  const sortEventsBySortDate = (events) => {
+    return events.sort((a, b) => {
+      // Check if sortDate is 'Available On All Weekends' or 'On Public Demand'
+      const isWeekendOrDemand = (date) => date === 'Available On All Weekends' || date === 'On Public Demand';
+  
+      if (isWeekendOrDemand(a.sortDate) && !isWeekendOrDemand(b.sortDate)) return 1;
+      if (!isWeekendOrDemand(a.sortDate) && isWeekendOrDemand(b.sortDate)) return -1;
+      if (isWeekendOrDemand(a.sortDate) && isWeekendOrDemand(b.sortDate)) return 0;
+  
+      // Sort by actual date for valid dates
+      const dateA = new Date(a.sortDate);
+      const dateB = new Date(b.sortDate);
+  
+      return dateA - dateB;
+    });
+  };
+
   const showDropdown = () => {
     setShow(!show);
   }
