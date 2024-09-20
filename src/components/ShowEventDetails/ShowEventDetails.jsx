@@ -29,7 +29,7 @@ const ShowEventDetails = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [params, setParams] = useState(type.split('/'));
   const [isSuccess, setSuccess] = useState(false);
-  const [inquery, setInquery] = useState(false);
+  const [inquery, setInquery] = useState(true);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
   const[pickupPoints , setPickupPoints] = useState([]);
@@ -161,7 +161,9 @@ const ShowEventDetails = () => {
       }
       else if(event.batches[i].notScheduleYet == true){
         batchdate ='On Demand';
+        
         setInquery(true);
+
         eventCostPerPerson = event.batches[i].eventCostPerPerson;
         batchSize = event.batches[i].eventBatchCount;
       }
