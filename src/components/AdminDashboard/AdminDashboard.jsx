@@ -14,7 +14,7 @@ function AdminDashboard() {
         return;
       }
 
-      const response = await fetch(`${apiUrl}show-all-events`, {
+      const response = await fetch(`${apiUrl}show-all-bookings`, {
         headers: { 'Authorization': token }
       });
 
@@ -32,14 +32,13 @@ function AdminDashboard() {
   return (
     <div>
       <AdminNavbar />
-      <div>
-      <h2>Admin Panel</h2>
-      <ul>
-        {events.map(event => (
-          <li key={event._id}>{event.name}</li>
-        ))}
-      </ul>
-    </div>
+      <div className="scheduled-contentbody contentbody">
+        <div className="container justify-content-center py-md-5">
+          <h1><b>Welcome, Bookings for next batches</b></h1>
+          <div className="row justify-content- py-4" >
+          </div>
+        </div>
+      </div>
 
     </div>
   )

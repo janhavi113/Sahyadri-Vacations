@@ -17,7 +17,7 @@ const AdminNavbar = () => {
       
         <div className={isOpen ? 'topnav responsive' : 'topnav'} >
           <nav className='admin-navlink navlink' >
-          <NavLink to="/">
+          <NavLink to="/dashboard">
           <img className="admin-logo" src={logo} />
         </NavLink>
             <NavLink className='navlink-hover' to="/dashboard"      ><li className='tab-style'>Home</li></NavLink>

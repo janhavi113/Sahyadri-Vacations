@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import AdminNavbar from "../AdminDashboard/AdminDashboard";
+import AdminNavbar from "../AdminNavbar";
 import { useSearchParams } from "react-router-dom";
 import '../ShowEventDetails/ShowEventDetails.css'
 import './ScheduledEvents.css'

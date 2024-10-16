@@ -202,7 +202,21 @@ app.use('/api', cors({
 	allowedHeaders: 'Content-Type, Authorization',
 	credentials: true,
 }));
-
+app.get("/show-all-bookings", async (req, res) => {
+	try {
+		let bookings = await Bookings.find({});
+		res.send({
+			isSuccess: true,
+			bookings: bookings
+		});
+	} catch (error) {
+		console.error(error);
+		res.send({
+			isSuccess: false,
+			error: error
+		});
+	}
+});
 app.get("/show-all-events", async (req, res) => {
 	console.log("i am in");
 	try {
@@ -771,22 +785,22 @@ app.use((err, req, res, next) => {
 	next();
 });
 
-const options = {
-	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
-  };
+// const options = {
+// 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
+// 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
+//   };
    
- // Start the HTTPS server
-const server = https.createServer(options, app);
-console.log('server',server);
-server.listen(3001, () => {
-  console.log('HTTPS Server running on port 3001');
-});
+//  // Start the HTTPS server
+// const server = https.createServer(options, app);
+// console.log('server',server);
+// server.listen(3001, () => {
+//   console.log('HTTPS Server running on port 3001');
+// });
 
-server.on('error', (err) => {
-  console.error('Server error:', err);
-});
-/*
+// server.on('error', (err) => {
+//   console.error('Server error:', err);
+// });
+
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);
-});*/
+});

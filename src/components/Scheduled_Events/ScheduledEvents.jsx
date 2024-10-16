@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import AdminNavbar from "../AdminDashboard/AdminDashboard";
+import AdminNavbar from "../AdminNavbar";
 import { useNavigate } from "react-router-dom";
 import '../ShowAllEvents/Events.css'
 const ScheduledEvents = () => {

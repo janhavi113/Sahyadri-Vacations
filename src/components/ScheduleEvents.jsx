@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import AdminNavbar from "../components/AdminDashboard/AdminDashboard";
+import AdminNavbar from "./AdminNavbar";
 import "./ScheduleEvents.css"
 import "./CreateEvents.css"
 import DatePicker from "./EventDatePicker";
