@@ -3,4 +3,73 @@
     padding: 0;
     margin: 0;
   }
-  
+  /* Style for the entire container */
+.event-tables-container {
+  padding: 20px;
+}
+
+/* Style for each table */
+.event-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+/* Style for the table caption */
+.table-caption {
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  text-align: left;
+  color: #333;
+  padding: 8px;
+  display: inline !important;
+}
+.home-dashboard{
+  font-size: 2.3em;
+}
+/* Style for table headers */
+.event-table thead tr th {
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 8px;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+  word-wrap: break-word;
+}
+
+.container-table-header {
+  display: flex;
+  justify-content: space-between; /* Pushes items to opposite ends */
+}
+
+.container-table-header button {
+  color: white;
+  background-color: #00506b;
+}
+/* Style for table cells */
+.event-table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Style for alternating row colors */
+.event-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Style for table container */
+.table-container {
+  border: 1px solid #ddd;
+  overflow: hidden;
+  margin-top: 25px
+}
+
+/* Style for no bookings message */
+.no-bookings-message {
+  color: #666;
+  font-size: 1em;
+  text-align: center;
+  margin-top: 20px;
+}
