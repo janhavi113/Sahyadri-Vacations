@@ -19,6 +19,7 @@ const ScheduledEvents = () => {
         let eventCostPerPerson;
          console.log('event------',event);
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+       if(event.batches){
         for (let i = 0; i < event.batches.length; i++) {
             if (event.batches[i].everyWeekend == true) {
                 batchdate = 'Available On All Weekends';
@@ -27,13 +28,24 @@ const ScheduledEvents = () => {
                 batchdate = 'On Public Demand';
                 eventCostPerPerson = event.batches[i].eventCostPerPerson;
             } else {
-
                 batchdate = batchdate + new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear() + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventEndDate).getFullYear() + ' | ';
                 eventCostPerPerson = event.batches[i].eventCostPerPerson;
                 console.log('batchdate --', batchdate);
             }
         }
-
+         }  else{
+            if (event.everyWeekend == true) {
+                batchdate = 'Available On All Weekends';
+                eventCostPerPerson = event.eventCostPerPerson;
+            } else if (event.notScheduleYet == true) {
+                batchdate = 'On Public Demand';
+                eventCostPerPerson = event.eventCostPerPerson;
+            } else {
+                batchdate = batchdate + new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear() + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventEndDate).getFullYear() + ' | ';
+                eventCostPerPerson = event.eventCostPerPerson;
+                console.log('batchdate --', batchdate);
+            }
+         }
         if (batchdate && eventCostPerPerson) {
             liveEvent = {
                 eventId: event.eventId,

@@ -19,6 +19,8 @@ import PrivacyPolicy from "./components/UserAgreement/PrivacyPolicy";
 import Gallery from "./components/Gallery/PhotoGallery" ;
 import ContactUs from "./components/Contact_Us/ContactUs" ;
 import Register from './components/Register/Register';
+import DirectBookingDashboard from "./components/DirectBookings/DirectBookingDashboard" ;
+import DirectBookings from "./components/DirectBookings/DirectBookings" ;
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 function App() {
@@ -109,7 +111,16 @@ function App() {
     {
       path: "/register",
       element: <Register />,
-    },
+    }    ,
+    {
+      path: "/direct-bookings",
+      element: <DirectBookings />,
+    }
+    ,
+    {
+      path: "/direct-bookings-dashboard",
+      element: <DirectBookingDashboard />,
+    }
   ]);
   return (
     <>

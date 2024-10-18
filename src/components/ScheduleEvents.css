@@ -18,6 +18,8 @@
     transition: all 0.3s ease;
     background: #F4F4F4;
   }
+
+
   .errorMessage{
     text-align: center;
     padding: 2%;
@@ -39,6 +41,11 @@
     background: #F4F4F4;
   }
 
+  .input-box-column input[type="checkbox"]{
+    height:15px;
+    width: inherit;
+  }
+  
   .input-box-column{
     margin: 0% 3% 0% 0%;
     width: calc(100% / 2 - 40px);

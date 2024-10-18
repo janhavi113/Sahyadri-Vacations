@@ -217,6 +217,23 @@ app.get("/show-all-bookings", async (req, res) => {
 		});
 	}
 });
+
+app.get("/schedule-event-details", async (req, res) => {
+	try {
+		let bookings = await Bookings.find({});
+		res.send({
+			isSuccess: true,
+			bookings: bookings
+		});
+	} catch (error) {
+		console.error(error);
+		res.send({
+			isSuccess: false,
+			error: error
+		});
+	}
+});
+
 app.get("/show-all-events", async (req, res) => {
 	console.log("i am in");
 	try {
@@ -633,17 +650,15 @@ app.post("/schedule-event", async (req, res) => {
 			active,
 			eventId,
 			eventname,
-			batches,
-			eventType
+			eventType,
+			eventCostPerPerson, 
+			eventEndDate,
+			eventStartDate,
+			eventBatchCount,
+			everyWeekend,
+			notScheduleYet,
 		} = req.body;
-		var batchList = [];
-		if (Array.isArray(batches)) {
-			for (let i = 0; i < batches.length; i++) {
-				batchList.push(JSON.parse(batches[i]));
-			}
-		} else {
-			batchList.push(JSON.parse(batches));
-		}
+		
 		let scheduleRecordcount = 0;
 		var events = await ScheduleBatches.find().sort([
 			["_id", -1]
@@ -656,7 +671,12 @@ app.post("/schedule-event", async (req, res) => {
 		const scheduleBatches = new ScheduleBatches({
 			active: active,
 			eventId: scheduleRecordcount + 1,
-			batches: batchList,
+			eventCostPerPerson:eventCostPerPerson , 
+			eventEndDate:eventEndDate,
+			eventStartDate:eventStartDate,
+			eventBatchCount:eventBatchCount,
+			everyWeekend:everyWeekend,
+			notScheduleYet:notScheduleYet,
 			eventname: eventname,
 			images: currUrl,
 			Url: "/event-details?eventid=" +

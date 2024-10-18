@@ -3,10 +3,9 @@ const otherParticipantsSchema = new mongoose.Schema({
     name:  { type :String},
     mobileNumber:  { type :Number},
     pickupLocation: { type :String},
-    status: { type :String}   
+    status: { type :String}      
     });
-
-const bookingsSchema = new mongoose.Schema({
+const directBookingsSchema = new mongoose.Schema({
     name:  { type :String},
     email : { type :String},
     mobileNumber:  { type :Number},
@@ -22,5 +21,5 @@ const bookingsSchema = new mongoose.Schema({
     ]
 });
 
-export const Bookings = mongoose.model('bookings', bookingsSchema);
+export const DirectBookings = mongoose.model('directBookingsSchema', directBookingsSchema);
 

@@ -18,12 +18,12 @@ import 'swiper/css/bundle';
 // import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import DatePicker from "react-datepicker";
-import {addDays ,isWeekend } from 'date-fns';
+import { addDays, isWeekend } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 const ShowEventDetails = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [searchParams, setSearchParams] = useSearchParams();
-  const [locationsArray ,setLocationsArray] = useState();
+  const [locationsArray, setLocationsArray] = useState();
   const queryParameters = new URLSearchParams(window.location.search);
   const [type, setType] = useState(queryParameters.get("eventid"));
   const [startDate, setStartDate] = useState(new Date());
@@ -32,7 +32,7 @@ const ShowEventDetails = () => {
   const [inquery, setInquery] = useState(true);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
-  const[pickupPoints , setPickupPoints] = useState([]);
+  const [pickupPoints, setPickupPoints] = useState([]);
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
   const [scheduleBatch, setScheduleBatch] = useState();
@@ -44,7 +44,7 @@ const ShowEventDetails = () => {
   const progressContent = useRef(null);
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
-  const [selectedDate , setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isBookingConfirmed, setBookingConfirmed] = useState(false);
   const handleClose = () => setShow(false);
@@ -52,10 +52,10 @@ const ShowEventDetails = () => {
   const handleDateChange = (date) => {
     setSelectedDate(date);
   }
-  const isWeekendDay = (date) =>{
+  const isWeekendDay = (date) => {
     return isWeekend(date);
   }
-  const filterWeekends = (date) =>{
+  const filterWeekends = (date) => {
     return isWeekendDay(date);
   }
   const toggleModal = () => {
@@ -78,26 +78,26 @@ const ShowEventDetails = () => {
   } = useForm();
   const onSubmit = async (data) => {
     const formData = new FormData();
-      formData.append('name', 'janhai');
-    
+    formData.append('name', 'janhai');
+
     data.numberOfPeoples = noOfTrekkers;
     data.amountPaid = finalPrice;
     data.eventId = eventDetails.eventId;
     data.eventName = eventDetails.name;
     data.batch = selectedDate;
     data.pickupLocation = selectedLocation;
-   // console.log('---data---'+data);
-   
+    // console.log('---data---'+data);
+
     let r = await fetch(`${apiUrl}booking`, {
       method: "POST", headers: {
         "Content-Type": "application/json",
       }, body: JSON.stringify(data)
     })
     let res = await r.json()
-   // console.log('res', JSON.stringify(res));
-   if (res.isSuccess == true) {
-    setBookingConfirmed(true);
-  }
+    // console.log('res', JSON.stringify(res));
+    if (res.isSuccess == true) {
+      setBookingConfirmed(true);
+    }
   }
 
   const handleSelection = (event) => {
@@ -113,7 +113,7 @@ const ShowEventDetails = () => {
       setFinalPrice(price1 * count);
     }
   }
-  
+
   const decreaseCount = async () => {
     if (noOfTrekkers > 0) {
       let count = noOfTrekkers;
@@ -146,36 +146,63 @@ const ShowEventDetails = () => {
     let eventType = event.eventType;
     const Q = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    if (event.batches) {
+      for (let i = 0; i < event.batches.length; i++) {
+        console.log('event.batches[' + i + ']--', event.batches[i]);
+        if (batchSize == -1 && new Date(event.batches[i].eventStartDate) - Q >= 0 && event.batches[i].eventBatchCount > 0) {
+          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          batchSize = event.batches[i].eventBatchCount;
+        } else if (event.batches[i].everyWeekend == true) {
+          batchdate = 'Available On All Weekends';
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          batchSize = event.batches[i].eventBatchCount;
+          setEveryWeekend(true);
+        }
+        else if (event.batches[i].notScheduleYet == true) {
+          batchdate = 'On Demand';
 
-    for (let i = 0; i < event.batches.length; i++) {
-     console.log('event.batches[' + i + ']--' ,  event.batches[i]);
-      if (batchSize == -1 && new Date(event.batches[i].eventStartDate) - Q >= 0 && event.batches[i].eventBatchCount > 0) {
-        batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
-        batchSize = event.batches[i].eventBatchCount;
-      }else if(event.batches[i].everyWeekend == true){
-        batchdate ='Available On All Weekends';
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
-        batchSize = event.batches[i].eventBatchCount;
+          setInquery(true);
+
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          batchSize = event.batches[i].eventBatchCount;
+        }
+        if (event.batches[i].everyWeekend == false && event.batches[i].notScheduleYet == false) {
+          batchDates.push(new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear());
+        } else if (event.batches[i].notScheduleYet == true) {
+          batchDates.push('On Demand');
+        } else if (event.batches[i].everyWeekend == true) {
+          batchDates.push('Available On All Weekends');
+        }
+      }
+    } else {
+      if (batchSize == -1 && new Date(event.eventStartDate) - Q >= 0 && event.eventBatchCount > 0) {
+        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear();
+        eventCostPerPerson = event.eventCostPerPerson;
+        batchSize = event.eventBatchCount;
+      } else if (event.everyWeekend == true) {
+        batchdate = 'Available On All Weekends';
+        eventCostPerPerson = event.eventCostPerPerson;
+        batchSize = event.eventBatchCount;
         setEveryWeekend(true);
       }
-      else if(event.batches[i].notScheduleYet == true){
-        batchdate ='On Demand';
-        
+      else if (event.notScheduleYet == true) {
+        batchdate = 'On Demand';
+
         setInquery(true);
 
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
-        batchSize = event.batches[i].eventBatchCount;
+        eventCostPerPerson = event.eventCostPerPerson;
+        batchSize = event.eventBatchCount;
       }
-      if(event.batches[i].everyWeekend == false && event.batches[i].notScheduleYet == false){
-       batchDates.push(new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear());
-       }else if(event.batches[i].notScheduleYet == true){
+      if (event.everyWeekend == false && event.notScheduleYet == false) {
+        batchDates.push(new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear());
+      } else if (event.notScheduleYet == true) {
         batchDates.push('On Demand');
-       }else if(event.batches[i].everyWeekend == true){
+      } else if (event.everyWeekend == true) {
         batchDates.push('Available On All Weekends');
-       }
-  }
-   // console.log('batchDates --- ' + batchDates);
+      }
+    }
+    // console.log('batchDates --- ' + batchDates);
     if (batchdate && eventCostPerPerson) {
       setAvailableBatches(batchDates);
       setPrice(eventCostPerPerson);
@@ -195,26 +222,26 @@ const ShowEventDetails = () => {
     // Create a temporary DOM element to parse the HTML string
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlString;
-  
+
     // Select all the <li> elements from the temporary DOM
     const listItems = tempDiv.querySelectorAll('li');
     const locations = [];
-  
+
     listItems.forEach((item, index) => {
       // Extract the text content, which is in the form "Location : Time"
       const [name, time] = item.textContent.split(' : ');
-       
+
       // Create the object for each location and push it into the array
       locations.push({
         id: index + 1,
-        name: name!= 'undefine' ? name.trim() : '',
-        time: name!= 'undefine' ? time.trim() : ''
+        name: name != 'undefine' ? name.trim() : '',
+        time: name != 'undefine' ? time.trim() : ''
       });
     });
-  
+
     return locations;
   }
-  
+
   const getAllRecord = async () => {
     let r = await fetch(`${apiUrl}event-details/eventid/${params[0]}/${params[1]}`, {
       method: "GET", headers: {
@@ -226,11 +253,11 @@ const ShowEventDetails = () => {
     if (res.isSuccess == true) {
       setSuccess(true);
       console.log('eventDetails --', res);
-     // 
+      // 
       setEventDetails(res.events);
-      if(res.events.pickupPoints != null && res.events.pickupPoints != 'undefine'){
-      const jsonData = convertHtmlToJSON(res.events.pickupPoints);
-      setPickupPoints(jsonData);
+      if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
+        const jsonData = convertHtmlToJSON(res.events.pickupPoints);
+        setPickupPoints(jsonData);
       }
       setScheduleBatch(res.ScheduleBatchesRecords);
       getNextBatchDate(res.ScheduleBatchesRecords);
@@ -239,7 +266,7 @@ const ShowEventDetails = () => {
     }
 
   }
- 
+
   return (
     <div>
       <Navbar />
@@ -258,7 +285,7 @@ const ShowEventDetails = () => {
         >
           {isSuccess && eventDetails.images.map((event, index) => (
 
-            <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}`+event} />
+            <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}` + event} />
               <div className="inner-content">
                 <h3>{eventDetails.name}</h3>
               </div>
@@ -390,16 +417,16 @@ const ShowEventDetails = () => {
                         </h4>
                         {!inquery && <> <div>
                           <center> {batchDate} </center></div>
-                          
-                           <div className="button-margin button">
-                          <input onClick={handleShow} type="submit" value="BOOK NOW" />
-                           {/*<button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> */}
-                        </div></>}
-                        {inquery && 
-                        <div className="button-margin button">
-                         <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
-                         </div>
-                      }
+
+                          <div className="button-margin button">
+                            <input onClick={handleShow} type="submit" value="BOOK NOW" />
+                            {/*<button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> */}
+                          </div></>}
+                        {inquery &&
+                          <div className="button-margin button">
+                            <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                          </div>
+                        }
                         <br />
                         <div className='card-info'><FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Best Price Guaranteed <br /> <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Secure & Easy Booking
                           <br />
@@ -426,14 +453,14 @@ const ShowEventDetails = () => {
                 </div>
                 <div className="button-edit-container">
                   <div className="button button-margin ">
-                  {!inquery &&
-                  <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
-                   /* <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> */
-                  }
-                  {inquery &&                      
-                         <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>                        
-                      }
-                  <button  type="button"><a href="tel:07028740961"> <strong>&nbsp;CALL NOW </strong></a> </button>
+                    {!inquery &&
+                      <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
+                      /* <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> */
+                    }
+                    {inquery &&
+                      <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                    }
+                    <button type="button"><a href="tel:07028740961"> <strong>&nbsp;CALL NOW </strong></a> </button>
                   </div>
                 </div>
               </div>
@@ -468,39 +495,39 @@ const ShowEventDetails = () => {
                       <span className="details">WhatsApp Mobile Number</span>
                       <input placeholder='+91'{...register("whatsappNumber", { required: { value: true, message: "This field is required" }, })} type="tel" required />
                     </div>
-                    { !everyWeekend && <div className="input-box">
+                    {!everyWeekend && <div className="input-box">
                       <span className="details">Select Batch</span>
                       <select  {...register("selectDate", { required: { value: true, message: "This field is required" }, })} required>
                         {availableBatches && availableBatches.map((event, index) => (
                           <option key={index} value={event} >{event}</option>
                         ))}
                       </select>
-                     </div>}
-                    { everyWeekend && <div className="input-box">
+                    </div>}
+                    {everyWeekend && <div className="input-box">
                       <span className="details">Select Batch</span>
-                      <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange}  />
-                    </div> }
+                      <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
+                    </div>}
 
                     <div>
-                    <h3>Select a Location:</h3>
-                    <ul>
-                      {pickupPoints.map((location) => (
-                        <li key={location.id}>
-                          <label className='radio-display'>
-                            <input
-                              type="radio"
-                              name="location"
-                              value={location.name}
-                              onChange={handleSelection}
-                              checked={selectedLocation === location.name}
-                            />
-                            {location.name} : {location.time}
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
+                      <h3>Select a Location:</h3>
+                      <ul>
+                        {pickupPoints.map((location) => (
+                          <li key={location.id}>
+                            <label className='radio-display'>
+                              <input
+                                type="radio"
+                                name="location"
+                                value={location.name}
+                                onChange={handleSelection}
+                                checked={selectedLocation === location.name}
+                              />
+                              {location.name} : {location.time}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  
+
 
                     <div className="input-box finalCalculation">
                       <div className="details">Number of Trekkers</div>
@@ -537,18 +564,18 @@ const ShowEventDetails = () => {
           </form>
         </Modal>
       }
-      {show== false && <ContactSection />}
+      {show == false && <ContactSection />}
       {
         <Modal
           show={isBookingConfirmed}
           onHide={() => setBookingConfirmed(false)}
         >
-            <Modal.Header closeButton>
-              <div className="title-header">
-                BOOKING CONFIRMED
-                <br />
-              </div>
-            </Modal.Header>
+          <Modal.Header closeButton>
+            <div className="title-header">
+              BOOKING CONFIRMED
+              <br />
+            </div>
+          </Modal.Header>
         </Modal>
       }
       <Footer />
