@@ -10,7 +10,7 @@ import ScheduledEventsDetails from "./components/Scheduled_Events/ScheduledEvent
 import ScheduleEvents from "./components/ScheduleEvents";
 import EventDetails from "./components/EventDetails";
 import ShowEventDetails from "./components/ShowEventDetails/ShowEventDetails";
-import CreateEvent from "./components/CreateEvents" ;  
+import CreateEvent from "./components/admin-panel/CreateEvent/CreateEvents" ;  
 import Events from "./components/ShowAllEvents/Events" ;
 import SearchEvent from "./components/SearchEvent/SearchEvent" ;
 import UserAgreement from "./components/UserAgreement/UserAgreement";

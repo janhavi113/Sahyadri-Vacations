@@ -15,11 +15,13 @@
         "express": "^4.19.2",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^6.8.2",
-        "nodemailer": "^6.9.12",
-        "nodemon": "^2.0.20"
+        "nodemailer": "^6.9.12"
     },
     "author": "Rishav",
     "license": "ISC",
     "keywords": [],
-    "description": ""
+    "description": "",
+    "devDependencies": {
+        "nodemon": "^3.1.7"
+    }
 }

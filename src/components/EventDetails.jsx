@@ -4,7 +4,7 @@ import Dropzone from "react-dropzone";
 import AdminNavbar from "./AdminNavbar";
 import { useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom";
-import "./CreateEvents.css"
+import "./admin-panel/CreateEvent/CreateEvents.css" 
 import "./Modal.css";
 import Editor from "./Editor";
 function EventDetails() {

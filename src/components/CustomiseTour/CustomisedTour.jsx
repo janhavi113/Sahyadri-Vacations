@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../Contact_Us/ContactForm.css';
-import '../CreateEvents.css'
+import '../admin-panel/CreateEvent/CreateEvents.css'
 import './CustomisedTour.css'
 import Footer from "../footer";
 import Navbar from "../Navbar";

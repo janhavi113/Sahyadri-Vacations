@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
-import AdminNavbar from "./AdminNavbar";
-import Editor from "./Editor";
+import AdminNavbar from "../../AdminNavbar";
+import Editor from "../../Editor";
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
 import "./CreateEvents.css"
@@ -75,7 +75,7 @@ function CreateEvents() {
     <div>
       <AdminNavbar />
       <form action="" onSubmit={handleSubmit(onSubmit)}>
-        <div className="container">
+        <div className="create-form container ">
           <div className="title-header">Event Details</div>
           <div className="content">
             {isSubmitting && <div>Loading...</div>}

@@ -11,7 +11,7 @@ import Navbar from "../Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { Modal, Button } from "react-bootstrap";
-import "../CreateEvents.css"
+import "../admin-panel/CreateEvent/CreateEvents.css"
 import "../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';

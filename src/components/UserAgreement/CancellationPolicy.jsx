@@ -1,6 +1,6 @@
 import React from 'react'
 import Footer from "../footer";
-import "../CreateEvents.css"
+import "../admin-panel/CreateEvent/CreateEvents.css"
 import "./UserAgreement.css"
 import Navbar from "../Navbar";
 const CancellationPolicy = () => {
