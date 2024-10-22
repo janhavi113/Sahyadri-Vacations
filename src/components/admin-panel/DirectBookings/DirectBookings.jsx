@@ -4,8 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import "../admin-panel/CreateEvent/CreateEvents.css"
-import "../Modal.css";
+import "../CreateEvent/CreateEvents.css"
+import "../../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
 // import required modules

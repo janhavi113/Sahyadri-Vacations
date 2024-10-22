@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
-import AdminNavbar from "./AdminNavbar";
-import Card from "./eventcard";
-import "./ScheduleEvents.css"
+import AdminNavbar from "../../AdminNavbar";
+import Card from "../../eventcard";
+import "../Schedule-Events/ScheduleEvents.css"
 import "./AllEvents.css"
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form"

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import AdminNavbar from "../AdminNavbar";
-import "../AdminNavbar.css";
+import AdminNavbar from "../../AdminNavbar";
+import "../../AdminNavbar.css";
 import "./AdminDashboard.css";
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { useNavigate } from "react-router-dom";
-import logo from '../Images/logo.png'; 
+import logo from '../../Images/logo.png'; 
 function AdminDashboard() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [events, setEvents] = useState([]);

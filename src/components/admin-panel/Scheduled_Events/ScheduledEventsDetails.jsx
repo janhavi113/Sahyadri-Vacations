@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import AdminNavbar from "../AdminNavbar";
+import AdminNavbar from "../../AdminNavbar";
 import { useSearchParams } from "react-router-dom";
-import '../ShowEventDetails/ShowEventDetails.css'
+import '../../ShowEventDetails/ShowEventDetails.css'
 import './ScheduledEvents.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';

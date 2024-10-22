@@ -1,6 +1,6 @@
 import React from 'react'
 import DirectBookings from './DirectBookings'
-import AdminNavbar from '../AdminNavbar'
+import AdminNavbar from '../../AdminNavbar'
 const DirectBookingDashboard = () => {
   return (
     <div>
