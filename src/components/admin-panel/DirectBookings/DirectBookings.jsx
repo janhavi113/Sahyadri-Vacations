@@ -1,111 +1,97 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import './DirectBooking.css'
-import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faCircleMinus , faCircleXmark} from '@fortawesome/free-solid-svg-icons';
 import "../CreateEvent/CreateEvents.css"
 import "../../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
 // import required modules
-import DatePicker from "react-datepicker";
-import { addDays, isWeekend } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
+import Dropzone from "react-dropzone";
+import { useDropzone } from 'react-dropzone';
 const DirectBookings = () => {
+
   const apiUrl = import.meta.env.VITE_API_URL;
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [locationsArray, setLocationsArray] = useState();
-  const queryParameters = new URLSearchParams(window.location.search);
-  const [startDate, setStartDate] = useState(new Date());
-  const [params, setParams] = useState();
+  const [eventName, setEventName] = useState();
   const [isSuccess, setSuccess] = useState(false);
-  const [inquery, setInquery] = useState(true);
-  const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
-  const [pickupPoints, setPickupPoints] = useState([]);
   const [eventPickupPoints, setEventPickupPoints] = useState([]);
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
-  const [scheduleBatch, setScheduleBatch] = useState();
   const [participants, setParticipants] = useState([]);
-  const [availableBatches, setAvailableBatches] = useState();
   const [price, setPrice] = useState(0);
   const [batchDate, setBatchDate] = useState();
   const [availableSlot, setAvailableSlot] = useState();
-  const progressCircle = useRef(null);
-  const progressContent = useRef(null);
-  const [modal, setModal] = useState(false);
-  const [show, setShow] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isBookingConfirmed, setBookingConfirmed] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [events, setEvent] = useState();
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  }
-  const isWeekendDay = (date) => {
-    return isWeekend(date);
-  }
-  const filterWeekends = (date) => {
-    return isWeekendDay(date);
-  }
-  const toggleModal = () => {
-    if (modal) {
-      setModal(false);
-    } else {
-      setModal(true);
-    }
-  };
-  if (modal) {
-    document.body.classList.add('active-modal')
-  } else {
-    document.body.classList.remove('active-modal')
-  }
+  const [file, setFile] = useState(null); // State to store uploaded file
+  const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
+
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  const onDrop = (acceptedFiles) => {
+    const newFiles = acceptedFiles.map(file => Object.assign(file, {
+      preview: URL.createObjectURL(file) // Create a preview URL for the image
+    }));
+    setUploadedFiles((prev) => [...prev, ...newFiles]); // Add new files to the uploaded files state
+  };
+
+  const removeFile = (file) => {
+    setUploadedFiles((prev) => prev.filter((f) => f !== file)); // Remove the file from the state
+  };
+
   const onSubmit = async (data) => {
     const formData = new FormData();
-    data.numberOfPeoples = noOfTrekkers;
-    data.amountPaid = finalPrice;
-    data.eventId = eventDetails.eventId;
-    //  data.eventName = eventDetails.name;
-    data.batch = selectedDate;
-    data.pickupLocation = selectedLocation;
-    // ////console.log('---data---'+data);
+    formData.append("fullName", data.fullName);
+    formData.append("email ", data.emailId);
+    formData.append("mobileNumber", data.whatsappNumber);
+    formData.append("batch", batchDate);
+    formData.append("eventId", data.Event);
+    formData.append("eventName", eventName);
+    formData.append("numberOfPeoples", noOfTrekkers);
+    formData.append("amountPaid", finalPrice);
+    formData.append("pickupLocation", selectedLocation);
+    const today = new Date();
+    formData.append("bookingDate", today);
+    formData.append("otherParticipants", JSON.stringify(participants));
 
-    let r = await fetch(`${apiUrl}booking`, {
-      method: "POST", headers: {
-        "Content-Type": "application/json",
-      }, body: JSON.stringify(data)
+
+    console.log('uploadedFiles--',uploadedFiles);
+    formData.append("images", uploadedFiles[0]); // Adjust the name as needed
+     
+    let r = await fetch(`${apiUrl}direct-booking`, {
+      method: "POST",
+      body: formData,
     })
     let res = await r.json()
-    // ////console.log('res', JSON.stringify(res));
     if (res.isSuccess == true) {
       setBookingConfirmed(true);
     }
   }
+
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const handleSelection = (event) => {
     setSelectedLocation(event.target.value);
   };
 
   const increaseCount = async () => {
-    console.log('availableSlot--', availableSlot);
-    console.log('noOfTrekkers--', noOfTrekkers);
     if (availableSlot > noOfTrekkers) {
       let count = noOfTrekkers;
       let price1 = price;
       count++;
       setNoOfTrekkers(count);
       setFinalPrice(price1 * count);
-      setParticipants([...participants, { name: '', whatsapp: '', pickup: '' }]);
+      setParticipants([...participants, { name: '', mobileNumber: '', pickupLocation: '' }]);
     }
   }
 
@@ -119,71 +105,67 @@ const DirectBookings = () => {
       setParticipants(participants.slice(0, -1));
     }
   }
+
   const handleParticipantChange = (index, field, value) => {
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
     setParticipants(newParticipants);
   };
 
-  const onAutoplayTimeLeft = (s, time, progress) => {
-    // progressCircle.current.style.setProperty('--progress', 1 - progress);
-    // progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
-  };
-
-  const displayList = (data) => {
-    var splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
-    splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
-    splitedList = splitedList.replaceAll('<ol>', '<ol class="display-bulletin">');
-    splitedList = splitedList.replaceAll('<p>', '<p class="ql-p">');
-    return splitedList;
-  }
-
   const getNextBatchDate = (event) => {
-    ////console.log('event--', event);
     let batchdate;
     let batchSize = -1;
     let eventCostPerPerson;
     let batchDates = [];
-    let eventType = event.eventType;
+    let eventName = event.eventname;
     const Q = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    if (event.batches) {
+      for (let i = 0; i < event.batches.length; i++) {
+        if (batchSize == -1 && new Date(event.batches[i].eventStartDate) - Q >= 0 && event.batches[i].eventBatchCount > 0) {
+          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          batchSize = event.batches[i].eventBatchCount;
+        } else if (event.batches[i].everyWeekend == true) {
+          batchdate = 'Available On All Weekends';
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          batchSize = event.batches[i].eventBatchCount;
+        }
+        else if (event.batches[i].notScheduleYet == true) {
+          batchdate = 'On Demand';
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          batchSize = event.batches[i].eventBatchCount;
+        }
 
-    for (let i = 0; i < event.batches.length; i++) {
-      ////console.log('event.batches[' + i + ']--', event.batches[i]);
-      if (batchSize == -1 && new Date(event.batches[i].eventStartDate) - Q >= 0 && event.batches[i].eventBatchCount > 0) {
-        batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
-        batchSize = event.batches[i].eventBatchCount;
-      } else if (event.batches[i].everyWeekend == true) {
-        batchdate = 'Available On All Weekends';
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
-        batchSize = event.batches[i].eventBatchCount;
-        setEveryWeekend(true);
+        if (event.batches[i].everyWeekend == false && event.batches[i].notScheduleYet == false) {
+          batchDates.push(new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear());
+        } else if (event.batches[i].notScheduleYet == true) {
+          batchDates.push('On Demand');
+        } else if (event.batches[i].everyWeekend == true) {
+          batchDates.push('Available On All Weekends');
+        }
       }
-      else if (event.batches[i].notScheduleYet == true) {
-        batchdate = 'On Demand';
+    } else {
+      if (event.everyWeekend == false && event.notScheduleYet == false) {
+        batchDates.push(new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear());
+        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear();
 
-        setInquery(true);
-
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
-        batchSize = event.batches[i].eventBatchCount;
-      }
-      if (event.batches[i].everyWeekend == false && event.batches[i].notScheduleYet == false) {
-        batchDates.push(new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear());
-      } else if (event.batches[i].notScheduleYet == true) {
+      } else if (event.notScheduleYet == true) {
         batchDates.push('On Demand');
-      } else if (event.batches[i].everyWeekend == true) {
+        batchdate = 'On Demand';
+      } else if (event.everyWeekend == true) {
         batchDates.push('Available On All Weekends');
+        batchdate = 'Available On All Weekends';
       }
+      eventCostPerPerson = event.eventCostPerPerson;
+      batchSize = event.eventBatchCount;
     }
-    // ////console.log('batchDates --- ' + batchDates);
     if (batchdate && eventCostPerPerson) {
-      setAvailableBatches(batchDates);
       setPrice(eventCostPerPerson);
       setBatchDate(batchdate);
       setAvailableSlot(batchSize);
       setFinalPrice(eventCostPerPerson);
-
+      setEventName(eventName);
     }
   }
 
@@ -194,29 +176,19 @@ const DirectBookings = () => {
   })
 
   function convertHtmlToJSON(htmlString) {
-    // Create a temporary DOM element to parse the HTML string
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = htmlString;
-
-    // Select all the <li> elements from the temporary DOM
     let listItems = tempDiv.querySelectorAll('li');
     if (listItems.length <= 0) {
       listItems = tempDiv.querySelectorAll('p');
     }
-
     const locations = [];
-
     listItems.forEach((item, index) => {
-      // Extract the text content, which is in the form "Location : Time"
-      const [name, time] = item.textContent.split(' : ');
-      // Create the object for each location and push it into the array
       locations.push({
         id: index + 1,
-        name: name != undefined ? name.trim() : '',
-        time: time != undefined ? time.trim() : ''
+        name: item.textContent,
       });
     });
-
     return locations;
   }
 
@@ -231,21 +203,30 @@ const DirectBookings = () => {
       setSuccess(res.isSuccess);
       setEventDetails(res.events);
       setEvent(res.scheduleBatches);
+      const scheduleBatches = res.scheduleBatches[0];
+      let eventApi = scheduleBatches.eventApi;
+      const event = res.events.find(e => e.apiname == eventApi);
+      const jsonData = convertHtmlToJSON(event.pickupPoints);
+      setEventPickupPoints(jsonData);
+      getNextBatchDate(scheduleBatches);
     }
   }
 
   function handleSelectEventChange(e) {
-
     let eventId = e.target.value;
+    eventChange(eventId);
+  }
+
+  function eventChange(eventId) {
     const scheduleBatches = events.find(e => e.eventId == eventId);
-    console.log('scheduleBatches---', scheduleBatches);
-    setAvailableSlot(scheduleBatches.eventBatchCount);
+    getNextBatchDate(scheduleBatches);
+
     let eventApi = scheduleBatches.eventApi;
     const event = eventDetails.find(e => e.apiname == eventApi);
     const jsonData = convertHtmlToJSON(event.pickupPoints);
     setEventPickupPoints(jsonData);
-
   }
+
   return (
     <div>
       <form action="" onSubmit={handleSubmit(onSubmit)}>
@@ -253,7 +234,6 @@ const DirectBookings = () => {
 
           <div className="title-header">BOOKING SUMMERY<br />
             <div className='booking-header'>
-              {/* {eventDetails.name} */}
             </div>
           </div>
 
@@ -293,20 +273,7 @@ const DirectBookings = () => {
                 <span className="details">WhatsApp Mobile Number</span>
                 <input placeholder='+91'{...register("whatsappNumber", { required: { value: true, message: "This field is required" }, })} type="tel" required />
               </div>
-              {/* {!everyWeekend && <div className="input-box">
-                <span className="details">Select Batch</span>
-                <select  {...register("selectDate", { required: { value: true, message: "This field is required" }, })} required>
-                  {availableBatches && availableBatches.map((event, index) => (
-                    <option key={index} value={event} >{event}</option>
-                  ))}
-                </select>
-              </div>}
-              {everyWeekend && <div className="input-box">
-                <span className="details">Select Batch</span>
-                <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
-              </div>} */}
-
-              <div>
+              <div className='select-pickup'>
                 <h3>Select a Location:</h3>
                 <ul>
                   {eventPickupPoints.map((location) => (
@@ -319,16 +286,15 @@ const DirectBookings = () => {
                           onChange={handleSelection}
                           checked={selectedLocation === location.name}
                         />
-                        {location.name} : {location.time}
+                        {location.name}
                       </label>
                     </li>
                   ))}
                 </ul>
               </div>
-
-
+              <br></br>
               <div className="input-box finalCalculation">
-                <div className="details">Number of Participents</div>
+                <div className="details">Number of participants</div>
                 <div></div>
                 <div className='noOftrekkers'>
                   <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>
@@ -337,28 +303,59 @@ const DirectBookings = () => {
                 </div>
               </div>
               {/* Render input fields for each participant */}
+
               {participants.map((participant, index) => (
-                <div key={index} className="participant-inputs">
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    value={participant.name}
-                    onChange={(e) => handleParticipantChange(index, 'name', e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="WhatsApp Number"
-                    value={participant.whatsapp}
-                    onChange={(e) => handleParticipantChange(index, 'whatsapp', e.target.value)}
-                  />
-                  <input
-                    type="text"
-                    placeholder="Pickup Location"
-                    value={participant.pickup}
-                    onChange={(e) => handleParticipantChange(index, 'pickup', e.target.value)}
-                  />
+                <div key={index} className='participant-box'><h2>participant {index + 2} </h2>
+                  <div key={index} className="participant-inputs">
+                    <input
+                      type="text"
+                      placeholder="Name"
+                      value={participant.name}
+                      onChange={(e) => handleParticipantChange(index, 'name', e.target.value)}
+                    />
+                    <input
+                      type="text"
+                      placeholder="WhatsApp Number"
+                      value={participant.mobileNumber}
+                      onChange={(e) => handleParticipantChange(index, 'mobileNumber', e.target.value)}
+                    />
+                    <select className='select-class' name="location" value={participant.pickupLocation} onChange={(e) => handleParticipantChange(index, 'pickupLocation', e.target.value)}>
+                      <option value="" >Select a location</option> {/* Optional: Placeholder option */}
+                      {eventPickupPoints.map(pickupPoint => {
+                        return (
+                          <option value={pickupPoint.name} key={pickupPoint.id}>
+                            {pickupPoint.name}
+                          </option>
+                        );
+                      })}
+
+                    </select>
+                  </div>
                 </div>
               ))}
+
+               {/* Dropzone for file uploads */}
+               <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
+                {({ getRootProps, getInputProps }) => (
+                  <section className="dropzone">
+                    <div {...getRootProps({ className: 'dropzone' })}>
+                      <input {...getInputProps()} />
+                      <p>Drag 'n' drop some files here, or click to select files</p>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+
+              {/* Preview Uploaded Images */}
+              <div className="image-preview-container">
+                {uploadedFiles.map((file) => (
+                  <div key={file.name} className="image-preview">
+                    <img src={file.preview} alt={file.name} style={{ width: '150px', height: '175px', objectFit: 'cover' }} />
+                    <button type="button" onClick={() => removeFile(file)}><FontAwesomeIcon icon={faCircleXmark} size="lg" style={{ color: "orange", }} /></button>
+                  </div>
+                ))}
+              </div>
+
               <div className='hr'></div>
 
               <div className='finalCalculation'>
@@ -366,6 +363,8 @@ const DirectBookings = () => {
                 <span></span>
                 <span >₹{finalPrice} /-</span>
               </div>
+
+
             </div>
           </div>
 
@@ -381,9 +380,9 @@ const DirectBookings = () => {
           </div>
 
         </div>
-      </form>
+      </form >
 
-    </div>
+    </div >
   )
 }
 

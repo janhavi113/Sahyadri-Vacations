@@ -1,17 +1,110 @@
-.direct-bookings-form{
-    margin-bottom: 0;
-    padding-bottom: 0;
-    padding-top: 130px;
+.direct-bookings-form {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  padding-top: 130px;
 
-   }
- @media(max-width: 584px){
-  .direct-bookings-form{
+}
+
+@media(max-width: 584px) {
+  .direct-bookings-form {
     padding-top: 100px !important;
   }
-  }
-  @media(max-width: 459px){
-  
-  .direct-bookings-form{
+
+}
+
+.select-pickup{
+  margin-bottom: 1.3em;
+}
+
+@media(max-width: 459px) {
+
+  .direct-bookings-form {
     padding-top: 80px !important;
   }
+}
+.participant-inputs {
+  display: grid;  /* Use grid layout */
+  grid-template-columns: repeat(3, 1fr);  /* Three equal columns */
+  gap: 10px;  /* Space between the columns */
+  margin-bottom: 10px;  /* Spacing between participant input rows */
+}
+.participant-box{
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin: 10px 0 10px 0;
+  width: 100%;
+}
+.participant-box h2{
+  padding-bottom: 8px;
+  font-size: 16px; 
+  font-weight: bold;
+  text-transform: uppercase;
+  color: orange;
+}
+.participant-inputs input,
+.participant-inputs .select-class {
+  padding: 8px;  /* Padding for better appearance */
+  box-sizing: border-box;  /* Ensures padding doesn't affect width */
+  background-color: white;
+  width: 100%;  /* Set width to 100% to make it consistent */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+  .participant-inputs {
+    display: block;  /* Stack inputs vertically */
+  }
+
+  .participant-inputs input,
+  .participant-inputs .select-class {
+    width: 100%;  /* Full width on smaller screens */
+    margin-bottom: 10px;  /* Add space between rows */
+    background-color: white;
+  }
+}
+
+.dropzone {
+  border: 1px dashed #4b4c4e;
+  border-radius: 3px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.dropzone:hover {
+  background-color: #f0f0f0;
+}
+
+.image-preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Space between images */
+  margin-bottom: 10px;
+}
+
+.image-preview {
+  position: relative;
+}
+
+.image-preview img {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.image-preview button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
 }

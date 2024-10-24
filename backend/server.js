@@ -18,6 +18,9 @@ import {
 	Bookings
 } from './models/Bookings.js';
 import {
+	DirectBookings
+} from './models/DirectBooking.js';
+import {
 	CustomisedRequest
 } from './models/CustomisedRequest.js';
 import main from './mongo.js';
@@ -42,7 +45,7 @@ app.use(cors({}));
 
 // CORS configuration
 app.use(cors({
-	origin: ['http://sahyadrivacations.com', 'http://www.sahyadrivacations.com','http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'], // Allow frontend IP and localhost
+	origin: ['http://sahyadrivacations.com', 'http://www.sahyadrivacations.com', 'http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'], // Allow frontend IP and localhost
 	methods: 'GET,POST,PUT,DELETE,OPTIONS',
 	allowedHeaders: 'Content-Type, Authorization',
 	credentials: true,
@@ -197,7 +200,7 @@ app.use(fileUpload());
 
 //Add the API route with the correct CORS settings
 app.use('/api', cors({
-	origin:  ['http://sahyadrivacations.com', 'http://www.sahyadrivacations.com','http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
+	origin: ['http://sahyadrivacations.com', 'http://www.sahyadrivacations.com', 'http://157.173.222.166', 'http://localhost', 'http://127.0.0.1'],
 	methods: 'GET,POST,PUT,DELETE,OPTIONS',
 	allowedHeaders: 'Content-Type, Authorization',
 	credentials: true,
@@ -298,28 +301,28 @@ app.get("/search-event/:serchText", async (req, res) => {
 
 app.get("/delete-scheduled-events/eventid/:eventId", async (req, res) => {
 	let event_Id = req.params.eventId;
-	console.log('event_Id---'+event_Id);
-try{
-	var myquery = {
-		eventId: event_Id
-	};
-	var events = await ScheduleBatches.deleteOne(myquery);
-	if (events && events.deletedCount > 0) {
+	console.log('event_Id---' + event_Id);
+	try {
+		var myquery = {
+			eventId: event_Id
+		};
+		var events = await ScheduleBatches.deleteOne(myquery);
+		if (events && events.deletedCount > 0) {
+			res.send({
+				isSuccess: true
+			});
+		} else {
+			res.send({
+				isSuccess: false
+			});
+		}
+	} catch (error) {
+		console.error(error);
 		res.send({
-			isSuccess: true
-		});
-	} else {
-		res.send({
-			isSuccess: false
+			isSuccess: false,
+			error: error
 		});
 	}
-} catch (error) {
-	console.error(error);
-	res.send({
-		isSuccess: false,
-		error: error
-	});
-}
 });
 app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	console.log("req.params--", req.params);
@@ -638,7 +641,7 @@ app.post("/schedule-event", async (req, res) => {
 		var currUrl = "";
 		let sampleFile = req.files.file;
 		let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-		currUrl ='/public/Images/' + sampleFile.name;
+		currUrl = '/public/Images/' + sampleFile.name;
 		sampleFile.mv(uploadPath, (err) => {
 			if (err) {
 				return res.status(500).send(err);
@@ -651,14 +654,14 @@ app.post("/schedule-event", async (req, res) => {
 			eventId,
 			eventname,
 			eventType,
-			eventCostPerPerson, 
+			eventCostPerPerson,
 			eventEndDate,
 			eventStartDate,
 			eventBatchCount,
 			everyWeekend,
 			notScheduleYet,
 		} = req.body;
-		
+
 		let scheduleRecordcount = 0;
 		var events = await ScheduleBatches.find().sort([
 			["_id", -1]
@@ -671,12 +674,12 @@ app.post("/schedule-event", async (req, res) => {
 		const scheduleBatches = new ScheduleBatches({
 			active: active,
 			eventId: scheduleRecordcount + 1,
-			eventCostPerPerson:eventCostPerPerson , 
-			eventEndDate:eventEndDate,
-			eventStartDate:eventStartDate,
-			eventBatchCount:eventBatchCount,
-			everyWeekend:everyWeekend,
-			notScheduleYet:notScheduleYet,
+			eventCostPerPerson: eventCostPerPerson,
+			eventEndDate: eventEndDate,
+			eventStartDate: eventStartDate,
+			eventBatchCount: eventBatchCount,
+			everyWeekend: everyWeekend,
+			notScheduleYet: notScheduleYet,
 			eventname: eventname,
 			images: currUrl,
 			Url: "/event-details?eventid=" +
@@ -778,6 +781,69 @@ app.post("/booking", async (req, res) => {
 	}
 });
 
+// Bookings
+app.post("/direct-booking", async (req, res) => {
+	try {
+		console.log("create req.body --", );
+		var currUrl = "";
+		if(req.files ){
+		let sampleFile = req.files.images;
+		let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
+		currUrl = '/public/Images/' + sampleFile.name;
+		sampleFile.mv(uploadPath, (err) => {
+			if (err) {
+				return res.status(500).send(err);
+			}
+		});}
+		const {
+			fullName,
+			email,
+			mobileNumber,
+			batch,
+			eventId,
+			eventName,
+			amountPaid,
+			numberOfPeoples,
+			pickupLocation,
+			bookingDate,
+			otherParticipants,
+		} = req.body;
+		// Parse otherParticipants to an array if it's a string
+		let parsedParticipants = [];
+		if (typeof otherParticipants === 'string') {
+			parsedParticipants = JSON.parse(otherParticipants);
+		}
+
+		const booking = new DirectBookings({
+			name: fullName,
+			email: email,
+			mobileNumber: mobileNumber,
+			batch: batch,
+			eventId: eventId,
+			eventName: eventName,
+			numberOfPeoples: numberOfPeoples,
+			amountPaid: amountPaid,
+			pickupLocation: pickupLocation,
+			bookingDate: bookingDate,
+			otherParticipants: parsedParticipants,
+			images: currUrl,
+			status: "Pending",
+		});
+
+	//	console.log('booking--', booking);
+		await booking.save();
+		res.send({
+			isSuccess: true
+		});
+	} catch (error) {
+		console.error(error);
+		res.send({
+			isSuccess: false,
+			error: error
+		});
+	}
+});
+
 // Handle all other routes and serve index.html
 app.get("*", (req, res) => {
 	// console.log("Serving index.html for route:", req);
@@ -809,7 +875,7 @@ app.use((err, req, res, next) => {
 // 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
 // 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
 //   };
-   
+
 //  // Start the HTTPS server
 // const server = https.createServer(options, app);
 // console.log('server',server);
