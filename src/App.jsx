@@ -20,7 +20,7 @@ import Gallery from "./components/Gallery/PhotoGallery" ;
 import ContactUs from "./components/Contact_Us/ContactUs" ;
 import Register from './components/Register/Register';
 import DirectBookingDashboard from "./components/admin-panel/DirectBookings/DirectBookingDashboard" ;
-import DirectBookings from "./components/admin-panel/DirectBookings/DirectBookings" ;
+import DirectBookings from "./components/admin-panel/DirectBookings/ConfirmDirectBooking" ;
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 function App() {

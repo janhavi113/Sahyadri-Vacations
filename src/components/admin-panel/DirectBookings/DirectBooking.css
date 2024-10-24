@@ -12,12 +12,18 @@
 
 }
 
+.title-header {
+  font-size: 25px !important;
+}
 .select-pickup{
   margin-bottom: 1.3em;
 }
 
 @media(max-width: 459px) {
-
+  
+  .title-header {
+    font-size: 25px !important;
+  }
   .direct-bookings-form {
     padding-top: 80px !important;
   }
@@ -59,7 +65,6 @@
   .participant-inputs {
     display: block;  /* Stack inputs vertically */
   }
-
   .participant-inputs input,
   .participant-inputs .select-class {
     width: 100%;  /* Full width on smaller screens */
@@ -81,7 +86,11 @@
 .dropzone:hover {
   background-color: #f0f0f0;
 }
-
+.error-message {
+  color: rgb(173, 9, 9);
+  font-weight: bold;
+  font-size: 20px;
+}
 .image-preview-container {
   display: flex;
   flex-wrap: wrap;
@@ -107,4 +116,80 @@
   border: none;
   border-radius: 50%;
   padding: 5px;
+}
+.confirm-booking {
+  display: flex;
+  flex-direction: column; /* Aligns items in a row */
+  justify-content: center; /* Centers the content horizontally */
+  align-items: center; /* Centers the content vertically */
+  padding-top: 20px; /* Adjust padding for spacing at the top */
+  gap: 20px; /* Space between the logo and the DirectBookings component */
+}
+
+
+.confirm-booking img {
+  max-width: 100%; /* Ensures the logo is responsive */
+  height: auto;
+  max-height: 100px; /* Limit the height as needed */
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+  .confirm-booking {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    padding-top: 15px;
+  }
+  .confirm-booking img {
+    max-height: 80px;
+  }
+}
+
+@media (max-width: 459px) {
+  .confirm-booking {
+    padding-top: 10px;
+  }
+  .confirm-booking img {
+    max-height: 60px;
+  }
+}
+
+.admin-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* Adjust this based on the actual height of your navbar */
+  background-color: #f8f9fa;
+  z-index: 1000;
+}
+
+.direct-bookings-container {
+  margin-top: 90px; /* Default margin for larger screens */
+  padding: 20px; /* Optional padding */
+}
+
+/* Media queries for responsive design */
+@media (max-width: 984px) {
+  .direct-bookings-container {
+    margin-top: 70px; /* Increased margin for medium-sized screens */
+  }
+}
+ 
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .direct-bookings-container {
+    margin-top: 55px; /* Increased margin for medium-sized screens */
+  }
+}
+
+@media (max-width: 576px) {
+  .direct-bookings-container {
+    margin-top: 40px; /* Increased margin for smaller screens */
+  }
+}
+
+@media (max-width: 400px) {
+  .direct-bookings-container {
+    margin-top: 40px; /* Even larger margin for extra-small screens */
+  }
 }

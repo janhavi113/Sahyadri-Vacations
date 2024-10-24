@@ -4,9 +4,13 @@ import AdminNavbar from '../../AdminNavbar'
 const DirectBookingDashboard = () => {
   return (
     <div>
-      <AdminNavbar/>
-      <DirectBookings/>
+    <div className='admin-navbar'>
+      <AdminNavbar />
     </div>
+    <div className='direct-bookings-container'>
+      <DirectBookings />
+    </div>
+  </div>
   )
 }
 

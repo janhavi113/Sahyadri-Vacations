@@ -833,7 +833,8 @@ app.post("/direct-booking", async (req, res) => {
 	//	console.log('booking--', booking);
 		await booking.save();
 		res.send({
-			isSuccess: true
+			isSuccess: true,
+			booking: booking
 		});
 	} catch (error) {
 		console.error(error);
