@@ -17,9 +17,7 @@ import {
 import {
 	Bookings
 } from './models/Bookings.js';
-import {
-	DirectBookings
-} from './models/DirectBooking.js';
+
 import {
 	CustomisedRequest
 } from './models/CustomisedRequest.js';
@@ -33,6 +31,8 @@ import multer from 'multer';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import directBookingRoutes from './routes/directBookingRoutes.js'; // Import the new route
+
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET; // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
@@ -781,69 +781,72 @@ app.post("/booking", async (req, res) => {
 	}
 });
 
-// Bookings
-app.post("/direct-booking", async (req, res) => {
-	try {
-		console.log("create req.body --", );
-		var currUrl = "";
-		if(req.files ){
-		let sampleFile = req.files.images;
-		let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-		currUrl = '/public/Images/' + sampleFile.name;
-		sampleFile.mv(uploadPath, (err) => {
-			if (err) {
-				return res.status(500).send(err);
-			}
-		});}
-		const {
-			fullName,
-			email,
-			mobileNumber,
-			batch,
-			eventId,
-			eventName,
-			amountPaid,
-			numberOfPeoples,
-			pickupLocation,
-			bookingDate,
-			otherParticipants,
-		} = req.body;
-		// Parse otherParticipants to an array if it's a string
-		let parsedParticipants = [];
-		if (typeof otherParticipants === 'string') {
-			parsedParticipants = JSON.parse(otherParticipants);
-		}
+// // Bookings
+// app.post("/direct-booking", async (req, res) => {
+// 	try {
+// 		console.log("create req.body --", );
+// 		var currUrl = "";
+// 		if(req.files ){
+// 		let sampleFile = req.files.images;
+// 		let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
+// 		currUrl = '/public/Images/' + sampleFile.name;
+// 		sampleFile.mv(uploadPath, (err) => {
+// 			if (err) {
+// 				return res.status(500).send(err);
+// 			}
+// 		});}
+// 		const {
+// 			fullName,
+// 			email,
+// 			mobileNumber,
+// 			batch,
+// 			eventId,
+// 			eventName,
+// 			amountPaid,
+// 			numberOfPeoples,
+// 			pickupLocation,
+// 			bookingDate,
+// 			otherParticipants,
+// 		} = req.body;
+// 		// Parse otherParticipants to an array if it's a string
+// 		let parsedParticipants = [];
+// 		if (typeof otherParticipants === 'string') {
+// 			parsedParticipants = JSON.parse(otherParticipants);
+// 		}
 
-		const booking = new DirectBookings({
-			name: fullName,
-			email: email,
-			mobileNumber: mobileNumber,
-			batch: batch,
-			eventId: eventId,
-			eventName: eventName,
-			numberOfPeoples: numberOfPeoples,
-			amountPaid: amountPaid,
-			pickupLocation: pickupLocation,
-			bookingDate: bookingDate,
-			otherParticipants: parsedParticipants,
-			images: currUrl,
-			status: "Pending",
-		});
+// 		const booking = new DirectBookings({
+// 			name: fullName,
+// 			email: email,
+// 			mobileNumber: mobileNumber,
+// 			batch: batch,
+// 			eventId: eventId,
+// 			eventName: eventName,
+// 			numberOfPeoples: numberOfPeoples,
+// 			amountPaid: amountPaid,
+// 			pickupLocation: pickupLocation,
+// 			bookingDate: bookingDate,
+// 			otherParticipants: parsedParticipants,
+// 			images: currUrl,
+// 			status: "Pending",
+// 		});
 
-	//	console.log('booking--', booking);
-		await booking.save();
-		res.send({
-			isSuccess: true,
-			booking: booking
-		});
-	} catch (error) {
-		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
-	}
-});
+// 	//	console.log('booking--', booking);
+// 		await booking.save();
+// 		res.send({
+// 			isSuccess: true,
+// 			booking: booking
+// 		});
+// 	} catch (error) {
+// 		console.error(error);
+// 		res.send({
+// 			isSuccess: false,
+// 			error: error
+// 		});
+// 	}
+// });
+// Use the separated routes
+// Use the route
+app.use(directBookingRoutes);
 
 // Handle all other routes and serve index.html
 app.get("*", (req, res) => {

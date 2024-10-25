@@ -65,7 +65,7 @@ const DirectBookings = ({ onSendData }) => {
     }
     const formData = new FormData();
     formData.append("fullName", data.fullName);
-    formData.append("email ", data.emailId);
+    formData.append("email", data.emailId);
     formData.append("mobileNumber", data.whatsappNumber);
     formData.append("batch", batchDate);
     formData.append("eventId", data.Event);
@@ -276,6 +276,8 @@ const DirectBookings = ({ onSendData }) => {
       setSuccess(res.isSuccess);
       setEventDetails(res.events);
       setEvent(res.scheduleBatches);
+      console.log('res.scheduleBatches--',res.scheduleBatches);
+
       const scheduleBatches = res.scheduleBatches[0];
       let eventApi = scheduleBatches.eventApi;
       const event = res.events.find((e) => e.apiname == eventApi);
