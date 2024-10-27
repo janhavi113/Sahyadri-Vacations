@@ -1,23 +1,23 @@
 import React from 'react'
-import Footer from "../footer";
-import "../admin-panel/CreateEvent/CreateEvents.css"
+import Footer from "../../footer";
+import "../../admin-panel/CreateEvent/CreateEvents.css"
 import "./UserAgreement.css"
-import Navbar from "../Navbar";
+import Navbar from "../../Navbar";
 const CancellationPolicy = () => {
     return (
         <div>
             <Navbar />
             <div className="user-agreement-header">
             </div>
-            <section class="terms_content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="terms-head">
+            <section className="terms_content">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="terms-head">
                                 <h4>Cancellation Policy</h4>
                             </div>
 
-                            <div class="policy-list terms-list">
+                            <div className="policy-list terms-list">
                                 <h3>Events (1 or 2 days)</h3>
                                 <ul>
                                     <li>75% refund if notified via phone conversation 8 or more days prior to the event date.
@@ -32,7 +32,7 @@ const CancellationPolicy = () => {
                                 </ul>
                             </div>
 
-                            <div class="policy-list terms-list">
+                            <div className="policy-list terms-list">
                                 <h3>Events (3-4 Days)</h3>
                                 <ul>
                                     <li>If cancellation is done prior to 45 days of the outing 75% will be refunded.</li>
@@ -47,9 +47,9 @@ const CancellationPolicy = () => {
                             </div>
 
 
-                            <div class="policy-list terms-list m-0">
+                            <div className="policy-list terms-list m-0">
                                 <h3>Events (More than 4 Days)</h3>
-                                <ul class="m-0">
+                                <ul className="m-0">
                                     <li>If cancellation is done prior to 45 days of the outing 75% will be refunded.</li>
                                     <li>If done prior to 30 days of the outing 50% will be refunded</li>
                                     <li>If done prior to 15 days of outing 30% will be refunded</li>

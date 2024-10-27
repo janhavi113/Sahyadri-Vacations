@@ -16,7 +16,7 @@
     color: white;
 }
 .funfact-area {
-    background-image: url(../Images/funfact.jpg);
+    background-image: url(../../Images/funfact.jpg);
     background-size: cover;
     position: relative;
 

@@ -13,9 +13,9 @@ import ShowEventDetails from "./components/User-Panel/ShowEventDetails/ShowEvent
 import CreateEvent from "./components/admin-panel/CreateEvent/CreateEvents" ;  
 import Events from "./components/User-Panel/ShowAllEvents/Events" ;
 import SearchEvent from "./components/User-Panel/SearchEvent/SearchEvent" ;
-import UserAgreement from "./components/UserAgreement/UserAgreement";
-import CancellationPolicy from "./components/UserAgreement/CancellationPolicy";
-import PrivacyPolicy from "./components/UserAgreement/PrivacyPolicy";
+import UserAgreement from "./components/User-Panel/UserAgreement/UserAgreement";
+import CancellationPolicy from "./components/User-Panel/UserAgreement/CancellationPolicy";
+import PrivacyPolicy from "./components/User-Panel/UserAgreement/PrivacyPolicy";
 import Gallery from "./components/User-Panel/Gallery/PhotoGallery" ;
 import ContactUs from "./components/User-Panel/Contact_Us/ContactUs" ;
 import Register from './components/Register/Register';

@@ -1,22 +1,22 @@
 import React from 'react'
-import Footer from "../footer";
-import "../admin-panel/CreateEvent/CreateEvents.css"
+import Footer from "../../footer";
+import "../../admin-panel/CreateEvent/CreateEvents.css"
 import "./UserAgreement.css"
-import Navbar from "../Navbar";
+import Navbar from "../../Navbar";
 const PrivacyPolicy = () => {
     return (
         <div>
             <Navbar />
             <div className="user-agreement-header">
             </div>
-            <section class="terms_content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="terms-head">
+            <section className="terms_content">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <div className="terms-head">
                                 <h4>Privacy Policy</h4>
                             </div>
-                            <div class="terms-list"> 
+                            <div className="terms-list"> 
                             <p>Thank you for choosing to be part of our community at Sahyadri Vacations and Adventure. We are dedicated to bringing people closer to nature through our travel and adventure services. With all the safety equipment and the right guidance, we aim to make every adventure possible for everyone, regardless of age. Conservation and appreciation of nature are very important to us, and we pledge to preserve our hiking trails, tourist sites, and natural heritage.</p>
                             <p>We are always happy to accept suggestions to improve our services and experiences.</p>
 
@@ -44,7 +44,7 @@ const PrivacyPolicy = () => {
                             <h3>Contact Us</h3>
                             <p>If you have any questions or concerns about this privacy notice or our practices with regards to your personal information, please contact us at <a href="mailto:info@sahyadrivacations.com">info@sahyadrivacations.com</a>.</p>
                             </div>
-                            <div class="policy-list terms-list">
+                            <div className="policy-list terms-list">
                                 <h4>Collection of Personal Information</h4>
                                 <p> We may collect the following information: </p>
                                 <ul>

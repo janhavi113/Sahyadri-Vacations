@@ -69,12 +69,19 @@ const Events = () => {
         const Q = new Date();
         console.log('Q---'+Q);
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      if(event.batches){
         for (let i = 0; i < event.batches.length; i++) {
             if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
                 batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()];
                 eventCostPerPerson = event.batches[i].eventCostPerPerson;
             }
         }
+    }else{
+        if (new Date(event.eventStartDate) - Q >= 0) {
+            batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()];
+            eventCostPerPerson = event.eventCostPerPerson;
+        }
+    }
         if (batchdate && eventCostPerPerson) {
             liveEvent = {
                 eventId: event.eventId,
