@@ -6,12 +6,18 @@ const ScheduledEvents = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [isSuccess, setSuccess] = useState(false);
     const [events, setEvent] = useState();
+    const navigate = useNavigate();
     useEffect(() => {
-
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/admin-login");
+          return;
+        }
         if (isSuccess == false) {
             getAllRecord();
         }
-    })
+    }, [navigate]);
+
     const getNextBatchDate = (event) => {
 
         var liveEvent = '';
@@ -81,7 +87,6 @@ const ScheduledEvents = () => {
             setEvent(liveEvents);
         }
     }
-    const navigate = useNavigate();
     return (
         <div>
             <AdminNavbar />

@@ -18,8 +18,13 @@ const AllEvents = () => {
   } = useForm();
   const navigate = useNavigate();
   useEffect(() => {
+    const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/admin-login");
+        return;
+      }
     getCurrentrecord();
-  }, []);
+  }, [navigate]);
 
   const getCurrentrecord = async () => {
 

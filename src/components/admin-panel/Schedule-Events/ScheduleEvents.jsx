@@ -24,8 +24,13 @@ function ScheduleEvents() {
   } = useForm();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/admin-login");
+        return;
+      }
     getCurrentrecord();
-  }, []);
+  },  [navigate]);
   const [file, setFiles] = useState(null);
   const [currentImages, setcurrentImages] = useState();
   const addUploadedInages = () => {

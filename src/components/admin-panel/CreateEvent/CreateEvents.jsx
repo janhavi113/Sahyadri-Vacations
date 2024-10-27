@@ -53,6 +53,14 @@ function CreateEvents() {
     }
 
   }
+// Check token when the component mounts
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    navigate("/admin-login");
+    return;
+  }
+}, [navigate]); // Add navigate as a dependency
 
   const removeFile = name => {
     setcurrentImages(currentImages => currentImages.filter(file => file !== name))

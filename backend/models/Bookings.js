@@ -18,6 +18,7 @@ const bookingsSchema = new mongoose.Schema({
     pickupLocation: { type :String},
     status: { type :String},
     bookingDate:  { type :String},
+    bookingId:  { type :String},
     otherParticipants: [ otherParticipantsSchema
     ]
 });

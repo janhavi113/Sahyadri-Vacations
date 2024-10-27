@@ -74,7 +74,7 @@ router.post('/direct-booking', async (req, res) => {
             numberOfPeoples: numberOfPeoples,
             amountPaid: amountPaid,
             pickupLocation: pickupLocation,
-            bookingDate: bookingDate,
+            bookingDate: new Date(bookingDate).toLocaleDateString(),
             otherParticipants: parsedParticipants,
             images: currUrl,
             status: "Pending",
@@ -94,20 +94,36 @@ router.post('/direct-booking', async (req, res) => {
     }
 });
 
+function convertDateToCustomFormat(dateString) {
+    // Split the date string (MM/DD/YYYY) into parts
+    const [month, day, year] = dateString.split("/");
+
+    // Get the last two digits of the year
+    const yearLastTwoDigits = year.slice(-2);
+
+    // Format the output as YYDDMM
+    const customFormattedDate = `${yearLastTwoDigits}${day}${month}`;
+
+    return customFormattedDate;
+}
+
 router.post('/confirm-booking/:id', async (req, res) => {
     const { id } = req.params;
   
     try {
       // Find the booking in DirectBookings
       const directBooking = await DirectBookings.findById(id);
-  
+
+      let bookings = await Bookings.find({bookingDate : directBooking.bookingDate});
+      let bookingIdVar = convertDateToCustomFormat(directBooking.bookingDate) + bookings.length;
+
       if (!directBooking) {
         return res.status(404).json({ message: "Booking not found." });
       }
-       console.log('directBooking',directBooking);
+     
       // Insert the booking into the Bookings collection
       const newBooking = new Bookings({
-        bookingId: directBooking.bookingId,
+        bookingId: bookingIdVar,
         name: directBooking.name,
         email: directBooking.email,
         mobileNumber: directBooking.mobileNumber,
@@ -125,7 +141,7 @@ router.post('/confirm-booking/:id', async (req, res) => {
       await newBooking.save();
   
       // Delete the booking from DirectBookings
-      await DirectBookings.findByIdAndDelete(id);
+       await DirectBookings.findByIdAndDelete(id);
   
       res.status(200).json({ message: "Booking confirmed successfully." });
     } catch (error) {
