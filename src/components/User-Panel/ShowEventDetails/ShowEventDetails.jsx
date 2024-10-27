@@ -3,16 +3,16 @@ import { useSearchParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useForm } from "react-hook-form"
 import './ShowEventDetails.css'
-import Footer from "../footer";
-import Ratingcard from '../Rating/RatingCard'
+import Footer from "../../footer";
+import Ratingcard from '../../Rating/RatingCard'
 import { motion } from "framer-motion"
-import ContactSection from "../ContactLogo/contactSection";
-import Navbar from "../Navbar";
+import ContactSection from "../../ContactLogo/contactSection";
+import Navbar from "../../Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { Modal, Button } from "react-bootstrap";
-import "../admin-panel/CreateEvent/CreateEvents.css"
-import "../Modal.css";
+import "../../admin-panel/CreateEvent/CreateEvents.css"
+import "../../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
 // import required modules
@@ -29,7 +29,7 @@ const ShowEventDetails = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [params, setParams] = useState(type.split('/'));
   const [isSuccess, setSuccess] = useState(false);
-  const [inquery, setInquery] = useState(true);
+  const [inquery, setInquery] = useState(false);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
   const [pickupPoints, setPickupPoints] = useState([]);
@@ -40,8 +40,11 @@ const ShowEventDetails = () => {
   const [price, setPrice] = useState(0);
   const [batchDate, setBatchDate] = useState();
   const [availableSlot, setAvailableSlot] = useState();
+  const [eventType, seteEventType] = useState();
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
+  const [participants, setParticipants] = useState([]);
+  const [eventPickupPoints, setEventPickupPoints] = useState([]);
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -65,6 +68,14 @@ const ShowEventDetails = () => {
       setModal(true);
     }
   };
+
+  const handleParticipantChange = (index, field, value) => {
+    const newParticipants = [...participants];
+    newParticipants[index][field] = value;
+    setParticipants(newParticipants);
+  };
+
+
   if (modal) {
     document.body.classList.add('active-modal')
   } else {
@@ -111,6 +122,10 @@ const ShowEventDetails = () => {
       count++;
       setNoOfTrekkers(count);
       setFinalPrice(price1 * count);
+      setParticipants([
+        ...participants,
+        { name: "", mobileNumber: "", pickupLocation: "" },
+      ]);
     }
   }
 
@@ -121,6 +136,7 @@ const ShowEventDetails = () => {
       count--;
       setNoOfTrekkers(count);
       setFinalPrice(price1 * count);
+      setParticipants(participants.slice(0, -1));
     }
   }
 
@@ -144,6 +160,8 @@ const ShowEventDetails = () => {
     let eventCostPerPerson;
     let batchDates = [];
     let eventType = event.eventType;
+    seteEventType(eventType);
+    
     const Q = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     if (event.batches) {
@@ -219,26 +237,19 @@ const ShowEventDetails = () => {
   })
 
   function convertHtmlToJSON(htmlString) {
-    // Create a temporary DOM element to parse the HTML string
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.innerHTML = htmlString;
-
-    // Select all the <li> elements from the temporary DOM
-    const listItems = tempDiv.querySelectorAll('li');
+    let listItems = tempDiv.querySelectorAll("li");
+    if (listItems.length <= 0) {
+      listItems = tempDiv.querySelectorAll("p");
+    }
     const locations = [];
-
     listItems.forEach((item, index) => {
-      // Extract the text content, which is in the form "Location : Time"
-      const [name, time] = item.textContent.split(' : ');
-
-      // Create the object for each location and push it into the array
       locations.push({
         id: index + 1,
-        name: name != 'undefine' ? name.trim() : '',
-        time: name != 'undefine' ? time.trim() : ''
+        name: item.textContent,
       });
     });
-
     return locations;
   }
 
@@ -255,13 +266,13 @@ const ShowEventDetails = () => {
       console.log('eventDetails --', res);
       // 
       setEventDetails(res.events);
+     
+      setScheduleBatch(res.ScheduleBatchesRecords);
+      getNextBatchDate(res.ScheduleBatchesRecords);
       if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
         const jsonData = convertHtmlToJSON(res.events.pickupPoints);
         setPickupPoints(jsonData);
       }
-      setScheduleBatch(res.ScheduleBatchesRecords);
-      getNextBatchDate(res.ScheduleBatchesRecords);
-
       //// console.log('scheduleBatch',scheduleBatch );
     }
 
@@ -507,27 +518,27 @@ const ShowEventDetails = () => {
                       <span className="details">Select Batch</span>
                       <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
                     </div>}
-
-                    <div>
-                      <h3>Select a Location:</h3>
-                      <ul>
-                        {pickupPoints.map((location) => (
-                          <li key={location.id}>
-                            <label className='radio-display'>
-                              <input
-                                type="radio"
-                                name="location"
-                                value={location.name}
-                                onChange={handleSelection}
-                                checked={selectedLocation === location.name}
-                              />
-                              {location.name} : {location.time}
-                            </label>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
+                    {eventType != 'CampingEvent' &&
+                      <div>
+                        <h3>Select a Location:</h3>
+                        <ul>
+                          {pickupPoints.map((location) => (
+                            <li key={location.id}>
+                              <label className='radio-display'>
+                                <input
+                                  type="radio"
+                                  name="location"
+                                  value={location.name}
+                                  onChange={handleSelection}
+                                  checked={selectedLocation === location.name}
+                                />
+                                {location.name} : {location.time}
+                              </label>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    }
 
                     <div className="input-box finalCalculation">
                       <div className="details">Number of Trekkers</div>
@@ -538,6 +549,59 @@ const ShowEventDetails = () => {
                         <span onClick={increaseCount}><FontAwesomeIcon icon={faCirclePlus} size="lg" style={{ color: "orange", }} /></span>
                       </div>
                     </div>
+                    {/* Render input fields for each participant */}
+                    {participants.map((participant, index) => (
+                      <div key={index} className="participant-box">
+                        <h2>participant {index + 2} </h2>
+                        <div key={index} className="Column-2 participant-inputs">
+                          <input
+                            type="text"
+                            placeholder="Name"
+                            value={participant.name}
+                            onChange={(e) =>
+                              handleParticipantChange(index, "name", e.target.value)
+                            }
+                          />
+                          <input
+                            type="text"
+                            placeholder="WhatsApp Number"
+                            value={participant.mobileNumber}
+                            onChange={(e) =>
+                              handleParticipantChange(
+                                index,
+                                "mobileNumber",
+                                e.target.value
+                              )
+                            }
+                          />
+                          {eventType != 'CampingEvent' &&
+                            <select
+                              className="select-class"
+                              name="location"
+                              value={participant.pickupLocation}
+                              onChange={(e) =>
+                                handleParticipantChange(
+                                  index,
+                                  "pickupLocation",
+                                  e.target.value
+                                )
+                              }
+                            >
+
+                              <option value="">Select a location</option>{" "}
+                              {/* Optional: Placeholder option */}
+                              {pickupPoints.map((pickupPoint) => {
+                                return (
+                                  <option value={pickupPoint.name} key={pickupPoint.id}>
+                                    {pickupPoint.name}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          }
+                        </div>
+                      </div>
+                    ))}
                     <div className='hr'></div>
 
                     <div className='finalCalculation'>

@@ -9,7 +9,7 @@ import ScheduledEvents from "./components/admin-panel/Scheduled_Events/Scheduled
 import ScheduledEventsDetails from "./components/admin-panel/Scheduled_Events/ScheduledEventsDetails";
 import ScheduleEvents from "./components/admin-panel/Schedule-Events/ScheduleEvents";
 import EventDetails from "./components/EventDetails";
-import ShowEventDetails from "./components/ShowEventDetails/ShowEventDetails";
+import ShowEventDetails from "./components/User-Panel/ShowEventDetails/ShowEventDetails";
 import CreateEvent from "./components/admin-panel/CreateEvent/CreateEvents" ;  
 import Events from "./components/ShowAllEvents/Events" ;
 import SearchEvent from "./components/SearchEvent/SearchEvent" ;
