@@ -1,68 +1,125 @@
-.funfact-area .style-2 {
-    background-image: none;
+/* Base styles */
+.funfact-area {
+    background-image: url(../../Images/funfact.jpg);
+    background-size: cover;
+    background-position: center;
     position: relative;
 }
-.pb-90 {
-    padding-bottom: 90px;
-}
-.pt-170 {
-    padding-top: 170px;
-}
+
 .section-title-funfact h2 {
     font-size: 40px;
-    line-height: initial;
+    line-height: 1.2;
     margin-bottom: 30px;
     text-transform: uppercase;
     color: white;
 }
-.funfact-area {
-    background-image: url(../../Images/funfact.jpg);
-    background-size: cover;
-    position: relative;
 
+.funfact-container {
+    background-color: rgba(0, 0, 0, 0.514) !important;
+    max-width: 100% !important;
+    padding: 10% !important;
 }
+
 .single-fact {
-    border:none;
+    border: none;
     border-radius: 10%;
     background-color: hsla(32, 100%, 46%, 0.703);
-    height: 174px;
+    height: 175px;
+    width: 175px;
     position: relative;
-    transition: .5s;
+    transition: 0.5s;
     margin-bottom: 20px;
     color: white;
     font-weight: bolder;
+    text-align: center;
+    padding: 20px;
 }
-.funfact-container{
-    background-color: rgba(0, 0, 0, 0.514) !important;
-    max-width: 100% !important;
+
+.single-fact:hover {
+    transform: scale(1.05);
 }
-.text-center {
-    text-align: center !important;
-}
-.single-fact .fact-info, .single-quick-icon .quick-icon-content {
+
+.single-fact .fact-info {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    transform: translate(-50%, -50%);
     width: 100%;
 }
-.fact-info span{
+
+.fact-info span {
     font-size: xx-large;
+    display: block;
+    margin-bottom: 5px;
 }
-.row {
-     margin-left: 6% !important;
-    margin-right: 6% !important;    
+.adjust-top{
+    top: 42% !important;
 }
-.add-gap{
+.adjust-top-destination{
+    top: 47% !important;
+}
+.add-gap {
     gap: 4%;
 }
+/* Responsive styles */
 @media screen and (max-width: 768px) {
-    .single-fact {
-        width: 125px;
-        height: 125px;
-        margin-left: 27%;
+    .row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Two columns */
+        gap: 15px;
     }
+    
+    .single-fact {
+        height: 150px;
+        width: 150px;
+    }
+
     .fact-info span {
-        font-size: x-large;
+        font-size: large;
+    }
+
+    .section-title-funfact h2 {
+        font-size: 28px;
+    }
+    
+}
+
+@media screen and (max-width: 576px) {
+    .row {
+        grid-template-columns: repeat(2, 1fr); /* Still two columns */
+        gap: 10px;
+    }
+
+    .single-fact {
+       
+        height: 140px;
+        width: 140px;
+    }
+
+    .fact-info span {
+        font-size: medium;
+    }
+
+    .section-title-funfact h2 {
+        font-size: 24px;
+    }
+    .add-gap {
+        gap: 2%;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 992px) {
+    .row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Three columns for larger mobile screens */
+        gap: 20px;
+    }
+
+    .single-fact {
+        width: 160px;
+        height: 160px;
+    }
+    .add-gap {
+        gap: 3%;
     }
 }

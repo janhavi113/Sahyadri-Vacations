@@ -16,7 +16,6 @@ const UserAgreement = () => {
                             <div className="terms-head">
                                 <h4>TERMS AND CONDITIONS</h4>
                             </div>
-
                             <div className="policy-list terms-list">
                                 <ul>
                                     <li>Please confirm seats availability on call before paying any amount.</li>
@@ -32,7 +31,7 @@ const UserAgreement = () => {
                                 </ul>
                             </div>
 
-                          
+
                         </div>
                     </div>
                 </div>
