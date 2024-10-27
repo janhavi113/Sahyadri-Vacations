@@ -88,8 +88,8 @@ const ShowEventDetails = () => {
     formState: { errors, isSubmitting },
   } = useForm();
   const onSubmit = async (data) => {
-    console.log('--participants--',participants);
-    console.log('---data---',data);
+    console.log('--participants--', participants);
+    console.log('---data---', data);
     const formData = new FormData();
     formData.append("fullName", data.fullName);
     formData.append("email", data.emailId);
@@ -108,10 +108,11 @@ const ShowEventDetails = () => {
       method: "POST",
       body: formData,
     });
-    
+
     let res = await r.json()
     // console.log('res', JSON.stringify(res));
     if (res.isSuccess == true) {
+      handleClose();
       setBookingConfirmed(true);
     }
   }
@@ -166,7 +167,7 @@ const ShowEventDetails = () => {
     let batchDates = [];
     let eventType = event.eventType;
     seteEventType(eventType);
-    
+
     const Q = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     if (event.batches) {
@@ -271,7 +272,7 @@ const ShowEventDetails = () => {
       console.log('eventDetails --', res);
       // 
       setEventDetails(res.events);
-     
+
       setScheduleBatch(res.ScheduleBatchesRecords);
       getNextBatchDate(res.ScheduleBatchesRecords);
       if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
@@ -328,9 +329,10 @@ const ShowEventDetails = () => {
                   <li className="nav-item">
                     <a className="nav-link" href="#scrollspyHeading4"> COST INCLUDES </a>
                   </li>
-                  <li className="nav-item">
+                  {eventType != 'CampingEvent' && <li className="nav-item">
                     <a className="nav-link" href="#scrollspyHeading6"> PICKUP POINTS </a>
                   </li>
+                  }
                 </ul>
               </nav>
               <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example  p-3 rounded-2" tabindex="0">
@@ -361,20 +363,32 @@ const ShowEventDetails = () => {
                 </div>
                 <hr />
                 <div id="scrollspyHeading4" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Cost Includes</h2>
+                  <h2 className="h3"> Inclusion</h2>
                   <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.costIncludes) }} />
                 </div>
                 <hr />
+                <div id="scrollspyHeading4" className="pt-4 pb-1 px-2">
+                  <h2 className="h3"> Exclusion </h2>
+                  <div className="section-details">
+                    <ul className="display-bulletin">
+                      <li>Anything not mentioned above</li>
+                      <li>Mineral water/lime water/purchased for personal consumption</li>
+                      <li>All expenses incurred due to unforeseen and unavailable circumstances like roadblocks, bad weather</li>
+                      <li>Any medical/ Emergency evacuations if required</li>
+                    </ul>
+                  </div>
+                </div><hr />
                 <div id="scrollspyHeading5" className='pt-4 pb-1 px-2'>
                   <h2 className="h3"> Things To Carry</h2>
                   <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.thingsToCarry) }} />
                 </div>
                 <hr />
-                <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Pickup Points</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
-                </div>
-
+                {eventType != 'CampingEvent' &&
+                  <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
+                    <h2 className="h3"> Pickup Points</h2>
+                    <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
+                  </div>
+                }
                 <div id="" className='pt-4 pb-1 px-2'>
                   <h2 className="h3"> FAQ's</h2>
                   <div className="section-details">
