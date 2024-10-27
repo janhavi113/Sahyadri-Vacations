@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Footer from "../footer";
-import Navbar from "../Navbar";
+import Footer from "../../footer";
+import Navbar from "../../Navbar";
 import Gallery from "./Gallery" ;
-import slide1 from '../Images/Screen_2.jpg';
-import slide2 from '../Images/Screen_3.webp';
-import slide3 from '../Images/Screen_4.webp';
-import slide4 from '../Images/Screen_1.jpg';
+import slide1 from '../../Images/Screen_2.jpg';
+import slide2 from '../../Images/Screen_3.webp';
+import slide3 from '../../Images/Screen_4.webp';
+import slide4 from '../../Images/Screen_1.jpg';
 import './Gallery.css'
 import EventHeader from './GalleryHeader'
 const PhotoGallery = () => {

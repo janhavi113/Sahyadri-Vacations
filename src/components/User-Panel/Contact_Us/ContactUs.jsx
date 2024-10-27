@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import './ContactForm.css';
-import Footer from "../footer";
-import Navbar from "../Navbar";
+import Footer from "../../footer";
+import Navbar from "../../Navbar";
 import Contact_Us from "./Contact_Us";
-import slide3 from '../Images/Screen_4.webp';
 import EventHeader from './ContactUsHeader'
 const ContactUs = () => {
   const [formData, setFormData] = useState({

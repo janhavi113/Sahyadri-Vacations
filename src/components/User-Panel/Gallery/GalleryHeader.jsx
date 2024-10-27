@@ -1,13 +1,13 @@
 import React from 'react'
-import slide1 from '../Images/backgrround (2).jpg';
-import '../Home_Header/Sidebar.css'
+import slide1 from '../../Images/backgrround (2).jpg';
+import '../../Home_Header/Sidebar.css'
 import '../ShowAllEvents/Events.css'
-const ContactUsHeader = () => {
+const GalleryHeader = () => {
     return (
         <div>
             <div className='event'>
                 <div className="wrapper">
-                    <h1>Contact Us</h1>
+                    <h1>Gallery</h1>
                 </div>
                 <div className="contactimg" >
                     <img src={slide1} alt="header" />
@@ -18,4 +18,4 @@ const ContactUsHeader = () => {
 }
 
 
-export default ContactUsHeader
+export default GalleryHeader

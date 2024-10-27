@@ -1,7 +1,7 @@
 import Home from "./components/Home";
 import Login from "./components/Login";
-import About from "./components/AboutUs/About";
-import CustomisedTour from "./components/CustomiseTour/CustomisedTour";
+import About from "./components/User-Panel/AboutUs/About";
+import CustomisedTour from "./components/User-Panel/CustomiseTour/CustomisedTour";
 import AdminLogin from "./components/admin-panel/Admin-Login/AdminLogin";
 import Dashboard from "./components/admin-panel/AdminDashboard/AdminDashboard";
 import AllEvents from  "./components/admin-panel/All-Events/AllEvents";     
@@ -11,13 +11,13 @@ import ScheduleEvents from "./components/admin-panel/Schedule-Events/ScheduleEve
 import EventDetails from "./components/EventDetails";
 import ShowEventDetails from "./components/User-Panel/ShowEventDetails/ShowEventDetails";
 import CreateEvent from "./components/admin-panel/CreateEvent/CreateEvents" ;  
-import Events from "./components/ShowAllEvents/Events" ;
-import SearchEvent from "./components/SearchEvent/SearchEvent" ;
+import Events from "./components/User-Panel/ShowAllEvents/Events" ;
+import SearchEvent from "./components/User-Panel/SearchEvent/SearchEvent" ;
 import UserAgreement from "./components/UserAgreement/UserAgreement";
 import CancellationPolicy from "./components/UserAgreement/CancellationPolicy";
 import PrivacyPolicy from "./components/UserAgreement/PrivacyPolicy";
-import Gallery from "./components/Gallery/PhotoGallery" ;
-import ContactUs from "./components/Contact_Us/ContactUs" ;
+import Gallery from "./components/User-Panel/Gallery/PhotoGallery" ;
+import ContactUs from "./components/User-Panel/Contact_Us/ContactUs" ;
 import Register from './components/Register/Register';
 import DirectBookingDashboard from "./components/admin-panel/DirectBookings/DirectBookingDashboard" ;
 import DirectBookings from "./components/admin-panel/DirectBookings/ConfirmDirectBooking" ;

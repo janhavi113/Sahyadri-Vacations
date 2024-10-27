@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Footer from "./footer";
 import Navbar from "./Navbar";
-import Contact_Us from "./Contact_Us/Contact_Us";
+import Contact_Us from "./User-Panel/Contact_Us/Contact_Us";
 import FunFact from "./FunFact/FunFact";
 import Rating from "./Rating/RatingSection";
 import slide1 from './Images/Screen_2.jpg';
@@ -14,7 +14,7 @@ import ViewAll from './Images/viewAll.svg'
 import Camping from './Images/camping.svg'
 import upcomingEvent from './Images/upcomingEvent.svg'
 import Backpacking from './Images/Backpacking.svg'
-import './Gallery/Gallery.css'
+import './User-Panel/Gallery/Gallery.css'
 import Sidebar from "./Home_Header/Sidebar"
 import './home.css'
 import "react-multi-carousel/lib/styles.css";

@@ -1,6 +1,6 @@
 import React from 'react'
-import slide1 from '../Images/backgrround (3).jpg';
-import '../Home_Header/Sidebar.css'
+import slide1 from '../../Images/backgrround (3).jpg';
+import '../../Home_Header/Sidebar.css'
 const EventHeader = () => {
     return (
         <div>

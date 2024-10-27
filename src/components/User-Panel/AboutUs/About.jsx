@@ -1,22 +1,9 @@
 import React, { useState } from 'react';
-import Footer from "../footer";
-import Navbar from "../Navbar";
-import slide3 from '../Images/Screen_4.webp';
-import multiimage1 from '../Images/Team/team_background_circles.svg';
-import multiimage3 from '../Images/Team/pravin.jpg';
-import venkatesh from '../Images/Team/venkatesh.jpg';
-import dheeraj from '../Images/Team/dheeraj.jpg';
-import sandeep from '../Images/Team/sandeep.png';
-import rajesh from '../Images/Team/rajesh.jpg';
-import multiimage2 from '../Images/Team/sahane.jpg';
+import Footer from "../../footer";
+import Navbar from "../../Navbar";
 import './AboutUs.css'
 import EventHeader from './AboutUsHeader'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSquareFacebook, faInstagram, faTelegram, faSquareYoutube, faYoutube, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
-import slide1 from '../Images/Screen_2.jpg';
-import slide2 from '../Images/Screen_3.webp';
-import slide4 from '../Images/Screen_1.jpg';
 const About = () => {
   return (
     <>

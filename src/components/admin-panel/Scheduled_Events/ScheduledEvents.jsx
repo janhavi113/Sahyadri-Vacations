@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import AdminNavbar from "../../AdminNavbar";
 import { useNavigate } from "react-router-dom";
-import "../../ShowAllEvents/Events.css";
+import '../../User-Panel/ShowAllEvents/Events.css';
 const ScheduledEvents = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [isSuccess, setSuccess] = useState(false);

@@ -2,11 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useSearchParams, useLocation } from "react-router-dom";
 import Footer from "../../footer";
 import Navbar from "../../Navbar";
-import slide2 from '../Images/Screen_3.webp';
-import slide3 from '../Images/Screen_4.webp';
-import slide4 from '../Images/Screen_1.jpg';
-import slide1 from '../Images/backgrround (2).jpg';
-import '../Home_Header/Sidebar.css'
+import slide1 from '../../Images/backgrround (2).jpg';
+import '../../Home_Header/Sidebar.css'
 import '../ShowAllEvents/Events.css'
 import './SearchEvent.css'
 import { useNavigate } from "react-router-dom";

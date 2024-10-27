@@ -1,15 +1,15 @@
 import React from 'react'
-import slide1 from '../Images/backgrround (2).jpg';
-import '../Home_Header/Sidebar.css'
+import slide1 from '../../Images/backgrround (1).jpg';
+import '../../Home_Header/Sidebar.css'
 import '../ShowAllEvents/Events.css'
-const GalleryHeader = () => {
+const AboutUsHeader = () => {
     return (
         <div>
             <div className='event'>
                 <div className="wrapper">
-                    <h1>Gallery</h1>
+                    <h1>About Us</h1>
                 </div>
-                <div className="contactimg" >
+                <div className="imageContainer" >
                     <img src={slide1} alt="header" />
                 </div>
             </div>
@@ -18,4 +18,4 @@ const GalleryHeader = () => {
 }
 
 
-export default GalleryHeader
+export default AboutUsHeader

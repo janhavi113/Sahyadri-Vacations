@@ -1,28 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Footer from "../footer";
-import Navbar from "../Navbar";
-import Contact_Us from "../Contact_Us/Contact_Us";
-import Rating from "../Rating/RatingSection";
-import slide1 from '../Images/backgrround (3).jpg';
+import Footer from "../../footer";
+import Navbar from "../../Navbar";
+import slide1 from '../../Images/backgrround (3).jpg';
 import EventHeader from './EventHeader'
-import slide2 from '../Images/Screen_3.webp';
-import slide3 from '../Images/Screen_4.webp';
-import slide4 from '../Images/Screen_1.jpg';
-import Card from "../card"
-import Whatsapp from '../Images/whatsapp.svg';
-import Allevents from '../Images/Allevents.svg';
-import ViewAll from '../Images/viewAll.svg'
-import Camping from '../Images/camping.svg'
-import upcomingEvent from '../Images/upcomingEvent.svg'
-import Backpacking from '../Images/Backpacking.svg'
 import { useNavigate } from "react-router-dom";
-import "../card.css"
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-import '../home.css'
+import "../../card.css"
+import '../../home.css'
 import './Events.css'
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 const Events = () => {

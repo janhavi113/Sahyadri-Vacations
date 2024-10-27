@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import '../Contact_Us/ContactForm.css';
-import '../admin-panel/CreateEvent/CreateEvents.css'
+import '../../admin-panel/CreateEvent/CreateEvents.css'
 import './CustomisedTour.css'
 import Footer from "../../footer";
 import Navbar from "../../Navbar";
-import slide3 from '../Images/Screen_4.webp';
+import slide3 from '../../Images/Screen_4.webp';
 import { faLocationDot, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from "react-hook-form"
-import sadface from '../Images/sad-face.svg'
+import sadface from '../../Images/sad-face.svg'
 const CustomisedTour = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const {

@@ -1,12 +1,11 @@
 import PhotoAlbum from "react-photo-album";
 import React, { useEffect, useState } from 'react';
-import slide0 from '../Images/gallery/image (1).jpeg';
-import slide1 from '../Images/gallery/image (1).jpg';
-import slide2 from '../Images/gallery/image (2).jpg';
-import slide3 from '../Images/gallery/image (3).jpg';
-import slide4 from '../Images/gallery/image (4).jpg';
-import slide5 from '../Images/gallery/image (5).jpg';
-import slide6 from '../Images/gallery/image (6).jpg';
+import slide1 from '../../Images/gallery/image (1).jpg';
+import slide2 from '../../Images/gallery/image (2).jpg';
+import slide3 from '../../Images/gallery/image (3).jpg';
+import slide4 from '../../Images/gallery/image (4).jpg';
+import slide5 from '../../Images/gallery/image (5).jpg';
+import slide6 from '../../Images/gallery/image (6).jpg';
 
 const photos = [
   {
