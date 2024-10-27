@@ -3,14 +3,20 @@ import AdminNavbar from "../../AdminNavbar";
 import Editor from "../../Editor";
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import "./CreateEvents.css"
 import Dropzone from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 function CreateEvents() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const {
     register,
     handleSubmit,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm();
   const navigate = useNavigate();
@@ -21,14 +27,21 @@ function CreateEvents() {
   const [pickupPoints, setPickupPoints] = useState();
   const [thingsToCarry, setThingsToCarry] = useState();
   const [costIncludes, setCostIncludes] = useState();
+  const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
+
   const onSubmit = async (data) => {
     console.log('data--', data);
-
-    console.log('file--', file);
+    if (uploadedFiles.length === 0) {
+      setError("dropzone", {
+        type: "manual",
+        message: "Please upload at least one file.",
+      });
+      return;
+    }
     const formData = new FormData();
-    if (file) {
-      for (let index = 0; index < file.length; index++) {
-        formData.append("files", file[index]);
+    if (uploadedFiles) {
+      for (let index = 0; index < uploadedFiles.length; index++) {
+        formData.append("files", uploadedFiles[index]);
       }
     }
     formData.append("costIncludes", costIncludes);
@@ -60,6 +73,8 @@ function CreateEvents() {
     }
 
   }
+
+
   // Check token when the component mounts
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -69,23 +84,22 @@ function CreateEvents() {
     }
   }, [navigate]); // Add navigate as a dependency
 
-  const removeFile = name => {
-    setcurrentImages(currentImages => currentImages.filter(file => file !== name))
-  }
-  const addUploadedInages = () => {
-    console.log('file', file);
-    var allFiles = [];
-    if (file) {
-      for (let index = 0; index < file.length; index++) {
-        const url = URL.createObjectURL(file[index])
-        console.log(url)
-        allFiles.push(url);
-      }
-      console.log('allFiles', allFiles);
-    }
-    setcurrentImages(allFiles);
-  }
 
+  const onDrop = (acceptedFiles) => {
+    const newFiles = acceptedFiles.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file), // Create a preview URL for the image
+      })
+    );
+    setUploadedFiles((prev) => [...prev, ...newFiles]); // Add new files to the uploaded files state
+    clearErrors("dropzone");
+  };
+
+  const removeFile = (file) => {
+    setUploadedFiles((prev) => prev.filter((f) => f !== file)); // Remove the file from the state
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
   return (
     <div>
       <AdminNavbar />
@@ -174,105 +188,47 @@ function CreateEvents() {
                 <Editor sendDataToParent={setPickupPoints} />
               </div>
             </div>
-            {/* <div className="input-box">
-              <span className="details">Upload Images</span>
-              <div className="dropzon">
-                <Dropzone onDrop={files => {
-                  setFiles(files);
-                  addUploadedInages();
-                }}>
-                  {({ getRootProps, getInputProps }) => (
-                    <div className="container">
-                      <div
-                        {...getRootProps({
-                          className: 'dropzone',
-                          onDrop: event => event.stopPropagation()
-                        })}
-                      >
-                        <input {...getInputProps()} />
-                        <div>Drag 'n' drop some files here, or click to select files</div>
-                      </div>
-                    </div>
-                  )}
-                </Dropzone>
-              </div>
+            {/* Dropzone for file uploads */}
+            <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
+              {({ getRootProps, getInputProps }) => (
+                <section className="dropzone">
+                  <div {...getRootProps({ className: "dropzone" })}>
+                    <input {...getInputProps()} />
+                    <p>
+                      Drag 'n' drop some files here, or click to select files
+                    </p>
+                  </div>
+                </section>
+              )}
+            </Dropzone>
+            {/* Show validation error if no file is uploaded */}
+            {errors.dropzone && (
+              <p className="error-message">{errors.dropzone.message}</p>
+            )}
 
+            {/* Preview Uploaded Images */}
+            <div className="image-preview-container">
+              {uploadedFiles.map((file) => (
+                <div key={file.name} className="image-preview">
+                  <img
+                    src={file.preview}
+                    alt={file.name}
+                    style={{
+                      width: "150px",
+                      height: "175px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <button type="button" onClick={() => removeFile(file)}>
+                    <FontAwesomeIcon
+                      icon={faCircleXmark}
+                      size="lg"
+                      style={{ color: "orange" }}
+                    />
+                  </button>
+                </div>
+              ))}
             </div>
-            <div >
-              {currentImages &&
-                <div> <div className='image-font'>
-                  Images
-                </div>
-                  <ul >
-                    {currentImages.map(file => (
-                      <li className="image-display" key={file} >
-                        <div
-                          className='close-button'
-                          onClick={() => removeFile(file)}                        >
-                          <span className="close">&times;</span>
-                        </div>
-                        <img
-                          src={file}
-                          width="200vh"
-                          height="250vh"
-                          onLoad={() => {
-                            URL.revokeObjectURL(file)
-                          }}
-                        />
-                      </li>
-                    ))}
-                  </ul> </div>}
-            </div> */}
-            <div className="input-box">
-                  <span className="details">Upload Images</span>
-                  <div className="dropzon">
-                    <Dropzone onDrop={files => {
-                      setFiles(files);
-                      addUploadedInages();
-                    }}>
-                      {({ getRootProps, getInputProps }) => (
-                        <div className="container">
-                          <div
-                            {...getRootProps({
-                              className: 'dropzone',
-                              onDrop: event => event.stopPropagation()
-                            })}
-                          >
-                            <input {...getInputProps()} />
-                            <div>Drag 'n' drop some files here, or click to select files</div>
-                          </div>
-                        </div>
-                      )}
-                    </Dropzone>
-                  </div>
-                  <div >
-                    {currentImages &&
-                      <div> <div className='image-font'>
-                        Images
-                      </div>
-                        <ul >
-                          {currentImages.map(file => (
-                            <li className="image-display" key={file} >
-                              <div
-                                className='close-button'
-                                onClick={() => removeFile(file)}                        >
-                                <span className="close">&times;</span>
-                              </div>
-                              <img
-                                src={file}
-                                width="200vh"
-                                height="250vh"
-                                onLoad={() => {
-                                  URL.revokeObjectURL(file)
-                                }}
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    }
-                  </div>
-                </div>
           </div>
           <div className="button">
             <input disabled={isSubmitting} type="submit" value="Submit" />

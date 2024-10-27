@@ -14,52 +14,25 @@ const UserAgreement = () => {
                     <div className="row">
                         <div className="col-md-12">
                             <div className="terms-head">
-                                <h4>Cancellation Policy</h4>
+                                <h4>TERMS AND CONDITIONS</h4>
                             </div>
 
                             <div className="policy-list terms-list">
-                                <h3>Events (1 or 2 days)</h3>
                                 <ul>
-                                    <li>75% refund if notified via phone conversation 8 or more days prior to the event date.
-                                    </li>
-                                    <li>50 % refund if notified via phone conversation 4 to 7 days prior to the event date.</li>
-                                    <li>No refund if the cancellation requested is less than 3 days prior to the event date</li>
-                                    <li>No show No Refund.</li>
-                                    <li>Event Tickets cannot be transferred to another date against cancellation.</li>
-                                    <li>Event Tickets cannot be transferred to another person against cancellation.</li>
-                                    <li>If Trek gets canceled, we will refund the "Trek Amount" only.</li>
-
+                                    <li>Please confirm seats availability on call before paying any amount.</li>
+                                    <li>Once the payment is completed, inform our team via sharing a screenshot/copy of the payment confirmation. Make sure the date, time, and UTR number are visible in the copy and please fill the registration form to confirm your seats, names & age with the team.</li>
+                                    <li>You will have to pay full amount of that event before departure, without it your booking will not be confirmed.</li>
+                                    <li>Please note that the advance amount paid would not not refunded in any case, except if the trek/tour departure is cancelled by our side. Do check cancellation policy in case any refunds or cancellations.</li>
+                                    <li>Please make sure you are added in the WhatsApp group 6-8 hours prior to the trip as all the pickup & lead details would be shared in the group.</li>
+                                    <li>Food and Stay arrangements are done as per the availability of the locations so kindly don't expect too luxurious.</li>
+                                    <li>Backpacking trips are arranged for the people who are looking out for pocket friendly trips and are more about chasing experiences.</li>
+                                    <li>We need at least 12-14 Travellers to manage our Trip/Trek, So our team reserves all the rights to cancel the Trip if the minimum batch size is not enough.</li>
+                                    <li>Everyone needs to fill our Waiver/Consent form at the time of departure, without it one cannot join to the event</li>
+                                    <li>Your payment implies that you have read & complied with all our terms and conditions.</li>
                                 </ul>
                             </div>
 
-                            <div className="policy-list terms-list">
-                                <h3>Events (3-4 Days)</h3>
-                                <ul>
-                                    <li>If cancellation is done prior to 45 days of the outing 75% will be refunded.</li>
-                                    <li>If done prior to 30 days of the outing 50% will be refunded</li>
-                                    <li>If done prior to 15 days of outing 30% will be refunded</li>
-                                    <li>After that, no refund will be provided</li>
-                                    <li>No show No Refund</li>
-                                    <li>Event Tickets cannot be transferred to another date against cancellation</li>
-                                    <li>Event Tickets cannot be transferred to another person against cancellation</li>
-                                    <li>If the Event gets cancelled, we will refund the "Event Amount" only</li>
-                                </ul>
-                            </div>
-
-
-                            <div className="policy-list terms-list m-0">
-                                <h3>Events (More than 4 Days)</h3>
-                                <ul className="m-0">
-                                    <li>If cancellation is done prior to 45 days of the outing 75% will be refunded.</li>
-                                    <li>If done prior to 30 days of the outing 50% will be refunded</li>
-                                    <li>If done prior to 15 days of outing 30% will be refunded</li>
-                                    <li>After that, no refund will be provided</li>
-                                    <li>No show No Refund</li>
-                                    <li>Event Tickets cannot be transferred to another date against cancellation</li>
-                                    <li>Event Tickets cannot be transferred to another person against cancellation</li>
-                                    <li>If the Event get canceled, we will refund the "Event Amount" only</li>
-                                </ul>
-                            </div>
+                          
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Modal, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import "./admin-panel/CreateEvent/CreateEvents.css"
 import Dropzone from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 import AdminNavbar from "./AdminNavbar";
 import { useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,7 +23,7 @@ function EventDetails() {
   const [thingsToCarry, setThingsToCarry] = useState();
   const [costIncludes, setCostIncludes] = useState();
   const [show, setShow] = useState(false);
-
+  const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const toggleModal = () => {
@@ -37,6 +43,7 @@ function EventDetails() {
     register,
     handleSubmit,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm();
   const [isEditable, setEditable] = useState(false);
@@ -50,11 +57,24 @@ function EventDetails() {
     getCurrentrecord();
   }, []);
 
-  const removeFile = name => {
+  const onDrop = (acceptedFiles) => {
+    const newFiles = acceptedFiles.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file), // Create a preview URL for the image
+      })
+    );
+    setUploadedFiles((prev) => [...prev, ...newFiles]); // Add new files to the uploaded files state
+    clearErrors("dropzone");
+  };
+
+  const removeFile = (file) => {
+    setUploadedFiles((prev) => prev.filter((f) => f !== file)); // Remove the file from the state
+  };
+
+  const removeCurrentFile = name => {
     setcurrentImages(currentImages => currentImages.filter(file => file !== name))
   }
-
-
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
   const getCurrentrecord = async () => {
     fetch(`${apiUrl}create-event/event-details/:${eventId}`, {
       method: "GET", headers: {
@@ -133,12 +153,19 @@ function EventDetails() {
     console.log("itinerary --> " + itinerary);
     console.log("pickupPoints --> " + pickupPoints);
     console.log("thingsToCarry --> " + thingsToCarry);
+    if (uploadedFiles.length === 0) {
+      setError("dropzone", {
+        type: "manual",
+        message: "Please upload at least one file.",
+      });
+      return;
+    }
     // fake request to upload file
     const url = `${apiUrl}create-event/event-details/:${eventId}`;
     const formData = new FormData();
-    if (file) {
-      for (let index = 0; index < file.length; index++) {
-        formData.append("file", file[index]);
+    if (uploadedFiles) {
+      for (let index = 0; index < uploadedFiles.length; index++) {
+        formData.append("files", uploadedFiles[index]);
       }
     }
     if (currentImages) {
@@ -309,31 +336,47 @@ function EventDetails() {
                   <span className="details">Pickup Points</span>
                   <Editor value={pickupPoints} sendDataToParent={setPickupPoints} />
                 </div>
-                <div className="input-box">
-                  <span className="details">Upload Images</span>
-                  <div className="dropzon">
-                    <Dropzone onDrop={files => {
-                      setFiles(files);
-                      addUploadedInages();
-                    }}>
-                      {({ getRootProps, getInputProps }) => (
-                        <div className="container">
-                          <div
-                            {...getRootProps({
-                              className: 'dropzone',
-                              onDrop: event => event.stopPropagation()
-                            })}
-                          >
-                            <input {...getInputProps()} />
-                            <div>Drag 'n' drop some files here, or click to select files</div>
-                          </div>
-                        </div>
-                      )}
-                    </Dropzone>
+                 {/* Dropzone for file uploads */}
+            <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
+              {({ getRootProps, getInputProps }) => (
+                <section className="dropzone">
+                  <div {...getRootProps({ className: "dropzone" })}>
+                    <input {...getInputProps()} />
+                    <p>
+                      Drag 'n' drop some files here, or click to select files
+                    </p>
                   </div>
+                </section>
+              )}
+            </Dropzone>
+            {/* Show validation error if no file is uploaded */}
+            {errors.dropzone && (
+              <p className="error-message">{errors.dropzone.message}</p>
+            )}
 
+            {/* Preview Uploaded Images */}
+            <div className="image-preview-container">
+              {uploadedFiles.map((file) => (
+                <div key={file.name} className="image-preview">
+                  <img
+                    src={file.preview}
+                    alt={file.name}
+                    style={{
+                      width: "150px",
+                      height: "175px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <button type="button" onClick={() => removeFile(file)}>
+                    <FontAwesomeIcon
+                      icon={faCircleXmark}
+                      size="lg"
+                      style={{ color: "orange" }}
+                    />
+                  </button>
                 </div>
-
+              ))}
+            </div>
               </div>
               <div >
                 <div className='image-font'>
@@ -344,7 +387,7 @@ function EventDetails() {
                     <li className="image-display" key={file} >
                       <div
                         className='close-button'
-                        onClick={() => removeFile(file)}                        >
+                        onClick={() => removeCurrentFile(file)}                        >
                         <span className="close">&times;</span>
                       </div>
                       <img

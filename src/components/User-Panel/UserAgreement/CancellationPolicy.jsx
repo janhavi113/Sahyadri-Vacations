@@ -26,7 +26,7 @@ const CancellationPolicy = () => {
                                     <li>No refund if the cancellation requested is less than 3 days prior to the event date</li>
                                     <li>No show No Refund.</li>
                                     <li>Event Tickets cannot be transferred to another date against cancellation.</li>
-                                    <li>Event Tickets cannot be transferred to another person against cancellation.</li>
+                                    <li>Event Tickets can be transferred to another person against cancellation for that event only.</li>
                                     <li>If Trek gets canceled, we will refund the "Trek Amount" only.</li>
 
                                 </ul>
