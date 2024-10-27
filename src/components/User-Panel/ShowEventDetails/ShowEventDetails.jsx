@@ -88,22 +88,27 @@ const ShowEventDetails = () => {
     formState: { errors, isSubmitting },
   } = useForm();
   const onSubmit = async (data) => {
+    console.log('--participants--',participants);
+    console.log('---data---',data);
     const formData = new FormData();
-    formData.append('name', 'janhai');
-
-    data.numberOfPeoples = noOfTrekkers;
-    data.amountPaid = finalPrice;
-    data.eventId = eventDetails.eventId;
-    data.eventName = eventDetails.name;
-    data.batch = selectedDate;
-    data.pickupLocation = selectedLocation;
-    // console.log('---data---'+data);
+    formData.append("fullName", data.fullName);
+    formData.append("email", data.emailId);
+    formData.append("mobileNumber", data.whatsappNumber);
+    formData.append("batch", selectedDate);
+    formData.append("eventId", eventDetails.eventId);
+    formData.append("eventName", eventDetails.name);
+    formData.append("numberOfPeoples", noOfTrekkers);
+    formData.append("amountPaid", finalPrice);
+    formData.append("pickupLocation", selectedLocation);
+    const today = new Date();
+    formData.append("bookingDate", today);
+    formData.append("otherParticipants", JSON.stringify(participants));
 
     let r = await fetch(`${apiUrl}booking`, {
-      method: "POST", headers: {
-        "Content-Type": "application/json",
-      }, body: JSON.stringify(data)
-    })
+      method: "POST",
+      body: formData,
+    });
+    
     let res = await r.json()
     // console.log('res', JSON.stringify(res));
     if (res.isSuccess == true) {

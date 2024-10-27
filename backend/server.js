@@ -742,36 +742,67 @@ app.post("/customised-tour", async (req, res) => {
 	}
 });
 
+function convertDateToCustomFormat(dateString) {
+    // Split the date string (MM/DD/YYYY) into parts
+    const [month, day, year] = dateString.split("/");
+
+    // Get the last two digits of the year
+    const yearLastTwoDigits = year.slice(-2);
+
+    // Format the output as YYDDMM
+    const customFormattedDate = `${yearLastTwoDigits}${day}${month}`;
+
+    return customFormattedDate;
+}
+
 // Bookings
 app.post("/booking", async (req, res) => {
 	try {
 		console.log("create req.body --", req.body);
 
 		const {
-			fullName,
-			numberOfPeoples,
-			amountPaid,
-			eventId,
-			eventName,
-			batch,
-			emailId,
-			whatsappNumber,
-			selectDate,
-		} = req.body;
+            fullName,
+            email,
+            mobileNumber,
+            batch,
+            eventId,
+            eventName,
+            amountPaid,
+            numberOfPeoples,
+            pickupLocation,
+            bookingDate,
+            otherParticipants,
+        } = req.body;
+
+		let confirmedBookings = await Bookings.find({bookingDate :new Date(req.body.bookingDate).toLocaleDateString()});
+		let bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + confirmedBookings.length;
+
+        let parsedParticipants = [];
+        if (typeof otherParticipants === 'string') {
+            parsedParticipants = JSON.parse(otherParticipants);
+        }
 		console.log("create req.body --", req.body);
 
 		const booking = new Bookings({
+			bookingId: bookingIdVar,
 			name: fullName,
-			email: emailId,
-			mobileNumber: whatsappNumber,
-			batch: batch,
-			eventId: eventId,
-			eventName: eventName,
-			numberOfPeoples: numberOfPeoples,
-			amountPaid: amountPaid,
-		});
-
-		booking.save();
+            email: email,
+            mobileNumber: mobileNumber,
+            batch: batch,
+            eventId: eventId,
+            eventName: eventName,
+            numberOfPeoples: numberOfPeoples,
+            amountPaid: amountPaid,
+            pickupLocation: pickupLocation,
+            bookingDate: new Date(bookingDate).toLocaleDateString(),
+            otherParticipants: parsedParticipants,
+            status: "Confirmed",
+        });
+		await booking.save();
+        res.send({
+            isSuccess: true,
+            booking: booking
+        });
 	} catch (error) {
 		console.error(error);
 		res.send({
@@ -781,69 +812,6 @@ app.post("/booking", async (req, res) => {
 	}
 });
 
-// // Bookings
-// app.post("/direct-booking", async (req, res) => {
-// 	try {
-// 		console.log("create req.body --", );
-// 		var currUrl = "";
-// 		if(req.files ){
-// 		let sampleFile = req.files.images;
-// 		let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-// 		currUrl = '/public/Images/' + sampleFile.name;
-// 		sampleFile.mv(uploadPath, (err) => {
-// 			if (err) {
-// 				return res.status(500).send(err);
-// 			}
-// 		});}
-// 		const {
-// 			fullName,
-// 			email,
-// 			mobileNumber,
-// 			batch,
-// 			eventId,
-// 			eventName,
-// 			amountPaid,
-// 			numberOfPeoples,
-// 			pickupLocation,
-// 			bookingDate,
-// 			otherParticipants,
-// 		} = req.body;
-// 		// Parse otherParticipants to an array if it's a string
-// 		let parsedParticipants = [];
-// 		if (typeof otherParticipants === 'string') {
-// 			parsedParticipants = JSON.parse(otherParticipants);
-// 		}
-
-// 		const booking = new DirectBookings({
-// 			name: fullName,
-// 			email: email,
-// 			mobileNumber: mobileNumber,
-// 			batch: batch,
-// 			eventId: eventId,
-// 			eventName: eventName,
-// 			numberOfPeoples: numberOfPeoples,
-// 			amountPaid: amountPaid,
-// 			pickupLocation: pickupLocation,
-// 			bookingDate: bookingDate,
-// 			otherParticipants: parsedParticipants,
-// 			images: currUrl,
-// 			status: "Pending",
-// 		});
-
-// 	//	console.log('booking--', booking);
-// 		await booking.save();
-// 		res.send({
-// 			isSuccess: true,
-// 			booking: booking
-// 		});
-// 	} catch (error) {
-// 		console.error(error);
-// 		res.send({
-// 			isSuccess: false,
-// 			error: error
-// 		});
-// 	}
-// });
 // Use the separated routes
 // Use the route
 app.use(directBookingRoutes);
