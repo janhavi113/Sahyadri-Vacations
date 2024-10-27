@@ -4,13 +4,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useForm } from "react-hook-form"
 import './ShowEventDetails.css'
 import Footer from "../../footer";
-import Ratingcard from '../../Rating/RatingCard'
-import { motion } from "framer-motion"
 import ContactSection from "../../ContactLogo/contactSection";
 import Navbar from "../../Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { Modal, Button } from "react-bootstrap";
+import { Modal} from "react-bootstrap";
 import "../../admin-panel/CreateEvent/CreateEvents.css"
 import "../../Modal.css";
 // Import Swiper styles
@@ -22,11 +20,8 @@ import { addDays, isWeekend } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 const ShowEventDetails = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [locationsArray, setLocationsArray] = useState();
   const queryParameters = new URLSearchParams(window.location.search);
   const [type, setType] = useState(queryParameters.get("eventid"));
-  const [startDate, setStartDate] = useState(new Date());
   const [params, setParams] = useState(type.split('/'));
   const [isSuccess, setSuccess] = useState(false);
   const [inquery, setInquery] = useState(false);
@@ -44,7 +39,6 @@ const ShowEventDetails = () => {
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
   const [participants, setParticipants] = useState([]);
-  const [eventPickupPoints, setEventPickupPoints] = useState([]);
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -87,6 +81,7 @@ const ShowEventDetails = () => {
     setError,
     formState: { errors, isSubmitting },
   } = useForm();
+
   const onSubmit = async (data) => {
     console.log('--participants--', participants);
     console.log('---data---', data);
@@ -160,7 +155,6 @@ const ShowEventDetails = () => {
   }
 
   const getNextBatchDate = (event) => {
-    console.log('event--', event);
     let batchdate;
     let batchSize = -1;
     let eventCostPerPerson;
@@ -172,7 +166,6 @@ const ShowEventDetails = () => {
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     if (event.batches) {
       for (let i = 0; i < event.batches.length; i++) {
-        console.log('event.batches[' + i + ']--', event.batches[i]);
         if (batchSize == -1 && new Date(event.batches[i].eventStartDate) - Q >= 0 && event.batches[i].eventBatchCount > 0) {
           batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
@@ -266,7 +259,6 @@ const ShowEventDetails = () => {
       }
     })
     let res = await r.json()
-    // console.log( 'res ',res);
     if (res.isSuccess == true) {
       setSuccess(true);
       console.log('eventDetails --', res);
@@ -279,7 +271,6 @@ const ShowEventDetails = () => {
         const jsonData = convertHtmlToJSON(res.events.pickupPoints);
         setPickupPoints(jsonData);
       }
-      //// console.log('scheduleBatch',scheduleBatch );
     }
 
   }
@@ -304,7 +295,7 @@ const ShowEventDetails = () => {
 
             <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}` + event} />
               <div className="inner-content">
-                <h3>{eventDetails.name}</h3>
+                <h3>{eventDetails.name} | Pune</h3>
               </div>
             </SwiperSlide>
           ))}
@@ -318,10 +309,10 @@ const ShowEventDetails = () => {
               <nav id="navbar-example2" className="nav-color d-none d-md-none d-lg-block panel-heading tab-bg-info px-2 ">
                 <ul className="nav nav-tabs">
                   <li className="nav-item">
-                    <a className="nav-link" href="#scrollspyHeading1"> DETAILS </a>
+                    <a className="nav-link" href="#scrollspyHeading1"> OVERVIEW </a>
                   </li>
                   <li >
-                    <a className="nav-link" href="#scrollspyHeading2"> SHEDULE </a>
+                    <a className="nav-link" href="#scrollspyHeading2"> ITINERARY </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" href="#scrollspyHeading3"> HIGHLIGHTS </a>
@@ -337,9 +328,11 @@ const ShowEventDetails = () => {
               </nav>
               <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example  p-3 rounded-2" tabindex="0">
                 <div id="scrollspyHeading1" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Details</h2>
+                  <h2 className="h3"> Overview</h2>
                   <p>{eventDetails.eventDetails}</p>
                   <br />
+                  <h2 className="h3"> About {eventDetails.name}</h2>
+                  <p>{eventDetails.eventDetails}</p>
                   <div className='flex'> <FontAwesomeIcon icon={faCalendarDays} size="lg" /> <h3> Upcoming Batches </h3> </div>
                   <div className='section-details'>
                     {availableBatches && availableBatches.map((event, index) => (
@@ -353,7 +346,7 @@ const ShowEventDetails = () => {
                 </div>
                 <hr />
                 <div id="scrollspyHeading2" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Schedule</h2>
+                  <h2 className="h3"> Itinerary</h2>
                   <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.itinerary) }} />
                 </div>
                 <hr />
@@ -392,18 +385,20 @@ const ShowEventDetails = () => {
                 <div id="" className='pt-4 pb-1 px-2'>
                   <h2 className="h3"> FAQ's</h2>
                   <div className="section-details">
-                    <ol className="display-bulletin">
+                  {eventType == 'TrekEvent' &&
+                  <ol className="display-bulletin">
+                   
                       <li>
                         <b>How many trek leaders will be available?</b><br />
                         There will be 1 trek leader available for a group of 8 people in each trek.<br />
                       </li>
                       <li>
                         <b>How do I get in touch with trek leaders and trek groups ?</b><br />
-                        We add participants in our Whatsapp group one day prior to the event.<br />
+                        We add participants in our Whatsapp group 5-6  hours prior to the event.<br />
                       </li>
                       <li>
                         <b>Can I cancel my booking?</b><br />
-                        You can check our cancel policy for the same.Or you can join us on the next trek (please inform us before 2 days)<br />
+                        You can check our cancel policy for the same.<br />
                       </li>
                       <li>
                         <b>What is prohibited in this trek?</b><br />
@@ -411,7 +406,7 @@ const ShowEventDetails = () => {
                       </li>
                       <li>
                         <b>Are changing rooms provided?</b><br />
-                        Yes, separate (Male/Female) changing rooms are provided. <br />
+                        Yes, Separate (Male/Female) changing rooms will be there as per availability of that particular location. <br />
                       </li>
                       <li>
                         <b> What is the type of bus ?</b><br />
@@ -423,13 +418,15 @@ const ShowEventDetails = () => {
                       </li>
                       <li>
                         <b>Is this trek safe for girls?</b><br />
-                        This trek is completely safe for girls. We have girl volunteers specially appointed for girls. And have separate changing rooms.<br />
+                        This trek is absolutely safe for girls. We have girl volunteers specially appointed for girls and, have separate changing rooms.<br />
                       </li>
                       <li>
-                        <b>Pick up points?</b><br />
-                        Pick up is available if your location comes in between our route for this you have to contact us before.<br />
+                        <b>Is it possible to charge my phone ?</b><br />
+                        Unfortunately, there is no electricity available. Please remember to bring a power bank if you need to charge your phone.<br />
                       </li>
+                      
                     </ol>
+      }
                   </div>
                 </div>
               </div>

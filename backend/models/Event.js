@@ -13,6 +13,14 @@ const eventSchema = new mongoose.Schema({
     url: { type :String},
     eventId: { type :Number},
     location: { type :String},
+    type: { type :String},
+    elevation: { type :String},
+    difficulty: { type :String},
+    endurance: { type :String},
+    duration: { type :String},
+    totalDistance: { type :String},
+    ageGroup: { type :String},
+    trekDistance: { type :String},
     images: [{
         type: String
     }]

@@ -22,9 +22,9 @@ function CreateEvents() {
   const [thingsToCarry, setThingsToCarry] = useState();
   const [costIncludes, setCostIncludes] = useState();
   const onSubmit = async (data) => {
-    console.log('data--',data);
-    
-    console.log('file--',file); 
+    console.log('data--', data);
+
+    console.log('file--', file);
     const formData = new FormData();
     if (file) {
       for (let index = 0; index < file.length; index++) {
@@ -39,8 +39,15 @@ function CreateEvents() {
     formData.append("itinerary", itinerary);
     formData.append("pickupPoints", pickupPoints);
     formData.append("thingsToCarry", thingsToCarry);
+    formData.append("location", data.location);
+    formData.append("type", data.type);
+    formData.append("elevation", data.elevation);
+    formData.append("difficulty", data.difficulty);
+    formData.append("endurance", data.endurance);
+    formData.append("duration", data.duration);
+    formData.append("totalDistance", data.totalDistance);
 
-    console.log('formData--',formData); 
+    console.log('formData--', formData);
 
     let r = await fetch(`${apiUrl}create-event`, {
       method: "POST",
@@ -53,14 +60,14 @@ function CreateEvents() {
     }
 
   }
-// Check token when the component mounts
-useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    navigate("/admin-login");
-    return;
-  }
-}, [navigate]); // Add navigate as a dependency
+  // Check token when the component mounts
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/admin-login");
+      return;
+    }
+  }, [navigate]); // Add navigate as a dependency
 
   const removeFile = name => {
     setcurrentImages(currentImages => currentImages.filter(file => file !== name))
@@ -93,6 +100,14 @@ useEffect(() => {
                 <input {...register("eventName", { required: { value: true, message: "This field is required" }, })} type="text" required />
               </div>
               <div className="input-box ">
+                <span className="details">Overview</span>
+                <textarea {...register("eventDetails", { required: { value: true, message: "This field is required" }, })} type="text" required />
+              </div>
+              <div className="input-box ">
+                <span className="details">Itinerary</span>
+                <Editor sendDataToParent={setItinerary} />
+              </div>
+              <div className="input-select-box ">
                 <span className="details">Event Type</span>
                 <select  {...register("eventType", { required: { value: true, message: "This field is required" }, })} >
                   <option value={"TrekEvent"} >Trekking Event</option>
@@ -100,13 +115,47 @@ useEffect(() => {
                   <option value={"BackPackingTrip"} >BackPacking Trip</option>
                 </select>
               </div>
-              <div className="input-select-box ">
-                <span className="details">Event Details</span>
-                <textarea {...register("eventDetails", { required: { value: true, message: "This field is required" }, })} type="text" required />
+              <div className="input-select-box">
+                <span className="details">Location</span>
+                <input {...register("location", { required: { value: true, message: "This field is required" }, })} type="text" required />
               </div>
               <div className="input-select-box">
-                <span className="details">Itinerary</span>
-                <Editor sendDataToParent={setItinerary} />
+                <span className="details">Type</span>
+                <input {...register("type",)} type="text" required />
+              </div>
+
+              <div className="input-select-box">
+                <span className="details">Elevation</span>
+                <input {...register("elevation",)} type="text" required />
+              </div>
+
+              <div className="input-select-box">
+                <span className="details">Difficulty</span>
+                <input {...register("difficulty",)} type="text" required />
+              </div>
+
+              <div className="input-select-box">
+                <span className="details">Endurance</span>
+                <input {...register("endurance",)} type="text" required />
+              </div>
+
+              <div className="input-select-box">
+                <span className="details">Duration</span>
+                <input {...register("duration",)} type="text" required />
+              </div>
+
+              <div className="input-select-box">
+                <span className="details">Total Distance</span>
+                <input {...register("totalDistance",)} type="text" required />
+              </div>
+              <div className="input-select-box">
+                <span className="details">Age Group</span>
+                <input {...register("ageGroup",)} type="text" required />
+              </div>
+
+              <div className="input-select-box">
+                <span className="details">Trek Distance</span>
+                <input {...register("trekDistance",)} type="text" required />
               </div>
               <div className="input-select-box">
                 <span className="details">Highlights</span>
@@ -125,7 +174,7 @@ useEffect(() => {
                 <Editor sendDataToParent={setPickupPoints} />
               </div>
             </div>
-            <div className="input-box">
+            {/* <div className="input-box">
               <span className="details">Upload Images</span>
               <div className="dropzon">
                 <Dropzone onDrop={files => {
@@ -173,8 +222,57 @@ useEffect(() => {
                       </li>
                     ))}
                   </ul> </div>}
-            </div>
-
+            </div> */}
+            <div className="input-box">
+                  <span className="details">Upload Images</span>
+                  <div className="dropzon">
+                    <Dropzone onDrop={files => {
+                      setFiles(files);
+                      addUploadedInages();
+                    }}>
+                      {({ getRootProps, getInputProps }) => (
+                        <div className="container">
+                          <div
+                            {...getRootProps({
+                              className: 'dropzone',
+                              onDrop: event => event.stopPropagation()
+                            })}
+                          >
+                            <input {...getInputProps()} />
+                            <div>Drag 'n' drop some files here, or click to select files</div>
+                          </div>
+                        </div>
+                      )}
+                    </Dropzone>
+                  </div>
+                  <div >
+                    {currentImages &&
+                      <div> <div className='image-font'>
+                        Images
+                      </div>
+                        <ul >
+                          {currentImages.map(file => (
+                            <li className="image-display" key={file} >
+                              <div
+                                className='close-button'
+                                onClick={() => removeFile(file)}                        >
+                                <span className="close">&times;</span>
+                              </div>
+                              <img
+                                src={file}
+                                width="200vh"
+                                height="250vh"
+                                onLoad={() => {
+                                  URL.revokeObjectURL(file)
+                                }}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    }
+                  </div>
+                </div>
           </div>
           <div className="button">
             <input disabled={isSubmitting} type="submit" value="Submit" />
