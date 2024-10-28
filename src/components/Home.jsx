@@ -3,7 +3,7 @@ import Footer from "./footer";
 import Navbar from "./Navbar";
 import Contact_Us from "./User-Panel/Contact_Us/Contact_Us";
 import FunFact from "./User-Panel/FunFact/FunFact";
-import Rating from "./Rating/RatingSection";
+import Rating from "./User-Panel/Rating/RatingSection";
 import slide1 from './Images/Screen_2.jpg';
 import slide2 from './Images/Screen_3.webp';
 import slide3 from './Images/Screen_4.webp';

@@ -1,16 +1,15 @@
 import React from 'react'
-import Google from '../Images/google.png';
+import Google from '../../Images/google.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import './Rating.css';
 import Ratingcard from './RatingCard'
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css/bundle';
 // import required modules
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay,  Navigation } from 'swiper/modules';
 const RatingSection = () => {
  
   var reviewList = [{

@@ -1,8 +1,8 @@
 import React from 'react'
 import './Rating.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faCircleCheck, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
-import google from '../Images/google-circle.svg'
+import { faStar, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import google from '../../Images/google-circle.svg'
 const RatingCard = (props) => {
  
   return (
