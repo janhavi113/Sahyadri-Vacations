@@ -4,12 +4,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useForm } from "react-hook-form"
 import './ShowEventDetails.css'
 import Footer from "../../footer";
-import ContactSection from "../../ContactLogo/contactSection";
+import ContactSection from "../ContactLogo/contactSection";
 import Navbar from "../../Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { Modal} from "react-bootstrap";
+import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot , faPersonHiking , faMountainSun } from '@fortawesome/free-solid-svg-icons';
+import { Modal } from "react-bootstrap";
 import "../../admin-panel/CreateEvent/CreateEvents.css"
+import tripType from '../../Images/type.svg'
+import duration from '../../Images/duration.svg'
+import distance from '../../Images/distance.svg'
+import endurance from '../../Images/endurance.svg'
+import locationicon from '../../Images/location.svg'
 import "../../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
@@ -17,6 +22,7 @@ import 'swiper/css/bundle';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import DatePicker from "react-datepicker";
 import { addDays, isWeekend } from 'date-fns';
+import CollapsibleSection from './CollapsibleSection';
 import "react-datepicker/dist/react-datepicker.css";
 const ShowEventDetails = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -295,7 +301,7 @@ const ShowEventDetails = () => {
 
             <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}` + event} />
               <div className="inner-content">
-                <h3>{eventDetails.name} | Pune</h3>
+                <h3>{eventDetails.name} |</h3>
               </div>
             </SwiperSlide>
           ))}
@@ -331,17 +337,59 @@ const ShowEventDetails = () => {
                   <h2 className="h3"> Overview</h2>
                   <p>{eventDetails.eventDetails}</p>
                   <br />
-                  <h2 className="h3"> About {eventDetails.name}</h2>
-                  <p>{eventDetails.eventDetails}</p>
-                  <div className='flex'> <FontAwesomeIcon icon={faCalendarDays} size="lg" /> <h3> Upcoming Batches </h3> </div>
-                  <div className='section-details'>
-                    {availableBatches && availableBatches.map((event, index) => (
-                      <div key={index}><b>Batch {index + 1} :</b> {event}</div>
-                    ))}
+                  <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                    <div className='flex'> <FontAwesomeIcon icon={faCalendarDays} size="lg" /> <h3> Upcoming Batches :</h3> </div>
+                    <div className='section-details'>
+                      {availableBatches && availableBatches.map((event, index) => (
+                        <div key={index}><b>Batch {index + 1} :</b> {event}</div>
+                      ))}
+                    </div>
                   </div>
-                  <div className='flex'> <FontAwesomeIcon icon={faLocationDot} size="lg" /> <h3> Location </h3> </div>
-                  <div className='section-details'>
-                    <p>{eventDetails.location}</p>
+                  <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                    <div className='flex'> <FontAwesomeIcon icon={faLocationDot} size="lg" /> <h3> Total Distance From :</h3> </div>
+                    <div className='section-details'>
+                      <p>{eventDetails.location}</p>
+                    </div>
+                  </div>
+                  <br />
+                  <h2 className="h3"> About {eventDetails.name}</h2>
+                  <div>
+                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                      <div className='flex'> <img src={locationicon} alt="Terms icon" crossOrigin="anonymous" /><h3> Location :</h3> </div>
+                      <div className='section-details'>
+                        <p>{eventDetails.location}</p>
+                      </div>
+                    </div>
+                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                      <div className='flex'>  <img src={tripType} alt="Terms icon" crossOrigin="anonymous" /> <h3> Type :</h3> </div>
+                      <div className='section-details'>
+                        <p>{eventDetails.location}</p>
+                      </div>
+                    </div>
+                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                      <div className='flex'> <FontAwesomeIcon icon={faMountainSun} size="lg" /> <h3> Elevation :</h3> </div>
+                      <div className='section-details'>
+                        <p>{eventDetails.location}</p>
+                      </div>
+                    </div>
+                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                      <div className='flex'> <img src={endurance} alt="Terms icon" crossOrigin="anonymous" /><h3> Difficulty :</h3> </div>
+                      <div className='section-details'>
+                        <p>{eventDetails.location}</p>
+                      </div>
+                    </div>
+                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                      <div className='flex'>  <img src={duration} alt="Terms icon" crossOrigin="anonymous" /> <h3> Duration :</h3> </div>
+                      <div className='section-details'>
+                        <p>{eventDetails.location}</p>
+                      </div>
+                    </div>
+                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                      <div className='flex'><img src={distance} alt="Terms icon" crossOrigin="anonymous" /> <h3> Total Trek Distance :</h3> </div>
+                      <div className='section-details'>
+                        <p>{eventDetails.location}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <hr />
@@ -371,63 +419,78 @@ const ShowEventDetails = () => {
                     </ul>
                   </div>
                 </div><hr />
-                <div id="scrollspyHeading5" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Things To Carry</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.thingsToCarry) }} />
-                </div>
-                <hr />
                 {eventType != 'CampingEvent' &&
                   <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
                     <h2 className="h3"> Pickup Points</h2>
                     <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
                   </div>
                 }
-                <div id="" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> FAQ's</h2>
-                  <div className="section-details">
-                  {eventType == 'TrekEvent' &&
-                  <ol className="display-bulletin">
-                   
-                      <li>
-                        <b>How many trek leaders will be available?</b><br />
-                        There will be 1 trek leader available for a group of 8 people in each trek.<br />
-                      </li>
-                      <li>
-                        <b>How do I get in touch with trek leaders and trek groups ?</b><br />
-                        We add participants in our Whatsapp group 5-6  hours prior to the event.<br />
-                      </li>
-                      <li>
-                        <b>Can I cancel my booking?</b><br />
-                        You can check our cancel policy for the same.<br />
-                      </li>
-                      <li>
-                        <b>What is prohibited in this trek?</b><br />
-                        Smoking, Drinking and loud music is prohibited.<br />
-                      </li>
-                      <li>
-                        <b>Are changing rooms provided?</b><br />
-                        Yes, Separate (Male/Female) changing rooms will be there as per availability of that particular location. <br />
-                      </li>
-                      <li>
-                        <b> What is the type of bus ?</b><br />
-                        The bus is NON/AC Tempo Traveler with decent seating comfort.<br />
-                      </li>
-                      <li>
-                        <b>Are washrooms available on the trek?</b><br />
-                        Washrooms are available at the base village only. No facility is available during the trek.<br />
-                      </li>
-                      <li>
-                        <b>Is this trek safe for girls?</b><br />
-                        This trek is absolutely safe for girls. We have girl volunteers specially appointed for girls and, have separate changing rooms.<br />
-                      </li>
-                      <li>
-                        <b>Is it possible to charge my phone ?</b><br />
-                        Unfortunately, there is no electricity available. Please remember to bring a power bank if you need to charge your phone.<br />
-                      </li>
-                      
-                    </ol>
-      }
+                <hr />
+                <div>
+                  <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
+                    <h2 className="h3">THINGS TO KNOW</h2>
                   </div>
+                  <CollapsibleSection title="THINGS TO CARRY">
+                    <ul className="display-bulletin-collaps">
+                      <li>Torch (optional)</li>
+                      <li>Please wear full pants and full sleeves t-shirts to protect from tanning, thorns, insects during the trek</li>
+                      <li>Snacks (Energy bars, Chikki, Biscuits, Sprouts, Chips, Dry fruits)</li>
+                      <li>Glucon D/Protein shakes/ORS</li>
+                      <li>Extra pair of clothes</li>
+                      <li>2/3 litres of water (Mandatory)</li>
+                      <li>Any personal medicines</li>
+                      <li>Good grip trekking shoes</li>
+                      <li>Suncap & Sunscreen</li>
+                      <li>Rains are expected so please carry a raincover / Jacket & cover your phones also in a plastic cover</li>
+                    </ul>
+                  </CollapsibleSection>
+
+                  <CollapsibleSection title="TERMS AND CONDITIONS">
+                    {eventType === 'TrekEvent' && (
+                      <ul className="display-bulletin-collaps">
+                        <li>Please confirm seats availability on call before paying any amount.</li>
+                        <li>Once the payment is completed, inform our team via sharing a screenshot/copy of the payment confirmation.</li>
+                        <li>You will have to pay full amount of that event before departure, without it your booking will not be confirmed.</li>
+                        <li>The advance amount paid would not be refunded in any case, except if the trek/tour departure is cancelled by our side.</li>
+                        <li>Make sure you are added in the WhatsApp group 6-8 hours prior to the trip for all the details.</li>
+                        <li>Food and Stay arrangements are as per the availability of the locations, not luxurious.</li>
+                        <li>Trips are pocket-friendly and experience-focused.</li>
+                        <li>We need at least 12-14 travelers; otherwise, the trip may be canceled.</li>
+                        <li>A waiver/consent form must be filled before departure.</li>
+                        <li>Your payment indicates acceptance of our terms and conditions.</li>
+                      </ul>
+                    )}
+                  </CollapsibleSection>
+
+                  <CollapsibleSection title="CANCELLATION POLICY">
+                    {eventType === 'TrekEvent' && (
+                      <ul className="display-bulletin-collaps">
+                        <li>75% refund if notified 8 or more days before the event.</li>
+                        <li>50% refund if notified 4 to 7 days before the event.</li>
+                        <li>No refund if less than 3 days before the event.</li>
+                        <li>No-show results in no refund.</li>
+                        <li>Event tickets cannot be transferred to another date.</li>
+                        <li>Tickets can be transferred to another person for the same event.</li>
+                        <li>If the trek is canceled, only the trek amount will be refunded.</li>
+                      </ul>
+                    )}
+                  </CollapsibleSection>
+
+                  <CollapsibleSection title="FAQ's">
+                    {eventType === 'TrekEvent' && (
+                      <ol className="display-bulletin-collaps">
+                        <li><b>How many trek leaders will be available?</b><br></br> There will be 1 trek leader for every 8 people.</li>
+                        <li><b>How do I get in touch with trek leaders?</b><br></br>  We add participants to a WhatsApp group 5-6 hours prior to the event.</li>
+                        <li><b>Can I cancel my booking?</b> <br></br> Please refer to the cancellation policy.</li>
+                        <li><b>What is prohibited on this trek?</b> <br></br> Smoking, drinking, and loud music are prohibited.</li>
+                        <li><b>Are changing rooms provided?</b> <br></br> Separate changing rooms are available based on location.</li>
+                        <li><b>What type of bus is provided?</b> <br></br> A NON-AC Tempo Traveler is used with comfortable seating.</li>
+                        <li><b>Are washrooms available?</b><br></br>  Washrooms are available at the base village only.</li>
+                        <li><b>Is the trek safe for girls?</b><br></br>  Yes, with girl volunteers and separate changing rooms.</li>
+                        <li><b>Is there a way to charge phones?</b> <br></br> There is no electricity, so bring a power bank.</li>
+                      </ol>
+                    )}
+                  </CollapsibleSection>
                 </div>
               </div>
             </div>

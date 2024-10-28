@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Whatsapp from '../Images/whatsapp.svg';
-import '../home.css'
+import Whatsapp from '../../Images/whatsapp.svg';
+import '../../home.css'
 const contactSection = () => {
     const [show, setShow] = useState(false);
     const showDropdown = () => {

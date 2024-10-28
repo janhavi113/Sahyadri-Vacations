@@ -18,18 +18,22 @@
     text-align: left;
     max-width: 750px;
 }
+
 .radio-display input[type="radio"] {
     display: block;
     width: 15px !important;
     margin: 0px 10px 0 10px;
 }
-.radio-display{
+
+.radio-display {
     display: flex;
     margin-left: 35px;
 }
+
 .termsAndCondition input[type="checkbox"] {
     width: 15px;
 }
+
 .inner-content h3 {
     color: #fff;
     -webkit-backdrop-filter: blur(10px);
@@ -39,12 +43,15 @@
     font-size: calc(1.3rem + .6vw);
     margin-bottom: 15px;
 }
-select{
+
+select {
     height: 45px;
 }
+
 .react-datepicker-wrapper {
     width: 100%;
 }
+
 .content-row {
     margin: 0;
     padding: 30px;
@@ -55,19 +62,21 @@ select{
     margin-top: -50px;
     background-color: white;
 }
-.button-edit-container .button-margin button ,input{
-    background-color: rgb(255, 115, 0) ;
+
+.button-edit-container .button-margin button,
+input {
+    background-color: rgb(255, 115, 0);
     color: white;
     margin-right: 2%;
     width: 48%;
 }
 
-.addGap{
+.addGap {}
 
-}
 sub {
     color: black;
 }
+
 .nav-tabs {
     --bs-nav-link-color: rgb(1, 0, 0) !important;
     --bs-nav-link-hover-color: orange !important;
@@ -91,8 +100,58 @@ h3 {
 .section-details {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
+    font-size: 17px;
+    margin-top: -5px;
 }
 
+.section-details-collaps {
+    transition: max-height 0.3s ease;
+    overflow: hidden;
+}
+
+.h3-collaps {
+    font-size: 1rem;
+    margin: 0;
+    color: orange;
+    line-height: 2.2;
+    font-weight: bold;
+}
+
+.display-bulletin-collaps {
+    margin: 0;
+    padding: 0;
+    list-style: revert !important;
+}
+
+.display-bulletin-collaps li {
+    margin: 0.5rem 1.5rem;
+}
+.collapsible-img{
+    width: 38px;
+    height: 38px;
+    margin-right: 12px;
+}
+.collapsible-section {
+    border: 1px solid #ccc; /* You can change the color as needed */
+    margin-bottom: 1rem; /* Adds some space between sections */
+    padding: 0.5rem; /* Adds some padding inside the border */
+    border-radius: 8px;
+  }
+
+  .collapsible-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+  }
+    
+  .h3-collaps {
+    flex: 1;
+    text-align: left;
+    font-weight: bold; /* To make the font bold */
+    margin: 0 10px;
+  }
 .pt-4 {
     padding-top: 1rem !important;
 }
@@ -159,18 +218,22 @@ h3 {
     box-shadow: 0px 8px 32px #00000029;
     border-radius: 16px;
 }
+
 .booking-card-mb {
     z-index: 1;
     background-color: white;
     box-shadow: 0px -4px 32px #00000029;
     border-radius: 16px 16px 0px 0px;
 }
+
 .mb-3 {
     margin-bottom: 1rem !important;
 }
+
 .button-edit-container .button .button-input {
     width: 48% !important;
-}   
+}
+
 .text-dark {
     color: #212529 !important;
 }
@@ -194,15 +257,18 @@ h3 {
     height: 2px;
     width: 100%;
 }
-.flex{
+
+.flex {
     display: flex;
     gap: 5px;
     color: orange;
     font-weight: bold;
 }
-.rating-section{
+
+.rating-section {
     max-width: 93%;
 }
+
 .finalCalculation {
     display: flex;
     font-size: 22px;
@@ -266,20 +332,25 @@ h3 {
 .yellow {
     margin-left: 50%;
 }
-.link{
+
+.link {
     color: orange !important;
 }
 
-.swiper-button-prev, .swiper-button-next {
+.swiper-button-prev,
+.swiper-button-next {
     color: gray !important;
     margin-right: -15px !important;
     margin-left: -15px !important;
-   
+
 }
-.swiper-button-prev:after, .swiper-button-next:after {
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
     font-size: 25px !important;
     font-weight: bold !important;
 }
+
 .button button {
     height: 100%;
     width: 100%;
@@ -293,56 +364,72 @@ h3 {
     transition: all 0.3s ease;
     background: rgb(255, 115, 0);
 }
-.booking-section{
+
+.booking-section {
     margin: 25px;
 }
-.button button:hover{
+
+.button button:hover {
     /* trans: scale(0.99); */
     background: orange;
-    }
-    .Phone {
-        bottom: 10px;
-        z-index: 3000;
-    }
+}
+
+.Phone {
+    bottom: 10px;
+    z-index: 3000;
+}
+
 @media (min-width: 1200px) {
+
     .h3,
     h3 {
         font-size: 1.75rem;
     }
 }
+
 @media screen and (max-width: 768px) {
     .content-row {
         padding: 0 !important;
     }
+
     .section-details {
         margin-right: 0 !important;
     }
-    .fixed-bottom {position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1030;
+
+    .fixed-bottom {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
     }
-    .sticky-top{
+
+    .sticky-top {
         display: none;
     }
-    
-.footer {
-    color: #FFF;
-    position: relative;
-    z-index: 2000;
+
+    .footer {
+        color: #FFF;
+        position: relative;
+        z-index: 2000;
+    }
+
+    .Phone {
+        bottom: 160px;
+        z-index: 3000;
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+        content: none;
+    }
+
+    .swiper-button-prev:after,
+    .swiper-button-next:after {
+        content: none;
+    }
 }
-.Phone {
-    bottom: 160px;
-    z-index: 3000;
-}
- .swiper-button-prev, .swiper-button-next {
-    content: none;
-}
-.swiper-button-prev:after, .swiper-button-next:after {
-    content: none;
-}
-}  
-.Column-2{
-    grid-template-columns: repeat(2, 1fr) !important; 
+
+.Column-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
 }
