@@ -9,7 +9,6 @@ import client from '../../Images/client.svg'
 import event from '../../Images/event.svg'
 const FunFact = () => {
     return (
-
         <>
             <div className="funfact-area style-2 ">
                 <div className="funfact-container container">
@@ -85,11 +84,11 @@ const FunFact = () => {
                                         <img style={{ 'margin': 'auto' }} loading="lazy" src={google} />
                                     </span>
                                     <span style={{ 'margin-top': '-20px' }}>
-                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "white", }} size="2xs" />
-                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "white", }} size="2xs" />
-                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "white", }} size="2xs" />
-                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "white", }} size="2xs" />
-                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "white", }} size="2xs" /> </span>
+                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" />
+                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" />
+                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" />
+                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" />
+                                        <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" /> </span>
                                     <p>5 Review
                                     </p>
                                 </div>
