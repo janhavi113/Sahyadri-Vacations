@@ -25,7 +25,7 @@ const FunFact = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="add-gap row">
+                    <div className="add-gap rating-row">
                         <div className="col-lg-2 col-sm-4">
                             <div className="single-fact text-center">
                                 <div className="adjust-top fact-info">
