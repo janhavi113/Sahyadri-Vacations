@@ -7,7 +7,7 @@ import Footer from "../../footer";
 import ContactSection from "../ContactLogo/contactSection";
 import Navbar from "../../Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot , faPersonHiking , faMountainSun } from '@fortawesome/free-solid-svg-icons';
+import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot, faPersonHiking, faMountainSun } from '@fortawesome/free-solid-svg-icons';
 import { Modal } from "react-bootstrap";
 import "../../admin-panel/CreateEvent/CreateEvents.css"
 import tripType from '../../Images/type.svg'
@@ -301,7 +301,7 @@ const ShowEventDetails = () => {
 
             <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}` + event} />
               <div className="inner-content">
-                <h3>{eventDetails.name} |</h3>
+                <h3>{eventDetails.name} | Pune</h3>
               </div>
             </SwiperSlide>
           ))}
@@ -341,55 +341,62 @@ const ShowEventDetails = () => {
                     <div className='flex'> <FontAwesomeIcon icon={faCalendarDays} size="lg" /> <h3> Upcoming Batches :</h3> </div>
                     <div className='section-details'>
                       {availableBatches && availableBatches.map((event, index) => (
-                        <div key={index}><b>Batch {index + 1} :</b> {event}</div>
+                        <div key={index}><b>Batch :</b> {event}</div>
                       ))}
                     </div>
                   </div>
-                  <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                  {eventDetails.totalDistance && <div style={{ 'display': 'flex', 'margin': '10px' }}>
                     <div className='flex'> <FontAwesomeIcon icon={faLocationDot} size="lg" /> <h3> Total Distance From :</h3> </div>
                     <div className='section-details'>
-                      <p>{eventDetails.location}</p>
+                      <p>{eventDetails.totalDistance}</p>
                     </div>
                   </div>
+                  }
                   <br />
                   <h2 className="h3"> About {eventDetails.name}</h2>
                   <div>
-                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                    {eventDetails.location && <div style={{ 'display': 'flex', 'margin': '10px' }}>
                       <div className='flex'> <img src={locationicon} alt="Terms icon" crossOrigin="anonymous" /><h3> Location :</h3> </div>
                       <div className='section-details'>
                         <p>{eventDetails.location}</p>
                       </div>
                     </div>
-                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                    }
+                    {eventDetails.type && <div style={{ 'display': 'flex', 'margin': '10px' }}>
                       <div className='flex'>  <img src={tripType} alt="Terms icon" crossOrigin="anonymous" /> <h3> Type :</h3> </div>
                       <div className='section-details'>
-                        <p>{eventDetails.location}</p>
+                        <p>{eventDetails.type}</p>
                       </div>
                     </div>
-                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                    }
+                    {eventDetails.elevation && <div style={{ 'display': 'flex', 'margin': '10px' }}>
                       <div className='flex'> <FontAwesomeIcon icon={faMountainSun} size="lg" /> <h3> Elevation :</h3> </div>
                       <div className='section-details'>
-                        <p>{eventDetails.location}</p>
+                        <p>{eventDetails.elevation}</p>
                       </div>
                     </div>
-                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                    }
+                    {eventDetails.difficulty && <div style={{ 'display': 'flex', 'margin': '10px' }}>
                       <div className='flex'> <img src={endurance} alt="Terms icon" crossOrigin="anonymous" /><h3> Difficulty :</h3> </div>
                       <div className='section-details'>
-                        <p>{eventDetails.location}</p>
+                        <p>{eventDetails.difficulty}</p>
                       </div>
                     </div>
-                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                    }
+                    {eventDetails.duration && <div style={{ 'display': 'flex', 'margin': '10px' }}>
                       <div className='flex'>  <img src={duration} alt="Terms icon" crossOrigin="anonymous" /> <h3> Duration :</h3> </div>
                       <div className='section-details'>
-                        <p>{eventDetails.location}</p>
+                        <p>{eventDetails.duration}</p>
                       </div>
                     </div>
-                    <div style={{ 'display': 'flex', 'margin': '10px' }}>
+                    }
+                    {eventDetails.trekDistance && <div style={{ 'display': 'flex', 'margin': '10px' }}>
                       <div className='flex'><img src={distance} alt="Terms icon" crossOrigin="anonymous" /> <h3> Total Trek Distance :</h3> </div>
                       <div className='section-details'>
-                        <p>{eventDetails.location}</p>
+                        <p>{eventDetails.trekDistance}</p>
                       </div>
                     </div>
+                    }
                   </div>
                 </div>
                 <hr />
