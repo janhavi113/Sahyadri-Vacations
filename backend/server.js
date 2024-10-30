@@ -395,8 +395,6 @@ app.post("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	}
 });
 
-
-
 // Get All Event
 app.get("/all-events", async (req, res) => {
 	try {
@@ -413,8 +411,6 @@ app.get("/all-events", async (req, res) => {
 		});
 	}
 });
-
-
 
 // Get All Event
 app.get("/schedule-event", async (req, res) => {
@@ -542,75 +538,6 @@ app.post("/customised-tour", async (req, res) => {
 	}
 });
 
-function convertDateToCustomFormat(dateString) {
-    // Split the date string (MM/DD/YYYY) into parts
-    const [month, day, year] = dateString.split("/");
-
-    // Get the last two digits of the year
-    const yearLastTwoDigits = year.slice(-2);
-
-    // Format the output as YYDDMM
-    const customFormattedDate = `${yearLastTwoDigits}${day}${month}`;
-
-    return customFormattedDate;
-}
-
-// Bookings
-// app.post("/booking", async (req, res) => {
-// 	try {
-// 		console.log("create req.body --", req.body);
-
-// 		const {
-//             fullName,
-//             email,
-//             mobileNumber,
-//             batch,
-//             eventId,
-//             eventName,
-//             amountPaid,
-//             numberOfPeoples,
-//             pickupLocation,
-//             bookingDate,
-//             otherParticipants,
-//         } = req.body;
-
-// 		let confirmedBookings = await Bookings.find({bookingDate :new Date(req.body.bookingDate).toLocaleDateString()});
-// 		let bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + confirmedBookings.length;
-
-//         let parsedParticipants = [];
-//         if (typeof otherParticipants === 'string') {
-//             parsedParticipants = JSON.parse(otherParticipants);
-//         }
-// 		console.log("create req.body --", req.body);
-
-// 		const booking = new Bookings({
-// 			bookingId: bookingIdVar,
-// 			name: fullName,
-//             email: email,
-//             mobileNumber: mobileNumber,
-//             batch: batch,
-//             eventId: eventId,
-//             eventName: eventName,
-//             numberOfPeoples: numberOfPeoples,
-//             amountPaid: amountPaid,
-//             pickupLocation: pickupLocation,
-//             bookingDate: new Date(bookingDate).toLocaleDateString(),
-//             otherParticipants: parsedParticipants,
-//             status: "Confirmed",
-//         });
-// 		await booking.save();
-//         res.send({
-//             isSuccess: true,
-//             booking: booking
-//         });
-// 	} catch (error) {
-// 		console.error(error);
-// 		res.send({
-// 			isSuccess: false,
-// 			error: error
-// 		});
-// 	}
-// });
 app.use(createEventRoutes);
 app.use(bookingRoutes);
 
@@ -645,22 +572,22 @@ app.use((err, req, res, next) => {
 	next();
 });
 
-// const options = {
-// 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
-// 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
-//   };
+const options = {
+	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
+  };
 
-//  // Start the HTTPS server
-// const server = https.createServer(options, app);
-// console.log('server',server);
-// server.listen(3001, () => {
-//   console.log('HTTPS Server running on port 3001');
-// });
-
-// server.on('error', (err) => {
-//   console.error('Server error:', err);
-// });
-
-app.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
+ // Start the HTTPS server
+const server = https.createServer(options, app);
+console.log('server',server);
+server.listen(3001, () => {
+  console.log('HTTPS Server running on port 3001');
 });
+
+server.on('error', (err) => {
+  console.error('Server error:', err);
+});
+
+// app.listen(port, () => {
+// 	console.log(`Server is running on port ${port}`);
+// });
