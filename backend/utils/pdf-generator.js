@@ -15,7 +15,7 @@ export const generateInvoicePdf = (bookingDetails, pdfPath) => {
   const __dirname = path.dirname(__filename);
 
   // Construct the path to the logo
-  const logo = getImageAsBase64('C:/Users/JanhaviJadhav/OneDrive - Bridgenext/Documents/Sahyadri-Vacations/public/logo.png');
+  const logo = getImageAsBase64('public/logo.png');
 let finalPrice = bookingDetails.amountPaid * bookingDetails.numberOfPeoples;
   console.log('bookingDetails-----',bookingDetails);
   const html = `
