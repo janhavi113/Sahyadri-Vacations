@@ -31,17 +31,10 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            height: auto;
-            overflow: hidden; /* Prevents scroll */
         }
         .invoice {
-            width: 100%;
-            max-width: 100%;
-            height: 90%;
-            padding: 10mm; /* Reduced padding */
-            box-sizing: border-box;
+            padding: 20mm; /* Increased padding for better layout */
             border: 1px solid #ddd;
-            position: relative;
         }
         .watermark {
             position: absolute;
@@ -56,10 +49,10 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px; /* Space between header and content */
+            margin-bottom: 20px;
         }
         .invoice-header h1 {
-            font-size: 28px; /* Adjusted font size */
+            font-size: 28px;
             margin: 0;
             color: #333;
         }
@@ -78,37 +71,29 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         .invoice-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px; /* Space between details and table */
+            margin-top: 20px;
         }
         .invoice-table th, .invoice-table td {
-            padding: 8px; /* Reduced padding */
+            padding: 8px;
             border-bottom: 1px solid #ddd;
             font-size: 14px;
             text-align: left;
         }
         .total-label, .total-amount {
             font-weight: bold;
-            font-size: 20px; /* Adjusted font size */
+            font-size: 20px;
             text-align: right;
         }
         .company-info {
-            font-size: 12px; /* Adjusted font size */
-            margin-top: 470px; /* Space before company info */
-        }
-        .thank-you {
-            margin-top: 1px;
-            font-size: 3em; /* Adjusted font size */
-            text-align: right;
-            transform: rotate(-25deg);
-            font-family: 'Segoe Script', cursive, sans-serif;
+            font-size: 12px;
+            margin-top: 50px; /* Adjusted space before company info */
         }
         .footer-strip {
             background-color: #00506b;
             color: white;
             text-align: center;
             padding: 10px;
-            position: relative; /* Changed from absolute */
-            font-size: 12px; /* Adjusted font size */
+            font-size: 12px;
         }
         .horizontal-line {
             border: none;
@@ -180,30 +165,36 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
 </html>`;
 
     // Launch Puppeteer
-    const browser = await puppeteer.launch({
-        headless: true, // Set to false if you want to see the browser action
-        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Use these flags in CI environments
-        dumpio: true, // Enable logging
-    });
-    
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' }); // Load the HTML content
+    let browser;
+    try {
+        browser = await puppeteer.launch({
+            headless: true, // Set to false if you want to see the browser action
+            args: ['--no-sandbox', '--disable-setuid-sandbox'], // Use these flags in CI environments
+            dumpio: true, // Enable logging
+        });
 
-    // Generate PDF
-    await page.pdf({
-        path: pdfPath,
-        format: 'A4',
-        printBackground: true,
-        // margin: {
-        //     top: '10mm',
-        //     right: '10mm',
-        //     bottom: '10mm',
-        //     left: '10mm'
-        // }
-    });
+        const page = await browser.newPage();
+        await page.setContent(html, { waitUntil: 'networkidle0' }); // Load the HTML content
 
-    // Close the browser
-    await browser.close();
+        // Generate PDF
+        await page.pdf({
+            path: pdfPath,
+            format: 'A4',
+            printBackground: true,
+            margin: {
+                top: '10mm',
+                right: '10mm',
+                bottom: '10mm',
+                left: '10mm'
+            }
+        });
 
-    console.log(`PDF saved at ${pdfPath}`);
+        console.log(`PDF saved at ${pdfPath}`);
+    } catch (error) {
+        console.error('Error generating PDF:', error);
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
 };
