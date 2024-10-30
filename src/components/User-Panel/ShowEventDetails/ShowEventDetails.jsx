@@ -89,8 +89,8 @@ const ShowEventDetails = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log('--participants--', participants);
-    console.log('---data---', data);
+    //console.log('--participants--', participants);
+    //console.log('---data---', data);
     const formData = new FormData();
     formData.append("fullName", data.fullName);
     formData.append("email", data.emailId);
@@ -111,13 +111,31 @@ const ShowEventDetails = () => {
     });
 
     let res = await r.json()
-    // console.log('res', JSON.stringify(res));
+    // //console.log('res', JSON.stringify(res));
     if (res.isSuccess == true) {
       handleClose();
       setBookingConfirmed(true);
+      await sendInvoiceRequest(res.booking);
     }
   }
+  const sendInvoiceRequest = async (booking) => {
+    try {
+        const response = await fetch(`${apiUrl}sendInvoice`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(booking),
+        });
 
+        const result = await response.text();
+        if (response.ok) {
+            console.log("Invoice sent successfully:", result);
+        } else {
+            console.error("Failed to send invoice:", result);
+        }
+    } catch (error) {
+        console.error("Error sending invoice:", error);
+    }
+};
   const handleSelection = (event) => {
     setSelectedLocation(event.target.value);
   };
@@ -225,7 +243,7 @@ const ShowEventDetails = () => {
         batchDates.push('Available On All Weekends');
       }
     }
-    // console.log('batchDates --- ' + batchDates);
+    // //console.log('batchDates --- ' + batchDates);
     if (batchdate && eventCostPerPerson) {
       setAvailableBatches(batchDates);
       setPrice(eventCostPerPerson);
@@ -267,7 +285,7 @@ const ShowEventDetails = () => {
     let res = await r.json()
     if (res.isSuccess == true) {
       setSuccess(true);
-      console.log('eventDetails --', res);
+      //console.log('eventDetails --', res);
       // 
       setEventDetails(res.events);
 

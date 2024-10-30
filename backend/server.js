@@ -34,6 +34,7 @@ import jwt from 'jsonwebtoken';
 import directBookingRoutes from './routes/directBookingRoutes.js'; // Import the new route
 import bookingRoutes from './routes/bookingRoutes.js'; // Import the new route
 import createEventRoutes from './routes/createEventRoutes.js'; // Import the new route
+
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET; // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
