@@ -168,11 +168,15 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
     let browser;
     try {
         browser = await puppeteer.launch({
-            headless: true, // Set to false if you want to see the browser action
-            args: ['--no-sandbox', '--disable-setuid-sandbox'], // Use these flags in CI environments
-            dumpio: true, // Enable logging
+            headless: true, // Keep this true for production
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage', // Overcomes limited resource problems
+                '--disable-gpu', // Disable GPU hardware acceleration
+                '--window-size=1920,1080', // Set the window size
+            ],
         });
-
         const page = await browser.newPage();
         await page.setContent(html, { waitUntil: 'networkidle0' }); // Load the HTML content
 
