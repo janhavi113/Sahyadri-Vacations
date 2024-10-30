@@ -31,10 +31,16 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            height: auto;
+            overflow: hidden; /* Prevents scroll */
         }
         .invoice {
-            padding: 20mm; /* Increased padding for better layout */
+            width: 100%;
+            max-width: 100%;
+            padding: 10mm; /* Reduced padding */
+            box-sizing: border-box;
             border: 1px solid #ddd;
+            position: relative;
         }
         .watermark {
             position: absolute;
@@ -49,10 +55,10 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 20px; /* Space between header and content */
         }
         .invoice-header h1 {
-            font-size: 28px;
+            font-size: 28px; /* Adjusted font size */
             margin: 0;
             color: #333;
         }
@@ -71,29 +77,37 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         .invoice-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 20px; /* Space between details and table */
         }
         .invoice-table th, .invoice-table td {
-            padding: 8px;
+            padding: 8px; /* Reduced padding */
             border-bottom: 1px solid #ddd;
             font-size: 14px;
             text-align: left;
         }
         .total-label, .total-amount {
             font-weight: bold;
-            font-size: 20px;
+            font-size: 20px; /* Adjusted font size */
             text-align: right;
         }
         .company-info {
-            font-size: 12px;
-            margin-top: 350px; /* Adjusted space before company info */
+            font-size: 12px; /* Adjusted font size */
+            margin-top: 470px; /* Space before company info */
+        }
+        .thank-you {
+            margin-top: 1px;
+            font-size: 3em; /* Adjusted font size */
+            text-align: right;
+            transform: rotate(-25deg);
+            font-family: 'Segoe Script', cursive, sans-serif;
         }
         .footer-strip {
             background-color: #00506b;
             color: white;
             text-align: center;
             padding: 10px;
-            font-size: 12px;
+            position: relative; /* Changed from absolute */
+            font-size: 12px; /* Adjusted font size */
         }
         .horizontal-line {
             border: none;
