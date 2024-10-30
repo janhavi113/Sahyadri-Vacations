@@ -104,7 +104,7 @@ router.post("/sendInvoice", async (req, res) => {
     }
 
     // Retry loop to check for the existence of the PDF
-    const maxRetries = 10;
+    const maxRetries = 15;
     let fileExists = false;
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         fileExists = fs.existsSync(pdfPath);
