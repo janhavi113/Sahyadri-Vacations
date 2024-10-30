@@ -183,6 +183,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
     const browser = await puppeteer.launch({
         headless: true, // Set to false if you want to see the browser action
         args: ['--no-sandbox', '--disable-setuid-sandbox'], // Use these flags in CI environments
+        dumpio: true, // Enable logging
     });
     
     const page = await browser.newPage();
