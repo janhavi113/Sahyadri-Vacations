@@ -86,7 +86,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         }
         .company-info {
             font-size: 12px;
-            margin-top: 470px; /* Adjusted space before company info */
+            margin-top: 400px; /* Adjusted space before company info */
         }
         .footer-strip {
             background-color: #00506b;
