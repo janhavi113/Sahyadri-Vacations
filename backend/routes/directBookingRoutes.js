@@ -57,6 +57,7 @@ router.post('/direct-booking', async (req, res) => {
             pickupLocation,
             bookingDate,
             otherParticipants,
+            eventPrice,
         } = req.body;
 
         let parsedParticipants = [];
@@ -78,6 +79,7 @@ router.post('/direct-booking', async (req, res) => {
             otherParticipants: parsedParticipants,
             images: currUrl,
             status: "Pending",
+            eventPrice: eventPrice,
         });
 
         await booking.save();

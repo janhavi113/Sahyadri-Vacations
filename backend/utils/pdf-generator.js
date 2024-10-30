@@ -16,8 +16,8 @@ export const generateInvoicePdf = (bookingDetails, pdfPath) => {
 
   // Construct the path to the logo
   const logo = getImageAsBase64('C:/Users/JanhaviJadhav/OneDrive - Bridgenext/Documents/Sahyadri-Vacations/public/logo.png');
-
-  //console.log('logo-----',logo);
+let finalPrice = bookingDetails.amountPaid * bookingDetails.numberOfPeoples;
+  console.log('bookingDetails-----',bookingDetails);
   const html = `
 
   <!DOCTYPE html>
@@ -5788,13 +5788,14 @@ export const generateInvoicePdf = (bookingDetails, pdfPath) => {
                 <tr>
                     <td class="customer-info">
                         <h3>Billed To:</h3>
-                        <p>Name: Dinesh Tambekar</p>
-                        <p>Phone No: 8421088703</p>
+                        <p>Name:${bookingDetails.name}</p>
+                        <p>Phone No: ${bookingDetails.mobileNumber}</p>
+                        <p>Email: ${bookingDetails.email}</p>
                     </td>
                     <td class="invoice-info">
                         <h3>Invoice Details:</h3>
-                        <p>Invoice Number: #10793</p>
-                        <p>Date: 06.08.2024</p>
+                        <p>Invoice Number: #${bookingDetails.bookingId}</p>
+                        <p>Date: ${bookingDetails.bookingDate}</p>
                     </td>
                 </tr>
             </table>
@@ -5813,16 +5814,16 @@ export const generateInvoicePdf = (bookingDetails, pdfPath) => {
             </thead>
             <tbody>
                 <tr>
-                    <td>Kalu Waterfall / God's Valley Trek</td>
-                    <td>4</td>
-                    <td>₹1,399</td>
-                    <td>₹5,596</td>
-                </tr>
+                    <td>${bookingDetails.eventName}</td>
+                    <td>${bookingDetails.numberOfPeoples}</td>
+                    <td>${bookingDetails.eventPrice}</td>
+                    <td>${finalPrice}</td>
+                </tr>               
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="3" class="total-label">Total</td>
-                    <td class="total-amount">₹5,596</td>
+                    <td class="total-amount">${bookingDetails.amountPaid}</td>
                 </tr>
             </tfoot>
         </table>

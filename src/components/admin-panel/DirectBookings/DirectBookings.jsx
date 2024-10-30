@@ -76,7 +76,7 @@ const DirectBookings = ({ onSendData }) => {
     const today = new Date();
     formData.append("bookingDate", today);
     formData.append("otherParticipants", JSON.stringify(participants));
-
+    formData.append("eventPrice",price);
     console.log("uploadedFiles--", uploadedFiles);
     formData.append("images", uploadedFiles[0]); // Adjust the name as needed
 

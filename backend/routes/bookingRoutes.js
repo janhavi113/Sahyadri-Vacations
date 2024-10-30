@@ -28,6 +28,7 @@ router.post("/booking", async (req, res) => {
             pickupLocation,
             bookingDate,
             otherParticipants,
+            eventPrice,
         } = req.body;
 
 		let confirmedBookings = await Bookings.find({bookingDate :new Date(req.body.bookingDate).toLocaleDateString()});
@@ -53,6 +54,7 @@ router.post("/booking", async (req, res) => {
             bookingDate: new Date(bookingDate).toLocaleDateString(),
             otherParticipants: parsedParticipants,
             status: "Confirmed",
+            eventPrice: eventPrice,
         });
 		await booking.save();
         console.log("booking --", booking);

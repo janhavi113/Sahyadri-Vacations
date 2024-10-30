@@ -104,7 +104,7 @@ const ShowEventDetails = () => {
     const today = new Date();
     formData.append("bookingDate", today);
     formData.append("otherParticipants", JSON.stringify(participants));
-
+    formData.append("eventPrice",price);
     let r = await fetch(`${apiUrl}booking`, {
       method: "POST",
       body: formData,
