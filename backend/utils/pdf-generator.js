@@ -5853,6 +5853,7 @@ let finalPrice = bookingDetails.amountPaid * bookingDetails.numberOfPeoples;
   const pdfOptions = {
     format: 'A4',
     printBackground: true,
+    phantomPath: '/usr/local/bin/phantomjs' 
   };
 
   pdf.create(html, pdfOptions).toFile(pdfPath, (err, res) => {
