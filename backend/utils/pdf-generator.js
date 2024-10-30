@@ -86,7 +86,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         }
         .company-info {
             font-size: 12px;
-            margin-top: 50px; /* Adjusted space before company info */
+            margin-top: 470px; /* Adjusted space before company info */
         }
         .footer-strip {
             background-color: #00506b;
@@ -185,12 +185,6 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             path: pdfPath,
             format: 'A4',
             printBackground: true,
-            margin: {
-                top: '10mm',
-                right: '10mm',
-                bottom: '10mm',
-                left: '10mm'
-            }
         });
 
         console.log(`PDF saved at ${pdfPath}`);
