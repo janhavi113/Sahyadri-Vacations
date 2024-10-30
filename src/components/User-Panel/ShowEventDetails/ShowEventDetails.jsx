@@ -111,7 +111,7 @@ const ShowEventDetails = () => {
     });
 
     let res = await r.json()
-    // //console.log('res', JSON.stringify(res));
+    console.log('booking---', JSON.stringify(res));
     if (res.isSuccess == true) {
       handleClose();
       setBookingConfirmed(true);
