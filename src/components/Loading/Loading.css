@@ -1,0 +1,35 @@
+/* Loading.css */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full height of the viewport */
+    background-color: #f9f9f9; /* Optional background color */
+}
+
+.loading-logo {
+    width: 150px; /* Adjust the size of your logo */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 20px; /* Spacing between logo and text */
+    animation: fadeIn 1s; /* Optional fade-in animation */
+}
+
+/* Keyframes for fade-in effect */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.loading-animation {
+    opacity: 0; /* Start with invisible loading message */
+    animation: fadeIn 1s forwards; /* Fade in after logo is hidden */
+    animation-delay: 2s; /* Delay to sync with logo display */
+}
+
+/* Keyframes for loading animation */
+@keyframes loadingAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); } /* Scale up */
+    100% { transform: scale(1); }
+}

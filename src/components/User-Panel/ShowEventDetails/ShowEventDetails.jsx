@@ -15,6 +15,8 @@ import duration from '../../Images/duration.svg'
 import distance from '../../Images/distance.svg'
 import endurance from '../../Images/endurance.svg'
 import locationicon from '../../Images/location.svg'
+import Loading from  '../../Loading/Loading';
+import CircularLoading from  '../../Loading/CircularLoading';
 import "../../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
@@ -24,6 +26,9 @@ import DatePicker from "react-datepicker";
 import { isWeekend } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import CollapsibleSection from './CollapsibleSection';
+import { css } from '@emotion/react';
+import ClipLoader from 'react-spinners/ClipLoader'; // Import the loading spinner component
+
 import "react-datepicker/dist/react-datepicker.css";
 const ShowEventDetails = () => {
   const navigate = useNavigate();
@@ -33,6 +38,8 @@ const ShowEventDetails = () => {
   const [params, setParams] = useState(type.split('/'));
   const [isSuccess, setSuccess] = useState(false);
   const [inquery, setInquery] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [buttonClick, setButtonClick] = useState(null);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
@@ -111,7 +118,9 @@ const ShowEventDetails = () => {
   // Set checkbox to unchecked on blur if it is currently checked
 
   const onSubmit = async (data) => {
-    console.log('selectedLocation--',);
+    setIsLoading(true); // Set loading to true before starting the request
+    try {
+       console.log('selectedLocation--',);
     if (buttonClick == 'pay-now') {
       const formData = new FormData();
       formData.append("numberOfPeoples", noOfTrekkers);
@@ -160,6 +169,12 @@ const ShowEventDetails = () => {
         setBookingId(res.booking.bookingId);
       }
     }
+  } catch (error) {
+    console.error('Error during booking:', error);
+    // Optionally, show an error message to the user
+  } finally {
+    setIsLoading(false); // Reset loading to false after the request is complete
+  }
   }
 
   const sendInvoiceRequest = async (booking) => {
@@ -327,6 +342,7 @@ const ShowEventDetails = () => {
     })
     let res = await r.json()
     if (res.isSuccess == true) {
+      setLoading(false);
       setSuccess(true);
       setEventDetails(res.events);
 
@@ -339,6 +355,9 @@ const ShowEventDetails = () => {
     }
 
   }
+  if (loading) {
+    return <Loading />; // Show loading component while fetching
+}
 
   return (
     <div>
@@ -367,6 +386,7 @@ const ShowEventDetails = () => {
 
         </Swiper>
       </div>
+     
       {isSuccess &&
         <div>
           <div className="content-row row2">
@@ -622,7 +642,14 @@ const ShowEventDetails = () => {
           </div>
         </div>
       }
-      {isSuccess &&
+       <div>
+      {loading ? (
+        <div className="loading-spinner">
+          <ClipLoader color="#36D7B7" loading={loading} size={50} />
+          <p>Processing your request...</p>
+        </div>
+      ) : (
+      
         <Modal show={show} onHide={handleClose}>
           <form action="" onSubmit={handleSubmit(onSubmit)}>
             <div className="container">
@@ -797,7 +824,9 @@ const ShowEventDetails = () => {
             </div>
           </form>
         </Modal>
-      }
+      
+    )}
+    </div>
       {show == false && <ContactSection />}
 
       <Footer />

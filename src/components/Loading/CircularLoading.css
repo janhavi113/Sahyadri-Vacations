@@ -1,0 +1,29 @@
+/* CircularLoading.css */
+.circular-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full height of the viewport */
+    background-color: #f9f9f9; /* Optional background color */
+}
+
+.circular-spinner {
+    border: 8px solid #f3f3f3; /* Light background */
+    border-top: 8px solid #3498db; /* Blue color for the spinner */
+    border-radius: 50%;
+    width: 60px; /* Size of the spinner */
+    height: 60px; /* Size of the spinner */
+    animation: spin 1s linear infinite; /* Spin animation */
+    margin-bottom: 20px; /* Space between spinner and text */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.circular-loading-container p {
+    font-size: 18px; /* Text size */
+    color: #555; /* Text color */
+}
