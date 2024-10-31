@@ -1,0 +1,46 @@
+.confirmation-container {
+    text-align: center;
+    margin: 50px;
+  }
+  
+  .confirmation-container h1 {
+    font-size: 2.5rem;
+    color: #4CAF50;
+  }
+  
+  .confirmation-container p {
+    font-size: 1.2rem;
+    margin: 20px 0;
+  }
+  
+
+  .invoice-message {
+    margin-top: 20px;
+    font-size: 16px;
+    color: orange; /* Adjust color as needed */
+    font-style: italic; /* Optional for emphasis */
+  }
+  
+  .confirmation-container button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .confirmation-container button:hover {
+    background-color: #45a049;
+  }
+  
+  .confirmed-link {
+    color: blue !important; /* Set link color to blue */
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .confirmed-link:hover {
+    text-decoration: underline !important;  /* Add underline on hover */
+  }
+  

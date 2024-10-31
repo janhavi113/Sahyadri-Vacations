@@ -22,8 +22,8 @@ import Register from './components/Register/Register';
 import DirectBookingDashboard from "./components/admin-panel/DirectBookings/DirectBookingDashboard" ;
 import DirectBookings from "./components/admin-panel/DirectBookings/ConfirmDirectBooking" ;
 import DirectBookingConfirmationPannel from "./components/admin-panel/DirectBookings/DirectBookingConfirmationPannel" ;
+import Confirmation from "./components/Confirmation";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
 function App() {
   console.log("inapp", import.meta.env.VITE_SOME_KEY);
   const router = createBrowserRouter([
@@ -126,6 +126,10 @@ function App() {
     {
       path: "/direct-booking-confirmation",
       element: <DirectBookingConfirmationPannel />,
+    },
+    {
+      path: "/confirmation", // New confirmation route
+      element: <Confirmation />,
     }
   ]);
   return (

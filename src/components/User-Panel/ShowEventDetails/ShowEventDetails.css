@@ -5,6 +5,13 @@
     object-position: center;
 }
 
+.show-error{
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
 .header-center-aligned {
     position: absolute;
     z-index: 299;
