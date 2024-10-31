@@ -7,7 +7,7 @@ import Footer from "../../footer";
 import ContactSection from "../ContactLogo/contactSection";
 import Navbar from "../../Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot, faPersonHiking, faMountainSun } from '@fortawesome/free-solid-svg-icons';
+import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot, faMountainSun } from '@fortawesome/free-solid-svg-icons';
 import { Modal } from "react-bootstrap";
 import "../../admin-panel/CreateEvent/CreateEvents.css"
 import tripType from '../../Images/type.svg'
@@ -21,7 +21,7 @@ import 'swiper/css/bundle';
 // import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import DatePicker from "react-datepicker";
-import {  isWeekend } from 'date-fns';
+import { isWeekend } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import CollapsibleSection from './CollapsibleSection';
 import "react-datepicker/dist/react-datepicker.css";
@@ -131,9 +131,8 @@ const ShowEventDetails = () => {
       if (res.isSuccess == true) {
         handleClose();
         setBookingConfirmed(true);
-       // const bookingDetails = res.booking;
         // Redirect to confirmation page
-        navigate('/confirmation', { state: { bookingId : res.booking.bookingId, name :res.booking.name ,noOfParticipant : res.booking.numberOfPeoples, phone: data.whatsappNumber, email: data.emailId } });
+        navigate('/confirmation', { state: { bookingId: res.booking.bookingId, name: res.booking.name, noOfParticipant: res.booking.numberOfPeoples, phone: data.whatsappNumber, email: data.emailId } });
         await sendInvoiceRequest(res.booking);
 
       }
@@ -288,7 +287,6 @@ const ShowEventDetails = () => {
         batchDates.push('Available On All Weekends');
       }
     }
-    // //console.log('batchDates --- ' + batchDates);
     if (batchdate && eventCostPerPerson) {
       setAvailableBatches(batchDates);
       setPrice(eventCostPerPerson);
@@ -330,8 +328,6 @@ const ShowEventDetails = () => {
     let res = await r.json()
     if (res.isSuccess == true) {
       setSuccess(true);
-      //console.log('eventDetails --', res);
-      // 
       setEventDetails(res.events);
 
       setScheduleBatch(res.ScheduleBatchesRecords);
@@ -580,7 +576,6 @@ const ShowEventDetails = () => {
 
                           <div className="button-margin button">
                             <input onClick={handleShow} type="submit" value="BOOK NOW" />
-                            {/*<button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> */}
                           </div></>}
                         {inquery &&
                           <div className="button-margin button">
@@ -615,7 +610,6 @@ const ShowEventDetails = () => {
                   <div className="button button-margin ">
                     {!inquery &&
                       <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
-                      /* <button  type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button> */
                     }
                     {inquery &&
                       <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
@@ -795,7 +789,7 @@ const ShowEventDetails = () => {
                     </div>
 
                     <div className="button">
-                      <input style={{"background": "green"}} disabled={buttonDisabled} type="submit" value="Pay Now" />
+                      <input style={{ "background": "green" }} disabled={buttonDisabled} type="submit" value="Pay Now" />
                     </div>
                   </div>
                 }
@@ -805,19 +799,7 @@ const ShowEventDetails = () => {
         </Modal>
       }
       {show == false && <ContactSection />}
-      {/* {
-        <Modal
-          show={isBookingConfirmed}
-          onHide={() => setBookingConfirmed(false)}
-        >
-          <Modal.Header closeButton>
-            <div className="title-header">
-              BOOKING CONFIRMED
-              <br />
-            </div>
-          </Modal.Header>
-        </Modal>
-      } */}
+
       <Footer />
     </div>
   )
