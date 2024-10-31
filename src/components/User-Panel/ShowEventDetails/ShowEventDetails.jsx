@@ -21,16 +21,19 @@ import 'swiper/css/bundle';
 // import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import DatePicker from "react-datepicker";
-import { addDays, isWeekend } from 'date-fns';
+import {  isWeekend } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 import CollapsibleSection from './CollapsibleSection';
 import "react-datepicker/dist/react-datepicker.css";
 const ShowEventDetails = () => {
+  const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
   const queryParameters = new URLSearchParams(window.location.search);
   const [type, setType] = useState(queryParameters.get("eventid"));
   const [params, setParams] = useState(type.split('/'));
   const [isSuccess, setSuccess] = useState(false);
   const [inquery, setInquery] = useState(false);
+  const [buttonClick, setButtonClick] = useState(null);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
   const [pickupPoints, setPickupPoints] = useState([]);
@@ -48,8 +51,10 @@ const ShowEventDetails = () => {
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [bookingId, setBookingId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isBookingConfirmed, setBookingConfirmed] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleDateChange = (date) => {
@@ -61,13 +66,6 @@ const ShowEventDetails = () => {
   const filterWeekends = (date) => {
     return isWeekendDay(date);
   }
-  const toggleModal = () => {
-    if (modal) {
-      setModal(false);
-    } else {
-      setModal(true);
-    }
-  };
 
   const handleParticipantChange = (index, field, value) => {
     const newParticipants = [...participants];
@@ -81,61 +79,108 @@ const ShowEventDetails = () => {
   } else {
     document.body.classList.remove('active-modal')
   }
+
   const {
     register,
     handleSubmit,
     setError,
+    clearErrors,
+    setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm();
+  // Watch the checkbox value
+  const termsChecked = watch("termsAndconditions");
 
-  const onSubmit = async (data) => {
-    //console.log('--participants--', participants);
-    //console.log('---data---', data);
-    const formData = new FormData();
-    formData.append("fullName", data.fullName);
-    formData.append("email", data.emailId);
-    formData.append("mobileNumber", data.whatsappNumber);
-    formData.append("batch", selectedDate);
-    formData.append("eventId", eventDetails.eventId);
-    formData.append("eventName", eventDetails.name);
-    formData.append("numberOfPeoples", noOfTrekkers);
-    formData.append("amountPaid", finalPrice);
-    formData.append("pickupLocation", selectedLocation);
-    const today = new Date();
-    formData.append("bookingDate", today);
-    formData.append("otherParticipants", JSON.stringify(participants));
-    formData.append("eventPrice",price);
-    let r = await fetch(`${apiUrl}booking`, {
-      method: "POST",
-      body: formData,
-    });
-
-    let res = await r.json()
-    console.log('booking---', JSON.stringify(res));
-    if (res.isSuccess == true) {
-      handleClose();
-      setBookingConfirmed(true);
-      await sendInvoiceRequest(res.booking);
+  // Handle blur to toggle the value
+  const handleCheckboxBlur = () => {
+    if (selectedLocation == null && eventType != 'CampingEvent') {
+      setError("dateError", {
+        type: "manual",
+        message: "Please select Pickup Location and again click Pay Now",
+      })
+      setButtonDisabled(false);
+      if (termsChecked) {
+        setValue("termsAndconditions", false);
+      }
+    } else {
+      clearErrors('dateError');
+      setButtonDisabled(false);
     }
   }
+  // Set checkbox to unchecked on blur if it is currently checked
+
+  const onSubmit = async (data) => {
+    console.log('selectedLocation--',);
+    if (buttonClick == 'pay-now') {
+      const formData = new FormData();
+      formData.append("numberOfPeoples", noOfTrekkers);
+      formData.append("amountPaid", finalPrice);
+      formData.append("pickupLocation", selectedLocation);
+      const today = new Date();
+      formData.append("bookingDate", today);
+      formData.append("otherParticipants", JSON.stringify(participants));
+      formData.append("bookingId", bookingId);
+      let r = await fetch(`${apiUrl}confirmed-booking`, {
+        method: "PUT",
+        body: formData,
+      });
+
+      let res = await r.json()
+      console.log('booking---', JSON.stringify(res));
+      if (res.isSuccess == true) {
+        handleClose();
+        setBookingConfirmed(true);
+       // const bookingDetails = res.booking;
+        // Redirect to confirmation page
+        navigate('/confirmation', { state: { bookingId : res.booking.bookingId, name :res.booking.name ,noOfParticipant : res.booking.numberOfPeoples, phone: data.whatsappNumber, email: data.emailId } });
+        await sendInvoiceRequest(res.booking);
+
+      }
+    } else {
+
+      const formData = new FormData();
+      formData.append("fullName", data.fullName);
+      formData.append("email", data.emailId);
+      formData.append("mobileNumber", data.whatsappNumber);
+      formData.append("batch", selectedDate);
+      formData.append("eventId", eventDetails.eventId);
+      formData.append("eventName", eventDetails.name);
+      const today = new Date();
+      formData.append("bookingDate", today);
+      formData.append("eventPrice", price);
+      let r = await fetch(`${apiUrl}booking`, {
+        method: "POST",
+        body: formData,
+      });
+
+      let res = await r.json()
+      console.log('booking---', JSON.stringify(res));
+      if (res.isSuccess == true) {
+        setButtonClick('pay-now');
+        setBookingId(res.booking.bookingId);
+      }
+    }
+  }
+
   const sendInvoiceRequest = async (booking) => {
     try {
-        const response = await fetch(`${apiUrl}sendInvoice`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(booking),
-        });
+      const response = await fetch(`${apiUrl}sendInvoice`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(booking),
+      });
 
-        const result = await response.text();
-        if (response.ok) {
-            console.log("Invoice sent successfully:", result);
-        } else {
-            console.error("Failed to send invoice:", result);
-        }
+      const result = await response.text();
+      if (response.ok) {
+        console.log("Invoice sent successfully:", result);
+      } else {
+        console.error("Failed to send invoice:", result);
+      }
     } catch (error) {
-        console.error("Error sending invoice:", error);
+      console.error("Error sending invoice:", error);
     }
-};
+  };
   const handleSelection = (event) => {
     setSelectedLocation(event.target.value);
   };
@@ -155,7 +200,7 @@ const ShowEventDetails = () => {
   }
 
   const decreaseCount = async () => {
-    if (noOfTrekkers > 0) {
+    if (noOfTrekkers > 1) {
       let count = noOfTrekkers;
       let price1 = price;
       count--;
@@ -588,7 +633,7 @@ const ShowEventDetails = () => {
           <form action="" onSubmit={handleSubmit(onSubmit)}>
             <div className="container">
               <Modal.Header closeButton>
-                <div className="title-header">BOOKING SUMMERY<br />
+                <div className="title-header">BOOKING<br />
                   <div className='booking-header'>
                     {eventDetails.name}
                   </div>
@@ -596,144 +641,171 @@ const ShowEventDetails = () => {
               </Modal.Header>
               <Modal.Body>
                 <div className="content">
-                  {isSubmitting && <div>Loading...</div>}
-                  <div className="user-details">
-                    <div className="input-box ">
-                      <span className="details">Full Name</span>
-                      <input {...register("fullName", { required: { value: true, message: "This field is required" }, })} type="text" required />
-                    </div>
-                    <div className="input-box ">
-                      <span className="details">Email ID</span>
-                      <input  {...register("emailId", { required: { value: true, message: "This field is required" }, })} type="email" required />
-                    </div>
-                    <div className="input-box">
-                      <span className="details">WhatsApp Mobile Number</span>
-                      <input placeholder='+91'{...register("whatsappNumber", { required: { value: true, message: "This field is required" }, })} type="tel" required />
-                    </div>
-                    {!everyWeekend && <div className="input-box">
-                      <span className="details">Select Batch</span>
-                      <select  {...register("selectDate", { required: { value: true, message: "This field is required" }, })} required>
-                        {availableBatches && availableBatches.map((event, index) => (
-                          <option key={index} value={event} >{event}</option>
-                        ))}
-                      </select>
-                    </div>}
-                    {everyWeekend && <div className="input-box">
-                      <span className="details">Select Batch</span>
-                      <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
-                    </div>}
-                    {eventType != 'CampingEvent' &&
-                      <div>
-                        <h3>Select a Location:</h3>
-                        <ul>
-                          {pickupPoints.map((location) => (
-                            <li key={location.id}>
-                              <label className='radio-display'>
-                                <input
-                                  type="radio"
-                                  name="location"
-                                  value={location.name}
-                                  onChange={handleSelection}
-                                  checked={selectedLocation === location.name}
-                                />
-                                {location.name} : {location.time}
-                              </label>
-                            </li>
+                  {buttonClick != 'pay-now' &&
+                    <div className="user-details">
+                      <div className="input-box ">
+                        <span className="details">Full Name</span>
+                        <input {...register("fullName", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                      </div>
+                      <div className="input-box ">
+                        <span className="details">Email ID</span>
+                        <input  {...register("emailId", { required: { value: true, message: "This field is required" }, })} type="email" required />
+                      </div>
+                      <div className="input-box">
+                        <span className="details">WhatsApp Mobile Number</span>
+                        <input placeholder='+91' {...register("whatsappNumber", { required: { value: true, message: "This field is required" }, })} type="tel" required />
+                      </div>
+                      {!everyWeekend && <div className="input-box">
+                        <span className="details">Select Batch</span>
+                        <select  {...register("selectDate", { required: { value: true, message: "This field is required" }, })} required>
+                          {availableBatches && availableBatches.map((event, index) => (
+                            <option key={index} value={event} >{event}</option>
                           ))}
-                        </ul>
-                      </div>
-                    }
+                        </select>
+                      </div>}
+                      {everyWeekend && <div className="input-box">
+                        <span className="details">Select Batch</span>
+                        <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
+                      </div>}
+                    </div>}
+                  {buttonClick == 'pay-now' &&
+                    <div className="user-details">
+                      {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
 
-                    <div className="input-box finalCalculation">
-                      <div className="details">Number of Trekkers</div>
-                      <div></div>
-                      <div className='noOftrekkers'>
-                        <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>
-                        {noOfTrekkers}
-                        <span onClick={increaseCount}><FontAwesomeIcon icon={faCirclePlus} size="lg" style={{ color: "orange", }} /></span>
+                      {eventType != 'CampingEvent' &&
+                        <div>
+                          <h3>Select a Location:</h3>
+                          <ul>
+                            {pickupPoints.map((location) => (
+                              <li key={location.id}>
+                                <label className='radio-display'>
+                                  <input
+                                    type="radio"
+                                    name="location"
+                                    value={location.name}
+                                    onChange={handleSelection}
+                                    checked={selectedLocation === location.name}
+                                  />
+                                  {location.name} : {location.time}
+                                </label>
+                              </li>
+                            ))}
+                          </ul>
+
+                        </div>
+                      }
+
+                      <div className="input-box finalCalculation">
+                        <div className="details">Number of Trekkers</div>
+                        <div></div>
+                        <div className='noOftrekkers'>
+                          <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>
+                          {noOfTrekkers}
+                          <span onClick={increaseCount}><FontAwesomeIcon icon={faCirclePlus} size="lg" style={{ color: "orange", }} /></span>
+                        </div>
                       </div>
-                    </div>
-                    {/* Render input fields for each participant */}
-                    {participants.map((participant, index) => (
-                      <div key={index} className="participant-box">
-                        <h2>participant {index + 2} </h2>
-                        <div key={index} className="Column-2 participant-inputs">
-                          <input
-                            type="text"
-                            placeholder="Name"
-                            value={participant.name}
-                            onChange={(e) =>
-                              handleParticipantChange(index, "name", e.target.value)
-                            }
-                          />
-                          <input
-                            type="text"
-                            placeholder="WhatsApp Number"
-                            value={participant.mobileNumber}
-                            onChange={(e) =>
-                              handleParticipantChange(
-                                index,
-                                "mobileNumber",
-                                e.target.value
-                              )
-                            }
-                          />
-                          {eventType != 'CampingEvent' &&
-                            <select
-                              className="select-class"
-                              name="location"
-                              value={participant.pickupLocation}
+                      {/* Render input fields for each participant */}
+                      {participants.map((participant, index) => (
+                        <div key={index} className="participant-box">
+                          <h2>participant {index + 2} </h2>
+                          <div key={index} className="Column-2 participant-inputs">
+                            <input
+                              type="text"
+                              placeholder="Name"
+                              value={participant.name}
+                              onChange={(e) =>
+                                handleParticipantChange(index, "name", e.target.value)
+                              }
+                            />
+                            <input
+                              type="text"
+                              placeholder="WhatsApp Number"
+                              value={participant.mobileNumber}
                               onChange={(e) =>
                                 handleParticipantChange(
                                   index,
-                                  "pickupLocation",
+                                  "mobileNumber",
                                   e.target.value
                                 )
                               }
-                            >
+                            />
+                            {eventType != 'CampingEvent' &&
+                              <select
+                                className="select-class"
+                                name="location"
+                                value={participant.pickupLocation}
+                                onChange={(e) =>
+                                  handleParticipantChange(
+                                    index,
+                                    "pickupLocation",
+                                    e.target.value
+                                  )
+                                }
+                              >
 
-                              <option value="">Select a location</option>{" "}
-                              {/* Optional: Placeholder option */}
-                              {pickupPoints.map((pickupPoint) => {
-                                return (
-                                  <option value={pickupPoint.name} key={pickupPoint.id}>
-                                    {pickupPoint.name}
-                                  </option>
-                                );
-                              })}
-                            </select>
-                          }
+                                <option value="">Select a location</option>{" "}
+                                {/* Optional: Placeholder option */}
+                                {pickupPoints.map((pickupPoint) => {
+                                  return (
+                                    <option value={pickupPoint.name} key={pickupPoint.id}>
+                                      {pickupPoint.name}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            }
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                    <div className='hr'></div>
+                      ))}
+                      <div className='hr'></div>
 
-                    <div className='finalCalculation'>
-                      <span >Total To Pay</span>
-                      <span></span>
-                      <span >₹{finalPrice} /-</span>
-                    </div>
-                  </div>
+                      <div className='finalCalculation'>
+                        <span >Total To Pay</span>
+                        <span></span>
+                        <span >₹{finalPrice} /-</span>
+                      </div>
+                    </div>}
                 </div>
               </Modal.Body>
               <Modal.Footer>
-                <div className='termsAndCondition'>
-                  <input type="checkbox"  {...register("termsAndconditions", { required: { value: true, message: "This field is required" }, })} required />
-                  <div >
-                    Accept all
-                    <a className='link' href='http://localhost:5173/user-agreement' target="_blank"> terms & conditions</a>
+                {buttonClick != 'pay-now' &&
+                  <div className="button">
+                    <input type="submit" value="Next >>" />
                   </div>
-                </div>
-                <div className="button">
-                  <input disabled={isSubmitting} type="submit" value="Submit" />
-                </div>
+                }
+                {buttonClick == 'pay-now' &&
+                  <div>
+                    <div className='termsAndCondition'>
+                      <input
+                        type="checkbox"
+                        {...register("termsAndconditions", {
+                          required: {
+                            value: true,
+                            message: "This field is required"
+                          }
+                        })}
+                        required
+                        onMouseOver={handleCheckboxBlur}
+                        checked={termsChecked} // Controlled component
+                      />
+                      <div >
+                        Accept all
+                        <a className='link' href='http://localhost:5173/user-agreement' target="_blank"> terms & conditions</a>
+                      </div>
+                    </div>
+
+                    <div className="button">
+                      <input style={{"background": "green"}} disabled={buttonDisabled} type="submit" value="Pay Now" />
+                    </div>
+                  </div>
+                }
               </Modal.Footer>
             </div>
           </form>
         </Modal>
       }
       {show == false && <ContactSection />}
-      {
+      {/* {
         <Modal
           show={isBookingConfirmed}
           onHide={() => setBookingConfirmed(false)}
@@ -745,7 +817,7 @@ const ShowEventDetails = () => {
             </div>
           </Modal.Header>
         </Modal>
-      }
+      } */}
       <Footer />
     </div>
   )
