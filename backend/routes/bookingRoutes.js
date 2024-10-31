@@ -23,21 +23,13 @@ router.post("/booking", async (req, res) => {
             batch,
             eventId,
             eventName,
-            amountPaid,
-            numberOfPeoples,
-            pickupLocation,
             bookingDate,
-            otherParticipants,
             eventPrice,
         } = req.body;
 
 		let confirmedBookings = await Bookings.find({bookingDate :new Date(req.body.bookingDate).toLocaleDateString()});
 		let bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + confirmedBookings.length;
 
-        let parsedParticipants = [];
-        if (typeof otherParticipants === 'string') {
-            parsedParticipants = JSON.parse(otherParticipants);
-        }
 		//console.log("create req.body --", req.body);
 
 		const booking = new Bookings({
@@ -48,12 +40,8 @@ router.post("/booking", async (req, res) => {
             batch: batch,
             eventId: eventId,
             eventName: eventName,
-            numberOfPeoples: numberOfPeoples,
-            amountPaid: amountPaid,
-            pickupLocation: pickupLocation,
             bookingDate: new Date(bookingDate).toLocaleDateString(),
-            otherParticipants: parsedParticipants,
-            status: "Confirmed",
+            status: "New",
             eventPrice: eventPrice,
         });
 		await booking.save();
@@ -69,6 +57,64 @@ router.post("/booking", async (req, res) => {
 		res.send({
 			isSuccess: false,
 			error: error
+		});
+	}
+});
+
+router.put("/confirmed-booking", async (req, res) => {
+	try {
+		//console.log("create req.body --", req.body);
+
+		const {
+            amountPaid,
+            numberOfPeoples,
+            pickupLocation,
+            bookingDate,
+            otherParticipants,
+            bookingId
+        } = req.body;
+
+
+        let parsedParticipants = [];
+        if (typeof otherParticipants === 'string') {
+            parsedParticipants = JSON.parse(otherParticipants);
+        }
+		//console.log("create req.body --", req.body);
+
+		const updatedBooking = await Bookings.findOneAndUpdate(
+			{ bookingId: bookingId }, // Filter
+			{
+				$set: {
+					numberOfPeoples: numberOfPeoples,
+					amountPaid: amountPaid,
+					pickupLocation: pickupLocation,
+					bookingDate: bookingDate,
+					otherParticipants: parsedParticipants,
+					status: "Confirmed"
+				}
+			},
+			{ new: true } // Return the updated document
+		);
+
+		// Check if booking was found and updated
+		if (!updatedBooking) {
+			return res.status(404).send({
+				isSuccess: false,
+				message: "Booking not found"
+			});
+		}
+
+		console.log("Updated booking:", updatedBooking);
+		res.send({
+			isSuccess: true,
+			booking: updatedBooking
+		});
+
+	} catch (error) {
+		console.error("Error updating booking:", error);
+		res.status(500).send({
+			isSuccess: false,
+			error: error.message
 		});
 	}
 });
@@ -93,7 +139,7 @@ router.post("/sendInvoice", async (req, res) => {
         return res.status(400).send('Booking ID is required');
     }
 
-    const pdfPath = path.resolve(`./backend/invoices/${bookingDetails.bookingId}.pdf`);
+    const pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
     console.log("Attempting to save PDF at:", pdfPath);
 
     try {
