@@ -45,7 +45,9 @@
     height:15px;
     width: inherit;
   }
-  
+  .input-box-column .details{
+    margin: 10px;
+  }
   .input-box-column{
     margin: 0% 3% 0% 0%;
     width: calc(100% / 2 - 40px);

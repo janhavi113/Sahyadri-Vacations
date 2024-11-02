@@ -7,6 +7,11 @@ import "../CreateEvent/CreateEvents.css"
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form"
 import Dropzone from "react-dropzone";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { useDropzone } from "react-dropzone";
 import { redirect, useNavigate } from "react-router-dom";
 function ScheduleEvents() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -14,6 +19,8 @@ function ScheduleEvents() {
   const [events, setEvent] = useState();
   const [activeError, setActiveError] = useState({ disply: false });
   const [count, setCount] = useState(1);
+  const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
+
   const navigate = useNavigate();
   const {
     register,
@@ -25,12 +32,12 @@ function ScheduleEvents() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/admin-login");
-        return;
-      }
+    if (!token) {
+      navigate("/admin-login");
+      return;
+    }
     getCurrentrecord();
-  },  [navigate]);
+  }, [navigate]);
   const [file, setFiles] = useState(null);
   const [currentImages, setcurrentImages] = useState();
   const addUploadedInages = () => {
@@ -62,94 +69,71 @@ function ScheduleEvents() {
     }
     console.log('events', events);
   }
+  const onDrop = (acceptedFiles) => {
+    const newFiles = acceptedFiles.map((file) =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file), // Create a preview URL for the image
+      })
+    );
+    setUploadedFiles((prev) => [...prev, ...newFiles]); // Add new files to the uploaded files state
+    clearErrors("dropzone");
+  };
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
+  const removeFile = (file) => {
+    setUploadedFiles((prev) => prev.filter((f) => f !== file)); // Remove the file from the state
+  };
   const onSubmit = async (data) => {
-    console.log('data---', data);
-
     const formData = new FormData();
+    console.log('data---', data);
+    if (uploadedFiles.length === 0) {
+      setError("dropzone", {
+        type: "manual",
+        message: "Please upload at least one file.",
+      });
+      return;
+    } else {
+      formData.append("file", uploadedFiles[0]);
+    }
+
     let active = data ? data.Active : false;
-    
+
     if (active && ((data.everyWeekend == true && data.eventEndDate != '' && data.notScheduleYet == true) || (data.everyWeekend == true && data.eventEndDate != '') || (data.eventEndDate != '' && data.notScheduleYet == true) || (data.everyWeekend == true && data.notScheduleYet == true))) {
       setActiveError({ disply: true, message: "You can only selet one from Every Weekend / Not Schedule Yet / Event EndDate " });
     } else {
       setActiveError({ disply: false });
-        if (file) {
-          formData.append("file", file[0]);
-        }
 
-       formData.append("active", active);
-       formData.append("eventId", data.Event);
-               const search = events.filter(function (item) {
-          console.log('item', item.eventId == data.Event)
-          return item.eventId == data.Event;
-        });
-        console.log('search--', search);
-        formData.append('eventname', search[0].name);
-        formData.append('eventType', search[0].eventType);
-        formData.append('eventCostPerPerson',data.eventCostPerPerson); 
-        formData.append('eventEndDate',data.eventEndDate  );
-        formData.append('eventStartDate',data.eventStartDate  );
-        formData.append('eventBatchCount',data.eventBatchCount );
-        formData.append('everyWeekend',data.everyWeekend);
-        formData.append('notScheduleYet',data.notScheduleYet);
-
-         const url = `${apiUrl}schedule-event`;
-         let r = await fetch(url, {
-           method: "POST",
-           body: formData,
-         })
-         let res = await r.json()
-         console.log('res ===', JSON.stringify(res));
-         if (res.isSuccess == true) {
-           navigate('/scheduled-events')
-         }
+      formData.append("active", active);
+      formData.append("eventId", data.Event);
+      const search = events.filter(function (item) {
+        console.log('item', item.eventId == data.Event)
+        return item.eventId == data.Event;
+      });
+      console.log('search--', search);
+      formData.append('eventname', search[0].name);
+      formData.append('eventType', search[0].eventType);
+      formData.append('eventCostPerPerson', data.eventCostPerPerson);
+      formData.append('eventEndDate', data.eventEndDate);
+      formData.append('eventStartDate', data.eventStartDate);
+      formData.append('eventBatchCount', data.eventBatchCount);
+      formData.append('everyWeekend', data.everyWeekend);
+      formData.append('notScheduleYet', data.notScheduleYet);
+      formData.append('b2bPrice', data.b2bPrice);
+      formData.append('bookingTillDate', data.bookingTillDate);
+      formData.append('bookingTillTime', data.bookingTillTime.toString());
+      const url = `${apiUrl}schedule-event`;
+      let r = await fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+      let res = await r.json()
+      console.log('res ===', JSON.stringify(res));
+      if (res.isSuccess == true) {
+        navigate('/scheduled-events')
+      }
     }
   }
 
-  // const [dataFromChild, setDataFromChild] = useState([]);
-  // const [childComponents, setChildComponents] = useState([]);
-
-  // const addChildComponent = () => {
-  //   setChildComponents([...childComponents, <DatePicker datapass={dataFromChild[{ count }]} count={count} key={childComponents.length} sendDataToParent={handleDataFromChild} />]);
-  // };
-
-  const removeFile = name => {
-    setcurrentImages(currentImages => currentImages.filter(file => file !== name))
-  }
-
-  // function handleDataFromChild(data) {
-  //   var childData;
-  //   if (dataFromChild) {
-  //     childData = dataFromChild;
-  //   } else {
-  //     childData = [];
-  //   }
-  //   console.log('data.Edit', data.Edit);
-  //   if (data.Edit) {
-  //     var tempDate = JSON.stringify(data);
-  //     tempdata.replaceAll
-  //     childData.push(data);
-  //     childData.sort((a, b) => new Date(a.Data.eventStartDate) - new Date(b.Data.eventStartDate));
-  //     console.log('childData', JSON.stringify(childData));
-  //     setDataFromChild(childData);
-  //     setActiveError({ disply: false });
-
-  //   } else {
-  //     console.log('childData ==', childData);
-  //     const elementIndex = childData.findIndex(item => item.key === data.key);
-  //     deleteItem(elementIndex);
-  //   }
-  //   console.log('dataFromChild -', dataFromChild);
-  // }
-
-  // const deleteItem = (index) => {
-  //   const newArray = [
-  //     ...dataFromChild.slice(0, index), // Elements before the one to delete
-  //     ...dataFromChild.slice(index + 1) // Elements after the one to delete
-  //   ];
-
-  //   setDataFromChild(newArray); // Triggers a re-render with the new array
-  // };
 
   return (
     <div>
@@ -163,95 +147,102 @@ function ScheduleEvents() {
             {isSuccess &&
               <div className="user-details">
                 <div className="input-box ">
-                  <span className="details">Event Name</span>
+                  <span className="details">Event Name<span style={{ 'color': 'red' }}>*</span></span>
                   <select  {...register("Event")}>
                     {events.map(event => (
                       <option value={event.eventId} key={event.eventId}>{event.name}</option>
                     ))}
                   </select>
                 </div>
-                
-                  <div className="input-box-column ">
-                    <span className="details">Start Date </span>
-                    <input type="date" {...register("eventStartDate")} />
-                  </div>
-                  <div className="input-box-column ">
-                    <span className="details">End Date </span>
-                    <input type="date" {...register("eventEndDate")} />
-                  </div>
-                  {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
-                  <div className="input-box-column event-picker ">
-                    <span className="details">Every Weekend </span>
-                    <input type="checkbox"  {...register("everyWeekend")} />
-                  </div>
 
-                  <div className="input-box-column event-picker ">
-                    <span className="details">On Public Demand </span>
-                    <input type="checkbox"   {...register("notScheduleYet")} />
-                  </div>
-                  {activeError.disply && <div className='errorMessage'>{activeError.message}</div>}
-                  <div className="input-box ">
-                    <span className="details">Batch Size *</span>
-                    <input  {...register("eventBatchCount", { required: { value: true, message: "This field is required" }, })} min="1" type="number" required />
-                  </div>
-                  <div className="input-box ">
-                    <span className="details">Cost Per Person *</span>
-                    <input  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="text" required />
-                  </div>
-                  <div >
+                <div className="input-box-column ">
+                  <span className="details">Start Date </span>
+                  <input type="date" {...register("eventStartDate")} />
+                </div>
+                <div className="input-box-column ">
+                  <span className="details">End Date </span>
+                  <input type="date" {...register("eventEndDate")} />
+                </div>
+                <br />
+                <div className="input-box-column ">
+                  <span className="details">Booking Open Till Date </span>
+                  <input type="date" {...register("bookingTillDate")} />
+                </div>
+                <div className="input-box-column ">
+                  <span className="details">Booking Open Till Time</span>
+                  <input type="time" {...register("bookingTillTime")} />
+                </div>
+                {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
+                <div className="input-box-column event-picker ">
+                  <span className="details">Every Weekend </span>
+                  <input type="checkbox"  {...register("everyWeekend")} />
+                </div>
+
+                <div className="input-box-column event-picker ">
+                  <span className="details">On Public Demand </span>
+                  <input type="checkbox"   {...register("notScheduleYet")} />
+                </div>
+                {activeError.disply && <div className='errorMessage'>{activeError.message}</div>}
+
+                <div className="input-box-column ">
+                  <span className="details">B2B Per Person <span style={{ 'color': 'red' }}>*</span></span>
+                  <input  {...register("b2bPrice", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                </div>
+                <div className="input-box-column">
+                  <span className="details">Cost Per Person <span style={{ 'color': 'red' }}>*</span></span>
+                  <input  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                </div>
+                <div className="input-box-column ">
+                  <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
+                  <input  {...register("eventBatchCount", { required: { value: true, message: "This field is required" }, })} min="1" type="number" required />
+                </div>
+                <div className="input-box-column ">
                   <span className="details">Active</span>
                   <input  {...register("Active")} type="checkbox" id="active" name="Active" value={true} />
                 </div>
-                
-                <div className="input-box">
-                  <span className="details">Upload Images</span>
-                  <div className="dropzon">
-                    <Dropzone onDrop={files => {
-                      setFiles(files);
-                      addUploadedInages();
-                    }}>
-                      {({ getRootProps, getInputProps }) => (
-                        <div className="container">
-                          <div
-                            {...getRootProps({
-                              className: 'dropzone',
-                              onDrop: event => event.stopPropagation()
-                            })}
-                          >
-                            <input {...getInputProps()} />
-                            <div>Drag 'n' drop some files here, or click to select files</div>
-                          </div>
-                        </div>
-                      )}
-                    </Dropzone>
-                  </div>
-                  <div >
-                    {currentImages &&
-                      <div> <div className='image-font'>
-                        Images
+                <div className="input-box-column ">
+                <span className="details">Upload Cover Photo <span style={{ 'color': 'red' }}>*</span></span>
+                </div>
+                 {/* Dropzone for file uploads */}
+                <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
+                  {({ getRootProps, getInputProps }) => (
+                    <section className="dropzone">
+                      <div {...getRootProps({ className: "dropzone" })}>
+                        <input {...getInputProps()} />
+                        <p>
+                          Drag 'n' drop some files here, or click to select files
+                        </p>
                       </div>
-                        <ul >
-                          {currentImages.map(file => (
-                            <li className="image-display" key={file} >
-                              <div
-                                className='close-button'
-                                onClick={() => removeFile(file)}                        >
-                                <span className="close">&times;</span>
-                              </div>
-                              <img
-                                src={file}
-                                width="200vh"
-                                height="250vh"
-                                onLoad={() => {
-                                  URL.revokeObjectURL(file)
-                                }}
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    }
-                  </div>
+                    </section>
+                  )}
+                </Dropzone>
+                {/* Show validation error if no file is uploaded */}
+                {errors.dropzone && (
+                  <p className="error-message">{errors.dropzone.message}</p>
+                )}
+
+                {/* Preview Uploaded Images */}
+                <div className="image-preview-container">
+                  {uploadedFiles.map((file) => (
+                    <div key={file.name} className="image-preview">
+                      <img
+                        src={file.preview}
+                        alt={file.name}
+                        style={{
+                          width: "150px",
+                          height: "175px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <button type="button" onClick={() => removeFile(file)}>
+                        <FontAwesomeIcon
+                          icon={faCircleXmark}
+                          size="lg"
+                          style={{ color: "orange" }}
+                        />
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
             }

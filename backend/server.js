@@ -34,7 +34,7 @@ import jwt from 'jsonwebtoken';
 import directBookingRoutes from './routes/directBookingRoutes.js'; // Import the new route
 import bookingRoutes from './routes/bookingRoutes.js'; // Import the new route
 import createEventRoutes from './routes/createEventRoutes.js'; // Import the new route
-
+import scheduleEventRoutes from './routes/scheduleEventRoutes.js'; // Import the new route
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET; // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
@@ -412,94 +412,7 @@ app.get("/all-events", async (req, res) => {
 	}
 });
 
-// Get All Event
-app.get("/schedule-event", async (req, res) => {
-	try {
-		var events = await Events.find({});
-		var scheduleBatches = await ScheduleBatches.find({});
-		res.send({
-			isSuccess: true,
-			events: events,
-			scheduleBatches: scheduleBatches
-		});
-	} catch (error) {
-		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
-	}
-});
 
-app.post("/schedule-event", async (req, res) => {
-	try {
-
-		var currUrl = "";
-		let sampleFile = req.files.file;
-		let uploadPath = path.join(__dirname, '../public/Images', sampleFile.name);
-		currUrl = '/public/Images/' + sampleFile.name;
-		sampleFile.mv(uploadPath, (err) => {
-			if (err) {
-				return res.status(500).send(err);
-			}
-		});
-
-		console.log("schedule-event --", req.body);
-		const {
-			active,
-			eventId,
-			eventname,
-			eventType,
-			eventCostPerPerson,
-			eventEndDate,
-			eventStartDate,
-			eventBatchCount,
-			everyWeekend,
-			notScheduleYet,
-		} = req.body;
-
-		let scheduleRecordcount = 0;
-		var events = await ScheduleBatches.find().sort([
-			["_id", -1]
-		]).limit(1);
-		if (events.length > 0) {
-			scheduleRecordcount = events[0].eventId;
-		} else {
-			scheduleRecordcount = 0;
-		}
-		const scheduleBatches = new ScheduleBatches({
-			active: active,
-			eventId: scheduleRecordcount + 1,
-			eventCostPerPerson: eventCostPerPerson,
-			eventEndDate: eventEndDate,
-			eventStartDate: eventStartDate,
-			eventBatchCount: eventBatchCount,
-			everyWeekend: everyWeekend,
-			notScheduleYet: notScheduleYet,
-			eventname: eventname,
-			images: currUrl,
-			Url: "/event-details?eventid=" +
-				(scheduleRecordcount + 1).toString() +
-				"/" +
-				eventname.toString().replace(/\s/g, "-").toLowerCase(),
-			eventType: eventType,
-			eventApi: eventname.toString().replace(/\s/g, "-").toLowerCase(),
-		});
-
-		scheduleBatches.save();
-		if (scheduleBatches._id) {
-			res.send({
-				isSuccess: true
-			});
-		}
-	} catch (error) {
-		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
-	}
-});
 
 // Customised Tour
 app.post("/customised-tour", async (req, res) => {
@@ -540,7 +453,7 @@ app.post("/customised-tour", async (req, res) => {
 
 app.use(createEventRoutes);
 app.use(bookingRoutes);
-
+app.use(scheduleEventRoutes);
 // Use the separated routes
 // Use the route
 app.use(directBookingRoutes);
@@ -572,22 +485,22 @@ app.use((err, req, res, next) => {
 	next();
 });
 
-const options = {
-	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
-  };
+// const options = {
+// 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
+// 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
+//   };
 
- // Start the HTTPS server
-const server = https.createServer(options, app);
-console.log('server',server);
-server.listen(3001, () => {
-  console.log('HTTPS Server running on port 3001');
-});
-
-server.on('error', (err) => {
-  console.error('Server error:', err);
-});
-
-// app.listen(port, () => {
-// 	console.log(`Server is running on port ${port}`);
+//  // Start the HTTPS server
+// const server = https.createServer(options, app);
+// console.log('server',server);
+// server.listen(3001, () => {
+//   console.log('HTTPS Server running on port 3001');
 // });
+
+// server.on('error', (err) => {
+//   console.error('Server error:', err);
+// });
+
+app.listen(port, () => {
+	console.log(`Server is running on port ${port}`);
+});
