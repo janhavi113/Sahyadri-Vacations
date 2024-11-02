@@ -355,9 +355,9 @@ const ShowEventDetails = () => {
     }
 
   }
-  if (loading) {
-    return <Loading />; // Show loading component while fetching
-}
+//   if (loading) {
+//     return <Loading />; // Show loading component while fetching
+// }
 
   return (
     <div>
@@ -643,12 +643,7 @@ const ShowEventDetails = () => {
         </div>
       }
        <div>
-      {loading ? (
-        <div className="loading-spinner">
-          <ClipLoader color="#36D7B7" loading={loading} size={50} />
-          <p>Processing your request...</p>
-        </div>
-      ) : (
+       {isSuccess &&
       
         <Modal show={show} onHide={handleClose}>
           <form action="" onSubmit={handleSubmit(onSubmit)}>
@@ -825,7 +820,7 @@ const ShowEventDetails = () => {
           </form>
         </Modal>
       
-    )}
+    }
     </div>
       {show == false && <ContactSection />}
 
