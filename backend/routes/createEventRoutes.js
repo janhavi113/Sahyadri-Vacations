@@ -21,13 +21,13 @@ router.post('/create-event', async (req, res) => {
     try {
         if (sampleFile.length === 1) {
             let uploadPath = path.join(__dirname, '../../public/Images', sampleFile.name);
-            imageList.push('/public/Images/' + sampleFile.name);
+            imageList.push('public/Images/' + sampleFile.name);
             await sampleFile.mv(uploadPath);
         } else {
             // Use Promise.all for multiple file uploads
             await Promise.all(sampleFile.map(async (file) => {
                 let uploadPath = path.join(__dirname, '../../public/Images', file.name);
-                imageList.push('/public/Images/' + file.name);
+                imageList.push('public/Images/' + file.name);
                 await file.mv(uploadPath);
             }));
         }
@@ -194,7 +194,7 @@ router.put("/create-event/event-details/:eventId", async (req, res) => {
 
 			for (let file of sampleFile) {
 				let uploadPath = path.join(__dirname, '../../public/Images', file.name);
-				imageList.push('/public/Images/' + file.name);
+				imageList.push('public/Images/' + file.name);
 				await file.mv(uploadPath); // Await each move operation
 			}
 		}

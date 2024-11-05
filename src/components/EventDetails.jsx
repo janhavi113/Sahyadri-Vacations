@@ -327,7 +327,7 @@ function EventDetails() {
                     {currentImages.map(file => (
                       <li className="image-display" key={file} >
                         <img
-                          src={file}
+                          src={`${apiUrl}${file}`}
                           width="200vh"
                           height="250vh"
                           onLoad={() => {
@@ -376,45 +376,45 @@ function EventDetails() {
                 </div>
                 <div className="input-select-box">
                   <span className="details">Location</span>
-                  <input value={locationValue} {...register("location", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                  <input value={locationValue} {...register("location", { required: { value: true, message: "This field is required" }, })} type="text"  />
                 </div>
                 <div className="input-select-box">
                   <span className="details">Type</span>
-                  <input value={typeValue} {...register("type")} type="text" required />
+                  <input value={typeValue} {...register("type")} type="text"  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Elevation</span>
-                  <input value={elevationValue} {...register("elevation",)} type="text" required />
+                  <input value={elevationValue} {...register("elevation",)} type="text"  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Difficulty</span>
-                  <input value={difficultyValue} {...register("difficulty",)} type="text" required />
+                  <input value={difficultyValue} {...register("difficulty",)} type="text"  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Endurance</span>
-                  <input value={enduranceValue} {...register("endurance",)} type="text" required />
+                  <input value={enduranceValue} {...register("endurance",)} type="text"  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Duration</span>
-                  <input value={durationValue} {...register("duration",)} type="text" required />
+                  <input value={durationValue} {...register("duration",)} type="text"  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Total Distance</span>
-                  <input value={totalDistanceValue} {...register("totalDistance",)} type="text" required />
+                  <input value={totalDistanceValue} {...register("totalDistance",)} type="text"  />
                 </div>
                 <div className="input-select-box">
                   <span className="details">Age Group</span>
-                  <input value={ageGroupValue} {...register("ageGroup",)} type="text" required />
+                  <input value={ageGroupValue} {...register("ageGroup",)} type="text"  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Trek Distance</span>
-                  <input value={trekDistanceValue} {...register("trekDistance",)} type="text" required />
+                  <input value={trekDistanceValue} {...register("trekDistance",)} type="text"  />
                 </div>
                 <div className="input-select-box">
                   <span className="details">Highlights</span>
@@ -487,7 +487,7 @@ function EventDetails() {
                         <span className="close">&times;</span>
                       </div>
                       <img
-                        src={file}
+                        src={`${apiUrl}${file}`}
                         width="200vh"
                         height="250vh"
                         onLoad={() => {
