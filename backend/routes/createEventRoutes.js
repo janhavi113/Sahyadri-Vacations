@@ -44,7 +44,14 @@ router.post('/create-event', async (req, res) => {
             costIncludes,
             thingsToCarry,
             pickupPoints,
-            eventType,
+            eventType,			
+			location,
+			type,
+			elevation,
+			difficulty,
+			endurance,
+			duration,
+			totalDistance,
         } = req.body;
 
         let apiName = req.body.eventName;
@@ -62,7 +69,14 @@ router.post('/create-event', async (req, res) => {
             highlights: highlights,
             eventId: recordcount + 1,
             url: "/create-event/event-details/" + (recordcount + 1),
-            images: imageList,
+            images: imageList,			
+			location:location,
+			type:type,
+			elevation:elevation,
+			difficulty:difficulty,
+			endurance:endurance,
+			duration:duration,
+			totalDistance:totalDistance,
         });
 
         await event.save();
@@ -139,7 +153,6 @@ router.post("/create-event/event-details/:eventId", async (req, res) => {
 
 // Update Event Details
 router.put("/create-event/event-details/:eventId", async (req, res) => {
-	//console.log('put create event ');
 	try {
 		let event_Id = Number(req.params.eventId.toString().replace(":", ""));
 		const {
@@ -152,36 +165,44 @@ router.put("/create-event/event-details/:eventId", async (req, res) => {
 			pickupPoints,
 			eventType,
 			currentImages,
+			location,
+			type,
+			elevation,
+			difficulty,
+			endurance,
+			duration,
+			totalDistance,
+			ageGroup,
+            trekDistance,
+		
 		} = req.body;
 
-		var imageList = [];
+		let imageList = [];
+		// Process existing images
 		if (currentImages != undefined && !Array.isArray(currentImages)) {
 			imageList.push(currentImages.toString().replace("blob:", ""));
-		} else if (currentImages != undefined && currentImages.length > 1) {
-			for (let index = 0; index < currentImages.length; index++) {
-				imageList.push(currentImages[index].toString().replace("blob:", ""));
+		} else if (Array.isArray(currentImages)) {
+			for (let img of currentImages) {
+				imageList.push(img.toString().replace("blob:", ""));
 			}
 		}
-		var hostname = req.headers.origin;
-		let sampleFile = req.files.file;
-		//console.log('sampleFile', sampleFile);
-		for (let i = 0; i < sampleFile.length; i++) {
-			let uploadPath = path.join(__dirname, '../public/Images', sampleFile[i].name);
-			imageList.push('/public/Images/' + sampleFile[i].name);
-			sampleFile[0].mv(uploadPath, (err) => {
-				if (err) {
-					return res.status(500).send(err);
-				}
-			});
+
+		// Handle file upload, if files exist
+		let sampleFile = req.files?.files;
+		if (sampleFile) {
+			if (!Array.isArray(sampleFile)) sampleFile = [sampleFile]; // Ensure array for consistency
+
+			for (let file of sampleFile) {
+				let uploadPath = path.join(__dirname, '../../public/Images', file.name);
+				imageList.push('/public/Images/' + file.name);
+				await file.mv(uploadPath); // Await each move operation
+			}
 		}
-		//console.log('imageList', imageList);
-		var myquery = {
-			eventId: event_Id
-		};
-		var options = {
-			upsert: true
-		};
-		var updateDoc = {
+
+		// Update query
+		let myquery = { eventId: event_Id };
+		let options = { upsert: true };
+		let updateDoc = {
 			name: eventName,
 			itinerary: itinerary,
 			eventDetails: eventDetails,
@@ -191,27 +212,32 @@ router.put("/create-event/event-details/:eventId", async (req, res) => {
 			pickupPoints: pickupPoints,
 			highlights: highlights,
 			images: imageList,
+			location:location,
+			type:type,
+			elevation:elevation,
+			difficulty:difficulty,
+			endurance:endurance,
+			duration:duration,
+			totalDistance:totalDistance,
+			ageGroup:ageGroup,
+            trekDistance:trekDistance,
 		};
-		var events = await Events.updateOne(myquery, updateDoc, options);
-		events = await Events.find(myquery);
-		//console.log('events--', events);
+
+		// Update and fetch events
+		await Events.updateOne(myquery, updateDoc, options);
+		let events = await Events.find(myquery);
+
+		// Send response based on existence of events
 		if (events && events.length > 0) {
-			res.send({
-				isSuccess: true,
-				events: events
-			});
+			return res.send({ isSuccess: true, events });
 		} else {
-			res.send({
-				isSuccess: false
-			});
+			return res.send({ isSuccess: false });
 		}
+
 	} catch (error) {
 		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
+		return res.status(500).send({ isSuccess: false, error });
 	}
-}
-);
+});
+
 export default router;

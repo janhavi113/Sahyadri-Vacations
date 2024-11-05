@@ -47,7 +47,7 @@ function Editor(props){
   };
   return (
     <>
-      <ReactQuill theme="snow" modules={modules} formats={formats} value={value} onChange={handleProcedureContentChange} onBlur={changeValue}/>
+      <ReactQuill theme="snow" modules={modules} formats={formats} value={value} onChange={handleProcedureContentChange} onBlur={changeValue} onKeyUp={changeValue} />
     
     </>
   );

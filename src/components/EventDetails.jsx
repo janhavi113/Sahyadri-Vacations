@@ -10,7 +10,7 @@ import { useDropzone } from "react-dropzone";
 import AdminNavbar from "./AdminNavbar";
 import { useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom";
-import "./admin-panel/CreateEvent/CreateEvents.css" 
+import "./admin-panel/CreateEvent/CreateEvents.css"
 import "./Modal.css";
 import Editor from "./Editor";
 function EventDetails() {
@@ -23,6 +23,15 @@ function EventDetails() {
   const [thingsToCarry, setThingsToCarry] = useState();
   const [costIncludes, setCostIncludes] = useState();
   const [show, setShow] = useState(false);
+  const [locationValue, setLocationValue] = useState();
+  const [typeValue, setTypeValue] = useState();
+  const [elevationValue, setElevationValue] = useState();
+  const [difficultyValue, setDifficultyValue] = useState();
+  const [enduranceValue, setEnduranceValue] = useState();
+  const [durationValue, setDurationValue] = useState();
+  const [totalDistanceValue, setTotalDistanceValue] = useState();
+  const [ageGroupValue, setAgeGroupValue] = useState();
+  const [trekDistanceValue,  setTrekDistanceValue] = useState();
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -92,6 +101,15 @@ function EventDetails() {
           setThingsToCarry(data.events[0]?.thingsToCarry);
           setCostIncludes(data.events[0]?.costIncludes);
           setcurrentImages(data.events[0]?.images);
+          setLocationValue(data.events[0]?.location);
+          setTypeValue(data.events[0]?.type);
+          setElevationValue(data.events[0]?.elevation);
+          setDifficultyValue(data.events[0]?.difficulty);
+          setEnduranceValue(data.events[0]?.endurance);
+          setDurationValue(data.events[0]?.duration);
+          setTotalDistanceValue(data.events[0]?.totalDistance);
+          setAgeGroupValue(data.events[0]?.ageGroup);
+          setTrekDistanceValue(data.events[0]?.trekDistance);
           console.log('event-%8', event);
         }
       });
@@ -133,27 +151,9 @@ function EventDetails() {
     return splitedList;
   }
 
-  const addUploadedInages = () => {
-    console.log('file', file);
-    var allFiles = currentImages;
-    if (file) {
-      for (let index = 0; index < file.length; index++) {
-        const url = URL.createObjectURL(file[index])
-        console.log(url)
-        allFiles.push(url);
-      }
-      console.log('allFiles', allFiles);
-    }
-    setcurrentImages(allFiles);
-  }
+ 
   const handleUpload = async (data) => {
-    console.log('data ===', data);
-    console.log("costIncludes --> " + costIncludes);
-    console.log("highlights --> " + highlights);
-    console.log("itinerary --> " + itinerary);
-    console.log("pickupPoints --> " + pickupPoints);
-    console.log("thingsToCarry --> " + thingsToCarry);
-    if (uploadedFiles.length === 0) {
+    if (currentImages.length === 0 && uploadedFiles!= 'undefined' && uploadedFiles.length === 0) {
       setError("dropzone", {
         type: "manual",
         message: "Please upload at least one file.",
@@ -164,12 +164,12 @@ function EventDetails() {
     const url = `${apiUrl}create-event/event-details/:${eventId}`;
     const formData = new FormData();
     if (uploadedFiles) {
-      for (let index = 0; index < uploadedFiles.length; index++) {
+      for (let index = 0; index < uploadedFiles?.length; index++) {
         formData.append("files", uploadedFiles[index]);
       }
     }
     if (currentImages) {
-      for (let index = 0; index < currentImages.length; index++) {
+      for (let index = 0; index < currentImages?.length; index++) {
         formData.append("currentImages", currentImages[index])
       }
     }
@@ -181,6 +181,15 @@ function EventDetails() {
     formData.append("itinerary", itinerary);
     formData.append("pickupPoints", pickupPoints);
     formData.append("thingsToCarry", thingsToCarry);
+    formData.append("location", data.location);
+    formData.append("type", data.type);
+    formData.append("elevation", data.elevation);
+    formData.append("difficulty", data.difficulty);
+    formData.append("endurance", data.endurance);
+    formData.append("duration", data.duration);
+    formData.append("totalDistance", data.totalDistance);
+    formData.append("ageGroup", data.ageGroup);
+    formData.append("trekDistance", data.trekDistance);
     console.log('formData ===', formData);
     //Assuming you only accept one file     
     // console.log("file logging drop/selected file", JSON.stringify(formData));
@@ -201,7 +210,7 @@ function EventDetails() {
     <div>
       <AdminNavbar />
       {!isEditable && isSuccess &&
-        <div className="container">
+        <div className="create-form container ">
           <div className="title-header">Event Details</div>
           <div className="button-container">
             <div className="button">
@@ -234,12 +243,54 @@ function EventDetails() {
                     <div>{event.name}</div>
                   </div>
                   <div className="input-box ">
+                    <span className="details">Event Details</span>
+                    <div>{event.eventDetails}</div>
+                  </div>
+                  <div className="input-select-box ">
                     <span className="details">Event Type</span>
                     <div>{event.eventType}</div>
                   </div>
-                  <div className="input-select-box ">
-                    <span className="details">Event Details</span>
-                    <div>{event.eventDetails}</div>
+                  <div className="input-select-box">
+                    <span className="details">Location</span>
+                    <div>{event.location}</div>
+                  </div>
+                  <div className="input-select-box">
+                    <span className="details">Type</span>
+                    <div>{event.type}</div>
+                  </div>
+
+                  <div className="input-select-box">
+                    <span className="details">Elevation</span>
+                    <div>{event.elevation}</div>
+                  </div>
+
+                  <div className="input-select-box">
+                    <span className="details">Difficulty</span>
+                    <div>{event.difficulty}</div>
+                  </div>
+
+                  <div className="input-select-box">
+                    <span className="details">Endurance</span>
+                    <div>{event.endurance}</div>
+                  </div>
+
+                  <div className="input-select-box">
+                    <span className="details">Duration</span>
+                    <div>{event.duration}</div>
+                  </div>
+
+                  <div className="input-select-box">
+                    <span className="details">Total Distance</span>
+                    <div>{event.totalDistance}</div>
+                  </div>
+                  <div className="input-select-box">
+                    <span className="details">Age Group</span>
+                    <div>{event.ageGroup}</div>
+                  </div>
+
+                  <div className="input-select-box">
+                    <span className="details">Trek Distance</span>
+                    <div>{event.trekDistance}</div>
                   </div>
                   <div className="input-select-box">
                     <span className="details">Itinerary</span>
@@ -294,6 +345,7 @@ function EventDetails() {
       }
       {
         isEditable && isSuccess &&
+        <div style={{'margin-top':'130px'}}>
         <form action="" onSubmit={handleSubmit(handleUpload)}>
           <div className="container">
             <div className="title-header">Event Details</div>
@@ -304,7 +356,17 @@ function EventDetails() {
                   <span className="details">Event Name</span>
                   <input value={event.name} {...register("eventName", { required: { value: true, message: "This field is required" }, })} type="text" required />
                 </div>
+
                 <div className="input-box ">
+                  <span className="details">Event Details</span>
+                  <textarea defaultValue={event.eventDetails}   {...register("eventDetails", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                </div>
+
+                <div className="input-box">
+                  <span className="details">Itinerary</span>
+                  <Editor value={itinerary} sendDataToParent={setItinerary} />
+                </div>
+                <div className="input-select-box">
                   <span className="details">Event Type</span>
                   <select  {...register("eventType", { required: { value: true, message: "This field is required" }, })} >
                     <option value={"TrekEvent"} >Trekking Event</option>
@@ -312,13 +374,47 @@ function EventDetails() {
                     <option value={"BackPackingTrip"} >BackPacking Trip</option>
                   </select>
                 </div>
-                <div className="input-select-box ">
-                  <span className="details">Event Details</span>
-                  <textarea defaultValue={event.eventDetails}   {...register("eventDetails", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                <div className="input-select-box">
+                  <span className="details">Location</span>
+                  <input value={locationValue} {...register("location", { required: { value: true, message: "This field is required" }, })} type="text" required />
                 </div>
                 <div className="input-select-box">
-                  <span className="details">Itinerary</span>
-                  <Editor value={itinerary} sendDataToParent={setItinerary} />
+                  <span className="details">Type</span>
+                  <input value={typeValue} {...register("type")} type="text" required />
+                </div>
+
+                <div className="input-select-box">
+                  <span className="details">Elevation</span>
+                  <input value={elevationValue} {...register("elevation",)} type="text" required />
+                </div>
+
+                <div className="input-select-box">
+                  <span className="details">Difficulty</span>
+                  <input value={difficultyValue} {...register("difficulty",)} type="text" required />
+                </div>
+
+                <div className="input-select-box">
+                  <span className="details">Endurance</span>
+                  <input value={enduranceValue} {...register("endurance",)} type="text" required />
+                </div>
+
+                <div className="input-select-box">
+                  <span className="details">Duration</span>
+                  <input value={durationValue} {...register("duration",)} type="text" required />
+                </div>
+
+                <div className="input-select-box">
+                  <span className="details">Total Distance</span>
+                  <input value={totalDistanceValue} {...register("totalDistance",)} type="text" required />
+                </div>
+                <div className="input-select-box">
+                  <span className="details">Age Group</span>
+                  <input value={ageGroupValue} {...register("ageGroup",)} type="text" required />
+                </div>
+
+                <div className="input-select-box">
+                  <span className="details">Trek Distance</span>
+                  <input value={trekDistanceValue} {...register("trekDistance",)} type="text" required />
                 </div>
                 <div className="input-select-box">
                   <span className="details">Highlights</span>
@@ -336,47 +432,47 @@ function EventDetails() {
                   <span className="details">Pickup Points</span>
                   <Editor value={pickupPoints} sendDataToParent={setPickupPoints} />
                 </div>
-                 {/* Dropzone for file uploads */}
-            <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
-              {({ getRootProps, getInputProps }) => (
-                <section className="dropzone">
-                  <div {...getRootProps({ className: "dropzone" })}>
-                    <input {...getInputProps()} />
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
-                  </div>
-                </section>
-              )}
-            </Dropzone>
-            {/* Show validation error if no file is uploaded */}
-            {errors.dropzone && (
-              <p className="error-message">{errors.dropzone.message}</p>
-            )}
+                {/* Dropzone for file uploads */}
+                <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
+                  {({ getRootProps, getInputProps }) => (
+                    <section className="dropzone">
+                      <div {...getRootProps({ className: "dropzone" })}>
+                        <input {...getInputProps()} />
+                        <p>
+                          Drag 'n' drop some files here, or click to select files
+                        </p>
+                      </div>
+                    </section>
+                  )}
+                </Dropzone>
+                {/* Show validation error if no file is uploaded */}
+                {errors.dropzone && (
+                  <p className="error-message">{errors.dropzone.message}</p>
+                )}
 
-            {/* Preview Uploaded Images */}
-            <div className="image-preview-container">
-              {uploadedFiles.map((file) => (
-                <div key={file.name} className="image-preview">
-                  <img
-                    src={file.preview}
-                    alt={file.name}
-                    style={{
-                      width: "150px",
-                      height: "175px",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <button type="button" onClick={() => removeFile(file)}>
-                    <FontAwesomeIcon
-                      icon={faCircleXmark}
-                      size="lg"
-                      style={{ color: "orange" }}
-                    />
-                  </button>
+                {/* Preview Uploaded Images */}
+                <div className="image-preview-container">
+                  {uploadedFiles.map((file) => (
+                    <div key={file.name} className="image-preview">
+                      <img
+                        src={file.preview}
+                        alt={file.name}
+                        style={{
+                          width: "150px",
+                          height: "175px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <button type="button" onClick={() => removeFile(file)}>
+                        <FontAwesomeIcon
+                          icon={faCircleXmark}
+                          size="lg"
+                          style={{ color: "orange" }}
+                        />
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
               </div>
               <div >
                 <div className='image-font'>
@@ -411,6 +507,7 @@ function EventDetails() {
             </div>
           </div>
         </form>
+        </div>
       }
     </div >
   )
