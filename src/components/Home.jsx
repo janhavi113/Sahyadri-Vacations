@@ -125,6 +125,7 @@ const Home = () => {
     }
     return liveEvent;
   }
+  
   const getAllRecord = async () => {
     //console.log('getAllRecord--');
     let liveEvents = [];
@@ -141,16 +142,14 @@ const Home = () => {
     })
 
     let res = await r.json()
-    //console.log('res',res);
+    console.log('res',res);
     if (res.isSuccess == true) {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {
         let tempEvent = [];
 
         tempEvent = getNextBatchDate(res.events[i]);
-        if (tempEvent.inactive ) {
-          inactivateEvent.push(getNextBatchDate(res.events[i]));
-        } else if (!tempEvent.inactive && tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
+        if (!tempEvent.inactive && tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
           liveEvents.push(getNextBatchDate(res.events[i]));
         }
 
@@ -168,19 +167,9 @@ const Home = () => {
       setCampingEvents(sortEventsBySortDate(campingEvents));
       setBackPackingEvents(sortEventsBySortDate(backPackingEvents));
     }
-    markEventInactive(inactivateEvent)
-  }
-  const markEventInactive = async (events) => {
    
-    let r = await fetch(`${apiUrl}inactive-events`,
-      {
-        method: "POST", headers: {
-          "Content-Type": "application/json",
-        }, body: JSON.stringify(events)
-      })
-      let res = await r.json()
-      console.log('inactive res --', JSON.stringify(res));
   }
+  
   const sortEventsBySortDate = (events) => {
     return events.sort((a, b) => {
       // Check if sortDate is 'Available On All Weekends' or 'On Public Demand'

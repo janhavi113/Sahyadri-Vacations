@@ -35,22 +35,5 @@ router.get("/show-all-events", async (req, res) => {
 	}
 });
 
-router.post("/inactive-events", async (req, res) => {
-    console.log("i am in",req.body);
-    try {
-        // Extract the eventId values from req.body
-        const eventIds = req.body.map(event => event.eventId);
-    
-        // Delete all matching documents
-        const result = await ScheduleBatches.deleteMany(
-          { eventId: { $in: eventIds } } // Match any eventId in the array
-        );
-    
-        res.status(200).json({ message: 'Events deleted successfully', result });
-      } catch (error) {
-        res.status(500).json({ message: 'Error deleting events', error });
-      }
-    
-    
-});
+
 export default router;
