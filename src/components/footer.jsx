@@ -7,6 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSquareFacebook, faInstagram, faTelegram, faSquareYoutube } from '@fortawesome/free-brands-svg-icons'
 import logo from './Images/logo.png';
 const footer = () => {
+   // Function to scroll to top
+   const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div>
       <div className="footer">
@@ -17,18 +22,18 @@ const footer = () => {
             <div className=" row ">
               <div className="col-xs-12">
                 <ul className="footer-navbar">
-                  <li> <NavLink to="/"><li className="info-block">Home</li></NavLink></li>
-                  <li> <NavLink to="/events"><li className="info-block">Events</li></NavLink></li>
-                  <li> <NavLink to="/gallery"><li className="info-block">Gallery</li></NavLink></li>
-                  <li> <NavLink to="/customised-tour"><li className="info-block">Customise Tours</li></NavLink></li>
-                  <li> <NavLink to="/about"><li className="info-block">Our Team</li></NavLink></li>
-                  <li> <NavLink to="/about"><li className="info-block">About</li></NavLink></li>
-                  <li> <NavLink to="/contact-us"><li className="info-block">Contact Us</li></NavLink></li>
+                  <li> <NavLink to="/" onClick={scrollToTop}><li className="info-block">Home</li></NavLink></li>
+                  <li> <NavLink to="/events" onClick={scrollToTop}><li className="info-block">Events</li></NavLink></li>
+                  <li> <NavLink to="/gallery" onClick={scrollToTop}><li className="info-block">Gallery</li></NavLink></li>
+                  <li> <NavLink to="/customised-tour" onClick={scrollToTop}><li className="info-block">Customise Tours</li></NavLink></li>
+                  <li> <NavLink to="/about" onClick={scrollToTop}><li className="info-block">Our Team</li></NavLink></li>
+                  <li> <NavLink to="/about" onClick={scrollToTop}><li className="info-block">About</li></NavLink></li>
+                  <li> <NavLink to="/contact-us" onClick={scrollToTop}><li className="info-block">Contact Us</li></NavLink></li>
                 </ul>
                 <ul className="footer-navbar">
-                  <li> <NavLink to="/privacy-policy"><li className="info-block">Privacy Policy</li></NavLink></li>
-                  <li> <NavLink to="/cancellation-policy"><li className="info-block">Refund & Cancellation Policy</li></NavLink></li>
-                  <li> <NavLink to="/user-agreement"><li className="info-block">Terms & Conditions</li></NavLink></li>
+                  <li> <NavLink to="/privacy-policy" onClick={scrollToTop}><li className="info-block">Privacy Policy</li></NavLink></li>
+                  <li> <NavLink to="/cancellation-policy" onClick={scrollToTop}><li className="info-block">Refund & Cancellation Policy</li></NavLink></li>
+                  <li> <NavLink to="/user-agreement" onClick={scrollToTop}><li className="info-block">Terms & Conditions</li></NavLink></li>
                 </ul>
               </div>
             </div>

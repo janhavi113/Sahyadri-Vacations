@@ -126,7 +126,8 @@ function CreateEvents() {
                 <select  {...register("eventType", { required: { value: true, message: "This field is required" }, })} >
                   <option value={"TrekEvent"} >Trekking Event</option>
                   <option value={"CampingEvent"}>Camping Event</option>
-                  <option value={"BackPackingTrip"} >BackPacking Trip</option>
+                  <option value={"BackPackingTrip"} >BackPacking Trip</option>                  
+                  <option value={"AdventureActivity"} >Adventure Activity</option>
                 </select>
               </div>
               <div className="input-select-box">
