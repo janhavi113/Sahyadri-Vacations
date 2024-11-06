@@ -83,7 +83,20 @@ const searchText = () => {
         <NavLink className='navlink-hover' to="/about"><li className="info-block">About</li></NavLink>
         <NavLink className='navlink-hover' to="/contact-us"><li className="info-block">Contact Us</li></NavLink>
         <NavLink className='navlink-hover-icon' onClick={toggleNavbar}><li className="info-block"><FontAwesomeIcon className='header-icon' icon={faBars} size="lg" /></li></NavLink>
-        <NavLink className={isSearch ? ' input-style navlink-hover' : 'navlink-hover' } ><li className="info-block" onClick={searchNavbar}><FontAwesomeIcon icon={faMagnifyingGlass} size="lg" /></li>{isSearch &&  <input className="nav-input-box " onChange={handleChange}  type="text" placeholder='Search..' />}</NavLink>
+        <NavLink className={isSearch ? ' input-style navlink-hover' : 'navlink-hover' } >
+          <li className="info-block" onClick={searchNavbar}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
+            </li>
+            {isSearch &&  
+            <input className="nav-input-box " onChange={handleChange}  
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                searchNavbar();
+              }
+            }} 
+            type="text" placeholder='Search..' />
+            }
+            </NavLink>
         
        
       </nav>

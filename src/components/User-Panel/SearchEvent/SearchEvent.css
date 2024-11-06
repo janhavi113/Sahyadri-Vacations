@@ -19,7 +19,28 @@
   height: 455px !important;
     width: 100%;
 }
-
+.event-tag-search {
+  position: absolute;
+  top: -10px; /* Adjust as necessary */
+  right: -10px; /* Adjust as necessary */
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  z-index: 1; /* Ensure it stays above other elements */
+}
+.not-found{
+  font-size: x-large;
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  height: 40vh; /* Full viewport height, optional */
+  font-weight: bold;
+  gap: 15px;
+  color: gray;
+}
 .input-container {
   position: absolute;
   left: 20%;
