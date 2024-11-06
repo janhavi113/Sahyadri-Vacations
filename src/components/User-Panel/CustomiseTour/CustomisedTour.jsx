@@ -164,10 +164,10 @@ const CustomisedTour = () => {
                     </div>
 
                     <div className='address-show'>
-                        <a className='address' href="mailto:sahyadrivacations21@gmail.com">
+                        <a className='address' href="mailto:contactus@sahyadrivacations.com">
                             <FontAwesomeIcon className="icon" icon={faEnvelope} size="2x" />
                             <span className='address'>
-                                sahyadrivacations21@gmail.com
+                                contactus@sahyadrivacations.com
                             </span>
                         </a>
 

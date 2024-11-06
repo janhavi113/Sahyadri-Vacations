@@ -211,7 +211,7 @@ const Home = () => {
               </li>
               <hr />
               <li>
-                <a className="dropdown-item" href="mailto:sahyadrivacations21@gmail.com">
+                <a className="dropdown-item" href="mailto:contactus@sahyadrivacations.com">
                   <i className="bi bi-telephone"></i>
                   Email
                 </a>

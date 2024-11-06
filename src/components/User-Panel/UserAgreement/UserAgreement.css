@@ -9,6 +9,12 @@
 .container .add-margin-top{
     margin-top: 70px;
 }
+
+.info-Email{
+    color: orange;
+    font-weight: bold;
+    text-decoration: underline;
+}
 .terms_content {
     margin: 0px 0 50px 0;
 }

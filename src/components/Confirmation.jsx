@@ -20,7 +20,7 @@ const isStateMissing = !name || !bookingId;
                     </p>
                     <p>
                         <strong>Email:</strong>
-                        <a href="mailto:sahyadrivacations21@gmail.com" className="confirmed-link" style={{ marginLeft: '5px' }}>sahyadrivacations21@gmail.com</a>
+                        <a href="mailto:contactus@sahyadrivacations.com" className="confirmed-link" style={{ marginLeft: '5px' }}>contactus@sahyadrivacations.com</a>
                     </p>
                 </div>
             ) : (
@@ -45,7 +45,7 @@ const isStateMissing = !name || !bookingId;
                     </p>
                     <p>
                         <strong>Email:</strong>
-                        <a href="mailto:sahyadrivacations21@gmail.com" className="confirmed-link" style={{ marginLeft: '5px' }}>sahyadrivacations21@gmail.com</a>
+                        <a href="mailto:contactus@sahyadrivacations.com" className="confirmed-link" style={{ marginLeft: '5px' }}>contactus@sahyadrivacations.com</a>
                     </p>
                     <button onClick={() => window.location.href = '/'}>Go to Home</button>
                 </div>

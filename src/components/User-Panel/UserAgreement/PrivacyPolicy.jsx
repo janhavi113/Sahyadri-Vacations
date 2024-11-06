@@ -21,7 +21,7 @@ const PrivacyPolicy = () => {
                             <p>We are always happy to accept suggestions to improve our services and experiences.</p>
 
                             <h3>Your Privacy Matters</h3>
-                            <p>Sahyadri Vacations and Adventure is committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regards to your personal information, please contact us at <a href="mailto:info@sahyadrivacations.com">info@sahyadrivacations.com</a>.</p>
+                            <p>Sahyadri Vacations and Adventure is committed to protecting your personal information and your right to privacy. If you have any questions or concerns about this privacy notice or our practices with regards to your personal information, please contact us at <a className='info-Email' href="mailto:info@sahyadrivacations.com">info@sahyadrivacations.com</a>.</p>
                             <p>When you visit our website <a href="http://www.sahyadrivacations.com">www.sahyadrivacations.com</a> (the "Website"), and more generally, use any of our services (the "Services", which include the Website), we appreciate that you are trusting us with your personal information. We take your privacy very seriously. This privacy notice seeks to explain to you in the clearest way possible what information we collect, how we use it, and what rights you have in relation to it. We hope you take some time to read it carefully as it is crucial for maintaining your trust and confidence in us.</p>
 
                             <h3>Collection of Personal Information</h3>
@@ -42,7 +42,7 @@ const PrivacyPolicy = () => {
                             <p><strong>In Short:</strong> We aim to protect your personal information through a system of organizational and technical security measures.</p>
                             
                             <h3>Contact Us</h3>
-                            <p>If you have any questions or concerns about this privacy notice or our practices with regards to your personal information, please contact us at <a href="mailto:info@sahyadrivacations.com">info@sahyadrivacations.com</a>.</p>
+                            <p>If you have any questions or concerns about this privacy notice or our practices with regards to your personal information, please contact us at <a className='info-Email' href="mailto:info@sahyadrivacations.com">info@sahyadrivacations.com</a>.</p>
                             </div>
                             <div className="policy-list terms-list">
                                 <h4>Collection of Personal Information</h4>
