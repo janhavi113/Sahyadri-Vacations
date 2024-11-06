@@ -74,12 +74,15 @@
     }
     
     .single-fact {
-        height: 150px;
-        width: 150px;
+        height: 140px;
+        width: 140px;
     }
 
     .fact-info span {
-        font-size: large;
+        font-size: medium;
+    }
+    .fact-info p {
+        font-size: medium;
     }
 
     .section-title-funfact h2 {
@@ -96,12 +99,16 @@
 
     .single-fact {
        
-        height: 140px;
-        width: 140px;
+        height: 120px;
+        width: 120px;
     }
 
     .fact-info span {
-        font-size: medium;
+        font-size: small;
+    }
+
+    .fact-info p {
+        font-size: small;
     }
 
     .section-title-funfact h2 {

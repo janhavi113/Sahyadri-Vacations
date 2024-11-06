@@ -102,7 +102,7 @@ const Contact_Us = () => {
             </div>
 
             <div className='address-show'>
-              <a className='address' href="mailto:contactus@sahyadrivacations.com">
+              <a className='address address-email' href="mailto:contactus@sahyadrivacations.com">
                 <FontAwesomeIcon className="icon" icon={faEnvelope} size="1x" />
                 <span className='address'>
                   contactus@sahyadrivacations.com

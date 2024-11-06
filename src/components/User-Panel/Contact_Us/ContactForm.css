@@ -135,4 +135,12 @@
   position: relative;
   background-color: white;
 }
+.address {
+  font-size: 14px;
+  padding-left: 10px;
+
+}
+.address-email{
+  margin-bottom: 20px;
+}
 }

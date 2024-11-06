@@ -29,7 +29,7 @@ const FunFact = () => {
                             <div className="single-fact text-center">
                                 <div className="adjust-top fact-info">
                                     <span>
-                                        <img style={{ 'margin': 'auto' }} loading="lazy" src={client} />
+                                        <img style={{ 'margin': 'auto' ,'width':'80px'}} loading="lazy" src={client} />
                                     </span >
                                     <span style={{ 'margin-top': '-25px' }}>8000+
                                     </span>
@@ -42,7 +42,7 @@ const FunFact = () => {
                             <div className="single-fact text-center">
                                 <div className="adjust-top fact-info">
                                     <span>
-                                        <img style={{ 'margin': 'auto' }} loading="lazy" src={event} />
+                                        <img style={{ 'margin': 'auto' ,'width':'80px'}} loading="lazy" src={event} />
                                     </span>
                                     <span style={{ 'margin-top': '-25px' }}> 600+
                                     </span>
@@ -55,7 +55,7 @@ const FunFact = () => {
                             <div className="single-fact text-center">
                                 <div className="adjust-top-destination fact-info">
                                     <span>
-                                        <img style={{ 'margin': 'auto' }} loading="lazy" src={destination} />
+                                        <img style={{ 'margin': 'auto' ,'width':'60px'}} loading="lazy" src={destination} />
                                     </span>
                                     <span style={{ 'margin-top': '-15px' }}>100+
                                     </span>
@@ -68,7 +68,7 @@ const FunFact = () => {
                             <div className="single-fact text-center">
                                 <div className="fact-info">
                                     <span>
-                                        <img style={{ 'margin': 'auto' }} loading="lazy" src={tour} />
+                                        <img style={{ 'margin': 'auto' ,'width':'50px'}} loading="lazy" src={tour} />
                                     </span>
                                     <span style={{ 'margin-top': '-4px' }}> 40+
                                     </span>
@@ -81,7 +81,7 @@ const FunFact = () => {
                             <div className="single-fact text-center">
                                 <div className="fact-info">
                                     <span>
-                                        <img style={{ 'margin': 'auto' }} loading="lazy" src={google} />
+                                        <img style={{ 'margin': 'auto' ,'width':'80px'}} loading="lazy" src={google} />
                                     </span>
                                     <span style={{ 'margin-top': '-20px' }}>
                                         <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" />

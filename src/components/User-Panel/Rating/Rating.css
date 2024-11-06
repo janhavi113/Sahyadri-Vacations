@@ -99,3 +99,13 @@
     padding: 3% 0px 3% 0 !important;
 }
 .review-container{background-color: rgb(228, 232, 232);}
+
+@media screen and (max-width: 576px) {
+
+    .rating-card{
+        height: 250px !important;
+        border-radius: 4px !important;
+        padding: 24px;
+    }
+
+}
