@@ -48,7 +48,7 @@ const Home = () => {
     slide3,
     slide4
   ];
- 
+
   const [show, setShow] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [events, setEvent] = useState();
@@ -56,11 +56,11 @@ const Home = () => {
   const [campingEvents, setCampingEvents] = useState();
   const [trekkingEvents, setTrekkingEvents] = useState();
   useEffect(() => {
-    console.log('isSuccess--'+isSuccess);
+    // console.log('isSuccess--'+isSuccess);
     if (isSuccess == false) {
       getAllRecord();
     }
-    
+
   })
 
   const getNextBatchDate = (event) => {
@@ -70,113 +70,130 @@ const Home = () => {
     let eventCostPerPerson;
     const Q = new Date();
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  if(event.batches){
-    for (let i = 0; i < event.batches.length; i++) {
-      if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
-        batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()];
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
-        sortdate = new Date(event.batches[i].eventStartDate);
+    if (event.batches) {
+      for (let i = 0; i < event.batches.length; i++) {
+        if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
+          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()];
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          sortdate = new Date(event.batches[i].eventStartDate);
 
-      } else if(event.batches[i].everyWeekend == true){
+        } else if (event.batches[i].everyWeekend == true) {
+          batchdate = 'Available On All Weekends';
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          sortdate = 'Available On All Weekends';
+        } else if (event.batches[i].notScheduleYet == true) {
+          batchdate = 'On Public Demand';
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          sortdate = 'On Public Demand';
+        }
+      }
+    } else {
+      if (new Date(event.eventStartDate) - Q >= 0) {
+        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()];
+        eventCostPerPerson = event.eventCostPerPerson;
+        sortdate = new Date(event.eventStartDate);
+
+      } else if (event.everyWeekend == true) {
         batchdate = 'Available On All Weekends';
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
+        eventCostPerPerson = event.eventCostPerPerson;
         sortdate = 'Available On All Weekends';
-      }else if (event.batches[i].notScheduleYet == true) {
+      } else if (event.notScheduleYet == true) {
         batchdate = 'On Public Demand';
-        eventCostPerPerson = event.batches[i].eventCostPerPerson;
+        eventCostPerPerson = event.eventCostPerPerson;
         sortdate = 'On Public Demand';
       }
     }
-  }else{
-    if (new Date(event.eventStartDate) - Q >= 0) {
-      batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()];
-      eventCostPerPerson = event.eventCostPerPerson;
-      sortdate = new Date(event.eventStartDate);
 
-    } else if(event.everyWeekend == true){
-      batchdate = 'Available On All Weekends';
-      eventCostPerPerson = event.eventCostPerPerson;
-      sortdate = 'Available On All Weekends';
-    }else if (event.notScheduleYet == true) {
-      batchdate = 'On Public Demand';
-      eventCostPerPerson = event.eventCostPerPerson;
-      sortdate = 'On Public Demand';
-    }
-  }
-   var base_url = window.location.origin; 
+    var base_url = window.location.origin;
     if (batchdate && eventCostPerPerson) {
       liveEvent = {
         eventId: event.eventId,
         eventname: event.eventname,
         eventType: event.eventType,
         url: event.Url,
-        images: `${apiUrl}`+event.images,
+        images: `${apiUrl}` + event.images,
         batchdate: batchdate,
         eventCostPerPerson: eventCostPerPerson,
-         sortDate : sortdate,
+        sortDate: sortdate,
+        inactive: false,
+      }
+    } else if (batchdate == undefined && eventCostPerPerson == undefined) {
+      liveEvent = {
+        eventId: event.eventId,
+        inactive: true,
       }
     }
     return liveEvent;
   }
   const getAllRecord = async () => {
-    console.log('getAllRecord--');
+    //console.log('getAllRecord--');
     let liveEvents = [];
     let trekkingEvents = [];
     let campingEvents = [];
     let backPackingEvents = [];
-    console.log('show-all-events');
-    console.log(`${apiUrl}show-all-events`);
+    let inactivateEvent = [];
+    //console.log('show-all-events');
+    // console.log(`${apiUrl}show-all-events`);
     let r = await fetch(`${apiUrl}show-all-events`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
     })
-    
+
     let res = await r.json()
-    console.log('res',res);
+    //console.log('res',res);
     if (res.isSuccess == true) {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {
-        console.log('res.events[' + i + '] ---', res.events[i]);
-
         let tempEvent = [];
+
         tempEvent = getNextBatchDate(res.events[i]);
-        if (tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
+        if (tempEvent.inactive ) {
+          inactivateEvent.push(getNextBatchDate(res.events[i]));
+        } else if (!tempEvent.inactive && tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
           liveEvents.push(getNextBatchDate(res.events[i]));
         }
-        
-        
-        if (res.events[i].eventType == 'TrekEvent') {
+
+        if (!tempEvent.inactive && res.events[i].eventType == 'TrekEvent') {
           trekkingEvents.push(tempEvent);
-        } else if (res.events[i].eventType == 'CampingEvent') {
-          console.log('CampingEvent++==', tempEvent);
+        } else if (!tempEvent.inactive && res.events[i].eventType == 'CampingEvent') {
           campingEvents.push(tempEvent);
-        } else if (res.events[i].eventType == 'BackPackingTrip') {
+        } else if (!tempEvent.inactive && res.events[i].eventType == 'BackPackingTrip') {
           backPackingEvents.push(tempEvent);
         }
       }
-     
+
       setEvent(sortEventsBySortDate(liveEvents));
       setTrekkingEvents(sortEventsBySortDate(trekkingEvents));
       setCampingEvents(sortEventsBySortDate(campingEvents));
       setBackPackingEvents(sortEventsBySortDate(backPackingEvents));
     }
-
+    markEventInactive(inactivateEvent)
   }
-
+  const markEventInactive = async (events) => {
+   
+    let r = await fetch(`${apiUrl}inactive-events`,
+      {
+        method: "POST", headers: {
+          "Content-Type": "application/json",
+        }, body: JSON.stringify(events)
+      })
+      let res = await r.json()
+      console.log('inactive res --', JSON.stringify(res));
+  }
   const sortEventsBySortDate = (events) => {
     return events.sort((a, b) => {
       // Check if sortDate is 'Available On All Weekends' or 'On Public Demand'
       const isWeekendOrDemand = (date) => date === 'Available On All Weekends' || date === 'On Public Demand';
-  
+
       if (isWeekendOrDemand(a.sortDate) && !isWeekendOrDemand(b.sortDate)) return 1;
       if (!isWeekendOrDemand(a.sortDate) && isWeekendOrDemand(b.sortDate)) return -1;
       if (isWeekendOrDemand(a.sortDate) && isWeekendOrDemand(b.sortDate)) return 0;
-  
+
       // Sort by actual date for valid dates
       const dateA = new Date(a.sortDate);
       const dateB = new Date(b.sortDate);
-  
+
       return dateA - dateB;
     });
   };
@@ -187,9 +204,9 @@ const Home = () => {
   return (
     <div >
       <Navbar />
-     
+
       <div className='home' >
-        <Sidebar/>
+        <Sidebar />
         <div className="Phone">
           <a className="btn" onClick={showDropdown} aria-expanded="false">
             <img loading="lazy" src={Whatsapp} />
@@ -299,7 +316,7 @@ const Home = () => {
               </a>
             </div>
           </div>
-          {console.log("campingEvents---", campingEvents)}
+
           <Swiper
             breakpoints={{
               0: {
@@ -362,7 +379,7 @@ const Home = () => {
               </a>
             </div>
           </div>
-          {console.log("backPackingEvents---", backPackingEvents)}
+
           <Swiper
             breakpoints={{
               0: {
@@ -410,7 +427,7 @@ const Home = () => {
       </div>
       <Rating />
       <div>
-      <FunFact />
+        <FunFact />
         <div className='section-header'>
           <div className="col-7 row">
             <div className="col-lg-1 col-3">
@@ -423,7 +440,7 @@ const Home = () => {
         </div>
         <div className='contactUsSection'>
           <Contact_Us />
-        </div>        
+        </div>
       </div>
       <Footer />
     </div>

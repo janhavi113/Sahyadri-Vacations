@@ -1,0 +1,56 @@
+// backend/routes/scheduleEvent.js
+import express from 'express';
+import path from 'path';
+import {
+	ScheduleBatches
+} from '../models/ScheduleBatches.js';
+import {
+	Events
+} from '../models/Event.js';
+import { fileURLToPath } from 'url';
+const router = express.Router();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+var recordcount;
+var images = {};
+// Route to handle file uploads
+// Get All Event
+router.get("/show-all-events", async (req, res) => {
+	console.log("i am in");
+	try {
+		let ScheduleBatchesRecords = await ScheduleBatches.find({
+			active: true
+		});
+		res.send({
+			isSuccess: true,
+			events: ScheduleBatchesRecords
+		});
+	} catch (error) {
+		console.error(error);
+		res.send({
+			isSuccess: false,
+			error: error
+		});
+	}
+});
+
+router.post("/inactive-events", async (req, res) => {
+    console.log("i am in",req.body);
+    try {
+        // Extract the eventId values from req.body
+        const eventIds = req.body.map(event => event.eventId);
+    
+        // Delete all matching documents
+        const result = await ScheduleBatches.deleteMany(
+          { eventId: { $in: eventIds } } // Match any eventId in the array
+        );
+    
+        res.status(200).json({ message: 'Events deleted successfully', result });
+      } catch (error) {
+        res.status(500).json({ message: 'Error deleting events', error });
+      }
+    
+    
+});
+export default router;
