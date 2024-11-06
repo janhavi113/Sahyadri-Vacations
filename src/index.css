@@ -17,6 +17,11 @@ body {
   font-family: var(--bs-font-sans-serif);
 }
 
+body, html {
+  overflow-x: hidden;
+}
+
+
 .quill {
   background-color: #F4F4F4;
 }
