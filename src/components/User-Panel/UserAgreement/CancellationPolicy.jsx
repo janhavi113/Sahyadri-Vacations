@@ -31,7 +31,7 @@ const CancellationPolicy = () => {
                                     <li>Event Tickets cannot be transferred to another date against cancellation.</li>
                                     <li>Event Tickets can be transferred to another person against cancellation for that event only.</li>
                                     <li>If Trek gets canceled, we will refund the "Trek Amount" only.</li>
-
+                                    <li>We need at least 12 participants to run that particular trek/trip, if batch size is not enough then organisers have all right to Postpone,Collaborate with other Companies or Cancel the trek. In this scenario,You will receive your booking amount in 2-3 working days.</li>
                                 </ul>
                             </div>
 
@@ -46,6 +46,7 @@ const CancellationPolicy = () => {
                                     <li>Event Tickets cannot be transferred to another date against cancellation</li>
                                     <li>Event Tickets cannot be transferred to another person against cancellation</li>
                                     <li>If the Event gets cancelled, we will refund the "Event Amount" only</li>
+                                    <li>We need at least 12 participants to run that particular trek/trip, if batch size is not enough then organisers have all right to Postpone,Collaborate with other Companies or Cancel the trek. In this scenario,You will receive your booking amount in 2-3 working days.</li>
                                 </ul>
                             </div>
 
@@ -61,6 +62,7 @@ const CancellationPolicy = () => {
                                     <li>Event Tickets cannot be transferred to another date against cancellation</li>
                                     <li>Event Tickets cannot be transferred to another person against cancellation</li>
                                     <li>If the Event get canceled, we will refund the "Event Amount" only</li>
+                                    <li>We need at least 12 participants to run that particular trek/trip, if batch size is not enough then organisers have all right to Postpone,Collaborate with other Companies or Cancel the trek. In this scenario,You will receive your booking amount in 2-3 working days.</li>
                                 </ul>
                             </div>
                             <br />
@@ -75,7 +77,7 @@ const CancellationPolicy = () => {
                                     <li>Phone Call is mandatory if cancelled before 3-5 days of event scheduled</li>
                                 </ul>
                             </div>
-                            <div style={{'font-style': 'italic','font-weight': 'bold','color': 'red'}}>
+                            <div style={{ 'font-style': 'italic', 'font-weight': 'bold', 'color': 'red' }}>
                                 <br />
                                 If unwell: No refund; find a replacement if needed.
                             </div>
