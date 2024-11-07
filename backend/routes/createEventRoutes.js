@@ -17,9 +17,9 @@ router.post('/create-event', async (req, res) => {
     console.log(' req.files---', req.files);
     var imageList = [];
     let sampleFile = req.files.files;
-
+    console.log('sampleFile--',Array.isArray(sampleFile));
     try {
-        if (sampleFile.length === 1) {
+        if (!Array.isArray(sampleFile)) {
             let uploadPath = path.join(__dirname, '../../public/Images', sampleFile.name);
             imageList.push('public/Images/' + sampleFile.name);
             await sampleFile.mv(uploadPath);
