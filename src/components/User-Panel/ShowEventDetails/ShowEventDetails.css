@@ -11,7 +11,12 @@
     text-align: center;
     width: 100%;
 }
-
+.bookingClosed{
+    font-style: italic;
+    color: rgb(190, 3, 3);
+    padding-top: 5px;
+    font-weight: bold;
+}
 .header-center-aligned {
     position: absolute;
     z-index: 299;

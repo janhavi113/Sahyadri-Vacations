@@ -16,7 +16,10 @@ const CancellationPolicy = () => {
                             <div className="terms-head">
                                 <h4>Cancellation Policy</h4>
                             </div>
-
+                            <div>
+                                <br />
+                                We understand the disappointment of canceling a trek after months of preparation. That's why we have a traveler-friendly cancellation policy.
+                            </div>
                             <div className="policy-list terms-list">
                                 <h3>Events (1 or 2 days)</h3>
                                 <ul>
@@ -59,6 +62,22 @@ const CancellationPolicy = () => {
                                     <li>Event Tickets cannot be transferred to another person against cancellation</li>
                                     <li>If the Event get canceled, we will refund the "Event Amount" only</li>
                                 </ul>
+                            </div>
+                            <br />
+                            <div className="terms-head">
+                                <h4>Cancellation Process:</h4>
+                            </div>
+                            <div className="policy-list terms-list">
+                                <ul>
+                                    <li>Email us at contactus@sahyadrivacations.com with your details.</li>
+                                    <li>Cancellation policy applies from email receipt.</li>
+                                    <li>Refund processed within 2-5 working days.</li>
+                                    <li>Phone Call is mandatory if cancelled before 3-5 days of event scheduled</li>
+                                </ul>
+                            </div>
+                            <div style={{'font-style': 'italic','font-weight': 'bold','color': 'red'}}>
+                                <br />
+                                If unwell: No refund; find a replacement if needed.
                             </div>
                         </div>
                     </div>

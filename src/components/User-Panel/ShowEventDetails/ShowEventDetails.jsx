@@ -17,6 +17,7 @@ import endurance from '../../Images/endurance.svg'
 import locationicon from '../../Images/location.svg'
 import Loading from '../../Loading/Loading';
 import CircularLoading from '../../Loading/CircularLoading';
+
 import "../../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
@@ -50,6 +51,8 @@ const ShowEventDetails = () => {
   const [availableBatches, setAvailableBatches] = useState();
   const [price, setPrice] = useState(0);
   const [batchDate, setBatchDate] = useState();
+  const [maxBooking, setMaxBooking] = useState();
+  const [bookedSlot, setBookedSlot] = useState();
   const [availableSlot, setAvailableSlot] = useState();
   const [eventType, seteEventType] = useState();
   const progressCircle = useRef(null);
@@ -62,6 +65,7 @@ const ShowEventDetails = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isBookingConfirmed, setBookingConfirmed] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [batchFull, setBatchFull] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleDateChange = (date) => {
@@ -130,6 +134,7 @@ const ShowEventDetails = () => {
         formData.append("bookingDate", today);
         formData.append("otherParticipants", JSON.stringify(participants));
         formData.append("bookingId", bookingId);
+        formData.append("scheduleEventId", scheduleBatch.eventId);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
           body: formData,
@@ -142,7 +147,7 @@ const ShowEventDetails = () => {
           setBookingConfirmed(true);
           // Redirect to confirmation page
           navigate('/confirmation', { state: { bookingId: res.booking.bookingId, name: res.booking.name, noOfParticipant: res.booking.numberOfPeoples, phone: data.whatsappNumber, email: data.emailId } });
-          await sendInvoiceRequest(res.booking);
+          // await sendInvoiceRequest(res.booking);
 
         }
       } else {
@@ -200,7 +205,8 @@ const ShowEventDetails = () => {
   };
 
   const increaseCount = async () => {
-    if (availableSlot > noOfTrekkers) {
+    
+    if (Number(maxBooking) - Number(bookedSlot) > Number(noOfTrekkers)) {
       let count = noOfTrekkers;
       let price1 = price;
       count++;
@@ -210,6 +216,9 @@ const ShowEventDetails = () => {
         ...participants,
         { name: "", mobileNumber: "", pickupLocation: "" },
       ]);
+    }else{
+      setBatchFull(true);
+      setAvailableSlot(Number(maxBooking) - Number(bookedSlot));
     }
   }
 
@@ -240,6 +249,7 @@ const ShowEventDetails = () => {
   const getNextBatchDate = (event) => {
     let batchdate;
     let batchSize = -1;
+    let bookedSize = 0;
     let eventCostPerPerson;
     let batchDates = [];
     let eventType = event.eventType;
@@ -280,19 +290,20 @@ const ShowEventDetails = () => {
         batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear();
         eventCostPerPerson = event.eventCostPerPerson;
         batchSize = event.eventBatchCount;
+        bookedSize = event.alreadyBoockedCount;
       } else if (event.everyWeekend == true) {
         batchdate = 'Available On All Weekends';
         eventCostPerPerson = event.eventCostPerPerson;
         batchSize = event.eventBatchCount;
+        bookedSize = event.alreadyBoockedCount;
         setEveryWeekend(true);
       }
       else if (event.notScheduleYet == true) {
         batchdate = 'On Demand';
-
         setInquery(true);
-
         eventCostPerPerson = event.eventCostPerPerson;
         batchSize = event.eventBatchCount;
+        bookedSize = event.alreadyBoockedCount;
       }
       if (event.everyWeekend == false && event.notScheduleYet == false) {
         batchDates.push(new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear());
@@ -306,7 +317,8 @@ const ShowEventDetails = () => {
       setAvailableBatches(batchDates);
       setPrice(eventCostPerPerson);
       setBatchDate(batchdate);
-      setAvailableSlot(batchSize);
+      setMaxBooking(batchSize);
+      setBookedSlot(bookedSize);
       setFinalPrice(eventCostPerPerson);
     }
   }
@@ -345,9 +357,14 @@ const ShowEventDetails = () => {
       setLoading(false);
       setSuccess(true);
       setEventDetails(res.events);
-
       setScheduleBatch(res.ScheduleBatchesRecords);
       getNextBatchDate(res.ScheduleBatchesRecords);
+
+      if (res.ScheduleBatchesRecords.alreadyBoockedCount >= res.ScheduleBatchesRecords.eventBatchCount) {
+        setButtonDisabled(true);
+      } else {
+        setButtonDisabled(false);
+      }
       if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
         const jsonData = convertHtmlToJSON(res.events.pickupPoints);
         setPickupPoints(jsonData);
@@ -484,7 +501,7 @@ const ShowEventDetails = () => {
                   <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.itinerary) }} />
                 </div>
                 <hr />
-                {eventDetails.highlights!='' && eventDetails.highlights!='undefined' &&
+                {eventDetails.highlights != '' && eventDetails.highlights != 'undefined' &&
                   <div id="scrollspyHeading3" className='pt-4 pb-1 px-2'>
                     <h2 className="h3"> Highlights</h2>
                     <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.highlights) }} />
@@ -593,12 +610,22 @@ const ShowEventDetails = () => {
                           <sub >Per Person</sub>
                         </center>
                         </h4>
-                        {!inquery && <> <div>
+                        {buttonDisabled &&
+                          <p className ="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
+                        }
+                        {!inquery && !buttonDisabled && <> <div>
                           <center> {batchDate} </center></div>
 
                           <div className="button-margin button">
-                            <input onClick={handleShow} type="submit" value="BOOK NOW" />
-                          </div></>}
+                            <input disabled={buttonDisabled} onClick={handleShow} type="submit" value="BOOK NOW" />
+                          </div></>
+                        }
+
+                        {buttonDisabled &&
+                          <div className="button-margin button">
+                            <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                          </div>
+                        }
                         {inquery &&
                           <div className="button-margin button">
                             <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
@@ -627,13 +654,16 @@ const ShowEventDetails = () => {
                   <div>
                     <center> {batchDate} </center>
                   </div>
-                </div>
+                </div>                   
+                {buttonDisabled &&
+                          <p className ="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
+                        }
                 <div className="button-edit-container">
                   <div className="button button-margin ">
-                    {!inquery &&
+                    {!inquery && !buttonDisabled &&
                       <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
                     }
-                    {inquery &&
+                    {inquery || buttonDisabled &&
                       <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
                     }
                     <button type="button"><a href="tel:07028740961"> <strong>&nbsp;CALL NOW </strong></a> </button>
@@ -662,19 +692,19 @@ const ShowEventDetails = () => {
                     {buttonClick != 'pay-now' &&
                       <div className="user-details">
                         <div className="input-box ">
-                          <span className="details">Full Name</span>
+                          <span className="details">Full Name<span style={{ 'color': 'red' }}> *</span></span>
                           <input {...register("fullName", { required: { value: true, message: "This field is required" }, })} type="text" required />
                         </div>
                         <div className="input-box ">
-                          <span className="details">Email ID</span>
+                          <span className="details">Email ID<span style={{ 'color': 'red' }}> *</span></span>
                           <input  {...register("emailId", { required: { value: true, message: "This field is required" }, })} type="email" required />
                         </div>
                         <div className="input-box">
-                          <span className="details">WhatsApp Mobile Number</span>
+                          <span className="details">WhatsApp Mobile Number<span style={{ 'color': 'red' }}> *</span></span>
                           <input placeholder='+91' {...register("whatsappNumber", { required: { value: true, message: "This field is required" }, })} type="tel" required />
                         </div>
                         {!everyWeekend && <div className="input-box">
-                          <span className="details">Select Batch</span>
+                          <span className="details">Select Batch<span style={{ 'color': 'red' }}> *</span></span>
                           <select  {...register("selectDate", { required: { value: true, message: "This field is required" }, })} required>
                             {availableBatches && availableBatches.map((event, index) => (
                               <option key={index} value={event} >{event}</option>
@@ -692,7 +722,7 @@ const ShowEventDetails = () => {
 
                         {eventType != 'CampingEvent' &&
                           <div>
-                            <h3>Select a Location:</h3>
+                            <h3>Select a Location:<span style={{ 'color': 'red' }}> *</span></h3>
                             <ul>
                               {pickupPoints.map((location) => (
                                 <li key={location.id}>
@@ -734,6 +764,7 @@ const ShowEventDetails = () => {
                                 onChange={(e) =>
                                   handleParticipantChange(index, "name", e.target.value)
                                 }
+                                required
                               />
                               <input
                                 type="text"
@@ -746,6 +777,7 @@ const ShowEventDetails = () => {
                                     e.target.value
                                   )
                                 }
+                                required
                               />
                               {eventType != 'CampingEvent' &&
                                 <select
@@ -759,6 +791,7 @@ const ShowEventDetails = () => {
                                       e.target.value
                                     )
                                   }
+                                  required
                                 >
 
                                   <option value="">Select a location</option>{" "}
@@ -775,6 +808,9 @@ const ShowEventDetails = () => {
                             </div>
                           </div>
                         ))}
+                        {batchFull &&
+                        <p className='bookingClosed'>Only {availableSlot} seats are currently available. Please reach out to us at +91 7028740961 to discuss the possibility of accommodating additional bookings.</p>
+                        }
                         <div className='hr'></div>
 
                         <div className='finalCalculation'>
@@ -808,7 +844,7 @@ const ShowEventDetails = () => {
                         />
                         <div >
                           Accept all
-                          <a className='link' href='http://localhost:5173/user-agreement' target="_blank"> terms & conditions</a>
+                          <a className='link' href={'https://sahyadrivacations.com/user-agreement'} target="_blank"> terms & conditions</a>
                         </div>
                       </div>
 

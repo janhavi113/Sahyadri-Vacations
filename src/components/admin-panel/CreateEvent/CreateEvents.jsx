@@ -136,41 +136,41 @@ function CreateEvents() {
               </div>
               <div className="input-select-box">
                 <span className="details">Type</span>
-                <input {...register("type",)} type="text" required />
+                <input {...register("type",)} type="text"  />
               </div>
 
               <div className="input-select-box">
                 <span className="details">Elevation</span>
-                <input {...register("elevation",)} type="text" required />
+                <input {...register("elevation",)} type="text"  />
               </div>
 
               <div className="input-select-box">
                 <span className="details">Difficulty</span>
-                <input {...register("difficulty",)} type="text" required />
+                <input {...register("difficulty",)} type="text" />
               </div>
 
               <div className="input-select-box">
                 <span className="details">Endurance</span>
-                <input {...register("endurance",)} type="text" required />
+                <input {...register("endurance",)} type="text" />
               </div>
 
               <div className="input-select-box">
                 <span className="details">Duration</span>
-                <input {...register("duration",)} type="text" required />
+                <input {...register("duration",)} type="text" />
               </div>
 
               <div className="input-select-box">
                 <span className="details">Total Distance</span>
-                <input {...register("totalDistance",)} type="text" required />
+                <input {...register("totalDistance",)} type="text"  />
               </div>
               <div className="input-select-box">
                 <span className="details">Age Group</span>
-                <input {...register("ageGroup",)} type="text" required />
+                <input {...register("ageGroup",)} type="text" />
               </div>
 
               <div className="input-select-box">
                 <span className="details">Trek Distance</span>
-                <input {...register("trekDistance",)} type="text" required />
+                <input {...register("trekDistance",)} type="text" />
               </div>
               <div className="input-select-box">
                 <span className="details">Highlights</span>
