@@ -483,22 +483,22 @@ app.use((err, req, res, next) => {
 	next();
 });
 
-const options = {
-	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
-  };
+// const options = {
+// 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
+// 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
+//   };
 
- // Start the HTTPS server
-const server = https.createServer(options, app);
-console.log('server',server);
-server.listen(3001, () => {
-  console.log('HTTPS Server running on port 3001');
-});
-
-server.on('error', (err) => {
-  console.error('Server error:', err);
-});
-
-// app.listen(port, () => {
-// 	console.log(`Server is running on port ${port}`);
+//  // Start the HTTPS server
+// const server = https.createServer(options, app);
+// console.log('server',server);
+// server.listen(3001, () => {
+//   console.log('HTTPS Server running on port 3001');
 // });
+
+// server.on('error', (err) => {
+//   console.error('Server error:', err);
+// });
+
+app.listen(port, () => {
+	console.log(`Server is running on port ${port}`);
+});

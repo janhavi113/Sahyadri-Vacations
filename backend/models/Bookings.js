@@ -21,7 +21,7 @@ const bookingsSchema = new mongoose.Schema({
     bookingId:  { type :String},
     eventPrice:  { type :String},
     addedDiscount: { type :String},
-    paymentType: { type :String},
+    paymentMethod: { type :String},
     transactionId: { type :String},
     otherParticipants: [ otherParticipantsSchema
     ]

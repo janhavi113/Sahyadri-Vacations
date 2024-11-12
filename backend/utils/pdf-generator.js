@@ -16,7 +16,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
 
     // Construct the path to the logo
     const logo = getImageAsBase64(path.join(__dirname, '../../public/logo.png')); // Adjusted path to logo
-    const finalPrice = bookingDetails.amountPaid * bookingDetails.numberOfPeoples;
+    const finalPrice = bookingDetails.eventPrice * bookingDetails.numberOfPeoples;
 
     console.log('Booking Details:', bookingDetails);
     const html = `<!DOCTYPE html>
@@ -92,7 +92,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         }
         .company-info {
             font-size: 12px; /* Adjusted font size */
-            margin-top: 470px; /* Space before company info */
+            margin-top: 400px; /* Space before company info */
         }
         .thank-you {
             margin-top: 1px;
@@ -137,6 +137,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
                         <p>Invoice Number: #${bookingDetails.bookingId}</p>
                         <p>Payment ID: ${bookingDetails.transactionId}</p>
                         <p>Date: ${bookingDetails.bookingDate}</p>
+                        <p>Payment Method: ${bookingDetails.paymentMethod}</p>
                     </td>
                 </tr>
             </table>
@@ -153,16 +154,26 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             </thead>
             <tbody>
                 <tr>
-                    <td>${bookingDetails.eventName}</td>
+                    <td>${bookingDetails.eventName}( ${bookingDetails.batch} )</td>
                     <td>${bookingDetails.numberOfPeoples}</td>
                     <td>${bookingDetails.eventPrice}</td>
                     <td>${finalPrice}</td>
                 </tr>
             </tbody>
+            ${bookingDetails.addedDiscount > 0 ? `
+                <tbody>
+                    <tr>
+                        <td>Total Discount</td>
+                        <td></td>
+                        <td></td>
+                        <td>- ${bookingDetails.addedDiscount}</td>
+                    </tr>
+                </tbody>
+            ` : ''}
             <tfoot>
                 <tr>
                     <td colspan="3" class="total-label">Total</td>
-                    <td class="total-amount">${finalPrice}</td>
+                    <td class="total-amount">${bookingDetails.amountPaid}</td>
                 </tr>
             </tfoot>
         </table>
@@ -174,7 +185,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         </div>
     </div>
     <div class="footer-strip">
-        <p>www.sahyadrivacations.com | sahyadrivacation21@gmail.com</p>
+        <p>www.sahyadrivacations.com | info@sahyadrivacations.com</p>
     </div>
 </body>
 </html>`;

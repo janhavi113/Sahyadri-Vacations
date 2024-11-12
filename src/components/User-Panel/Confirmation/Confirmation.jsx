@@ -58,11 +58,11 @@ const Confirmation = () => {
         }
     };
 
-    const getBookingData = async (bookingId, paymentType, transactionId) => {
+    const getBookingData = async (bookingId, paymentMethod, transactionId) => {
         try {
             const formData = new FormData();
             formData.append("bookingId", bookingId);
-            formData.append("paymentType", paymentType);
+            formData.append("paymentMethod", paymentMethod);
             formData.append("transactionId", transactionId);
             let r = await fetch(`${apiUrl}payment-confirmed`, {
                 method: "PUT",

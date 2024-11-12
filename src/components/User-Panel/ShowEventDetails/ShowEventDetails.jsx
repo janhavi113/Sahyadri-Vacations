@@ -181,7 +181,7 @@ const ShowEventDetails = () => {
         formData.append("fullName", data.fullName);
         formData.append("email", data.emailId);
         formData.append("mobileNumber", data.whatsappNumber);
-        formData.append("batch", selectedDate);
+        formData.append("batch", data.selectDate);
         formData.append("eventId", eventDetails.eventId);
         formData.append("eventName", eventDetails.name);
         const today = new Date();

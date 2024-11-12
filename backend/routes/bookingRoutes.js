@@ -66,7 +66,6 @@ router.put("/confirmed-booking", async (req, res) => {
             amountPaid,
             numberOfPeoples,
             pickupLocation,
-            bookingDate,
             otherParticipants,
             bookingId,
             scheduleEventId,
@@ -87,7 +86,6 @@ router.put("/confirmed-booking", async (req, res) => {
                     numberOfPeoples: numberOfPeoples,
                     amountPaid: amountPaid,
                     pickupLocation: pickupLocation,
-                    bookingDate: bookingDate,
                     otherParticipants: parsedParticipants,
                     scheduleEventId: scheduleEventId,
                     status: "Pending",
@@ -123,7 +121,7 @@ router.put("/payment-confirmed", async (req, res) => {
     console.log('req.body---',req.body);
     try {
         const {
-            paymentType,
+            paymentMethod,
             transactionId,
             bookingId
         } = req.body;
@@ -133,7 +131,7 @@ router.put("/payment-confirmed", async (req, res) => {
             {
                 $set: {
                     transactionId:transactionId,
-                    paymentType:paymentType,
+                    paymentMethod:paymentMethod,
                     status: "confirmed",
                 }
             },
@@ -192,7 +190,7 @@ router.post("/sendInvoice", async (req, res) => {
     }
 
     // Retry loop to check for the existence of the PDF
-    const maxRetries = 15;
+    const maxRetries = 5;
     let fileExists = false;
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         fileExists = fs.existsSync(pdfPath);
