@@ -35,6 +35,10 @@ import directBookingRoutes from './routes/directBookingRoutes.js'; // Import the
 import bookingRoutes from './routes/bookingRoutes.js'; // Import the new route
 import createEventRoutes from './routes/createEventRoutes.js'; // Import the new route
 import scheduleEventRoutes from './routes/scheduleEventRoutes.js'; // Import the new route
+import showAllEventsRoutes from './routes/showAllEventsRoutes.js'; // Import the new route
+import paymentRoutes from './routes/paymentRoutes.js';
+import paymentCallbackRoutes from './routes/paymentCallbackRoutes.js';
+import couponRoutes from './routes/couponRoutes.js';
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET; // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
@@ -239,24 +243,6 @@ app.get("/schedule-event-details", async (req, res) => {
 	}
 });
 
-app.get("/show-all-events", async (req, res) => {
-	console.log("i am in");
-	try {
-		let ScheduleBatchesRecords = await ScheduleBatches.find({
-			active: true
-		});
-		res.send({
-			isSuccess: true,
-			events: ScheduleBatchesRecords
-		});
-	} catch (error) {
-		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
-	}
-});
 
 app.get("/scheduled-events", async (req, res) => {
 	try {
@@ -336,6 +322,12 @@ app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	let ScheduleBatchesRecords = await ScheduleBatches.findOne({
 		eventId: event_Id,
 	});
+	console.log(
+		"event_Id--",
+		events,
+		"ScheduleBatchesRecords",
+		ScheduleBatchesRecords
+	);
 	if (events && ScheduleBatchesRecords) {
 		console.log(
 			"event_Id--",
@@ -454,10 +446,16 @@ app.post("/customised-tour", async (req, res) => {
 app.use(createEventRoutes);
 app.use(bookingRoutes);
 app.use(scheduleEventRoutes);
+app.use(showAllEventsRoutes);
+// Use the payment routes
+
 // Use the separated routes
 // Use the route
 app.use(directBookingRoutes);
-
+app.use(couponRoutes);
+// Use the payment route
+app.use('/api', paymentRoutes);
+app.use('/api', paymentCallbackRoutes);
 // Handle all other routes and serve index.html
 app.get("*", (req, res) => {
 	// console.log("Serving index.html for route:", req);

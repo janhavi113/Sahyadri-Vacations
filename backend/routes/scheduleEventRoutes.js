@@ -62,6 +62,7 @@ router.post("/schedule-event", async (req, res) => {
 			b2bPrice,
 			bookingTillDate,
 			bookingTillTime,
+			specialOfferEvent,
 		} = req.body;
 
 		let scheduleRecordcount = 0;
@@ -87,6 +88,7 @@ router.post("/schedule-event", async (req, res) => {
 			bookingTillTime: bookingTillTime,
 			eventname: eventname,
 			images: currUrl,
+			specialOfferEvent:specialOfferEvent,
 			Url: "/event-details?eventid=" +
 				(scheduleRecordcount + 1).toString() +
 				"/" +
@@ -109,4 +111,5 @@ router.post("/schedule-event", async (req, res) => {
 		});
 	}
 });
+
 export default router;

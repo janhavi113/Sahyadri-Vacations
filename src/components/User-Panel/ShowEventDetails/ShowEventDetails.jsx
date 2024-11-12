@@ -15,8 +15,8 @@ import duration from '../../Images/duration.svg'
 import distance from '../../Images/distance.svg'
 import endurance from '../../Images/endurance.svg'
 import locationicon from '../../Images/location.svg'
-import Loading from '../../Loading/Loading';
-import CircularLoading from '../../Loading/CircularLoading';
+import Loading from '../Loading/Loading';
+import CircularLoading from '../Loading/CircularLoading';
 
 import "../../Modal.css";
 // Import Swiper styles
@@ -47,12 +47,14 @@ const ShowEventDetails = () => {
   const [pickupPoints, setPickupPoints] = useState([]);
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
+  const [actualPrice, setActualPrice] = useState(0);
   const [scheduleBatch, setScheduleBatch] = useState();
   const [availableBatches, setAvailableBatches] = useState();
   const [price, setPrice] = useState(0);
   const [batchDate, setBatchDate] = useState();
   const [maxBooking, setMaxBooking] = useState();
   const [bookedSlot, setBookedSlot] = useState();
+  const [bookingPhone, setBookingPhone] = useState();
   const [availableSlot, setAvailableSlot] = useState();
   const [eventType, seteEventType] = useState();
   const progressCircle = useRef(null);
@@ -66,6 +68,10 @@ const ShowEventDetails = () => {
   const [isBookingConfirmed, setBookingConfirmed] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [batchFull, setBatchFull] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [preCouponCode, setPreCouponCode] = useState('');
+  const [discount, setDiscount] = useState(-1);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleDateChange = (date) => {
@@ -126,15 +132,17 @@ const ShowEventDetails = () => {
     try {
       console.log('selectedLocation--',);
       if (buttonClick == 'pay-now') {
+
         const formData = new FormData();
         formData.append("numberOfPeoples", noOfTrekkers);
-        formData.append("amountPaid", finalPrice);
+        formData.append("amountPaid", Number(finalPrice));
         formData.append("pickupLocation", selectedLocation);
         const today = new Date();
         formData.append("bookingDate", today);
         formData.append("otherParticipants", JSON.stringify(participants));
         formData.append("bookingId", bookingId);
         formData.append("scheduleEventId", scheduleBatch.eventId);
+        formData.append("addedDiscount",discount);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
           body: formData,
@@ -143,16 +151,33 @@ const ShowEventDetails = () => {
         let res = await r.json()
         console.log('booking---', JSON.stringify(res));
         if (res.isSuccess == true) {
-          handleClose();
-          setBookingConfirmed(true);
-          // Redirect to confirmation page
-          navigate('/confirmation', { state: { bookingId: res.booking.bookingId, name: res.booking.name, noOfParticipant: res.booking.numberOfPeoples, phone: data.whatsappNumber, email: data.emailId } });
-          // await sendInvoiceRequest(res.booking);
+          // try {
+          alert('In Pay Now');
+          // Send the payment request to your backend
+          const response = await fetch(`${apiUrl}api/phonepe/payment`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              amount: finalPrice , // Convert amount to paisa (1 INR = 100 paisa)
+              orderId: bookingId,
+              mobileNumber: bookingPhone,
+            }),
+          });
 
+          const data = await response.json();
+          if (data && data.redirectUrl) {
+            // Redirect the user to PhonePe for payment
+            window.location.href = data.redirectUrl;
+          } else {
+            alert('Payment initiation failed. Please try again.');
+          }
         }
       } else {
 
         const formData = new FormData();
+        setBookingPhone(data.whatsappNumber);
         formData.append("fullName", data.fullName);
         formData.append("email", data.emailId);
         formData.append("mobileNumber", data.whatsappNumber);
@@ -182,41 +207,25 @@ const ShowEventDetails = () => {
     }
   }
 
-  const sendInvoiceRequest = async (booking) => {
-    try {
-      const response = await fetch(`${apiUrl}sendInvoice`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(booking),
-      });
-
-      const result = await response.text();
-      if (response.ok) {
-        console.log("Invoice sent successfully:", result);
-      } else {
-        console.error("Failed to send invoice:", result);
-      }
-    } catch (error) {
-      console.error("Error sending invoice:", error);
-    }
-  };
+ 
   const handleSelection = (event) => {
     setSelectedLocation(event.target.value);
   };
 
   const increaseCount = async () => {
-    
+
     if (Number(maxBooking) - Number(bookedSlot) > Number(noOfTrekkers)) {
       let count = noOfTrekkers;
       let price1 = price;
       count++;
       setNoOfTrekkers(count);
       setFinalPrice(price1 * count);
+      setActualPrice(price1 * count);
       setParticipants([
         ...participants,
         { name: "", mobileNumber: "", pickupLocation: "" },
       ]);
-    }else{
+    } else {
       setBatchFull(true);
       setAvailableSlot(Number(maxBooking) - Number(bookedSlot));
     }
@@ -320,6 +329,7 @@ const ShowEventDetails = () => {
       setMaxBooking(batchSize);
       setBookedSlot(bookedSize);
       setFinalPrice(eventCostPerPerson);
+      setActualPrice(eventCostPerPerson);
     }
   }
 
@@ -372,9 +382,55 @@ const ShowEventDetails = () => {
     }
 
   }
-  //   if (loading) {
-  //     return <Loading />; // Show loading component while fetching
-  // }
+
+  const handleCouponApply = async () => {
+
+    try {
+      if (couponCode) {
+        console.log('scheduleBatch--',scheduleBatch);
+        if (!scheduleBatch.specialOfferEvent && (couponCode != preCouponCode)) {
+          const response = await fetch(`${apiUrl}api/validate-coupon`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: couponCode, eventType: eventDetails.eventType })
+          });
+          setPreCouponCode(couponCode);
+          const data = await response.json();
+          let calculatedDiscount;
+
+          if (response.ok && data.isValid) {
+            console.log('--data---', data);
+            if (data.coupon == null) {
+              calculatedDiscount = 0;
+              console.log('--calculatedDiscount---', calculatedDiscount);
+
+            } else if (data.coupon.discountPercent) {
+              calculatedDiscount = Math.min(
+                (finalPrice * data.coupon.discountPercent) / 100
+              );
+              console.log('calculatedDiscount1---', calculatedDiscount);
+            } else if (data.coupon.discountPrice) {
+              calculatedDiscount = data.coupon.discountPrice;
+              console.log('--calculatedDiscount---', calculatedDiscount);
+            }
+
+            setDiscount(calculatedDiscount);
+            setFinalPrice(Number(actualPrice) - Number(calculatedDiscount));
+
+          } else {
+            // setErrorMessage(data.message || 'Invalid coupon code.');
+          }
+        }
+      } else {
+        setPreCouponCode(couponCode);
+        setDiscount(-1);
+        setFinalPrice(actualPrice);
+      }
+    } catch (error) {
+      //setErrorMessage('An error occurred while applying the coupon.');
+    }
+
+  };
 
   return (
     <div>
@@ -611,7 +667,7 @@ const ShowEventDetails = () => {
                         </center>
                         </h4>
                         {buttonDisabled &&
-                          <p className ="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
+                          <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                         }
                         {!inquery && !buttonDisabled && <> <div>
                           <center> {batchDate} </center></div>
@@ -654,10 +710,10 @@ const ShowEventDetails = () => {
                   <div>
                     <center> {batchDate} </center>
                   </div>
-                </div>                   
+                </div>
                 {buttonDisabled &&
-                          <p className ="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
-                        }
+                  <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
+                }
                 <div className="button-edit-container">
                   <div className="button button-margin ">
                     {!inquery && !buttonDisabled &&
@@ -809,8 +865,25 @@ const ShowEventDetails = () => {
                           </div>
                         ))}
                         {batchFull &&
-                        <p className='bookingClosed'>Only {availableSlot} seats are currently available. Please reach out to us at +91 7028740961 to discuss the possibility of accommodating additional bookings.</p>
+                          <p className='bookingClosed'>Only {availableSlot} seats are currently available. Please reach out to us at +91 7028740961 to discuss the possibility of accommodating additional bookings.</p>
                         }
+                        <div className="input-box" style={{ 'display': 'flex', 'gap': '10px' }}>
+                          <input
+                            type="text" className="input-box-discount"
+                            value={couponCode}
+                            onChange={(e) => setCouponCode(e.target.value)}
+                            placeholder="Enter coupon code"
+                          />
+                          <div className="button discount-button">
+                            <button type="button" onClick={handleCouponApply}>
+                              Apply Coupon
+                            </button>
+                          </div>
+                        </div>
+                        {discount > 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': 'green', 'gap': '5px' }}> Discount Applied   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.007 8.27C22.194 9.125 23 10.45 23 12c0 1.55-.806 2.876-1.993 3.73.24 1.442-.134 2.958-1.227 4.05-1.095 1.095-2.61 1.459-4.046 1.225C14.883 22.196 13.546 23 12 23c-1.55 0-2.878-.807-3.731-1.996-1.438.235-2.954-.128-4.05-1.224-1.095-1.095-1.459-2.611-1.217-4.05C1.816 14.877 1 13.551 1 12s.816-2.878 2.002-3.73c-.242-1.439.122-2.955 1.218-4.05 1.093-1.094 2.61-1.467 4.057-1.227C9.125 1.804 10.453 1 12 1c1.545 0 2.88.803 3.732 1.993 1.442-.24 2.956.135 4.048 1.227 1.093 1.092 1.468 2.608 1.227 4.05Zm-4.426-.084a1 1 0 0 1 .233 1.395l-5 7a1 1 0 0 1-1.521.126l-3-3a1 1 0 0 1 1.414-1.414l2.165 2.165 4.314-6.04a1 1 0 0 1 1.395-.232Z" fill="#009912"></path></g></svg></p>}
+                        {discount == 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> Coupon Not Applied  <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
+
+
                         <div className='hr'></div>
 
                         <div className='finalCalculation'>

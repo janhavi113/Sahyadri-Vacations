@@ -84,14 +84,21 @@ select {
 }
 
 .button-edit-container .button-margin button,
-input {
+input[type="submit"] {
     background-color: rgb(255, 115, 0);
     color: white;
     margin-right: 2%;
     width: 48%;
 }
 
-.addGap {}
+.discount-button {
+ margin: 0 !important;
+  }
+  
+  .input-box-discount{
+    width: 50% !important;
+  }
+  
 
 sub {
     color: black;

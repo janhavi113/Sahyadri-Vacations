@@ -18,7 +18,9 @@ const scheduleBatchesSchema = new mongoose.Schema({
   everyWeekend: { type: Boolean },
   notScheduleYet: { type: Boolean },
   images: { type: String },
+  scheduleEventId: { type: String },
   alreadyBoockedCount: { type: Number , default: 0},
+  specialOfferEvent: { type: Boolean , default: false },
 });
 
 // Middleware to check and update `active` field before each query

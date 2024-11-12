@@ -1,0 +1,57 @@
+/* General styles for form container */
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Form heading */
+  .form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+  }
+  
+  /* Input and select elements */
+  .form-container input[type='text'],
+  .form-container input[type='number'],
+  .form-container select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Form label styles */
+  .form-container label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  
+  /* Message styles for feedback */
+  .form-container p {
+    text-align: center;
+    color: #d9534f;
+    margin-top: 15px;
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 600px) {
+    .form-container {
+      padding: 15px;
+    }
+  
+    .form-container h2 {
+      font-size: 20px;
+    }
+  
+  }
+  

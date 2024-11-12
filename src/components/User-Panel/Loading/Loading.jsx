@@ -1,7 +1,7 @@
 // Loading.js
 import React, { useEffect } from 'react';
 import './Loading.css'; // Optional: for styling
-import logo from '../Images/logo.png'; // Update the path to your logo
+import logo from '../../Images/logo.png'; // Update the path to your logo
 import { useNavigate } from 'react-router-dom';
 
 const Loading = () => {

@@ -8,6 +8,7 @@ import AllEvents from  "./components/admin-panel/All-Events/AllEvents";
 import ScheduledEvents from "./components/admin-panel/Scheduled_Events/ScheduledEvents";
 import ScheduledEventsDetails from "./components/admin-panel/Scheduled_Events/ScheduledEventsDetails";
 import ScheduleEvents from "./components/admin-panel/Schedule-Events/ScheduleEvents";
+import CouponCode from "./components/admin-panel/CouponCode/CouponForm";
 import EventDetails from "./components/EventDetails";
 import ShowEventDetails from "./components/User-Panel/ShowEventDetails/ShowEventDetails";
 import CreateEvent from "./components/admin-panel/CreateEvent/CreateEvents" ;  
@@ -22,7 +23,7 @@ import Register from './components/Register/Register';
 import DirectBookingDashboard from "./components/admin-panel/DirectBookings/DirectBookingDashboard" ;
 import DirectBookings from "./components/admin-panel/DirectBookings/ConfirmDirectBooking" ;
 import DirectBookingConfirmationPannel from "./components/admin-panel/DirectBookings/DirectBookingConfirmationPannel" ;
-import Confirmation from "./components/Confirmation";
+import Confirmation from "./components/User-Panel/Confirmation/Confirmation";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 function App() {
   console.log("inapp", import.meta.env.VITE_SOME_KEY);
@@ -82,6 +83,10 @@ function App() {
     {
       path: "/event-details",
       element: <ShowEventDetails />,
+    },
+    {
+      path: "/CouponCode",
+      element: <CouponCode />,
     },
     {
       path: "/user-agreement",

@@ -26,6 +26,7 @@ const AdminNavbar = () => {
             <NavLink className='navlink-hover' to="/schedule-event" ><li className='tab-style'>Schedule Event</li></NavLink>
             <NavLink className='navlink-hover' to="/direct-bookings-dashboard" ><li className='tab-style'>Direct Booking</li></NavLink>
             <NavLink className='navlink-hover' to="/direct-booking-confirmation" ><li className='tab-style'>Booking Confirmation</li></NavLink>
+            <NavLink className='navlink-hover' to="/CouponCode" ><li className='tab-style'>Create Coupon Code</li></NavLink>
             <NavLink className='navlink-hover-icon' onClick={toggleNavbar}><li className="info-block"><FontAwesomeIcon className='header-icon' icon={faBars} size="lg" /></li></NavLink>
           </nav>
         </div>

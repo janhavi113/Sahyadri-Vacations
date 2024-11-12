@@ -135,6 +135,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
                     <td class="invoice-info">
                         <h3>Invoice Details:</h3>
                         <p>Invoice Number: #${bookingDetails.bookingId}</p>
+                        <p>Payment ID: ${bookingDetails.transactionId}</p>
                         <p>Date: ${bookingDetails.bookingDate}</p>
                     </td>
                 </tr>

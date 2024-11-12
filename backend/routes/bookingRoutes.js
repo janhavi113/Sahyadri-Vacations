@@ -15,8 +15,6 @@ const __dirname = path.dirname(__filename);
 
 router.post("/booking", async (req, res) => {
     try {
-        ////console.log("create req.body --", req.body);
-
         const {
             fullName,
             email,
@@ -30,8 +28,6 @@ router.post("/booking", async (req, res) => {
 
         let confirmedBookings = await Bookings.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
         let bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + confirmedBookings.length;
-
-        ////console.log("create req.body --", req.body);
 
         const booking = new Bookings({
             bookingId: bookingIdVar,
@@ -74,6 +70,7 @@ router.put("/confirmed-booking", async (req, res) => {
             otherParticipants,
             bookingId,
             scheduleEventId,
+            addedDiscount
         } = req.body;
 
 
@@ -92,7 +89,9 @@ router.put("/confirmed-booking", async (req, res) => {
                     pickupLocation: pickupLocation,
                     bookingDate: bookingDate,
                     otherParticipants: parsedParticipants,
-                    status: "Confirmed",
+                    scheduleEventId: scheduleEventId,
+                    status: "Pending",
+                    addedDiscount:addedDiscount,
                 }
             },
             { new: true } // Return the updated document
@@ -106,33 +105,47 @@ router.put("/confirmed-booking", async (req, res) => {
                 message: "Booking not found"
             });
         }
-        // console.log("Updated booking:", updatedBooking);
-        try {
-            const ScheduleBatchesRecords = await ScheduleBatches.findOne({ eventId: scheduleEventId });
-            let count = 0;
-            if (ScheduleBatchesRecords) {
-                //console.log('User found:', ScheduleBatchesRecords.alreadyBoockedCount);
-                if (ScheduleBatchesRecords.alreadyBoockedCount) {
-                    count = Number(ScheduleBatchesRecords.alreadyBoockedCount);
-                    count = count + Number(numberOfPeoples);
-                } else {
-                    count = Number(numberOfPeoples);
+        res.send({
+            isSuccess: true,
+            booking: updatedBooking
+        });
+
+    } catch (error) {
+        console.error("Error updating booking:", error);
+        res.status(500).send({
+            isSuccess: false,
+            error: error.message
+        });
+    }
+});
+
+router.put("/payment-confirmed", async (req, res) => {
+    console.log('req.body---',req.body);
+    try {
+        const {
+            paymentType,
+            transactionId,
+            bookingId
+        } = req.body;
+
+        const updatedBooking = await Bookings.findOneAndUpdate(
+            { bookingId: bookingId }, // Filter
+            {
+                $set: {
+                    transactionId:transactionId,
+                    paymentType:paymentType,
+                    status: "confirmed",
                 }
-                const ScheduleBatchesCountUpdate = await ScheduleBatches.findOneAndUpdate(
-                    { eventId: scheduleEventId }, // Filter
-                    {
-                        $set: {
-                            alreadyBoockedCount: count,
-                        }
-                    },
-                    { new: true } // Return the updated document
-                )
-                console.log('ScheduleBatchesCountUpdate', ScheduleBatchesCountUpdate);
-            } else {
-                console.log('User not found');
-            }
-        } catch (error) {
-            console.error('Error fetching user:', error);
+            },
+            { new: true } // Return the updated document
+        );
+
+        // Check if booking was found and updated
+        if (!updatedBooking) {
+            return res.status(404).send({
+                isSuccess: false,
+                message: "Booking not found"
+            });
         }
         res.send({
             isSuccess: true,

@@ -120,6 +120,7 @@ function ScheduleEvents() {
       formData.append('notScheduleYet', data.notScheduleYet);
       formData.append('b2bPrice', data.b2bPrice);
       formData.append('bookingTillDate', data.bookingTillDate);
+      formData.append('specialOfferEvent', data.specialOfferEvent);
       formData.append('bookingTillTime', data.bookingTillTime.toString());
       const url = `${apiUrl}schedule-event`;
       let r = await fetch(url, {
@@ -185,8 +186,8 @@ function ScheduleEvents() {
                 {activeError.disply && <div className='errorMessage'>{activeError.message}</div>}
 
                 <div className="input-box-column ">
-                  <span className="details">B2B Per Person <span style={{ 'color': 'red' }}>*</span></span>
-                  <input  {...register("b2bPrice", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                  <span className="details">B2B Per Person </span>
+                  <input  {...register("b2bPrice")} type="text" />
                 </div>
                 <div className="input-box-column">
                   <span className="details">Cost Per Person <span style={{ 'color': 'red' }}>*</span></span>
@@ -200,6 +201,13 @@ function ScheduleEvents() {
                   <span className="details">Active</span>
                   <input  {...register("Active")} type="checkbox" id="active" name="Active" value={true} />
                 </div>
+                <div className="input-box-column ">
+                  <span className="details">Special Offer Event</span>
+                  <input  {...register("specialOfferEvent")} type="checkbox" id="active" name="Active" value={true} />
+                </div>
+                <div className="input-box-column ">
+                  <span className="details"></span>
+                 </div>
                 <div className="input-box-column ">
                 <span className="details">Upload Cover Photo <span style={{ 'color': 'red' }}>*</span></span>
                 </div>
