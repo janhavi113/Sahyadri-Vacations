@@ -3,15 +3,17 @@ import fs from 'fs';
 import path from 'path';
 
 export const sendInvoiceEmail = async (recipientEmail, pdfPath) => {
-    console.log('recipientEmail----',recipientEmail);
-    console.log('recipientEmail1----',process.env.MONGOODB_GMAIL_USERNAME);
-    console.log('recipientEmail2----',process.env.MONGOODB_GMAIL_PASSWORD);
-    // Create a transporter
+    console.log('recipientEmail:', recipientEmail);
+    console.log(' process.env.HOSTINGER_EMAIL_USERNAME:',  process.env.HOSTINGER_EMAIL_USERNAME);
+    console.log(' process.env.HOSTINGER_EMAIL_PASSWORD:',  process.env.HOSTINGER_EMAIL_PASSWORD);
+    // Create a transporter with Hostinger SMTP settings
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.hostinger.com', // Hostinger SMTP server
+        port: 465, // Port for SSL
+        secure: true, // Use SSL
         auth: {
-            user: process.env.MONGOODB_GMAIL_USERNAME,
-            pass: process.env.MONGOODB_GMAIL_PASSWORD,
+            user: process.env.HOSTINGER_EMAIL_USERNAME, // Hostinger email address
+            pass: process.env.HOSTINGER_EMAIL_PASSWORD, // Hostinger email password
         },
     });
 
@@ -22,13 +24,13 @@ export const sendInvoiceEmail = async (recipientEmail, pdfPath) => {
 
     // Set up email data
     const mailOptions = {
-        from: process.env.MONGOODB_GMAIL_USERNAME,
-        to: recipientEmail,
+        from: process.env.HOSTINGER_EMAIL_USERNAME, // Sender address
+        to: recipientEmail, // Receiver's email
         subject: 'Your Invoice',
         text: 'Please find attached your invoice.',
         attachments: [
             {
-                filename: path.basename(pdfPath), // Use path module for better handling
+                filename: path.basename(pdfPath),
                 path: pdfPath,
             },
         ],
@@ -37,8 +39,9 @@ export const sendInvoiceEmail = async (recipientEmail, pdfPath) => {
     // Send the email
     try {
         const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
-         // Delete the PDF file after sending the email
+        console.log('Email sent:', info);
+
+        // Delete the PDF file after sending the email
         fs.unlink(pdfPath, (err) => {
             if (err) {
                 console.error(`Error deleting the PDF: ${err}`);
@@ -48,6 +51,6 @@ export const sendInvoiceEmail = async (recipientEmail, pdfPath) => {
         });
     } catch (error) {
         console.error('Error sending email:', error);
-        throw error; // Propagate the error
+        throw error;
     }
 };
