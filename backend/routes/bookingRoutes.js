@@ -183,7 +183,7 @@ router.post("/sendInvoice", async (req, res) => {
         return res.status(400).send('Booking ID is required');
     }
 
-    const pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
+    const pdfPath = path.resolve(`./backend/invoices/${bookingDetails.bookingId}.pdf`);
     //console.log("Attempting to save PDF at:", pdfPath);
 
     try {
