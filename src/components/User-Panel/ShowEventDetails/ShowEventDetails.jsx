@@ -502,7 +502,7 @@ const ShowEventDetails = () => {
                             style={{ color: 'orange' }}
                           />
                           <span className="section-details-tag" style={{ marginTop: '-1px' }}>
-                            Upcoming Batches:
+                            Upcoming Batch:
                           </span>
                         </td>
                         <td className="section-details">
@@ -522,7 +522,7 @@ const ShowEventDetails = () => {
                               style={{ color: 'orange' }}
                             />
                             <span className="section-details-tag" style={{ marginTop: '-1px' }}>
-                              Total Distance From:
+                              Total Distance:
                             </span>
                           </td>
                           <td className="section-details">
