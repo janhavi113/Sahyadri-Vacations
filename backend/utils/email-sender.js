@@ -40,8 +40,7 @@ export const sendInvoiceEmail = async (recipientEmail, pdfPath) => {
     try {
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent:', info);
-
-        // Delete the PDF file after sending the email
+               // Delete the PDF file after sending the email
         fs.unlink(pdfPath, (err) => {
             if (err) {
                 console.error(`Error deleting the PDF: ${err}`);

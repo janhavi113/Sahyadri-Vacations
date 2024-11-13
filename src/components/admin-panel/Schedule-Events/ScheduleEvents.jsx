@@ -113,8 +113,8 @@ function ScheduleEvents() {
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
       formData.append('eventCostPerPerson', data.eventCostPerPerson);
-      formData.append('eventEndDate', data.eventEndDate);
-      formData.append('eventStartDate', data.eventStartDate);
+      formData.append('eventEndDate', new Date(data.eventEndDate));
+      formData.append('eventStartDate', new Date(data.eventStartDate));
       formData.append('eventBatchCount', data.eventBatchCount);
       formData.append('everyWeekend', data.everyWeekend);
       formData.append('notScheduleYet', data.notScheduleYet);

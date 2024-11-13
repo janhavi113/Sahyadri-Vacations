@@ -23,6 +23,11 @@ const bookingsSchema = new mongoose.Schema({
     addedDiscount: { type :String},
     paymentMethod: { type :String},
     transactionId: { type :String},
+    scheduleEventId: { type :String},
+    eventStartDate: { type: Date },
+    eventEndDate: { type: Date },
+    invoiceDelivered: { type: Boolean, default: false },
+    active: { type: Boolean, default: true },
     otherParticipants: [ otherParticipantsSchema
     ]
 });

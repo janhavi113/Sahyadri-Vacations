@@ -60,7 +60,7 @@ router.post("/booking", async (req, res) => {
 
 router.put("/confirmed-booking", async (req, res) => {
     try {
-        //  console.log("create req.body --", req.body);
+          console.log("create req.body --", req.body);
 
         const {
             amountPaid,
@@ -69,6 +69,8 @@ router.put("/confirmed-booking", async (req, res) => {
             otherParticipants,
             bookingId,
             scheduleEventId,
+            eventStartDate,
+            eventEndDate,
             addedDiscount
         } = req.body;
 
@@ -88,6 +90,8 @@ router.put("/confirmed-booking", async (req, res) => {
                     pickupLocation: pickupLocation,
                     otherParticipants: parsedParticipants,
                     scheduleEventId: scheduleEventId,
+                    eventStartDate: eventStartDate,
+                    eventEndDate: eventEndDate,
                     status: "Pending",
                     addedDiscount:addedDiscount,
                 }
@@ -207,6 +211,12 @@ router.post("/sendInvoice", async (req, res) => {
     // Send email with PDF attachment
     try {
         await sendInvoiceEmail(bookingDetails.email, pdfPath);
+        const updatedBooking = await Bookings.findOneAndUpdate(
+            { _id: bookingDetails.bookingId }, // Find booking by _id
+            { $set: { invoiceDelivered: true } }, // Update field
+            { new: true } // Return the updated document
+        );
+        console.log('updatedBooking---',updatedBooking);
         res.status(200).send('Booking successful and invoice sent!');
     } catch (error) {
         console.error('Error sending email:', error);

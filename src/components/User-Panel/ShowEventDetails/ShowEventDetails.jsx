@@ -142,6 +142,8 @@ const ShowEventDetails = () => {
         formData.append("otherParticipants", JSON.stringify(participants));
         formData.append("bookingId", bookingId);
         formData.append("scheduleEventId", scheduleBatch.eventId);
+        formData.append("eventStartDate", scheduleBatch.eventStartDate);
+        formData.append("eventEndDate", scheduleBatch.eventEndDate);
         formData.append("addedDiscount",discount);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
