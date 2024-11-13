@@ -15,7 +15,7 @@ const Register = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
-      alert('User registered!');
+     // alert('User registered!');
     
     } catch (err) {
       console.error(err);

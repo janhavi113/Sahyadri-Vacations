@@ -26,7 +26,7 @@ router.post('/phonepe/payment', async (req, res) => {
             merchantId: process.env.PHONEPE_MERCHANT_ID,
             merchantTransactionId: orderId,
             merchantUserId: 'MUID' + orderId,
-            amount: 100 ,//Number(amount) * 100,
+            amount: Number(amount) * 100,
             redirectUrl: process.env.REDIRECT_URL + '?booking-id=' + orderId,
             redirectMode: "REDIRECT",
             callbackUrl: process.env.CALLBACK_URL,

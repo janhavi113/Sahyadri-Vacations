@@ -102,13 +102,13 @@ function DirectBookingConfirmationPannel() {
           })
         );
 
-        alert("Booking confirmed successfully!");
+       // alert("Booking confirmed successfully!");
       } else {
-        alert("Failed to confirm the booking.");
+        //alert("Failed to confirm the booking.");
       }
     } catch (error) {
       console.error("Error confirming the booking:", error);
-      alert("An error occurred while confirming the booking.");
+     // alert("An error occurred while confirming the booking.");
     }
   };
 

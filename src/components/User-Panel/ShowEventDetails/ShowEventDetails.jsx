@@ -154,7 +154,7 @@ const ShowEventDetails = () => {
         //console.log('booking---', JSON.stringify(res));
         if (res.isSuccess == true) {
           // try {
-          alert('In Pay Now');
+          //alert('In Pay Now');
           // Send the payment request to your backend
           const response = await fetch(`${apiUrl}api/phonepe/payment`, {
             method: 'POST',
@@ -173,7 +173,7 @@ const ShowEventDetails = () => {
             // Redirect the user to PhonePe for payment
             window.location.href = data.redirectUrl;
           } else {
-            alert('Payment initiation failed. Please try again.');
+          // console.log('Payment initiation failed. Please try again.');
           }
         }
       } else {
