@@ -4,7 +4,15 @@
     object-fit: cover;
     object-position: center;
 }
-
+@media (max-width: 768px) {
+    .event-section-header-img {
+        width: 100%;
+        height: 55vh;
+        object-fit: cover;
+        object-position: center;
+    }
+  }
+  
 .show-error{
     color: red;
     font-weight: bold;

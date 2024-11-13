@@ -135,7 +135,7 @@ const ShowEventDetails = () => {
 
         const formData = new FormData();
         formData.append("numberOfPeoples", noOfTrekkers);
-        formData.append("amountPaid",Number(finalPrice));
+        formData.append("amountPaid", Number(finalPrice));
         formData.append("pickupLocation", selectedLocation);
         const today = new Date();
         formData.append("bookingDate", today);
@@ -144,7 +144,7 @@ const ShowEventDetails = () => {
         formData.append("scheduleEventId", scheduleBatch.eventId);
         formData.append("eventStartDate", scheduleBatch.eventStartDate);
         formData.append("eventEndDate", scheduleBatch.eventEndDate);
-        formData.append("addedDiscount",discount);
+        formData.append("addedDiscount", discount);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
           body: formData,
@@ -162,7 +162,7 @@ const ShowEventDetails = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              amount: finalPrice , // Convert amount to paisa (1 INR = 100 paisa)
+              amount: finalPrice, // Convert amount to paisa (1 INR = 100 paisa)
               orderId: bookingId,
               mobileNumber: bookingPhone,
             }),
@@ -173,7 +173,7 @@ const ShowEventDetails = () => {
             // Redirect the user to PhonePe for payment
             window.location.href = data.redirectUrl;
           } else {
-          // console.log('Payment initiation failed. Please try again.');
+            console.log('Payment initiation failed. Please try again.');
           }
         }
       } else {
@@ -209,7 +209,7 @@ const ShowEventDetails = () => {
     }
   }
 
- 
+
   const handleSelection = (event) => {
     setSelectedLocation(event.target.value);
   };
@@ -491,29 +491,135 @@ const ShowEventDetails = () => {
                   <h2 className="h3"> Overview</h2>
                   <p>{eventDetails.eventDetails}</p>
                   <br />
-                  <div  className='tag-flex'>
-                      <FontAwesomeIcon icon={faCalendarDays} size="lg" style={{'color':'orange'}}/> 
-                      <span className='section-details-tag' style={{ 'margin-top': '-1px '}}> Upcoming Batches :</span>
-                    <div className='section-details'>
-                      {availableBatches && availableBatches.map((event, index) => (
-                        <div key={index}><b>Batch :</b> {event}</div>
-                      ))}
-                    </div>
-                  </div>
-                  {eventDetails.totalDistance && 
-                  <div  className='tag-flex'>                    
-                     <FontAwesomeIcon icon={faLocationDot} size="lg" style={{'color':'orange'}}/> 
-                     <span className='section-details-tag' style={{ 'margin-top': '-1px '}}> Total Distance From :</span> 
-                     
-                    <div className='section-details'>
-                      <p >{eventDetails.totalDistance}</p>
-                    </div>
-                  </div>
-                  }
+                  <table className="event-details-table">
+                    <tbody>
+                      {/* Upcoming Batches */}
+                      <tr >
+                        <td className="tag-flex">
+                          <FontAwesomeIcon
+                            icon={faCalendarDays}
+                            size="lg"
+                            style={{ color: 'orange' }}
+                          />
+                          <span className="section-details-tag" style={{ marginTop: '-1px' }}>
+                            Upcoming Batches:
+                          </span>
+                        </td>
+                        <td className="section-details">
+                          {availableBatches && availableBatches.map((event, index) => (
+                            <div key={index}>{event}</div>
+                          ))}
+                        </td>
+                      </tr>
+
+                      {/* Total Distance From */}
+                      {eventDetails.totalDistance && (
+                        <tr>
+                          <td className="tag-flex">
+                            <FontAwesomeIcon
+                              icon={faLocationDot}
+                              size="lg"
+                              style={{ color: 'orange' }}
+                            />
+                            <span className="section-details-tag" style={{ marginTop: '-1px' }}>
+                              Total Distance From:
+                            </span>
+                          </td>
+                          <td className="section-details">
+                            <p>{eventDetails.totalDistance}</p>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+
                   <br />
                   <h2 className="h3"> About {eventDetails.name}</h2>
                   <div>
-                    {eventDetails.location && 
+                    <table className="event-details-table">
+                      <tbody>
+                        {eventDetails.location && (
+                          <tr >
+                            <td className="tag-flex">
+                              <img
+                                src={locationicon}
+                                alt="Location icon"
+                                crossOrigin="anonymous"
+                              />
+                              <span className="section-details-tag"> Location :</span>
+                            </td>
+                            <td className="section-details">
+                              <p>{eventDetails.location}</p>
+                            </td>
+                          </tr>
+                        )}
+                        {eventDetails.type && (
+                          <tr >
+                            <td className="tag-flex">
+                              <img src={tripType} alt="Type icon" crossOrigin="anonymous" />
+                              <span className="section-details-tag"> Type :</span>
+                            </td>
+                            <td className="section-details">
+                              <p>{eventDetails.type}</p>
+                            </td>
+                          </tr>
+                        )}
+                        {eventDetails.elevation && (
+                          <tr >
+                            <td className="tag-flex">
+                              <FontAwesomeIcon
+                                icon={faMountainSun}
+                                size="lg"
+                                style={{ color: "orange" }}
+                              />
+                              <span className="section-details-tag"> Elevation :</span>
+                            </td>
+                            <td className="section-details">
+                              <p>{eventDetails.elevation}</p>
+                            </td>
+                          </tr>
+                        )}
+                        {eventDetails.difficulty && (
+                          <tr >
+                            <td className="tag-flex">
+                              <img src={endurance} alt="Difficulty icon" crossOrigin="anonymous" />
+                              <span className="section-details-tag"> Difficulty :</span>
+                            </td>
+                            <td className="section-details">
+                              <p>{eventDetails.difficulty}</p>
+                            </td>
+                          </tr>
+                        )}
+                        {eventDetails.duration && (
+                          <tr >
+                            <td className="tag-flex">
+                              <img src={duration} alt="Duration icon" crossOrigin="anonymous" />
+                              <span className="section-details-tag"> Duration :</span>
+                            </td>
+                            <td className="section-details">
+                              <p>{eventDetails.duration}</p>
+                            </td>
+                          </tr>
+                        )}
+                        {eventDetails.trekDistance && (
+                          <tr >
+                            <td className="tag-flex">
+                              <img
+                                src={distance}
+                                alt="Distance icon"
+                                crossOrigin="anonymous"
+                              />
+                              <span className="section-details-tag">Trek Distance :</span>
+                            </td>
+                            <td className="section-details">
+                              <p>{eventDetails.trekDistance}</p>
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+
+                    {/* {eventDetails.location && 
                     <div className='tag-flex'>
                          <img src={locationicon} alt="Terms icon" crossOrigin="anonymous" />
                          <span className='section-details-tag'> Location :</span>
@@ -571,7 +677,7 @@ const ShowEventDetails = () => {
                         <p>{eventDetails.trekDistance}</p>
                       </div>
                     </div>
-                    }
+                    } */}
                   </div>
                 </div>
                 <hr />

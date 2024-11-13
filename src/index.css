@@ -17,11 +17,19 @@ body {
   font-family: var(--bs-font-sans-serif);
 }
 
-/* Global reset to prevent horizontal overflow */
-body {
-  overflow-x: hidden;
+
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+  }
 }
 
+
+@media (min-width: 1024px) {
+  body {
+    overflow-x: hidden;
+  }
+}
 
 .quill {
   background-color: #F4F4F4;
