@@ -20,13 +20,13 @@ router.post('/phonepe/payment', async (req, res) => {
             mobileNumber,
         } = req.body;
 
-        console.log('amount--', amount);
+        //console.log('amount--', amount);
         // Prepare the payload
         const payload = {
             merchantId: process.env.PHONEPE_MERCHANT_ID,
             merchantTransactionId: orderId,
             merchantUserId: 'MUID' + orderId,
-            amount: Number(amount) * 100,
+            amount: 100 ,//Number(amount) * 100,
             redirectUrl: process.env.REDIRECT_URL + '?booking-id=' + orderId,
             redirectMode: "REDIRECT",
             callbackUrl: process.env.CALLBACK_URL,
@@ -35,7 +35,7 @@ router.post('/phonepe/payment', async (req, res) => {
                 type: "PAY_PAGE"
             }
         };
-        console.log('JSON.stringify(payload)--', payload);
+        //console.log('JSON.stringify(payload)--', payload);
         // Base64 encode the payload
         const base64Payload = base64.encode(JSON.stringify(payload));
 
@@ -43,7 +43,7 @@ router.post('/phonepe/payment', async (req, res) => {
         const saltKey = process.env.PHONEPE_SALT_KEY;
         const saltIndex = process.env.PHONEPE_SALT_INDEX;
         const url = process.env.PHONEPE_BASE_URL + '/pg/v1/pay';
-        console.log('url--', url);
+        //console.log('url--', url);
         const xVerify = calculateXVerify(base64Payload, saltKey, saltIndex);
 
         // Prepare headers for the API request
@@ -70,12 +70,12 @@ router.post('/phonepe/payment', async (req, res) => {
             });
 
             responseData = await response.json();
-            console.log('JSON.stringify(responseData)--', responseData);
+            //console.log('JSON.stringify(responseData)--', responseData);
             if (responseData.success) {
                 break; // Successfully received the response, exit the loop
             } else {
                 if (responseData.code === 'TOO_MANY_REQUESTS' && attempt < retries) {
-                    console.log(`Rate limit exceeded, retrying in ${retryDelay / 1000} seconds...`);
+                    //console.log(`Rate limit exceeded, retrying in ${retryDelay / 1000} seconds...`);
                     await delay(retryDelay); // Wait before retrying
                     retryDelay *= 2; // Exponential backoff (increase delay for next retry)
                 } else {
@@ -84,7 +84,7 @@ router.post('/phonepe/payment', async (req, res) => {
             }
         }
 
-        console.log('responseData', responseData);
+        //console.log('responseData', responseData);
         if (responseData.success) {
             res.json({ redirectUrl: responseData.data.instrumentResponse.redirectInfo.url });
         }
@@ -107,14 +107,14 @@ router.get('/check-status/:merchantTransactionId', async (req, res) => {
         'X-VERIFY': generateXVerify(merchantId, merchantTransactionId),
         'X-MERCHANT-ID': merchantId
     };
-    console.log('Request URL:', url);
-    console.log('Request Headers:', headers);
+    //console.log('Request URL:', url);
+    //console.log('Request Headers:', headers);
 
     try {
         const response = await fetch(url, { method: 'GET', headers });
         // Only parse the body once
         const data = await response.json();
-        console.log('data:', data);
+        //console.log('data:', data);
         if (data && data.success) {
             // Handle success
             if (data.code === 'PAYMENT_SUCCESS') {

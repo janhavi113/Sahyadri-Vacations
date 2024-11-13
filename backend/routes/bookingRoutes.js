@@ -178,7 +178,7 @@ function convertDateToCustomFormat(dateString) {
 
 router.post("/sendInvoice", async (req, res) => {
     const bookingDetails = req.body;
-
+    console.log('sendInvoice req.body----',req.body);
     if (!bookingDetails.bookingId) {
         return res.status(400).send('Booking ID is required');
     }
@@ -194,7 +194,7 @@ router.post("/sendInvoice", async (req, res) => {
     }
 
     // Retry loop to check for the existence of the PDF
-    const maxRetries = 5;
+    const maxRetries = 3;
     let fileExists = false;
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         fileExists = fs.existsSync(pdfPath);
@@ -210,9 +210,9 @@ router.post("/sendInvoice", async (req, res) => {
 
     // Send email with PDF attachment
     try {
-        await sendInvoiceEmail(bookingDetails.email, pdfPath);
+        await sendInvoiceEmail(bookingDetails.email, bookingDetails,  pdfPath);
         const updatedBooking = await Bookings.findOneAndUpdate(
-            { _id: bookingDetails.bookingId }, // Find booking by _id
+            { bookingId: bookingDetails.bookingId }, // Find booking by _id
             { $set: { invoiceDelivered: true } }, // Update field
             { new: true } // Return the updated document
         );

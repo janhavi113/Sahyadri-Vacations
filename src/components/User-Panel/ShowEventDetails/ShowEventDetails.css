@@ -94,7 +94,12 @@ input[type="submit"] {
 .discount-button {
  margin: 0 !important;
   }
-  
+  .section-details-tag{
+    margin-top: 2px ;
+    color: orange;    
+    font-weight: bold;
+    margin-left: 4px;
+  }
   .input-box-discount{
     width: 50% !important;
   }
@@ -128,7 +133,7 @@ h3 {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     font-size: 17px;
-    margin-top: -5px;
+    margin-top: 0px;
 }
 
 .section-details-collaps {
@@ -285,11 +290,9 @@ h3 {
     width: 100%;
 }
 
-.flex {
+.tag-flex {
     display: flex;
-    gap: 5px;
-    color: orange;
-    font-weight: bold;
+    gap: 2px;
 }
 
 .rating-section {

@@ -24,9 +24,9 @@ const Confirmation = () => {
     const fetchPaymentStatus = async (merchantTransactionId) => {
 
         try {
-
             const response = await fetch(`${apiUrl}api/check-status/${merchantTransactionId}`);
             const data = await response.json();
+            console.log('data--',data);
             if (data.status == 'success' || data.status == 'pending') {
                 const details = data.details;
                 if (details.code === 'PAYMENT_SUCCESS') {
@@ -76,7 +76,9 @@ const Confirmation = () => {
                 setEmail(res.booking.email);
                 setName(res.booking.name);
                 setNoOfParticipant(res.booking.numberOfPeoples);
+                if(!res.booking.invoiceDelivered){
                 await sendInvoiceRequest(res.booking);
+                }
             }
 
         } catch (error) {
@@ -87,7 +89,6 @@ const Confirmation = () => {
     // Call fetchPaymentStatus when component mounts
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
-
         if (params.get('booking-id') != null) {
             setIsStateMissing(isStateMissing);
             fetchPaymentStatus(params.get('booking-id'));
@@ -98,6 +99,7 @@ const Confirmation = () => {
     }, []);
 
     const sendInvoiceRequest = async (booking) => {
+        console.log('booking---',booking)
         try {
             const response = await fetch(`${apiUrl}sendInvoice`, {
                 method: "POST",

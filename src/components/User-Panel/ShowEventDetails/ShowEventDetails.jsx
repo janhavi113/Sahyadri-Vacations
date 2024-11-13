@@ -130,12 +130,12 @@ const ShowEventDetails = () => {
   const onSubmit = async (data) => {
     setIsLoading(true); // Set loading to true before starting the request
     try {
-      console.log('selectedLocation--',);
+      //console.log('selectedLocation--',);
       if (buttonClick == 'pay-now') {
 
         const formData = new FormData();
         formData.append("numberOfPeoples", noOfTrekkers);
-        formData.append("amountPaid", Number(finalPrice));
+        formData.append("amountPaid",Number(finalPrice));
         formData.append("pickupLocation", selectedLocation);
         const today = new Date();
         formData.append("bookingDate", today);
@@ -151,7 +151,7 @@ const ShowEventDetails = () => {
         });
 
         let res = await r.json()
-        console.log('booking---', JSON.stringify(res));
+        //console.log('booking---', JSON.stringify(res));
         if (res.isSuccess == true) {
           // try {
           alert('In Pay Now');
@@ -195,7 +195,7 @@ const ShowEventDetails = () => {
         });
 
         let res = await r.json()
-        console.log('booking---', JSON.stringify(res));
+        //console.log('booking---', JSON.stringify(res));
         if (res.isSuccess == true) {
           setButtonClick('pay-now');
           setBookingId(res.booking.bookingId);
@@ -389,7 +389,7 @@ const ShowEventDetails = () => {
 
     try {
       if (couponCode) {
-        console.log('scheduleBatch--',scheduleBatch);
+        //console.log('scheduleBatch--',scheduleBatch);
         if (!scheduleBatch.specialOfferEvent && (couponCode != preCouponCode)) {
           const response = await fetch(`${apiUrl}api/validate-coupon`, {
             method: 'POST',
@@ -401,19 +401,19 @@ const ShowEventDetails = () => {
           let calculatedDiscount;
 
           if (response.ok && data.isValid) {
-            console.log('--data---', data);
+            //console.log('--data---', data);
             if (data.coupon == null) {
               calculatedDiscount = 0;
-              console.log('--calculatedDiscount---', calculatedDiscount);
+              //console.log('--calculatedDiscount---', calculatedDiscount);
 
             } else if (data.coupon.discountPercent) {
               calculatedDiscount = Math.min(
                 (finalPrice * data.coupon.discountPercent) / 100
               );
-              console.log('calculatedDiscount1---', calculatedDiscount);
+              //console.log('calculatedDiscount1---', calculatedDiscount);
             } else if (data.coupon.discountPrice) {
               calculatedDiscount = data.coupon.discountPrice;
-              console.log('--calculatedDiscount---', calculatedDiscount);
+              //console.log('--calculatedDiscount---', calculatedDiscount);
             }
 
             setDiscount(calculatedDiscount);
@@ -491,61 +491,82 @@ const ShowEventDetails = () => {
                   <h2 className="h3"> Overview</h2>
                   <p>{eventDetails.eventDetails}</p>
                   <br />
-                  <div style={{ 'display': 'flex', 'margin': '10px' }}>
-                    <div className='flex'> <FontAwesomeIcon icon={faCalendarDays} size="lg" /> <h3> Upcoming Batches :</h3> </div>
+                  <div  className='tag-flex'>
+                      <FontAwesomeIcon icon={faCalendarDays} size="lg" style={{'color':'orange'}}/> 
+                      <span className='section-details-tag' style={{ 'margin-top': '-1px '}}> Upcoming Batches :</span>
                     <div className='section-details'>
                       {availableBatches && availableBatches.map((event, index) => (
                         <div key={index}><b>Batch :</b> {event}</div>
                       ))}
                     </div>
                   </div>
-                  {eventDetails.totalDistance && <div style={{ 'display': 'flex', 'margin': '10px' }}>
-                    <div className='flex'> <FontAwesomeIcon icon={faLocationDot} size="lg" /> <h3> Total Distance From :</h3> </div>
+                  {eventDetails.totalDistance && 
+                  <div  className='tag-flex'>                    
+                     <FontAwesomeIcon icon={faLocationDot} size="lg" style={{'color':'orange'}}/> 
+                     <span className='section-details-tag' style={{ 'margin-top': '-1px '}}> Total Distance From :</span> 
+                     
                     <div className='section-details'>
-                      <p>{eventDetails.totalDistance}</p>
+                      <p >{eventDetails.totalDistance}</p>
                     </div>
                   </div>
                   }
                   <br />
                   <h2 className="h3"> About {eventDetails.name}</h2>
                   <div>
-                    {eventDetails.location && <div style={{ 'display': 'flex', 'margin': '10px' }}>
-                      <div className='flex'> <img src={locationicon} alt="Terms icon" crossOrigin="anonymous" /><h3> Location :</h3> </div>
+                    {eventDetails.location && 
+                    <div className='tag-flex'>
+                         <img src={locationicon} alt="Terms icon" crossOrigin="anonymous" />
+                         <span className='section-details-tag'> Location :</span>
+                         
                       <div className='section-details'>
                         <p>{eventDetails.location}</p>
                       </div>
                     </div>
                     }
-                    {eventDetails.type && <div style={{ 'display': 'flex', 'margin': '10px' }}>
-                      <div className='flex'>  <img src={tripType} alt="Terms icon" crossOrigin="anonymous" /> <h3> Type :</h3> </div>
+                    {eventDetails.type &&
+                     <div  className='tag-flex'>
+                         <img src={tripType} alt="Terms icon" crossOrigin="anonymous" /> 
+                         <span className='section-details-tag'> Type :</span> 
                       <div className='section-details'>
                         <p>{eventDetails.type}</p>
                       </div>
                     </div>
                     }
-                    {eventDetails.elevation && <div style={{ 'display': 'flex', 'margin': '10px' }}>
-                      <div className='flex'> <FontAwesomeIcon icon={faMountainSun} size="lg" /> <h3> Elevation :</h3> </div>
+                    {eventDetails.elevation && <div  className='tag-flex'>
+                      
+                        <FontAwesomeIcon icon={faMountainSun} size="lg" style={{'color':'orange'}}/> 
+                        <span className='section-details-tag'> Elevation :</span> 
+                        
                       <div className='section-details'>
                         <p>{eventDetails.elevation}</p>
                       </div>
                     </div>
                     }
-                    {eventDetails.difficulty && <div style={{ 'display': 'flex', 'margin': '10px' }}>
-                      <div className='flex'> <img src={endurance} alt="Terms icon" crossOrigin="anonymous" /><h3> Difficulty :</h3> </div>
+                    {eventDetails.difficulty && <div  className='tag-flex'>
+                      
+                        <img src={endurance} alt="Terms icon" crossOrigin="anonymous" />
+                        <span className='section-details-tag'> Difficulty :</span> 
+                        
                       <div className='section-details'>
                         <p>{eventDetails.difficulty}</p>
                       </div>
                     </div>
                     }
-                    {eventDetails.duration && <div style={{ 'display': 'flex', 'margin': '10px' }}>
-                      <div className='flex'>  <img src={duration} alt="Terms icon" crossOrigin="anonymous" /> <h3> Duration :</h3> </div>
+                    {eventDetails.duration && <div  className='tag-flex'>
+                      
+                         <img src={duration} alt="Terms icon" crossOrigin="anonymous" /> 
+                         <span className='section-details-tag'> Duration :</span> 
+                         
                       <div className='section-details'>
                         <p>{eventDetails.duration}</p>
                       </div>
                     </div>
                     }
-                    {eventDetails.trekDistance && <div style={{ 'display': 'flex', 'margin': '10px' }}>
-                      <div className='flex'><img src={distance} alt="Terms icon" crossOrigin="anonymous" /> <h3> Total Trek Distance :</h3> </div>
+                    {eventDetails.trekDistance && <div  className='tag-flex'>
+                      
+                        <img src={distance} alt="Terms icon" crossOrigin="anonymous" />
+                         <span className='section-details-tag'> Total Trek Distance :</span>
+                         
                       <div className='section-details'>
                         <p>{eventDetails.trekDistance}</p>
                       </div>
