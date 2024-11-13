@@ -736,12 +736,11 @@ const ShowEventDetails = () => {
                   </CollapsibleSection>
 
                   <CollapsibleSection title="TERMS AND CONDITIONS">
-                    {eventType === 'TrekEvent' && (
+                   
                       <ul className="display-bulletin-collaps">
-                        <li>Please confirm seats availability on call before paying any amount.</li>
-                        <li>Once the payment is completed, inform our team via sharing a screenshot/copy of the payment confirmation.</li>
                         <li>You will have to pay full amount of that event before departure, without it your booking will not be confirmed.</li>
                         <li>The advance amount paid would not be refunded in any case, except if the trek/tour departure is cancelled by our side.</li>
+                        <li>Please confirm seats availability on call before paying any amount.</li>
                         <li>Make sure you are added in the WhatsApp group 6-8 hours prior to the trip for all the details.</li>
                         <li>Food and Stay arrangements are as per the availability of the locations, not luxurious.</li>
                         <li>Trips are pocket-friendly and experience-focused.</li>
@@ -749,11 +748,11 @@ const ShowEventDetails = () => {
                         <li>A waiver/consent form must be filled before departure.</li>
                         <li>Your payment indicates acceptance of our terms and conditions.</li>
                       </ul>
-                    )}
+                 
                   </CollapsibleSection>
 
                   <CollapsibleSection title="CANCELLATION POLICY">
-                    {eventType === 'TrekEvent' && (
+                  
                       <ul className="display-bulletin-collaps">
                         <li>75% refund if notified 8 or more days before the event.</li>
                         <li>50% refund if notified 4 to 7 days before the event.</li>
@@ -763,7 +762,6 @@ const ShowEventDetails = () => {
                         <li>Tickets can be transferred to another person for the same event.</li>
                         <li>If the trek is canceled, only the trek amount will be refunded.</li>
                       </ul>
-                    )}
                   </CollapsibleSection>
 
                   <CollapsibleSection title="FAQ's">
