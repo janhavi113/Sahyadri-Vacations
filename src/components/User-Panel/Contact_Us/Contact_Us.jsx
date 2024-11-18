@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import './ContactForm.css';
 import { faLocationDot, faEnvelope, faPhone ,faPhoneVolume} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import sadface from '../../Images/sad-face.svg'
 const Contact_Us = () => {
+    const apiUrl = import.meta.env.VITE_API_URL;
     const [formData, setFormData] = useState({
         name: '',
         phone: '',
@@ -16,20 +17,32 @@ const Contact_Us = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     setSubmitting(true);
     e.preventDefault();
     // Add your logic for form submission here
     console.log(formData);
+    let r = await fetch(`${apiUrl}contact-us`,{
+      method: "POST", headers: {
+          "Content-Type": "application/json",
+      }, body: JSON.stringify(formData)
+  })
+  let res = await r.json()
+  console.log('res', JSON.stringify(res));
+  if (res.isSuccess == true) {
+      setSuccess(true);
+  }else{
+      setSuccess(false);
+  }
   };
-
+  const [isSuccess, setSuccess] = useState('');
   return (
     <div>
    
       <div className='contact-us-container'>
         <div className="container-top container">
           <div className="user-details">
-            <form onSubmit={handleSubmit}>
+          {!isSubmitting && <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="name">Name:</label>
                 <input
@@ -78,7 +91,19 @@ const Contact_Us = () => {
                   <input disabled={isSubmitting} type="submit" value="Submit" />
                 </div>
               </div>
-            </form>
+            </form>}
+            {isSubmitting && isSuccess &&
+                <div className="container">
+                    <h2 className='thicker'> Thank you ! </h2>
+                    <p className='customised-message '> Your interest is greatly appreciated, and we're thrilled to assist you in planning your ideal travel experience. Our dedicated team will be in touch with you very soon to discuss your preferences and craft a personalized itinerary that perfectly suits your needs. We can't wait to embark on this journey with you!</p>
+                </div>
+            }
+            {isSubmitting && !isSuccess &&
+                <div className="container">
+                    <h2 className='thicker'> Try again ! </h2>
+                    <div > <img style={{ margin: '12px 0px 0 46%' }} loading="lazy" src={sadface} /> </div>
+                </div>
+            }
           </div>
         </div>
         <div className="container-top container">

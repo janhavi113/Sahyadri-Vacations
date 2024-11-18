@@ -39,6 +39,7 @@ import showAllEventsRoutes from './routes/showAllEventsRoutes.js'; // Import the
 import paymentRoutes from './routes/paymentRoutes.js';
 import paymentCallbackRoutes from './routes/paymentCallbackRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
+import customisedTourRoutes from './routes/customisedTourRoutes.js'
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET; // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
@@ -258,7 +259,6 @@ app.get("/schedule-event-details", async (req, res) => {
 	}
 });
 
-
 app.get("/scheduled-events", async (req, res) => {
 	try {
 		let ScheduleBatchesRecords = await ScheduleBatches.find({});
@@ -419,46 +419,12 @@ app.get("/all-events", async (req, res) => {
 	}
 });
 
-// Customised Tour
-app.post("/customised-tour", async (req, res) => {
-	try {
-		const {
-			name,
-			phone,
-			traveldate,
-			durationoftour,
-			numberofpeople,
-			email,
-			message,
-		} = req.body;
-
-		const customisedRequest = new CustomisedRequest({
-			name: name,
-			phone: phone,
-			traveldate: traveldate,
-			durationoftour: durationoftour,
-			numberofpeople: numberofpeople,
-			email: email,
-			message: message,
-		});
-
-		customisedRequest.save();
-		res.send({
-			isSuccess: true
-		});
-	} catch (error) {
-		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
-	}
-});
 
 app.use(createEventRoutes);
 app.use(bookingRoutes);
 app.use(scheduleEventRoutes);
 app.use(showAllEventsRoutes);
+app.use(customisedTourRoutes);
 // Use the payment routes
 
 // Use the separated routes

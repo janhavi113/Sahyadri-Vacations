@@ -11,6 +11,7 @@ const customisedRequestSchema = new mongoose.Schema({
     durationoftour: { type: String },
     numberofpeople: { type: Number },
     email: { type: String },
+    preferedLocation: { type: String },
     message: { type: String },
     inquireydate: { 
         type: Date, 
