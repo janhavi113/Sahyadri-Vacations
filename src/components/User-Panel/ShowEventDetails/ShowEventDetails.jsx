@@ -742,11 +742,11 @@ const ShowEventDetails = () => {
                         <li>The advance amount paid would not be refunded in any case, except if the trek/tour departure is cancelled by our side.</li>
                         <li>Please confirm seats availability on call before paying any amount.</li>
                         <li>Make sure you are added in the WhatsApp group 6-8 hours prior to the trip for all the details.</li>
-                        <li>Food and Stay arrangements are as per the availability of the locations, not luxurious.</li>
-                        <li>Trips are pocket-friendly and experience-focused.</li>
-                        <li>We need at least 12-14 travelers; otherwise, the trip may be canceled.</li>
+                        <li>Food and Stay arrangements are as per the availability of that locations.Kindly don't expect it too luxurious.</li>
+                        <li>Backpacking treks/trips are are arranged for the people who are looking for pocket friendly trips,They are more about chasing experiences.</li>
+                        <li>We need at least 12-14 travelers to run that particular event, if batch size is not enough then Organisors have all right to Collabe with other Travel companies,Postpone or Cancel the event.; .</li>
                         <li>A waiver/consent form must be filled before departure.</li>
-                        <li>Your payment indicates acceptance of our terms and conditions.</li>
+                        <li>Your payment implies that you have read and accept our terms and conditions.</li>
                       </ul>
                  
                   </CollapsibleSection>
@@ -759,23 +759,26 @@ const ShowEventDetails = () => {
                         <li>No refund if less than 3 days before the event.</li>
                         <li>No-show results in no refund.</li>
                         <li>Event tickets cannot be transferred to another date.</li>
-                        <li>Tickets can be transferred to another person for the same event.</li>
-                        <li>If the trek is canceled, only the trek amount will be refunded.</li>
+                        <li>Tickets can be transferred to another person for the same event only.</li>
+                        <li>If the trek is cancelled, only the trek amount will be refunded.</li>
                       </ul>
                   </CollapsibleSection>
 
                   <CollapsibleSection title="FAQ's">
                     {eventType === 'TrekEvent' && (
                       <ol className="display-bulletin-collaps">
-                        <li><b>How many trek leaders will be available?</b><br></br> There will be 1 trek leader for every 8 people.</li>
-                        <li><b>How do I get in touch with trek leaders?</b><br></br>  We add participants to a WhatsApp group 5-6 hours prior to the event.</li>
-                        <li><b>Can I cancel my booking?</b> <br></br> Please refer to the cancellation policy.</li>
+                        <li><b>What type of bus is provided?</b> <br></br> A NON-AC Tempo Traveller/ 32 seater bus are used with descent seating comfort.</li>
+                        <li><b>Can I cancel my booking?</b> <br></br> Please refer the cancellation policy.</li>
+                        <li><b>How many trek leaders will be available?</b><br></br> There will be 1 trek leader for every 8-10 people.</li>
+                        <li><b>How do I get in touch with trek leaders?</b><br></br>  We add participants to a WhatsApp group 5-6 hours prior to the event to provide further details.</li>
                         <li><b>What is prohibited on this trek?</b> <br></br> Smoking, drinking, and loud music are prohibited.</li>
-                        <li><b>Are changing rooms provided?</b> <br></br> Separate changing rooms are available based on location.</li>
-                        <li><b>What type of bus is provided?</b> <br></br> A NON-AC Tempo Traveler is used with comfortable seating.</li>
+                        <li><b>Are changing rooms provided?</b> <br></br> Separate changing rooms are there as per availability on that location.</li>
                         <li><b>Are washrooms available?</b><br></br>  Washrooms are available at the base village only.</li>
-                        <li><b>Is the trek safe for girls?</b><br></br>  Yes, with girl volunteers and separate changing rooms.</li>
-                        <li><b>Is there a way to charge phones?</b> <br></br> There is no electricity, so bring a power bank.</li>
+                        <li><b>Is the trek safe for girls?</b><br></br>  Yes,This trek is absolutely safe for girls.We have seprate female volunteer to take care of them</li>
+                        <li><b>Is there a way to charge my phone ?</b> <br></br> There is no electricity,You can bring a power bank with you.</li>
+                        <li><b>Can I come alone ?</b> <br></br> Yes,You can join as a Solo Traveller.</li>
+                        <li><b>Waht about extra baggage ?</b> <br></br> You can safely keep your bags in bus.</li>
+                        <li><b>Can I join this trek if I have no prior trekking experience ?</b> <br></br> You can contact us before booking ,Our team will assist you regarding difficulty level.</li>
                       </ol>
                     )}
                   </CollapsibleSection>

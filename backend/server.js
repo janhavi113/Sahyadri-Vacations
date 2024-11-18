@@ -419,8 +419,6 @@ app.get("/all-events", async (req, res) => {
 	}
 });
 
-
-
 // Customised Tour
 app.post("/customised-tour", async (req, res) => {
 	try {
@@ -442,7 +440,6 @@ app.post("/customised-tour", async (req, res) => {
 			numberofpeople: numberofpeople,
 			email: email,
 			message: message,
-			status: "new",
 		});
 
 		customisedRequest.save();
@@ -468,9 +465,11 @@ app.use(showAllEventsRoutes);
 // Use the route
 app.use(directBookingRoutes);
 app.use(couponRoutes);
+
 // Use the payment route
 app.use('/api', paymentRoutes);
 app.use('/api', paymentCallbackRoutes);
+
 // Handle all other routes and serve index.html
 app.get("*", (req, res) => {
 	// console.log("Serving index.html for route:", req);
@@ -498,6 +497,7 @@ app.use((err, req, res, next) => {
 	next();
 });
 
+if (process.env.NODE_ENV === 'production') {
 const options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
@@ -513,7 +513,8 @@ server.listen(3001, () => {
 server.on('error', (err) => {
   console.error('Server error:', err);
 });
-
-// app.listen(port, () => {
-// 	console.log(`Server is running on port ${port}`);
-// });
+}else{
+app.listen(port, () => {
+	console.log(`Server is running on port ${port}`);
+});
+}
