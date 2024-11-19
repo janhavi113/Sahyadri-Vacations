@@ -462,8 +462,9 @@ app.use((err, req, res, next) => {
 	}
 	next();
 });
-
-if (process.env.NODE_ENV === 'production') {
+console.log('process.env.NODE_ENV',process.env.NODE_ENV);
+console.log('process.env.NODE_ENV',process.env.NODE_ENV == 'production');
+if (process.env.NODE_ENV == 'production') {
 const options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
 	cert: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/fullchain.pem'),
