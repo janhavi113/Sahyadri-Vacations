@@ -66,6 +66,7 @@
 
 .admin-panel.collapsed .nav-text {
   display: none;
+  
 }
 
 /* Main Content */
@@ -77,6 +78,57 @@
 }
 
 .main-content.shifted {
-  margin-left: 200px; /* Expanded navbar width */
+  margin-left: 255px; /* Expanded navbar width */
   width: calc(100% - 200px); /* Adjust to the available space */
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* Admin Panel - Mobile View */
+  .admin-panel {
+    width: 70%;
+    min-width: unset;
+    transition: transform 0.3s ease, width 0.3s ease;
+
+  z-index: 10;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Navbar Toggle Button */
+  .toggle-button {
+    display: block;
+  }
+
+  .admin-panel.expanded {
+    transform: translateX(0);
+  }
+
+  .admin-panel.collapsed {
+    transform: translateX(-100%);
+  }
+
+  .main-content.shifted {
+    margin-left: 20%;
+    width: 80%;
+  }
+  /* Navbar Toggle Button */
+
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  border: none;
+  font-size: 20px;
+  padding: 0px 6px 0 6px;
+  cursor: pointer;
+  z-index: 15;
+
+}
+
+
 }
