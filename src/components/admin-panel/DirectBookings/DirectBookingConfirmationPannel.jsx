@@ -121,7 +121,7 @@ function DirectBookingConfirmationPannel() {
 
   return (
     <div>
-      <AdminNavbar />
+      <AdminNavbar>
       <div className="scheduled-contentbody contentbody">
         <div className="container justify-content-center py-md-5">
           <div>
@@ -179,6 +179,7 @@ function DirectBookingConfirmationPannel() {
           </div>
         </div>
       </div>
+      </AdminNavbar>
     </div>
   );
 }

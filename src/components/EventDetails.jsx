@@ -208,7 +208,7 @@ function EventDetails() {
 
   return (
     <div>
-      <AdminNavbar />
+      <AdminNavbar>
       {!isEditable && isSuccess &&
         <div className="create-form container ">
           <div className="title-header">Event Details</div>
@@ -510,6 +510,7 @@ function EventDetails() {
         </form>
         </div>
       }
+   </AdminNavbar>
     </div >
   )
 }

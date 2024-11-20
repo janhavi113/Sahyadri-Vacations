@@ -170,11 +170,8 @@ function AdminDashboard() {
     }
   };
 
-
-
   return (
-    <div>
-      <AdminNavbar />
+    <AdminNavbar>
       <div className="scheduled-contentbody contentbody">
         <div className="container justify-content-center py-md-5">
           <div>
@@ -187,8 +184,8 @@ function AdminDashboard() {
           </div>
         </div>
       </div>
-    </div>
+  </AdminNavbar>
   );
-}
+ }
 
 export default AdminDashboard;

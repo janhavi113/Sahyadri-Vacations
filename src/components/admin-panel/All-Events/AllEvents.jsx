@@ -47,7 +47,7 @@ const AllEvents = () => {
   }
   return (
     <div>
-      <AdminNavbar />
+      <AdminNavbar>
       <div className="scheduled-contentbody contentbody">
         <div className="container justify-content-center py-md-5">
           <h1><b>All Available Events</b></h1>
@@ -75,6 +75,7 @@ const AllEvents = () => {
           </div>
         </div>
       </div>
+      </AdminNavbar>
     </div>
   )
 }

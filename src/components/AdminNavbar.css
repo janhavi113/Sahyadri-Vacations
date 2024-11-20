@@ -1,54 +1,82 @@
-nav {
+/* Admin Panel */
+.admin-layout {
   display: flex;
-  align-items: center;
-  background-color: black;
-  color: white;
 }
 
-.admin-logo {
-  width: 70%;
-  max-width: 150px; /* Optional: Set a max-width to prevent the logo from getting too large */
-  height: auto;
+.admin-panel {
+  width: 20%;
+  min-width: 50px;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  transition: width 0.3s ease;
 }
 
-.admin-navlink {
-  background-color: black;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.admin-panel.collapsed {
+  width: 70px;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  color: #ecf0f1;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
 }
 
 .nav-links {
   display: flex;
-  gap: 34px;
-  flex-grow: 1;
-  justify-content: flex-end;
+  flex-direction: column;
+  margin-top: 10px;
 }
 
-.tab-style {
-  list-style: none;
-  padding: 23px;
-}
-
-a li {
-  color: white;
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  color: #ecf0f1;
   text-decoration: none;
+  transition: background-color 0.3s ease;
 }
 
-* {
-  padding: 0;
-  margin: 0;
+.nav-item:hover {
+  background-color: #34495e;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .admin-logo {
-    width: 50%; /* Adjust width for smaller screens */
-  }
+.nav-icon {
+  font-size: 1.5rem;
+  margin-right: 15px;
+}
 
-  .nav-links {
-    flex-direction: column;
-    gap: 10px;
-  }
+.nav-text {
+  font-size: 1rem;
+}
+
+.admin-panel.collapsed .nav-icon {
+  margin-right: 0;
+}
+
+.admin-panel.collapsed .nav-text {
+  display: none;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 70px; /* Collapsed navbar width */
+  padding: 20px;
+  width: calc(100% - 70px); /* Adjust to the available space */
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.main-content.shifted {
+  margin-left: 200px; /* Expanded navbar width */
+  width: calc(100% - 200px); /* Adjust to the available space */
 }

@@ -138,7 +138,7 @@ function ScheduleEvents() {
 
   return (
     <div>
-      <AdminNavbar />
+      <AdminNavbar>
 
       < form action="" onSubmit={handleSubmit(onSubmit)}>
         <div className="schedule-form container">
@@ -271,7 +271,7 @@ function ScheduleEvents() {
           </div>
         </div>
       </form>
-
+      </AdminNavbar>
     </div>
 
   )

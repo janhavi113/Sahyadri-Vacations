@@ -160,7 +160,7 @@ const ScheduledEventsDetails = () => {
   };
   return (
     <div>
-      <AdminNavbar />
+      <AdminNavbar>
       <div>
         <Swiper
           spaceBetween={50}
@@ -322,6 +322,7 @@ const ScheduledEventsDetails = () => {
           </div>
         </div>
       }
+     </AdminNavbar>
     </div>
   )
 }

@@ -24,12 +24,11 @@ const DirectBookingDashboard = () => {
   };
   return (
     <div>
-    <div className='admin-navbar'>
-      <AdminNavbar />
-    </div>
+     <AdminNavbar>
     <div className='direct-bookings-container'>
     <DirectBookings onSendData={handleChildResponse}/>
     </div>
+    </AdminNavbar>
   </div>
   )
 }

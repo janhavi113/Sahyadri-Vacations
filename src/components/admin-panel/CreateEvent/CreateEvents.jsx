@@ -102,7 +102,7 @@ function CreateEvents() {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
   return (
     <div>
-      <AdminNavbar />
+      <AdminNavbar>
       <form action="" onSubmit={handleSubmit(onSubmit)}>
         <div className="create-form container ">
           <div className="title-header">Event Details</div>
@@ -236,7 +236,7 @@ function CreateEvents() {
           </div>
         </div>
       </form>
-
+      </AdminNavbar>
     </div>
   )
 }
