@@ -164,32 +164,11 @@
 }
 
 .direct-bookings-container {
-  margin-top: 90px; /* Default margin for larger screens */
   padding: 20px; /* Optional padding */
 }
 
 /* Media queries for responsive design */
 @media (max-width: 984px) {
-  .direct-bookings-container {
-    margin-top: 70px; /* Increased margin for medium-sized screens */
-  }
+  
 }
  
-/* Media queries for responsive design */
-@media (max-width: 768px) {
-  .direct-bookings-container {
-    margin-top: 55px; /* Increased margin for medium-sized screens */
-  }
-}
-
-@media (max-width: 576px) {
-  .direct-bookings-container {
-    margin-top: 40px; /* Increased margin for smaller screens */
-  }
-}
-
-@media (max-width: 400px) {
-  .direct-bookings-container {
-    margin-top: 40px; /* Even larger margin for extra-small screens */
-  }
-}

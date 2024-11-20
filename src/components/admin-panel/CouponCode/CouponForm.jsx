@@ -58,7 +58,7 @@ const CouponForm = () => {
   return (
     <div>
     <AdminNavbar>
-    <div className="container" style={{    'margin-top': '130px'}}>
+    <div className="container" >
       <div className="title-header">
         <h2>Create a New Coupon</h2>
       </div>

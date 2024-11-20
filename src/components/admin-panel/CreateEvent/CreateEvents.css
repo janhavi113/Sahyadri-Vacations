@@ -163,7 +163,6 @@ ul .details-list  {
   .create-form{
     margin-bottom: 0;
     padding-bottom: 0;
-    padding-top: 130px;
 
    }
  @media(max-width: 584px){
@@ -184,15 +183,9 @@ ul .details-list  {
   .user-details::-webkit-scrollbar{
     width: 5px;
   }
-  .create-form{
-    padding-top: 100px !important;
-  }
   }
   @media(max-width: 459px){
   .container .content .category{
     flex-direction: column;
-  }
-  .create-form{
-    padding-top: 80px !important;
   }
 }
