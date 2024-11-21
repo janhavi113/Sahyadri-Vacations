@@ -34,47 +34,6 @@ const searchText = () => {
   return (
     <div >   
       <header className={isOpen ? 'active-header-center-aligned header-center-aligned' : 'header-center-aligned'} >
-      {/* <div className="header-top">
-        <div className="header-container">
-          <div className="row">
-            <div className="col-xs-12">
-              <div className="holder">
-                <div >
-                  <ul className="info-list list-unstyled">
-                    <li className="info-block">
-                      <div className="multiple-phone call-desktop">
-                        <a
-                          href="#"
-                          className="vl-popover hidden-xs hidden-sm skip-url-slug-check"
-                          data-container="body"
-                          data-toggle="popover"
-                          data-placement="bottom"
-                          data-popover-content="#customPopover"
-                          data-original-title="Call Us"
-                          ><FontAwesomeIcon className='header-icon' icon={faPhone} size="lg" /> Call
-                          Us
-                          <FontAwesomeIcon className='header-icon' icon={faSortDown} size="lg" />
-                          </a>
-                       
-                      </div>
-                    </li>
-                    <li className="info-block">
-                      <a
-                        href="mailto:sahyadrivacations@gmail.com"
-                        className="skip-url-slug-check"
-                        title="sahyadrivacations@gmail.com"
-                        > <FontAwesomeIcon className='header-icon' icon={faEnvelope} size="lg" />
-                        sahyadrivacations@gmail.com
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>        
-      </div>
-      */}
       <div className={isOpen ? 'topnav responsive' : 'topnav'} >    
       <nav className='navlink' >
         <NavLink className='navlink-hover' to="/"><li className="info-block">Home</li></NavLink>
