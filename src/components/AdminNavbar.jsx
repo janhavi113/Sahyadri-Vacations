@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './AdminNavbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCalendar, faPlus ,faBars, faClipboardList, faTag , faBookOpen , faPenToSquare , faTable} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCalendar, faPlus, faBars, faClipboardList, faTag,faFire ,faBookOpen, faPenToSquare, faTable } from '@fortawesome/free-solid-svg-icons';
 import expand from './Images/expand-nav.svg';
 const AdminNavbar = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -34,21 +34,25 @@ const AdminNavbar = ({ children }) => {
             <FontAwesomeIcon icon={faClipboardList} className="nav-icon" />
             {isExpanded && <span className="nav-text">Schedule Event</span>}
           </NavLink>
-          <NavLink to="/scheduled-events"className="nav-item">
+          <NavLink to="/scheduled-events" className="nav-item">
             <FontAwesomeIcon icon={faTable} className="nav-icon" />
             {isExpanded && <span className="nav-text">Show Scheduled Events</span>}
           </NavLink>
-            <NavLink to="/direct-bookings-dashboard" className="nav-item">
+          <NavLink to="/direct-bookings-dashboard" className="nav-item">
             <FontAwesomeIcon icon={faPenToSquare} className="nav-icon" />
             {isExpanded && <span className="nav-text">Direct Bookings</span>}
           </NavLink>
-            <NavLink to="/direct-booking-confirmation" className="nav-item">
+          <NavLink to="/direct-booking-confirmation" className="nav-item">
             <FontAwesomeIcon icon={faBookOpen} className="nav-icon" />
             {isExpanded && <span className="nav-text">Direct Booking Dashboard</span>}
           </NavLink>
-            <NavLink to="/CouponCode" className="nav-item">
+          <NavLink to="/CouponCode" className="nav-item">
             <FontAwesomeIcon icon={faTag} className="nav-icon" />
             {isExpanded && <span className="nav-text">Coupons</span>}
+          </NavLink>
+          <NavLink to="/add-special-offer-events" className="nav-item">
+            <FontAwesomeIcon icon={faFire} className="nav-icon" />
+            {isExpanded && <span className="nav-text">Special Offers</span>}
           </NavLink>
         </nav>
       </div>

@@ -22,6 +22,7 @@ import ContactUs from "./components/User-Panel/Contact_Us/ContactUs" ;
 import Register from './components/Register/Register';
 import DirectBookingDashboard from "./components/admin-panel/DirectBookings/DirectBookingDashboard" ;
 import DirectBookings from "./components/admin-panel/DirectBookings/ConfirmDirectBooking" ;
+import AddSpecialOfferEvents from "./components/admin-panel/SpecialOfferEvents/AddSpecialOfferEvents" ;
 import DirectBookingConfirmationPannel from "./components/admin-panel/DirectBookings/DirectBookingConfirmationPannel" ;
 import Confirmation from "./components/User-Panel/Confirmation/Confirmation";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -47,6 +48,10 @@ function App() {
     {
       path: "/about",
       element: <About />,
+    },
+    {
+      path: "/add-special-offer-events",
+      element: <AddSpecialOfferEvents />,
     },
      {
       path: "/events",

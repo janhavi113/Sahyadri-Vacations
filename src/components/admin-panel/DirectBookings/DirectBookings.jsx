@@ -146,8 +146,8 @@ const DirectBookings = ({ onSendData }) => {
       "August",
       "September",
       "October",
-      "November",
-      "December",
+      "Nov",
+      "Dec",
     ];
     if (event.batches) {
       for (let i = 0; i < event.batches.length; i++) {

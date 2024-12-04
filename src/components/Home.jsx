@@ -69,11 +69,11 @@ const Home = () => {
     let sortdate;
     let eventCostPerPerson;
     const Q = new Date();
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     if (event.batches) {
       for (let i = 0; i < event.batches.length; i++) {
         if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
-          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()];
+          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()]+ ' ' + months[new Date(event.batches[i].eventEndDate).getFullYear()];
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           sortdate = new Date(event.batches[i].eventStartDate);
 
@@ -89,7 +89,7 @@ const Home = () => {
       }
     } else {
       if (new Date(event.eventStartDate) - Q >= 0) {
-        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()];
+        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()]+ ' ' + new Date(event.eventEndDate).getFullYear();
         eventCostPerPerson = event.eventCostPerPerson;
         sortdate = new Date(event.eventStartDate);
 

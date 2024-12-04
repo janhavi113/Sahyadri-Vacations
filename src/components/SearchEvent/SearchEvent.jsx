@@ -59,7 +59,7 @@ const SearchEvent = (props) => {
     let batchdate;
     let eventCostPerPerson;
     const Q = new Date("2024-04-09");
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (let i = 0; i < event.batches.length; i++) {
       if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
         batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()];
