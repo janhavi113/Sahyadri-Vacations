@@ -68,12 +68,10 @@
   width: 200px;
   height: 200px;
   position: relative;
-  margin: 0px -190px -103px 0px;
+  margin: 0px -190px -173px 0px;
 
 }
-.remove-margin{
-margin-top: -30px;
-}
+
 .footer-links {
   background-color: #00506b;
 }
