@@ -139,7 +139,7 @@ const CustomisedTour = () => {
             {isSubmitting && !isSuccess &&
                 <div className="container">
                     <h2 className='thicker'> Try again ! </h2>
-                    <div > <img style={{ margin: '12px 0px 0 46%' }} loading="lazy" src={sadface} /> </div>
+                    <div > <img  loading="lazy" src={sadface} /> </div>
                 </div>
             }
             <hr />

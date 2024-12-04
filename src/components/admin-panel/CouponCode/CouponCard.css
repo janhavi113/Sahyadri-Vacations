@@ -1,0 +1,54 @@
+.coupon-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  background-color: #f9f9f9;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s ease-in-out;
+}
+
+.coupon-card:hover {
+  transform: translateY(-10px); /* Lifts the card on hover */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+}
+
+.coupon-card h3 {
+  margin: 0;
+  font-size: 1.25rem;  
+  font-weight: bolder;
+}
+
+.coupon-card p {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: #fff; /* Ensure text is always white */
+}
+
+.delete-button {
+  background-color: #00506b;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #355f6d;
+}
+
+.toggle-form-button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  background-color: #1890ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.toggle-form-button:hover {
+  background-color: #40a9ff;
+}

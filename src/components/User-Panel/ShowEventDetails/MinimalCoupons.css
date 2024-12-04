@@ -1,0 +1,94 @@
+.minimal-coupons-container {
+    margin: 0 auto;
+    text-align: center;
+    background-color: #ffffff;
+  }
+  
+  .minimal-coupons-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .minimal-coupons-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .minimal-coupon {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fafafa;
+    transition: box-shadow 0.3s ease;
+   
+  }
+  
+  .minimal-coupon:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .coupon-details {
+    flex: 1; /* Allow it to take available space */
+    text-align: left; /* Explicitly align text to the left */
+    padding-left: 4%;
+  }
+
+  .coupon-details h3 {
+    font-size: 1rem;
+    margin: 0;
+    color: orange;
+    font-weight: bold;
+  }
+  
+  .coupon-details p {
+    margin: auto;
+    color: #666;
+  }
+  
+ .coupon-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px; /* Add spacing between coupon details and action */
+}
+  .coupon-code {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #333;
+    background-color: #f4f4f4;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  
+  .coupon-action button {
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .coupon-action button:hover {
+    background-color: #e64a19;
+  }
+  /* Add a media query for phone layouts */
+@media screen and (max-width: 600px) {
+  .coupon-details h3 {
+    font-size: 0.8rem; /* Reduced font size for smaller screens */
+  }
+  .minimal-coupon img{
+    height: 30px !important;
+  }
+  .coupon-action {
+    display: flex;
+    flex-direction: column;
+  }
+}

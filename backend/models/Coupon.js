@@ -6,6 +6,10 @@ const couponSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Coupon name is required'],
   },
+  couponDescription: {
+    type: String,
+    required: [true, 'Description is required'],
+  },
   discountPrice: {
     type: Number,
     validate: {
@@ -30,6 +34,11 @@ const couponSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Event type is required'],
     enum: ['TrekEvent', 'CampingEvent', 'BackPackingTrip','AdventureActivity', 'Special'],
+  },
+  numberOfPeople: {
+    type: Number,
+    required: [true, 'Number of people is required'], // Make it optional by removing this line
+    min: [1, 'Number of people must be at least 1'],
   },
   createdAt: {
     type: Date,

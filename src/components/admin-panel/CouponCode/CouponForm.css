@@ -42,6 +42,48 @@
     color: #d9534f;
     margin-top: 15px;
   }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .title-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .toggle-form-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .toggle-form-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .coupon-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .error-message {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #ff0000;
+  } 
+  .form-title-header {
+    font-size: 30px;
+    font-weight: bolder;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2); /* Adding a shadow effect */
+  }
   
   /* Responsive design for smaller screens */
   @media (max-width: 600px) {
