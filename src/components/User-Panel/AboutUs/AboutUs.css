@@ -241,4 +241,12 @@
         border-radius: 4%;
         margin: auto;
     }
+    .team-header{
+        padding-bottom: 30px;
+        text-transform: uppercase;
+        color: orange;
+        font-weight: bolder;
+        text-align: center; 
+        font-size: 26px;
+    }
 }
