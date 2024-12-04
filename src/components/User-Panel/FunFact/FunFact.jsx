@@ -89,7 +89,7 @@ const FunFact = () => {
                                         <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" />
                                         <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" />
                                         <FontAwesomeIcon className="icon" icon={faStar} style={{ color: "yellow", }} size="2xs" /> </span>
-                                    <p>5 Review
+                                    <p>380+ Reviews
                                     </p>
                                 </div>
                             </div>
