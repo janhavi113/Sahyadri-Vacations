@@ -223,8 +223,11 @@ h3 {
     color: orange;
 }
 
-.booking-header {
+.booking-header p {
     font-size: 20px;
+}
+.booking-header h2 {
+    font-size: 25px;
 }
 
 .modal-header .btn-close {
@@ -388,6 +391,25 @@ h3 {
     font-size: 25px !important;
     font-weight: bold !important;
 }
+
+.show-title-header {
+    font-weight: bold;
+    position: relative;
+    padding-bottom: 15px;
+    text-align: center;
+    width: 100%;
+}
+
+.show-title-header::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 100%;
+    border-radius: 5px;
+    background:  rgb(255, 115, 0);;;
+  }
 
 .button button {
     height: 100%;

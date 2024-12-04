@@ -102,7 +102,7 @@ const CouponForm = () => {
     <div>
       <AdminNavbar>
         <div className="container">
-          <div className="title-header">
+          <div className="coupon-title-header">
             <h2>Coupons</h2>
             <button onClick={() => setShowForm(!showForm)} className="toggle-form-button">
               {showForm ? 'Hide Form' : 'Create Coupon'}

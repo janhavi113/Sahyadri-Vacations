@@ -211,7 +211,7 @@ function EventDetails() {
       <AdminNavbar>
       {!isEditable && isSuccess &&
         <div className="create-form container ">
-          <div className="title-header">Event Details</div>
+          <div className="title-header ">Event Details</div>
           <div className="button-container">
             <div className="button">
               <input type="submit" value="Edit" onClick={() => {

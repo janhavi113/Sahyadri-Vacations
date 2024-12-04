@@ -72,6 +72,7 @@ const ShowEventDetails = () => {
   const [coupons, setCoupons] = useState([]);
   const [preCouponCode, setPreCouponCode] = useState('');
   const [discount, setDiscount] = useState(-1);
+  const [discountAvailable , setDiscountAvailable ] = useState(false);
   const [showDiscountStatus, setShowDiscountStatus] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -381,14 +382,15 @@ const ShowEventDetails = () => {
       setEventDetails(res.events);
       setScheduleBatch(res.ScheduleBatchesRecords);
       getNextBatchDate(res.ScheduleBatchesRecords);
-
       if (res.ScheduleBatchesRecords.alreadyBoockedCount >= res.ScheduleBatchesRecords.eventBatchCount) {
         setButtonDisabled(true);
       } else {
         setButtonDisabled(false);
       }
+      console.log('res.ScheduleBatchesRecords--',res.ScheduleBatchesRecords);
       if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
         const jsonData = convertHtmlToJSON(res.events.pickupPoints);
+        console.log('jsonData--',JSON.stringify(jsonData));
         setPickupPoints(jsonData);
       }
       getAvailableCoupons(res.ScheduleBatchesRecords);
@@ -397,10 +399,8 @@ const ShowEventDetails = () => {
   }
 
   const handleCouponApply = async () => {
-
     try {
       if (couponCode) {
-        //console.log('scheduleBatch--',scheduleBatch);
         if (!scheduleBatch.specialOfferEvent && (couponCode != preCouponCode)) {
           const response = await fetch(`${apiUrl}api/validate-coupon`, {
             method: 'POST',
@@ -412,24 +412,19 @@ const ShowEventDetails = () => {
           let calculatedDiscount;
 
           if (response.ok && data.isValid) {
-            //console.log('--data---', data);
             if (data.coupon == null) {
               calculatedDiscount = 0;
-              //console.log('--calculatedDiscount---', calculatedDiscount);
-
-            } else if (data.coupon.discountPercent) {
+             } else if (data.coupon.discountPercent) {
               calculatedDiscount = Math.min(
                 (finalPrice * data.coupon.discountPercent) / 100
               );
-              //console.log('calculatedDiscount1---', calculatedDiscount);
+            
             } else if (data.coupon.discountPrice) {
               calculatedDiscount = data.coupon.discountPrice;
-              //console.log('--calculatedDiscount---', calculatedDiscount);
             }
             setShowDiscountStatus(true);
             setDiscount(calculatedDiscount);
             setFinalPrice(Number(actualPrice) - Number(calculatedDiscount));
-
           } else {
             // setErrorMessage(data.message || 'Invalid coupon code.');
           }
@@ -446,7 +441,8 @@ const ShowEventDetails = () => {
   };
 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
-    //
+    
+    setDiscountAvailable(ScheduleBatchesRecords.specialOfferEvent);
     if (!ScheduleBatchesRecords.specialOfferEvent) {
       const response = await fetch(`${apiUrl}get-coupons-event/${ScheduleBatchesRecords.eventType}`, {
         method: 'GET',
@@ -461,7 +457,6 @@ const ShowEventDetails = () => {
       }
     }
   }
-
   return (
     <div>
       <Navbar />
@@ -899,9 +894,11 @@ const ShowEventDetails = () => {
             <form action="" onSubmit={handleSubmit(onSubmit)}>
               <div className="container">
                 <Modal.Header closeButton>
-                  <div className="title-header">BOOKING<br />
+                  <div className="show-title-header"> <br/>
                     <div className='booking-header'>
-                      {eventDetails.name}
+                    <h2>BOOKING</h2>
+                    <p>{eventDetails.name}</p>
+                      
                     </div>
                   </div>
                 </Modal.Header>
@@ -1029,6 +1026,8 @@ const ShowEventDetails = () => {
                         {batchFull &&
                           <p className='bookingClosed'>Only {availableSlot} seats are currently available. Please reach out to us at +91 7028740961 to discuss the possibility of accommodating additional bookings.</p>
                         }
+                        {
+                        discountAvailable &&
                         <div className="input-box" style={{ 'display': 'flex', 'gap': '10px' }}>
                           <input
                             type="text" className="input-box-discount"
@@ -1042,7 +1041,7 @@ const ShowEventDetails = () => {
                             </button>
                           </div>
                         </div>
-
+                        }
                         {showDiscountStatus && discount > 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': 'green', 'gap': '5px' }}> Discount Applied   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.007 8.27C22.194 9.125 23 10.45 23 12c0 1.55-.806 2.876-1.993 3.73.24 1.442-.134 2.958-1.227 4.05-1.095 1.095-2.61 1.459-4.046 1.225C14.883 22.196 13.546 23 12 23c-1.55 0-2.878-.807-3.731-1.996-1.438.235-2.954-.128-4.05-1.224-1.095-1.095-1.459-2.611-1.217-4.05C1.816 14.877 1 13.551 1 12s.816-2.878 2.002-3.73c-.242-1.439.122-2.955 1.218-4.05 1.093-1.094 2.61-1.467 4.057-1.227C9.125 1.804 10.453 1 12 1c1.545 0 2.88.803 3.732 1.993 1.442-.24 2.956.135 4.048 1.227 1.093 1.092 1.468 2.608 1.227 4.05Zm-4.426-.084a1 1 0 0 1 .233 1.395l-5 7a1 1 0 0 1-1.521.126l-3-3a1 1 0 0 1 1.414-1.414l2.165 2.165 4.314-6.04a1 1 0 0 1 1.395-.232Z" fill="#009912"></path></g></svg></p>}
                         {showDiscountStatus && discount == 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> Coupon Not Applied  <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
 
