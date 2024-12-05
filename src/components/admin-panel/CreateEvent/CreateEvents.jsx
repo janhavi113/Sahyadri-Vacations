@@ -27,8 +27,9 @@ function CreateEvents() {
   const [pickupPoints, setPickupPoints] = useState();
   const [thingsToCarry, setThingsToCarry] = useState();
   const [costIncludes, setCostIncludes] = useState();
+  const [costExcludes, setCostExcludes] = useState();
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
-
+  const [FAQ ,setFAQ] = useState();
   const onSubmit = async (data) => {
     console.log('data--', data);
     if (uploadedFiles.length === 0) {
@@ -45,6 +46,8 @@ function CreateEvents() {
       }
     }
     formData.append("costIncludes", costIncludes);
+    formData.append("costExcludes", costExcludes);
+    formData.append("FAQ", FAQ);
     formData.append("eventDetails", data.eventDetails.toString());
     formData.append("eventName", data.eventName.toString());
     formData.append("eventType", data.eventType.toString());
@@ -177,16 +180,24 @@ function CreateEvents() {
                 <Editor sendDataToParent={setHighlights} />
               </div>
               <div className="input-select-box">
+                <span className="details">Pickup Points</span>
+                <Editor sendDataToParent={setPickupPoints} />
+              </div>
+              <div className="input-select-box">
                 <span className="details">Cost Includes</span>
                 <Editor sendDataToParent={setCostIncludes} />
+              </div>
+              <div className="input-select-box">
+                <span className="details">Cost Excludes</span>
+                <Editor sendDataToParent={setCostExcludes} />
               </div>
               <div className="input-select-box">
                 <span className="details">Things To Carry</span>
                 <Editor sendDataToParent={setThingsToCarry} />
               </div>
               <div className="input-select-box">
-                <span className="details">Pickup Points</span>
-                <Editor sendDataToParent={setPickupPoints} />
+                <span className="details">FAQ</span>
+                <Editor sendDataToParent={setFAQ} />
               </div>
             </div>
             {/* Dropzone for file uploads */}

@@ -7,6 +7,8 @@ const eventSchema = new mongoose.Schema({
     itinerary:  { type :String},
     eventDetails:  { type :String},
     costIncludes:  { type :String},
+    costExcludes:  { type :String},
+    FAQ:  { type :String},
     thingsToCarry:  { type :String},
     pickupPoints:  { type :String},
     highlights:  { type :String},
