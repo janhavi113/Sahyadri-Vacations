@@ -252,11 +252,14 @@ const ShowEventDetails = () => {
   };
 
   const displayList = (data) => {
-    var splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
+    var splitedList;
+    if(data){
+    splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
     splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
-    splitedList = splitedList.replaceAll('?', '? <br>');
+    splitedList = splitedList.includes("?") ? splitedList.replaceAll('?', '? <br>') :'';
     splitedList = splitedList.replaceAll('<ol>', '<ol class="display-bulletin">');
     splitedList = splitedList.replaceAll('<p>', '<p class="ql-p">');
+    }
     return splitedList;
   }
 

@@ -148,10 +148,13 @@ function EventDetails() {
   }
 
   const displayList = (data) => {
-    var splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
+    var splitedList;
+    if(data){
+    splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
     splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
     splitedList = splitedList.replaceAll('<ol>', '<ol class="display-bulletin">');
     splitedList = splitedList.replaceAll('<p>', '<p class="ql-p">');
+  }
     return splitedList;
   }
 
@@ -395,41 +398,41 @@ function EventDetails() {
                 </div>
                 <div className="input-select-box">
                   <span className="details">Type</span>
-                  <input value={typeValue} {...register("type")} type="text"  />
+                  <input value={typeValue} {...register("type")} type="text" onChange={(e) => setTypeValue(e.target.value)}  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Elevation</span>
-                  <input value={elevationValue} {...register("elevation",)} type="text"  />
+                  <input value={elevationValue} {...register("elevation",)} type="text" onChange={(e) => setElevationValue(e.target.value)}  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Difficulty</span>
-                  <input value={difficultyValue} {...register("difficulty",)} type="text"  />
+                  <input value={difficultyValue} {...register("difficulty",)} type="text" onChange={(e) => setDifficultyValue(e.target.value)}  />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Endurance</span>
-                  <input value={enduranceValue} {...register("endurance",)} type="text"  />
+                  <input value={enduranceValue} {...register("endurance",)} type="text"  onChange={(e) => setEnduranceValue(e.target.value)} />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Duration</span>
-                  <input value={durationValue} {...register("duration",)} type="text"  />
+                  <input value={durationValue} {...register("duration",)} type="text"  onChange={(e) => setDurationValue(e.target.value)} />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Total Distance</span>
-                  <input value={totalDistanceValue} {...register("totalDistance",)} type="text"  />
+                  <input value={totalDistanceValue} {...register("totalDistance",)} type="text"  onChange={(e) => setTrekDistanceValue(e.target.value)} />
                 </div>
                 <div className="input-select-box">
                   <span className="details">Age Group</span>
-                  <input value={ageGroupValue} {...register("ageGroup",)} type="text"  />
+                  <input value={ageGroupValue} {...register("ageGroup",)} type="text"  onChange={(e) => setAgeGroupValue(e.target.value)} />
                 </div>
 
                 <div className="input-select-box">
                   <span className="details">Trek Distance</span>
-                  <input value={trekDistanceValue} {...register("trekDistance",)} type="text"  />
+                  <input value={trekDistanceValue} {...register("trekDistance",)} type="text"  onChange={(e) => setTrekDistanceValue(e.target.value)} />
                 </div>
                 <div className="input-select-box">
                   <span className="details">Highlights</span>
