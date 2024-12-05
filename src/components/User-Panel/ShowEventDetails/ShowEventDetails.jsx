@@ -255,7 +255,9 @@ const ShowEventDetails = () => {
     var splitedList;
     splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
     splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
-    splitedList = splitedList.includes("?") ? splitedList.replaceAll('?', '? <br>') :'';
+     console.log(splitedList);
+     let s = splitedList;
+    splitedList = s.includes('?') ? splitedList.replaceAll('?', '? <br>') :splitedList;
     splitedList = splitedList.replaceAll('<ol>', '<ol class="display-bulletin">');
     splitedList = splitedList.replaceAll('<p>', '<p class="ql-p">');
     
