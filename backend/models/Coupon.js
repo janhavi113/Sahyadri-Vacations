@@ -38,7 +38,7 @@ const couponSchema = new mongoose.Schema({
   numberOfPeople: {
     type: Number,
     required: [true, 'Number of people is required'], // Make it optional by removing this line
-    min: [1, 'Number of people must be at least 1'],
+    min: [0, 'Number of people must be at least 0'],
   },
   createdAt: {
     type: Date,

@@ -40,6 +40,7 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import paymentCallbackRoutes from './routes/paymentCallbackRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import customisedTourRoutes from './routes/customisedTourRoutes.js'
+import specialOfferRoutes from './routes/specialOfferRoutes.js'
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET; // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
@@ -425,6 +426,7 @@ app.use(bookingRoutes);
 app.use(scheduleEventRoutes);
 app.use(showAllEventsRoutes);
 app.use(customisedTourRoutes);
+app.use(specialOfferRoutes);
 // Use the payment routes
 
 // Use the separated routes
