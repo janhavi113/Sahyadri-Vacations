@@ -41,6 +41,8 @@ import paymentCallbackRoutes from './routes/paymentCallbackRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import customisedTourRoutes from './routes/customisedTourRoutes.js'
 import specialOfferRoutes from './routes/specialOfferRoutes.js'
+import './cron/specialOfferCleanup.js';
+ 
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET; // Fixed typo in variable name
 let clientId = process.env.MONGOODB_CLIENT_ID;
