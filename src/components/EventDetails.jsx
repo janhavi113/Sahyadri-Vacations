@@ -59,6 +59,8 @@ function EventDetails() {
   const [isSuccess, setSuccess] = useState(false);
   const [event, setEvent] = useState();
   const [currentImages, setcurrentImages] = useState();
+  const [costExcludes, setCostExcludes] = useState();
+  const [FAQ ,setFAQ] = useState();
   const navigate = useNavigate();
   const params = useParams()
   let eventId = params.eventId;
@@ -100,6 +102,8 @@ function EventDetails() {
           setPickupPoints(data.events[0]?.pickupPoints);
           setThingsToCarry(data.events[0]?.thingsToCarry);
           setCostIncludes(data.events[0]?.costIncludes);
+          setCostExcludes(data.events[0]?.costExcludes);
+          setFAQ(data.events[0]?.FAQ);
           setcurrentImages(data.events[0]?.images);
           setLocationValue(data.events[0]?.location);
           setTypeValue(data.events[0]?.type);
@@ -174,6 +178,8 @@ function EventDetails() {
       }
     }
     formData.append("costIncludes", costIncludes);
+    formData.append("costExcludes", costExcludes);
+    formData.append("FAQ", FAQ);
     formData.append("eventDetails", data.eventDetails);
     formData.append("eventName", data.eventName);
     formData.append("eventType", data.eventType);
@@ -307,16 +313,24 @@ function EventDetails() {
                     <div dangerouslySetInnerHTML={{ __html: displayList(event.highlights) }} />
                   </div>
                   <div className="input-select-box">
+                    <span className="details">Pickup Points</span>
+                    <div dangerouslySetInnerHTML={{ __html: displayList(event.pickupPoints) }} />
+                  </div>
+                  <div className="input-select-box">
                     <span className="details">Cost Includes</span>
                     <div dangerouslySetInnerHTML={{ __html: displayList(event.costIncludes) }} />
+                  </div>
+                  <div className="input-select-box">
+                    <span className="details">Cost Excludes</span>
+                    <div dangerouslySetInnerHTML={{ __html: displayList(event.costExcludes) }} />
                   </div>
                   <div className="input-select-box">
                     <span className="details">Things To Carry</span>
                     <div dangerouslySetInnerHTML={{ __html: displayList(event.thingsToCarry) }} />
                   </div>
                   <div className="input-select-box">
-                    <span className="details">Pickup Points</span>
-                    <div dangerouslySetInnerHTML={{ __html: displayList(event.pickupPoints) }} />
+                    <span className="details">FAQ</span>
+                    <div dangerouslySetInnerHTML={{ __html: displayList(event.FAQ) }} />
                   </div>
                 </div>
                 <div >
@@ -426,12 +440,20 @@ function EventDetails() {
                   <Editor value={costIncludes} sendDataToParent={setCostIncludes} />
                 </div>
                 <div className="input-select-box">
+                  <span className="details">Cost Excludes</span>
+                  <Editor value={costExcludes} sendDataToParent={setCostExcludes} />
+                </div>
+                <div className="input-select-box">
                   <span className="details">Things To Carry</span>
                   <Editor value={thingsToCarry} sendDataToParent={setThingsToCarry} />
                 </div>
                 <div className="input-select-box">
                   <span className="details">Pickup Points</span>
                   <Editor value={pickupPoints} sendDataToParent={setPickupPoints} />
+                </div>
+                <div className="input-select-box">
+                  <span className="details">FAQ</span>
+                  <Editor value={FAQ} sendDataToParent={setFAQ} />
                 </div>
                 {/* Dropzone for file uploads */}
                 <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
