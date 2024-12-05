@@ -1,6 +1,6 @@
 
 .all-events-card{
-    width: 365.667px;
+    width: 300px;
 }
 .all-event-card-footer {
     bottom: 18px;
@@ -36,22 +36,74 @@
 }
 @media only screen and (max-width: 767px) {
     .event .imageContainer img {
-        height: 225px !important;
+        height: 200px !important;
+        object-fit: cover;
     }
+
+    .event .wrapper {
+        margin: 25% 5% 0 5%;
+        text-align: center;
+        color: white;
+    }
+
     .event .wrapper h1 {
-        margin: 35% 0 0 0;
         font-weight: 700;
-        font-size: 35px !important;
-        text-shadow: 2px 2px 8px #120202b0;
+        font-size: 28px !important;
+        text-shadow: 2px 2px 8px rgba(18, 2, 2, 0.69);
     }
-    .adjust-margin{
-        margin: 0% 0% 0% 10% !important;
-    }
+
     .contentbody {
         width: 100%;
-        border-radius: 32px 32px 0px 0px;
-        margin-top: -8%;
+        border-radius: 32px 32px 0 0;
+        margin-top: -6%;
         position: relative;
         background-color: white;
+        padding: 16px 8px;
+    }
+
+    .all-events-card {
+        width: 90%;
+        margin: 10px auto;
+        height: 360px;
+    }
+
+    .event-card-image {
+        height: 235px;
+        object-fit: cover;
+    }
+
+    .event-card-header {
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .all-event-card-footer {
+        align-items: center;
+        font-size: 14px;
+    }
+
+    .price {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .team {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .row>* {
+        padding: 5px !important;
+    }
+
+    .adjust-margin {
+        margin: 0 5% 0 5% !important;
+    }
+
+    .py-md-5 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
     }
 }

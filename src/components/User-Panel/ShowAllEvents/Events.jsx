@@ -36,7 +36,7 @@ const Events = () => {
                 "Content-Type": "application/json",
             }
         })
-       
+
         let res = await r.json()
         console.log('res +==', JSON.stringify(res));
         if (res.isSuccess == true) {
@@ -67,28 +67,28 @@ const Events = () => {
         let batchdate;
         let eventCostPerPerson;
         const Q = new Date();
-        console.log('Q---'+Q);
+        console.log('Q---' + Q);
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      if(event.batches){
-        for (let i = 0; i < event.batches.length; i++) {
-            if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
-                batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()];
-                eventCostPerPerson = event.batches[i].eventCostPerPerson;
+        if (event.batches) {
+            for (let i = 0; i < event.batches.length; i++) {
+                if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
+                    batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()];
+                    eventCostPerPerson = event.batches[i].eventCostPerPerson;
+                }
+            }
+        } else {
+            if (new Date(event.eventStartDate) - Q >= 0) {
+                batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()];
+                eventCostPerPerson = event.eventCostPerPerson;
             }
         }
-    }else{
-        if (new Date(event.eventStartDate) - Q >= 0) {
-            batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()];
-            eventCostPerPerson = event.eventCostPerPerson;
-        }
-    }
         if (batchdate && eventCostPerPerson) {
             liveEvent = {
                 eventId: event.eventId,
                 eventname: event.eventname,
                 eventType: event.eventType,
                 url: event.Url,
-                images: `${apiUrl}`+event.images,
+                images: `${apiUrl}` + event.images,
                 batchdate: batchdate,
                 eventCostPerPerson: eventCostPerPerson,
 
@@ -104,35 +104,35 @@ const Events = () => {
             <h1 >Sahydri Vacations</h1>
             <img className='slide-image' src={backgroundImage}></img>
             </div> */}
-            <EventHeader/>
+            <EventHeader />
             <div className="contentbody">
-                <div className="container justify-content-center py-md-5">
-
-                    <div className="row justify-content- py-4" >
-                       
-                    {isSuccess && events.map((event, index) => (
-                         <>
-                         <div className="event-card card all-events-card">
-                             <a onClick={() => navigate(event.url)}>
-                                 <img className="event-card-image" src={event.images} alt="Avatar" width="100%" />
-                                 <div className="event-card-container">
-                                     <h2 className='all-event-header event-card-header bg-transparent'><b>{event.eventname}</b></h2>
-                                     <div className='all-event-card-footer event-card-footer'>
-                                     <div >{event.batchdate}</div>
-                                     <div ><strong className='price'>₹{event.eventCostPerPerson} </strong><i>per person</i></div>
-                                     </div>
-                                 </div>
-                             </a>
-                         </div>
-                         </>
-                    ))}
-                        </div>
+                <div className="team justify-content-center">
+                    <div className="row justify-content-around">
+                        {isSuccess && events.map((event, index) => (
+                            <>
+                                <div className="mt-2 col-lg-3 col-md-3 col-sm-3">
+                                    <div className="event-card card all-events-card">
+                                        <a onClick={() => navigate(event.url)}>
+                                            <img className="event-card-image" src={event.images} alt="Avatar" width="100%" />
+                                            <div className="event-card-container">
+                                                <h2 className='all-event-header event-card-header bg-transparent'><b>{event.eventname}</b></h2>
+                                                <div className='all-event-card-footer event-card-footer'>
+                                                    <div >{event.batchdate}</div>
+                                                    <div ><strong className='price'>₹{event.eventCostPerPerson} </strong><i>per person</i></div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </>
+                        ))}
                     </div>
                 </div>
-                
-                <Footer />
             </div>
-            )
+
+            <Footer />
+        </div>
+    )
 }
 
-            export default Events
+export default Events
