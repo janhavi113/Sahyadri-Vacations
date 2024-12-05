@@ -287,69 +287,7 @@ const Home = () => {
           </Swiper>
 
         </div>
-        <div>
-          <div className='section-header'>
-            <div className="col-7 row">
-              <div className="col-lg-1 col-3">
-                <img loading="lazy" src={Camping} />
-              </div>
-              <div className="col-lg-11 col-9">
-                <h3 className='home-thicker home-header-text ' >Camping & Resorts</h3>
-              </div>
-            </div>
-            <div className="text-end">
-              <a className="btn home-header-text-viewall" href="/events" role="button" >
-                <div className='section-header-btn'><span>View All</span>
-                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <Swiper
-            breakpoints={{
-              0: {
-                slidesPerView: 1.5,
-              },
-              400: {
-                slidesPerView: 1.5,
-              },
-              639: {
-                slidesPerView: 2,
-              },
-              865: {
-                slidesPerView: 2
-              },
-              1000: {
-                slidesPerView: 3
-              },
-              1500: {
-                slidesPerView: 3
-              },
-              1700: {
-                slidesPerView: 3
-              }
-            }}
-            spaceBetween={50}
-            slidesPerView={3}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            modules={[Autoplay, Navigation]}
-            className='rating-section'
-          >
-            {isSuccess && campingEvents.map((event, index) => (
-              <SwiperSlide key={index}>
-                <Card key={index} event={event} />
-              </SwiperSlide>
-            ))}
-
-          </Swiper>
-        </div>
+       
         <div>
           <div className='section-header'>
             <div className="col-7 row">
@@ -406,6 +344,69 @@ const Home = () => {
             className='rating-section'
           >
             {isSuccess && backPackingEvents.map((event, index) => (
+              <SwiperSlide key={index}>
+                <Card key={index} event={event} />
+              </SwiperSlide>
+            ))}
+
+          </Swiper>
+        </div>
+        <div>
+          <div className='section-header'>
+            <div className="col-7 row">
+              <div className="col-lg-1 col-3">
+                <img loading="lazy" src={Camping} />
+              </div>
+              <div className="col-lg-11 col-9">
+                <h3 className='home-thicker home-header-text ' >Camping & Resorts</h3>
+              </div>
+            </div>
+            <div className="text-end">
+              <a className="btn home-header-text-viewall" href="/events" role="button" >
+                <div className='section-header-btn'><span>View All</span>
+                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <Swiper
+            breakpoints={{
+              0: {
+                slidesPerView: 1.5,
+              },
+              400: {
+                slidesPerView: 1.5,
+              },
+              639: {
+                slidesPerView: 2,
+              },
+              865: {
+                slidesPerView: 2
+              },
+              1000: {
+                slidesPerView: 3
+              },
+              1500: {
+                slidesPerView: 3
+              },
+              1700: {
+                slidesPerView: 3
+              }
+            }}
+            spaceBetween={50}
+            slidesPerView={3}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            navigation
+            pagination={{ clickable: true }}
+            modules={[Autoplay, Navigation]}
+            className='rating-section'
+          >
+            {isSuccess && campingEvents.map((event, index) => (
               <SwiperSlide key={index}>
                 <Card key={index} event={event} />
               </SwiperSlide>
