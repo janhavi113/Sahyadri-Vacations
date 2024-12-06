@@ -123,7 +123,7 @@ const ScheduledEventsDetails = () => {
     if (res.isSuccess == true) {
       setSuccess(true);
       // console.log('eventDetails ', res.events);
-      // console.log('scheduleBatch', res.ScheduleBatchesRecords);
+     console.log('scheduleBatch', res.ScheduleBatchesRecords);
       setEventDetails(res.events);
       setScheduleBatch(res.ScheduleBatchesRecords);
       getNextBatchDate(res.ScheduleBatchesRecords);
@@ -148,7 +148,9 @@ const ScheduledEventsDetails = () => {
   const openConfirmPopup = () => {
     setShowConfirm(true);
   };
-
+  const editScheduleEvent = () => {
+    navigateUrl(`/update-schedule-events?eventid=${params[0]}`);
+  };
   const displayList = (data) => {
     var splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
     splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
@@ -179,7 +181,7 @@ const ScheduledEventsDetails = () => {
           {isSuccess && console.log('eventDetails.images-- ' + eventDetails.images)}
           {isSuccess && eventDetails.images.map((event, index) => (
 
-            <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}` + event} />
+            <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}` + scheduleBatch.images} />
               <div className="inner-content">
                 <h3>{eventDetails.name}</h3>
               </div>
@@ -192,73 +194,63 @@ const ScheduledEventsDetails = () => {
         <div>
           <div className="content-row row2">
             <div>
-              <nav id="navbar-example2" className="nav-color d-none d-md-none d-lg-block panel-heading tab-bg-info px-2 ">
-                <ul className="nav nav-tabs">
-                  <li className="nav-item">
-                    <a className="nav-link" href="#scrollspyHeading1"> DETAILS </a>
-                  </li>
-                  <li >
-                    <a className="nav-link" href="#scrollspyHeading2"> SHEDULE </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="#scrollspyHeading3"> HIGHLIGHTS </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="#scrollspyHeading4"> COST INCLUDES </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="#scrollspyHeading6"> PICKUP POINTS </a>
-                  </li>
-                </ul>
-              </nav>
+             
               <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example  p-3 rounded-2" tabindex="0">
-                <div id="scrollspyHeading1" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Details</h2>
-                  <p>{eventDetails.eventDetails}</p>
-                  <br />
-                  <div className='flex'> <FontAwesomeIcon icon={faCalendarDays} size="lg" /> <h3> Upcoming Batches </h3> </div>
+                <div  className='pt-4 pb-1 px-2'>
+                
                   <div className='section-details'>
-                    {availableBatches && console.log('availableBatches ' + availableBatches)}
+                  <div > 
+                  <h2 className='section-header'>Event Details </h2>
+                  {availableBatches && console.log('availableBatches ' + availableBatches)}
                     {availableBatches && availableBatches.map((event, index) => (
-                      <div key={index}><b>Batch {index + 1} :</b> {event}</div>
+                      <div key={index}><b> Upcoming Batches  Batch {index + 1} :</b> {event}</div>
                     ))}
                   </div>
-                  <div className='flex'> <FontAwesomeIcon icon={faLocationDot} size="lg" /> <h3> Location </h3> </div>
-                  <div className='section-details'>
-                    <p>{eventDetails.location}</p>
-                  </div>
-                </div>
-                <hr />
-                <div id="scrollspyHeading2" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Schedule</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.itinerary) }} />
-                </div>
-                <hr />
-                <div id="scrollspyHeading3" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Highlights</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.highlights) }} />
-                </div>
-                <hr />
-                <div id="scrollspyHeading4" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Cost Includes</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.costIncludes) }} />
-                </div>
-                <hr />
-                <div id="scrollspyHeading5" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Things To Carry</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.thingsToCarry) }} />
-                </div>
-                <hr />
-                <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Pickup Points</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
-                </div>
+                  <div id="scrollspyHeading1"> 
+                
+                    <div className='scheduled-flex'>
+                    <div ><b>eventApi: </b>{ scheduleBatch.eventApi}</div>
+                   <div id="scrollspyHeading5"><b>eventType: </b>{ scheduleBatch.eventType}</div>
+                   </div>
+                    <div className='scheduled-flex'>
+                    <div ><b>eventCostPerPerson: </b>{ scheduleBatch.eventCostPerPerson}</div>
+                    <div ><b>Base to Base Price: </b>{ scheduleBatch.b2bPrice}</div>
+                    </div>
+                    <div className='scheduled-flex'>
+                    <div><b>eventEndDate: </b>{new Date(scheduleBatch.eventEndDate).toISOString().split('T')[0]}</div>
+                    <div><b>eventStartDate: </b>{ new Date(scheduleBatch.eventStartDate).toISOString().split('T')[0]}</div>
+                    </div>
+                    </div>
+                    <hr/>
+                    <div id="scrollspyHeading2" >
+                    <h2 className='section-header'>Booking Open Details </h2>
+                    <div className='scheduled-flex'>                    
+                    <div><b>bookingTillDate: </b>{ scheduleBatch.bookingTillDate}</div>
+                    <div><b>bookingTillTime: </b>{ scheduleBatch.bookingTillTime}</div>
+                    </div>
+                    </div>
+                    <div className='scheduled-flex'>
+                    <div><b>everyWeekend: </b>{ scheduleBatch.everyWeekend}</div>
+                    <div><b>notScheduleYet: </b>{ scheduleBatch.notScheduleYet}</div>
+                    </div>
+                    <hr />
+                    <h2 className='section-header'>Booking Count Details </h2>
+                    <div className='scheduled-flex'>                    
+                    <div><b>eventBatchCount: </b>{ scheduleBatch.eventBatchCount}</div>
+                    <div><b>alreadyBoockedCount: </b>{ scheduleBatch.alreadyBoockedCount}</div>
+                    </div>
+                    <hr />
+                    <h2 className='section-header'>Booking Count Details </h2>
+                    <div><b>specialOfferEvent: </b>{ scheduleBatch.specialOfferEvent}</div>
+                   
+                    </div>              
+                </div>  
               </div>
             </div>
-            <div className="content-right-side col-sm-12 col-md-4  col-lg-4 col-xl-4 ">
+            <div className="col-xl-4 ">
               <div className="container sticky-top" >
-                <div className="justify-content-md-center">
-                  <div className="col-lg-12 d-none d-md-none d-lg-block">
+                <div >
+                  <div >
                     <div className="booking-card mb-3 " >
                       <div className="card-body text-dark">
                         <h4 className="card-title"><center>
@@ -271,7 +263,7 @@ const ScheduledEventsDetails = () => {
 
                           <div className="button-margin button button-group-box">
                             {/* <input onClick={handleShow} type="submit" value="BOOK NOW" /> */}
-                            <button type="button"> <strong>EDIT</strong> </button>
+                            <button onClick={editScheduleEvent} type="button"> <strong>EDIT</strong> </button>
                             <button onClick={openConfirmPopup} type="button"> <strong>DELETE</strong> </button>
                           </div></>}
                       </div>
@@ -284,7 +276,7 @@ const ScheduledEventsDetails = () => {
           <div className="d-sm-block d-md-none d-lg-none fixed-bottom">
             <div className="booking-card-mb mb-0 " style={{ "width": "100%;" }}>
               <div className="card-body text-dark">
-                <div className="booking-section d-flex justify-content-between align-items-center">
+                <div className="booking-section d-scheduled-flex justify-content-between align-items-center">
                   <h4 className="card-title"><center>
                     <b className='event-price'>₹{price} /- </b>
                     <sub >Per Person</sub>

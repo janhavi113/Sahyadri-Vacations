@@ -112,6 +112,7 @@ function ScheduleEvents() {
       console.log('search--', search);
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
+      formData.append('scheduleEventId',search[0].eventId);
       formData.append('eventCostPerPerson', data.eventCostPerPerson);
       formData.append('eventEndDate', new Date(data.eventEndDate));
       formData.append('eventStartDate', new Date(data.eventStartDate));
