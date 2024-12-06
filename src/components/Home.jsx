@@ -73,7 +73,7 @@ const Home = () => {
     if (event.batches) {
       for (let i = 0; i < event.batches.length; i++) {
         if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
-          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + months[new Date(event.batches[i].eventEndDate).getFullYear()];
+          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()]+ ' ' + months[new Date(event.batches[i].eventEndDate).getFullYear()];
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           sortdate = new Date(event.batches[i].eventStartDate);
 
@@ -89,7 +89,7 @@ const Home = () => {
       }
     } else {
       if (new Date(event.eventStartDate) - Q >= 0) {
-        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventEndDate).getFullYear();
+        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()]+ ' ' + new Date(event.eventEndDate).getFullYear();
         eventCostPerPerson = event.eventCostPerPerson;
         sortdate = new Date(event.eventStartDate);
 
@@ -125,7 +125,7 @@ const Home = () => {
     }
     return liveEvent;
   }
-
+  
   const getAllRecord = async () => {
     //console.log('getAllRecord--');
     let liveEvents = [];
@@ -142,7 +142,7 @@ const Home = () => {
     })
 
     let res = await r.json()
-    console.log('res', res);
+    console.log('res',res);
     if (res.isSuccess == true) {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {
@@ -167,9 +167,9 @@ const Home = () => {
       setCampingEvents(sortEventsBySortDate(campingEvents));
       setBackPackingEvents(sortEventsBySortDate(backPackingEvents));
     }
-
+   
   }
-
+  
   const sortEventsBySortDate = (events) => {
     return events.sort((a, b) => {
       // Check if sortDate is 'Available On All Weekends' or 'On Public Demand'
@@ -236,9 +236,8 @@ const Home = () => {
             </div>
             <div className="text-end">
               <a className="btn home-header-text-viewall" href="/events" role="button" >
-                <div className="section-header-btn tooltip-container">
-                  <img style={{ margin: '4px' }} loading="lazy" src={ViewAll} />
-                  <div className="tooltip-text">View all</div>
+                <div className='section-header-btn'><span>View All</span>
+                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
                 </div>
               </a>
             </div>
@@ -288,7 +287,7 @@ const Home = () => {
           </Swiper>
 
         </div>
-
+       
         <div>
           <div className='section-header'>
             <div className="col-7 row">
@@ -300,14 +299,12 @@ const Home = () => {
               </div>
             </div>
             <div className="text-end">
-              <a className="btn home-header-text-viewall" href="/backpacking-events" role="button">
-                <div className="section-header-btn tooltip-container">
-                  <img style={{ margin: '4px' }} loading="lazy" src={ViewAll} />
-                  <div className="tooltip-text">View all</div>
+              <a className="btn home-header-text-viewall" href="/backpacking-events" role="button" >
+                <div className='section-header-btn'><span>View All</span>
+                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
                 </div>
               </a>
             </div>
-
           </div>
 
           <Swiper
@@ -366,9 +363,8 @@ const Home = () => {
             </div>
             <div className="text-end">
               <a className="btn home-header-text-viewall" href="/camping-events" role="button" >
-                <div className="section-header-btn tooltip-container">
-                  <img style={{ margin: '4px' }} loading="lazy" src={ViewAll} />
-                  <div className="tooltip-text">View all</div>
+                <div className='section-header-btn'><span>View All</span>
+                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
                 </div>
               </a>
             </div>
