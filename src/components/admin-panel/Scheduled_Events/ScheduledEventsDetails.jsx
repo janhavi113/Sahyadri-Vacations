@@ -181,7 +181,7 @@ const ScheduledEventsDetails = () => {
           {isSuccess && console.log('eventDetails.images-- ' + eventDetails.images)}
           {isSuccess && eventDetails.images.map((event, index) => (
 
-            <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}` + scheduleBatch.images} />
+            <SwiperSlide key={index}><img className='event-schedule-section-header-img' loading="lazy" src={`${apiUrl}` + scheduleBatch.images} />
               <div className="inner-content">
                 <h3>{eventDetails.name}</h3>
               </div>
@@ -200,7 +200,7 @@ const ScheduledEventsDetails = () => {
                 
                   <div className='section-details'>
                   <div > 
-                  <h2 className='section-header'>Event Details </h2>
+                  <h2 className='schedule-section-header'>Event Details </h2>
                   {availableBatches && console.log('availableBatches ' + availableBatches)}
                     {availableBatches && availableBatches.map((event, index) => (
                       <div key={index}><b> Upcoming Batches  Batch {index + 1} :</b> {event}</div>
@@ -223,7 +223,7 @@ const ScheduledEventsDetails = () => {
                     </div>
                     <hr/>
                     <div id="scrollspyHeading2" >
-                    <h2 className='section-header'>Booking Open Details </h2>
+                    <h2 className='schedule-section-header'>Booking Open Details </h2>
                     <div className='scheduled-flex'>                    
                     <div><b>bookingTillDate: </b>{ scheduleBatch.bookingTillDate}</div>
                     <div><b>bookingTillTime: </b>{ scheduleBatch.bookingTillTime}</div>
@@ -234,13 +234,13 @@ const ScheduledEventsDetails = () => {
                     <div><b>notScheduleYet: </b>{ scheduleBatch.notScheduleYet}</div>
                     </div>
                     <hr />
-                    <h2 className='section-header'>Booking Count Details </h2>
+                    <h2 className='schedule-section-header'>Booking Count Details </h2>
                     <div className='scheduled-flex'>                    
                     <div><b>eventBatchCount: </b>{ scheduleBatch.eventBatchCount}</div>
                     <div><b>alreadyBoockedCount: </b>{ scheduleBatch.alreadyBoockedCount}</div>
                     </div>
                     <hr />
-                    <h2 className='section-header'>Booking Count Details </h2>
+                    <h2 className='schedule-section-header'>Booking Count Details </h2>
                     <div><b>specialOfferEvent: </b>{ scheduleBatch.specialOfferEvent}</div>
                    
                     </div>              
