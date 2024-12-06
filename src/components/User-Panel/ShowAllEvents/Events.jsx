@@ -8,7 +8,7 @@ import "../../card.css"
 import '../../home.css'
 import './Events.css'
 import "react-multi-carousel/lib/styles.css";
-
+import './Camping_Event.css';
 const Events = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [backgroundImage, setBackgroundImage] = useState(slide1);
@@ -100,12 +100,8 @@ const Events = () => {
     return (
         <div >
             <Navbar />
-            {/* <div className="header-img-wapper">
-            <h1 >Sahydri Vacations</h1>
-            <img className='slide-image' src={backgroundImage}></img>
-            </div> */}
-            <EventHeader />
-            <div className="contentbody">
+            <EventHeader name='Upcoming Events'/>
+            <div className="all-event-contentbody">
                 <div className="team justify-content-center">
                     <div className="row justify-content-around">
                         {isSuccess && events.map((event, index) => (

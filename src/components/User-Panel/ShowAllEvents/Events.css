@@ -5,8 +5,12 @@
 .all-event-card-footer {
     bottom: 18px;
 }
+.event-header{
+    font-family: 'Poppins', sans-serif !important;
+}
 .all-event-header {
     text-align: left !important;
+    
 }
 .event .imageContainer img {
     height: 400px !important;

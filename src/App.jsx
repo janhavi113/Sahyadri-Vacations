@@ -13,6 +13,9 @@ import EventDetails from "./components/EventDetails";
 import ShowEventDetails from "./components/User-Panel/ShowEventDetails/ShowEventDetails";
 import CreateEvent from "./components/admin-panel/CreateEvent/CreateEvents" ;  
 import Events from "./components/User-Panel/ShowAllEvents/Events" ;
+import CampingEvent from "./components/User-Panel/ShowAllEvents/Camping_Event"
+import TrekingEvents from "./components/User-Panel/ShowAllEvents/Treking_Events"
+import BackPackingEvent from "./components/User-Panel/ShowAllEvents/BackPacking_Event"
 import SearchEvent from "./components/User-Panel/SearchEvent/SearchEvent" ;
 import UserAgreement from "./components/User-Panel/UserAgreement/UserAgreement";
 import CancellationPolicy from "./components/User-Panel/UserAgreement/CancellationPolicy";
@@ -57,6 +60,15 @@ function App() {
       path: "/events",
       element: <Events />,
     },
+     {
+      path: "/camping-events",
+      element: <CampingEvent/> },
+     {
+      path: "/treking-events",
+      element: <TrekingEvents/> },
+     {
+      path: "/backpacking-events",
+      element: <BackPackingEvent/> },
     {
       path: "/admin-login",
       element: <AdminLogin />,

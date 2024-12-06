@@ -35,5 +35,27 @@ router.get("/show-all-events", async (req, res) => {
 	}
 });
 
+router.get("/show-events/:eventType", async (req, res) => {
+	
+	try {
+		let eventType = req.params.eventType;
+		console.log("eventType---",eventType);
+		let ScheduleBatchesRecords = await ScheduleBatches.find({
+			active: true,
+			eventType: eventType
+		});
+		console.log("ScheduleBatchesRecords---",ScheduleBatchesRecords);
+		res.send({
+			isSuccess: true,
+			events: ScheduleBatchesRecords
+		});
+	} catch (error) {
+		console.error(error);
+		res.send({
+			isSuccess: false,
+			error: error
+		});
+	}
+});
 
 export default router;
