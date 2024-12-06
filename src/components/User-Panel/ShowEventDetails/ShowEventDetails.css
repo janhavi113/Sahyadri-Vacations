@@ -307,7 +307,7 @@ h3 {
 }
 
 .rating-section {
-    max-width: 93%;
+    max-width: 87%;
 }
 .calculation{
     display: flex;
@@ -470,7 +470,9 @@ h3 {
         left: 0;
         z-index: 1030;
     }
-
+    .rating-section {
+        max-width: 93%;
+    }
     .sticky-top {
         display: none;
     }
