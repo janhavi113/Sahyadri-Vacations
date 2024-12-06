@@ -43,7 +43,9 @@ router.post('/create-special-event', async (req, res) => {
 		});
     const {
 			title,
-      events
+      events,
+      date,
+      couponId
 		} = req.body;
     let eventList = JSON.parse(events);
     let eventIdList = [];
@@ -54,9 +56,13 @@ router.post('/create-special-event', async (req, res) => {
       const offer = new SpecialOffer({
         imagePath: currUrl, 
         events :eventIdList,
-        title: title
+        title: title,
+        couponId:couponId,
+        date: date
       });
-      console.log('offer--',offer);
+     
+      const result = await SpecialOffer.updateMany({}, { active: false});
+      console.log('result--',result);
       await offer.save();
     
     res.status(200).json({ message: 'Special offer saved successfully', offer });

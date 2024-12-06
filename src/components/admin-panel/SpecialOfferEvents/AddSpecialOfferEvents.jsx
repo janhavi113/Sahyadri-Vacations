@@ -10,12 +10,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useDropzone } from "react-dropzone";
 import SearchAndAdd from './SearchAndAdd';
+
 const AddSpecialOfferEvents = () => {
     const [selectedEvents, setSelectedEvents] = useState([]);
-
-    const handleSelectionChange = (selectedItems) => {
-        console.log('selectedItems--', selectedItems);
-        setSelectedEvents(selectedItems); // Update state with selected items
+    const handleSelectionChange = (items) => {
+        setSelectedEvents(items);
+        console.log('Selected Items:', items); // This is where you can use the selected data
     };
     const [options, setOptions] = useState([]);
 
@@ -96,6 +96,7 @@ const AddSpecialOfferEvents = () => {
     const [selectedValue, setSelectedValue] = useState("");
 
     const handleChange = (event) => {
+        console.log('handleSelect=-', event.target.value);
         setSelectedValue(event.target.value);
     };
 
@@ -107,11 +108,13 @@ const AddSpecialOfferEvents = () => {
             });
             return;
         }
-        console.log('I am here---', selectedEvents);
+        console.log('I am here---', selectedValue);
         const formData = new FormData();
         formData.append("images", uploadedFiles[0]); // Adjust the name as needed
         formData.append("title", data.name);
+        formData.append("date", data.date);
         formData.append("events", JSON.stringify(selectedEvents));
+        formData.append("couponId", selectedValue);
         let r = await fetch(`${apiUrl}create-special-event`, {
             method: "POST",
             body: formData,
@@ -135,6 +138,7 @@ const AddSpecialOfferEvents = () => {
         if (r.ok) {
             setCouponsFound(true);
             setCoupons(res.coupons);
+            setSelectedValue(res.coupons[0]);
         }
 
     }
@@ -148,7 +152,7 @@ const AddSpecialOfferEvents = () => {
                             <div className=" contentbody">
                                 <div className="container justify-content-center py-md-5">
                                     <div className="input-box ">
-                                        <span className="details">Title</span>
+                                        <span className="details">Title <span style={{'color':'red'}}>*</span></span>
                                         <input
                                             {...register("name", {
                                                 required: {
@@ -161,7 +165,7 @@ const AddSpecialOfferEvents = () => {
                                         />
                                     </div>
                                     <div>
-                                        <h3>Search and Add Months</h3>
+                                        <span className="details">Search and Add Months <span style={{'color':'red'}}>*</span></span>
                                         <SearchAndAdd
                                             options={options}
                                             placeholder="Search months to add..."
@@ -169,10 +173,15 @@ const AddSpecialOfferEvents = () => {
                                         />
 
                                     </div>
+
                                     <div className="input-box-search input-box" >
-                                        <span className="details">Select Coupons</span>
+                                        <span className="details">Select Coupons <span style={{'color':'red'}}>*</span></span>
                                         {couponsFound &&
-                                            <select id="picklist" value={selectedValue} onChange={handleChange}>
+                                            <select id="picklist" value={selectedValue} onChange={handleChange} required>
+                                                {/* Default option */}
+                                                <option value="">
+                                                    --select coupon--
+                                                </option>
                                                 {coupons &&
                                                     coupons.map((event, index) => (
                                                         <option key={index} value={event._id} >{event.couponName}</option>
@@ -180,7 +189,19 @@ const AddSpecialOfferEvents = () => {
                                             </select>
                                         }
                                     </div>
-
+                                    <div className="input-box ">
+                                        <span className="details">Offer Till<span style={{'color':'red'}}>*</span></span>
+                                        <input
+                                            {...register("date", {
+                                                required: {
+                                                    value: true,
+                                                    message: "This field is required",
+                                                },
+                                            })}
+                                            type="date"
+                                            required
+                                        />
+                                    </div>
                                     <div className="row justify-content- py-4">
                                         <div className="content">
                                             <div className="user-details">

@@ -309,7 +309,14 @@ h3 {
 .rating-section {
     max-width: 93%;
 }
-
+.calculation{
+    display: flex;
+    font-weight: 500;
+    font-size: 20px;
+    justify-content: space-between;
+    width: 100%;
+    color: gray;
+}
 .finalCalculation {
     display: flex;
     font-size: 22px;

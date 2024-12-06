@@ -9,9 +9,10 @@ const SpecialOfferSchema = new mongoose.Schema({
   couponId:{ type: String },
   date: { 
     type: Date, 
-    required: true, 
-    default: Date.now // Set default to the current date and time
-  }
+    required: true
+  },
+ 
+  active: { type: Boolean, default: true },
 });
 
 const SpecialOffer = mongoose.model('SpecialOffer', SpecialOfferSchema);
