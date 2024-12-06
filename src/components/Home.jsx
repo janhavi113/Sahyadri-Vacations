@@ -149,7 +149,7 @@ const Home = () => {
         let tempEvent = [];
 
         tempEvent = getNextBatchDate(res.events[i]);
-        if (!tempEvent.inactive && tempEvent != '' && tempEvent.batchdate != 'On Public Demand') {
+        if (!tempEvent.inactive && tempEvent != '' && tempEvent.batchdate != 'On Public Demand' && res.events[i].eventType != 'CampingEvent') {
           liveEvents.push(getNextBatchDate(res.events[i]));
         }
 
