@@ -31,7 +31,7 @@ const Treking_Events = () => {
       let trekkingEvents = [];
       let campingEvents = [];
       let backPackingEvents = [];
-      let r = await fetch(`${apiUrl}show-events/TrekEvent`, {
+      let r = await fetch(`${apiUrl}show-all-events`, {
           method: "GET", headers: {
               "Content-Type": "application/json",
           }
@@ -46,7 +46,7 @@ const Treking_Events = () => {
               if (getNextBatchDate(res.events[i]) != '') {
                   liveEvents.push(getNextBatchDate(res.events[i]));
               }
-              if (res.events[i].eventType == 'TrekEvent') {
+              if (res.events[i].eventType == 'TrekEvent' || res.events[i].eventType == 'AdventureActivity') {
                   trekkingEvents.push(getNextBatchDate(res.events[i]));
               } else if (res.events[i].eventType == 'CampingEvent') {
                   campingEvents.push(getNextBatchDate(res.events[i]));
@@ -108,7 +108,7 @@ const Treking_Events = () => {
           <div className="all-event-contentbody">
               <div className="team justify-content-center">
                   <div className="row justify-content-around">
-                      {isSuccess && events.map((event, index) => (
+                      {isSuccess && trekkingEvents.map((event, index) => (
                           <>
                               <div className="mt-2 col-lg-3 col-md-3 col-sm-3">
                                   <div className="event-card card all-events-card">

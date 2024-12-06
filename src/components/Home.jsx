@@ -153,7 +153,7 @@ const Home = () => {
           liveEvents.push(getNextBatchDate(res.events[i]));
         }
 
-        if (!tempEvent.inactive && res.events[i].eventType == 'TrekEvent') {
+        if (!tempEvent.inactive && (res.events[i].eventType == 'TrekEvent' || res.events[i].eventType == 'AdventureActivity')) {
           trekkingEvents.push(tempEvent);
         } else if (!tempEvent.inactive && res.events[i].eventType == 'CampingEvent') {
           campingEvents.push(tempEvent);
@@ -287,7 +287,69 @@ const Home = () => {
           </Swiper>
 
         </div>
-       
+        <div>
+          <div className='section-header px-heading'>
+            <div className="col-7 row">
+              <div className="col-lg-1 col-3">
+                <img className='section-header-img' loading="lazy" src={upcomingEvent} />
+              </div>
+              <div className="col-lg-11 col-9">
+                <h3 className='home-thicker home-header-text' >Trek Events</h3>
+              </div>
+            </div>
+            <div className="text-end">
+              <a className="btn home-header-text-viewall" href="/treking-events" role="button" >
+                <div className='section-header-btn'><span>View All</span>
+                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
+                </div>
+              </a>
+            </div>
+          </div>
+          <Swiper
+            breakpoints={{
+              0: {
+                slidesPerView: 1.5,
+              },
+              400: {
+                slidesPerView: 1.5,
+              },
+              639: {
+                slidesPerView: 2,
+              },
+              865: {
+                slidesPerView: 3
+              },
+              1000: {
+                slidesPerView: 3
+              },
+              1500: {
+                slidesPerView: 3
+              },
+              1700: {
+                slidesPerView: 3
+              }
+            }}
+            spaceBetween={50}
+            slidesPerView={3}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            navigation
+            pagination={{ clickable: true }}
+            modules={[Autoplay, Navigation]}
+            className='rating-section'
+          >
+            {isSuccess && trekkingEvents.map((event, index) => (
+              <SwiperSlide key={index}>
+                <Card key={index} event={event} />
+              </SwiperSlide>
+            ))}
+
+          </Swiper>
+
+        </div>
         <div>
           <div className='section-header'>
             <div className="col-7 row">
