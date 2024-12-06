@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import AdminNavbar from "../../AdminNavbar";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams , useNavigate} from "react-router-dom";
 import '../../User-Panel/ShowEventDetails/ShowEventDetails.css'
 import './ScheduledEvents.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -31,7 +31,7 @@ const ScheduledEventsDetails = () => {
   const [batchDate, setBatchDate] = useState();
   const [availableSlot, setAvailableSlot] = useState();
   const [inquery, setInquery] = useState(false);
-
+  const navigateUrl = useNavigate();
   useEffect(() => {
 
     if (isSuccess == false && type && params) {
@@ -140,7 +140,9 @@ const ScheduledEventsDetails = () => {
       }
     })
     let res = await r.json();
-
+      if(r.ok){
+        navigateUrl('/scheduled-events');
+      }
   };
 
   const openConfirmPopup = () => {
