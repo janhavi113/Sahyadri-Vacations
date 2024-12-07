@@ -472,7 +472,18 @@ h3 {
     .content-row {
         padding: 0 !important;
     }
-
+    .finalCalculation {
+        display: flex;
+        font-size: 18px;
+        font-weight: bold;
+        width: 100%;
+    }
+    .details {
+        font-size: 16px;
+    }
+    .price-link {
+        font-size: small;
+    }
     .section-details {
         margin-right: 0 !important;
     }
