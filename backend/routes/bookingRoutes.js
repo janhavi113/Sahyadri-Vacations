@@ -187,7 +187,7 @@ router.post("/sendInvoice", async (req, res) => {
 
     let pdfPath;
     if (process.env.NODE_ENV === 'production') {
-        pdfPath = path.resolve(`./backend/invoices/${bookingDetails.bookingId}.pdf`);
+        pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
         console.log("Attempting to save PDF at:", pdfPath);
     } else {
         pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
