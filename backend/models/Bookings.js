@@ -27,6 +27,7 @@ const bookingsSchema = new mongoose.Schema({
     eventStartDate: { type: Date },
     eventEndDate: { type: Date },
     invoiceDelivered: { type: Boolean, default: false },
+    addedOn: { type :Number,default: 0},
     active: { type: Boolean, default: true },
     otherParticipants: [ otherParticipantsSchema
     ]

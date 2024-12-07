@@ -17,15 +17,14 @@ export const sendInvoiceEmail = async (recipientEmail, bookingDetails, pdfPath) 
     // SMTP Transporter with connection pooling
     const transporter = nodemailer.createTransport({
         host: 'smtp.hostinger.com',
-        port: 465,
-        secure: true,
+        port: 587,
+        secure: false,
         auth: {
             user: process.env.HOSTINGER_EMAIL_USERNAME,
             pass: process.env.HOSTINGER_EMAIL_PASSWORD,
         },
-        pool: true,
-        maxConnections: 5,
-        maxMessages: 10,
+        pool: true, // Enable connection pooling
+        rateLimit: 10 // Send 10 emails per second
     });
 
     // Check if the PDF file exists

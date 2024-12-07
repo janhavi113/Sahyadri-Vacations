@@ -122,7 +122,7 @@ router.put("/confirmed-booking", async (req, res) => {
 });
 
 router.put("/payment-confirmed", async (req, res) => {
-    console.log('req.body---',req.body);
+    console.log('payment req.body---',req.body);
     try {
         const {
             paymentMethod,
@@ -149,6 +149,7 @@ router.put("/payment-confirmed", async (req, res) => {
                 message: "Booking not found"
             });
         }
+        console.log('payment req.body---',updatedBooking);
         res.send({
             isSuccess: true,
             booking: updatedBooking
