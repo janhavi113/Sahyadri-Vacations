@@ -109,15 +109,11 @@ app.post('/register', async (req, res) => {
 		username,
 		password
 	} = req.body;
-	console.log('username', username);
-	console.log('password', password);
 	const hashedPassword = await bcrypt.hash(password, 10);
-	console.log('hashedPassword', hashedPassword);
 	const user = new Employee({
 		Username: username,
 		Password: hashedPassword
 	});
-	console.log('user', user);
 	await user.save();
 	res.send('User registered!');
 });
@@ -129,7 +125,6 @@ app.post('/admin-login', async (req, res) => {
 		username,
 		password
 	} = req.body;
-	console.log('req.body', req.body);
 	let userDetails = await Employee.findOne({
 		Username: username
 	});
@@ -138,11 +133,7 @@ app.post('/admin-login', async (req, res) => {
 		return res.status(400).send('Invalid credentials');
 	} else {
 		let userPassword = JSON.parse(JSON.stringify(userDetails)).Password;
-		console.log('password', password);
-		console.log('userPassword', userPassword);
-		console.log('user', JSON.parse(JSON.stringify(userDetails)).Password);
 		const isPasswordValid = await bcrypt.compare(password, userPassword);
-		console.log('isPasswordValid--', isPasswordValid);
 		if (!isPasswordValid) return res.status(400).send('Invalid credentials');
 		const token = jwt.sign({
 			userId: userDetails._id
@@ -153,27 +144,6 @@ app.post('/admin-login', async (req, res) => {
 		});
 	}
 });
-
-
-// // Example API route for testing
-// app.post("/create-event", (req, res) => {
-//   console.log("API /create-event route hit");
-//   res.json({ message: "API route is working" });
-// });
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "public/Images/");
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = Date.now() + "-" + path.extname(file.originalname);
-//     cb(null, file.fieldname + "-" + uniqueSuffix);
-//   },
-// });
-// console.log('storage---',storage);
-// //const upload = multer({ storage: storage });
-// const upload = multer({ dest: 'public/Images/' });
-// console.log('upload---',upload);
 
 // Set up storage engine
 const storage = multer.diskStorage({
@@ -194,17 +164,6 @@ const upload = multer({
 function handleError(err, res) {
 	res.status(500).contentType("text/plain").end("Something went wrong!");
 }
-// Route to handle file uploads
-// app.post('/create-event', upload.array('file', 12), (req, res) => {
-//   console.log('req---', req.body);
-//   if (!req.files) {
-//     return res.status(400).send('No files were uploaded.');
-//   }
-//   // Files are available in req.files
-//   console.log('req.file---', req.files);
-//   res.send({ isSuccess: true, message: 'Files uploaded successfully' });
-// });
-
 
 app.use(fileUpload());
 
@@ -223,7 +182,6 @@ async function updateExpiredBookings() {
             { eventEndDate: { $lt: currentDate }, active: true },
             { $set: { active: false } }
         );
-        console.log(`Updated ${result.nModified} records`);
     } catch (error) {
         console.error("Error updating records:", error);
     }
@@ -280,18 +238,13 @@ app.get("/scheduled-events", async (req, res) => {
 
 app.get("/search-event/:serchText", async (req, res) => {
 	try {
-		console.log("req.params--", req.params.serchText);
-
-		console.log("serchText--", {
-			$regex: ".*" + req.params.serchText.toLowerCase() + ".*",
-		});
+		
 		let ScheduleBatchesRecords = await ScheduleBatches.find({
 			active: true,
 			eventApi: {
 				$regex: ".*" + req.params.serchText.toLowerCase() + ".*",
 			},
 		});
-		console.log("ScheduleBatchesRecords--", ScheduleBatchesRecords);
 		res.send({
 			isSuccess: true,
 			events: ScheduleBatchesRecords
@@ -307,7 +260,6 @@ app.get("/search-event/:serchText", async (req, res) => {
 
 app.get("/delete-scheduled-events/eventid/:eventId", async (req, res) => {
 	let event_Id = req.params.eventId;
-	console.log('event_Id---' + event_Id);
 	try {
 		var myquery = {
 			eventId: event_Id
@@ -331,7 +283,6 @@ app.get("/delete-scheduled-events/eventid/:eventId", async (req, res) => {
 	}
 });
 app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
-	console.log("req.params--", req.params);
 	let event_Id = req.params.eventId;
 	let apiname = req.params.apiName;
 	var events = await Events.findOne({
@@ -340,19 +291,9 @@ app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	let ScheduleBatchesRecords = await ScheduleBatches.findOne({
 		eventId: event_Id,
 	});
-	console.log(
-		"event_Id--",
-		events,
-		"ScheduleBatchesRecords",
-		ScheduleBatchesRecords
-	);
+	
 	if (events && ScheduleBatchesRecords) {
-		console.log(
-			"event_Id--",
-			events,
-			"ScheduleBatchesRecords",
-			ScheduleBatchesRecords
-		);
+		
 		res.send({
 			isSuccess: true,
 			events: events,
@@ -367,7 +308,6 @@ app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 
 // Login to System
 app.post("/event-details/eventid/:eventId/:apiName", async (req, res) => {
-	console.log(req.body);
 	try {
 		const {
 			fullName,
@@ -442,10 +382,8 @@ app.use('/api', paymentCallbackRoutes);
 
 // Handle all other routes and serve index.html
 app.get("*", (req, res) => {
-	// console.log("Serving index.html for route:", req);
 	const indexPath = path.join(frontendDir, "index.html");
 	if (fs.existsSync(indexPath)) {
-		//   console.log("indexPath", indexPath);
 		res.sendFile(indexPath);
 	} else {
 		console.error("index.html not found in frontend directory");
@@ -466,8 +404,7 @@ app.use((err, req, res, next) => {
 	}
 	next();
 });
-console.log('process.env.NODE_ENV',process.env.NODE_ENV);
-console.log('process.env.NODE_ENV',process.env.NODE_ENV == 'production');
+
 if (process.env.NODE_ENV == 'production') {
 const options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/sahyadrivacations.com/privkey.pem'),
