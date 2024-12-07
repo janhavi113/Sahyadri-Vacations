@@ -180,11 +180,11 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
               <td>Convenience Fee (1.5 %)</td>
               <td style="text-align: right;">${convenienceFee}</td>
             </tr>
-            ${bookingDetails.addedOn != 0 ? `<tr>
+            ${bookingDetails.addedOn > 0 ? `<tr>
                 <td>Added Discount</td>
                 <td style="text-align: right;">- ${bookingDetails.addedOn}</td>
               </tr>` : ''}
-              ${bookingDetails.addedDiscount != 0 ? `<tr>
+              ${bookingDetails.addedDiscount > 0 ? `<tr>
                 <td>Added Discount</td>
                 <td style="text-align: right;">- ${bookingDetails.addedDiscount}</td>
               </tr>` : ''}
