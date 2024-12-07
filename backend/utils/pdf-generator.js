@@ -116,7 +116,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             margin: 5px 0;
         }
         .invoice-header-details{
-            color: orange;
+            color: green;
              font-family: 'Poppins', sans-serif !important;
              font-weight: bold;
              font-size: larger;

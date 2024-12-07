@@ -26,7 +26,7 @@ const Confirmation = () => {
         try {
             const response = await fetch(`${apiUrl}api/check-status/${merchantTransactionId}`);
             const data = await response.json();
-            console.log('data--',data);
+            console.log('data--', data);
             if (data.status == 'success' || data.status == 'pending') {
                 const details = data.details;
                 if (details.code === 'PAYMENT_SUCCESS') {
@@ -76,8 +76,8 @@ const Confirmation = () => {
                 setEmail(res.booking.email);
                 setName(res.booking.name);
                 setNoOfParticipant(res.booking.numberOfPeoples);
-                if(!res.booking.invoiceDelivered){
-                await sendInvoiceRequest(res.booking);
+                if (!res.booking.invoiceDelivered) {
+                    await sendInvoiceRequest(res.booking);
                 }
             }
 
@@ -99,7 +99,7 @@ const Confirmation = () => {
     }, []);
 
     const sendInvoiceRequest = async (booking) => {
-        console.log('booking---',booking)
+        console.log('booking---', booking)
         try {
             const response = await fetch(`${apiUrl}sendInvoice`, {
                 method: "POST",
@@ -141,26 +141,27 @@ const Confirmation = () => {
                 ) : (
                     <div>
                         <h1>Booking Confirmation</h1>
-                        <p>Thank you for your booking, {name}!</p>
-                        <p>
-                            Your booking for <strong>{noOfParticipant}</strong> participant{noOfParticipant !== 1 ? 's' : ''} has been successfully confirmed.
-                            We appreciate your choice and look forward to welcoming you soon!
-                        </p>
-                        <h2>Your Booking Details</h2>
-                        <div className="contact-details">
-                            <p><strong>Booking ID:</strong> {bookingId}</p>
-                            <p><strong>Phone Number:</strong> {phone}</p>
-                            <p><strong>Email:</strong> {email}</p>
-                        </div>
-                        <p className="invoice-message">You will receive an invoice by email in the next few minutes.</p>
-
                         {/* Displaying Payment Status */}
                         {loading ? (
                             <logoLoading />
                         ) : error ? (
                             <p className="error">{error}</p>
                         ) : paymentStatus === 'SUCCESS' ? (
-                            <p>Payment Successful! Thank you for your payment.</p>
+                            <div>
+                                <p>Payment Successful! Thank you for your payment.</p>
+                                <p>Thank you for your booking, {name}!</p>
+                                <p>
+                                    Your booking for <strong>{noOfParticipant}</strong> participant{noOfParticipant !== 1 ? 's' : ''} has been successfully confirmed.
+                                    We appreciate your choice and look forward to welcoming you soon!
+                                </p>
+                                <h2>Your Booking Details</h2>
+                                <div className="contact-details">
+                                    <p><strong>Booking ID:</strong> {bookingId}</p>
+                                    <p><strong>Phone Number:</strong> {phone}</p>
+                                    <p><strong>Email:</strong> {email}</p>
+                                </div>
+                                <p className="invoice-message">You will receive an invoice by email in the next few minutes.</p>
+                            </div>
                         ) : paymentStatus === 'FAILED' ? (
                             <p>Payment Failed. Please try again or contact support.</p>
                         ) : paymentStatus === 'PENDING' ? (
