@@ -1118,8 +1118,7 @@ const ShowEventDetails = () => {
 
                      
                   </div>
-                </Modal.Body>
-                <Modal.Footer>
+               
                   {buttonClick != 'pay-now' &&
                     <div className="button">
                       <input type="submit" value="Next >>" />
@@ -1151,7 +1150,7 @@ const ShowEventDetails = () => {
                       </div>
                     </div>
                   }
-                </Modal.Footer>
+                </Modal.Body>
               </div>
             </form>
           </Modal>
