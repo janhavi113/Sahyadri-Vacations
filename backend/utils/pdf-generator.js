@@ -15,7 +15,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
     const __dirname = path.dirname(__filename);
 
     // Construct the path to the logo
-    const logo = getImageAsBase64(path.join(__dirname, '../../public/logo.png')); // Adjusted path to logo
+    const logo = getImageAsBase64(path.join(__dirname, '../../public/logo.jpg')); // Adjusted path to logo
     const finalPrice = bookingDetails.eventPrice * bookingDetails.numberOfPeoples;
 
     console.log('Booking Details:', bookingDetails);

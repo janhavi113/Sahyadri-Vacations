@@ -178,49 +178,51 @@ function convertDateToCustomFormat(dateString) {
 
 router.post("/sendInvoice", async (req, res) => {
     const bookingDetails = req.body;
-    console.log('sendInvoice req.body----',req.body);
+    console.log('sendInvoice req.body----', req.body);
+
     if (!bookingDetails.bookingId) {
         return res.status(400).send('Booking ID is required');
     }
 
-    const pdfPath = path.resolve(`./backend/invoices/${bookingDetails.bookingId}.pdf`);
-    //console.log("Attempting to save PDF at:", pdfPath);
+    let pdfPath;
+    if (process.env.NODE_ENV === 'production') {
+        pdfPath = path.resolve(`./backend/invoices/${bookingDetails.bookingId}.pdf`);
+        console.log("Attempting to save PDF at:", pdfPath);
+    } else {
+        pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
+        console.log("Attempting to save PDF at:", pdfPath);
+    }
 
     try {
+        // Generate the invoice PDF
         await generateInvoicePdf(bookingDetails, pdfPath);
+
+        // Ensure the file exists
+        if (!fs.existsSync(pdfPath)) {
+            console.error('PDF file was not found:', pdfPath);
+            return res.status(500).send('Error generating PDF');
+        }
+
+        // Respond quickly to the client
+        res.status(200).send('Invoice generation in progress and email will be sent shortly.');
+
+        // Send email asynchronously
+        sendInvoiceEmail(bookingDetails.email, bookingDetails, pdfPath)
+            .then(async () => {
+                // Update the booking record after successful email delivery
+                const updatedBooking = await Bookings.findOneAndUpdate(
+                    { bookingId: bookingDetails.bookingId },
+                    { $set: { invoiceDelivered: true } },
+                    { new: true }
+                );
+                console.log('Invoice email sent and booking updated:', updatedBooking);
+            })
+            .catch(err => {
+                console.error('Error sending invoice email:', err);
+            });
     } catch (err) {
-        console.error("Error generating PDF:", err);
-        return res.status(500).send("Error generating PDF");
-    }
-
-    // Retry loop to check for the existence of the PDF
-    const maxRetries = 3;
-    let fileExists = false;
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        fileExists = fs.existsSync(pdfPath);
-        if (fileExists) break;
-        //console.log(`PDF not found, retrying in 500ms... (Attempt ${attempt} of ${maxRetries})`);
-        await new Promise(resolve => setTimeout(resolve, 500));
-    }
-
-    if (!fileExists) {
-        console.error('PDF file was not found:', pdfPath);
-        return res.status(500).send('Error generating PDF');
-    }
-
-    // Send email with PDF attachment
-    try {
-        await sendInvoiceEmail(bookingDetails.email, bookingDetails,  pdfPath);
-        const updatedBooking = await Bookings.findOneAndUpdate(
-            { bookingId: bookingDetails.bookingId }, // Find booking by _id
-            { $set: { invoiceDelivered: true } }, // Update field
-            { new: true } // Return the updated document
-        );
-        console.log('updatedBooking---',updatedBooking);
-        res.status(200).send('Booking successful and invoice sent!');
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).send('Error processing booking');
+        console.error('Error generating PDF or processing invoice:', err);
+        return res.status(500).send('Error processing invoice');
     }
 });
 
