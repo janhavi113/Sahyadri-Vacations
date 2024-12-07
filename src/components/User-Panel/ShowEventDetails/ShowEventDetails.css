@@ -309,14 +309,28 @@ h3 {
 .rating-section {
     max-width: 89%;
 }
+.price-link{
+  font-size: medium;
+}   
+.column2{
+    text-align: right;
+}
+
+.pay-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .pay-th, .pay-td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #DDD;
+  }
 .calculation{
     display: flex;
-    font-weight: 500;
-    font-size: 20px;
-    justify-content: space-between;
-    width: 100%;
-    color: gray;
+    flex-direction: column;
 }
+
 .finalCalculation {
     display: flex;
     font-size: 22px;

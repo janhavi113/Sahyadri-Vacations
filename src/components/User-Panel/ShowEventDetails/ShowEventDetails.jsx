@@ -58,6 +58,7 @@ const ShowEventDetails = () => {
   const [bookingPhone, setBookingPhone] = useState();
   const [availableSlot, setAvailableSlot] = useState();
   const [eventType, seteEventType] = useState();
+  const [noOfPeopleNeedforCoupon, setNoOfPeopleNeedforCoupon] = useState();
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
   const [participants, setParticipants] = useState([]);
@@ -66,7 +67,7 @@ const ShowEventDetails = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [bookingId, setBookingId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [isBookingConfirmed, setBookingConfirmed] = useState(false);
+  const [showTermsAndConditions, setShowTermsAndConditions] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [batchFull, setBatchFull] = useState(false);
   const [couponCode, setCouponCode] = useState('');
@@ -96,6 +97,7 @@ const ShowEventDetails = () => {
   }
 
   const handleParticipantChange = (index, field, value) => {
+    //console.log(g('index---',index,'---field----', field,'---value----',value);
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
     setParticipants(newParticipants);
@@ -141,7 +143,7 @@ const ShowEventDetails = () => {
   const onSubmit = async (data) => {
     setIsLoading(true); // Set loading to true before starting the request
     try {
-      //console.log('selectedLocation--',);
+      ////console.log(g('selectedLocation--',);
       if (buttonClick == 'pay-now') {
 
         const formData = new FormData();
@@ -162,7 +164,7 @@ const ShowEventDetails = () => {
         });
 
         let res = await r.json()
-        //console.log('booking---', JSON.stringify(res));
+        ////console.log(g('booking---', JSON.stringify(res));
         if (res.isSuccess == true) {
           // try {
           //alert('In Pay Now');
@@ -184,7 +186,7 @@ const ShowEventDetails = () => {
             // Redirect the user to PhonePe for payment
             window.location.href = data.redirectUrl;
           } else {
-            console.log('Payment initiation failed. Please try again.');
+            //console.log(g('Payment initiation failed. Please try again.');
           }
         }
       } else {
@@ -206,7 +208,7 @@ const ShowEventDetails = () => {
         });
 
         let res = await r.json()
-        //console.log('booking---', JSON.stringify(res));
+        ////console.log(g('booking---', JSON.stringify(res));
         if (res.isSuccess == true) {
           setButtonClick('pay-now');
           setBookingId(res.booking.bookingId);
@@ -220,22 +222,29 @@ const ShowEventDetails = () => {
     }
   }
 
-
   const handleSelection = (event) => {
+    console.log('handleSelection----', event.target.value);
     setSelectedLocation(event.target.value);
+    setShowTermsAndConditions(true);
   };
 
   const increaseCount = async () => {
-
     if (Number(maxBooking) - Number(bookedSlot) > Number(noOfTrekkers)) {
       let count = noOfTrekkers;
       let price1 = price;
-      let convenienceFee = (price1 * count) * (0.015);
       count++;
+      let convenienceFee = (Number(price1) * Number(count) * 0.015).toFixed(2);
       setNoOfTrekkers(count);
-      setFinalPrice(price1 * count);
-      setActualPrice(price1 * count);
-      setConvenienceFee(convenienceFee);
+      let totalPrice = (Number(price1) * Number(count));
+      let final_Price = Number(totalPrice) + Number(convenienceFee);
+      if (Number(discount) > 0 && (Number(count) >= Number(noOfPeopleNeedforCoupon))) {
+        final_Price = Number(final_Price) - Number(discount);
+      } else {
+        setDiscount(0);
+      }
+      setFinalPrice(final_Price);
+      setActualPrice(Number(totalPrice));
+      setConvenienceFee(Number(convenienceFee));
       setParticipants([
         ...participants,
         { name: "", mobileNumber: "", pickupLocation: "" },
@@ -247,14 +256,27 @@ const ShowEventDetails = () => {
   }
 
   const decreaseCount = async () => {
+    let count = 1;
+    let price1;
     if (noOfTrekkers > 1) {
-      let count = noOfTrekkers;
-      let price1 = price;
+      count = noOfTrekkers;
+      price1 = Number(actualPrice) / Number(count);
       count--;
-      setNoOfTrekkers(count);
-      setFinalPrice(price1 * count);
+      let amount = Number(price1) * Number(count);
+      let convenienceFee = (Number(amount) * 0.015).toFixed(2);
+      let final_Price = Number(amount) + Number(convenienceFee);
+      if (Number(discount) > 0 && (Number(count) >= Number(noOfPeopleNeedforCoupon))) {
+        final_Price = Number(final_Price) - Number(discount);
+      } else {
+        setDiscount(0);
+      }
+      setNoOfTrekkers(Number(count));
+      setActualPrice(Number(amount));
+      setFinalPrice(Number(final_Price));
+      setConvenienceFee(Number(convenienceFee));
       setParticipants(participants.slice(0, -1));
     }
+
   }
 
   const onAutoplayTimeLeft = (s, time, progress) => {
@@ -266,7 +288,7 @@ const ShowEventDetails = () => {
     var splitedList;
     splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
     splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
-    console.log(splitedList);
+    //console.log(g(splitedList);
     let s = splitedList;
     splitedList = s.includes('?') ? splitedList.replaceAll('?', '? <br>') : splitedList;
     splitedList = splitedList.replaceAll('<ol>', '<ol class="display-bulletin">');
@@ -283,6 +305,10 @@ const ShowEventDetails = () => {
     let batchDates = [];
     let eventType = event.eventType;
     seteEventType(eventType);
+
+    if (eventType == 'CampingEvent') {
+      setShowTermsAndConditions(true);
+    }
 
     const Q = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -343,14 +369,20 @@ const ShowEventDetails = () => {
       }
     }
     if (batchdate && eventCostPerPerson) {
+
+      let convenienceFeePerPerson = eventCostPerPerson * 0.015;
+      console.log('convenienceFeePerPerson----', convenienceFeePerPerson);
+      convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
+      console.log('convenienceFeePerPerson===', convenienceFeePerPerson);
+      //Math.round(((eventCostPerPerson * 0.015)/ 10) * 100) / 100;
       setAvailableBatches(batchDates);
       setPrice(eventCostPerPerson);
       setBatchDate(batchdate);
       setMaxBooking(batchSize);
       setBookedSlot(bookedSize);
-      setFinalPrice(eventCostPerPerson);
-      setConvenienceFee(eventCostPerPerson * 0.015);
-      setActualPrice(eventCostPerPerson);
+      setFinalPrice(Number(eventCostPerPerson) + Number(convenienceFeePerPerson));
+      setConvenienceFee(convenienceFeePerPerson);
+      setActualPrice(Number(eventCostPerPerson));
     }
   }
 
@@ -363,6 +395,7 @@ const ShowEventDetails = () => {
 
       const timer = setTimeout(() => {
         setShowDiscountStatus(false); // Hide the message after 2 seconds
+        setCouponCode('');
       }, 2000);
 
       return () => clearTimeout(timer); // Cleanup the timer on unmount
@@ -407,7 +440,7 @@ const ShowEventDetails = () => {
       console.log('res.ScheduleBatchesRecords--', res.ScheduleBatchesRecords);
       if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
         const jsonData = convertHtmlToJSON(res.events.pickupPoints);
-        console.log('jsonData--', JSON.stringify(jsonData));
+        //console.log(g('jsonData--', JSON.stringify(jsonData));
         setPickupPoints(jsonData);
       }
       getAvailableCoupons(res.ScheduleBatchesRecords);
@@ -427,21 +460,22 @@ const ShowEventDetails = () => {
           setPreCouponCode(couponCode);
           const data = await response.json();
           let calculatedDiscount;
-
+          let final_price = Number(actualPrice) + Number(convenienceFee);
           if (response.ok && data.isValid) {
             if (data.coupon == null) {
               calculatedDiscount = 0;
             } else if (data.coupon.discountPercent) {
               calculatedDiscount = Math.min(
-                (finalPrice * data.coupon.discountPercent) / 100
+                (Number(final_price) * Number(data.coupon.discountPercent)) / 100
               );
 
             } else if (data.coupon.discountPrice) {
               calculatedDiscount = data.coupon.discountPrice;
             }
+            setNoOfPeopleNeedforCoupon(data.coupon.numberOfPeople)
             setShowDiscountStatus(true);
-            setDiscount(calculatedDiscount);
-            setFinalPrice(Number(actualPrice) - Number(calculatedDiscount));
+            setDiscount(Number(calculatedDiscount));
+            setFinalPrice(Number(final_price) - Number(calculatedDiscount));
           } else {
             // setErrorMessage(data.message || 'Invalid coupon code.');
           }
@@ -457,9 +491,9 @@ const ShowEventDetails = () => {
 
   };
 
+  // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
-
-    setDiscountAvailable(ScheduleBatchesRecords.specialOfferEvent);
+    setDiscountAvailable(!ScheduleBatchesRecords.specialOfferEvent);
     if (!ScheduleBatchesRecords.specialOfferEvent) {
       let scheduleEventType = ScheduleBatchesRecords.eventType;
       if (scheduleEventType == 'TrekEvent' || scheduleEventType == 'AdventureActivity') {
@@ -467,7 +501,7 @@ const ShowEventDetails = () => {
       } else {
         scheduleEventType = ScheduleBatchesRecords.eventType;
       }
-      console.log('scheduleEventType   ', scheduleEventType);
+
       const response = await fetch(`${apiUrl}get-coupons-event/${scheduleEventType}`, {
         method: 'GET',
         headers: {
@@ -476,11 +510,11 @@ const ShowEventDetails = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        console.log('data.coupons-----', data.coupons);
         setCoupons(data.coupons);
       }
     }
   }
+
   return (
     <div>
       <Navbar />
@@ -665,66 +699,6 @@ const ShowEventDetails = () => {
                         )}
                       </tbody>
                     </table>
-
-                    {/* {eventDetails.location && 
-                    <div className='tag-flex'>
-                         <img src={locationicon} alt="Terms icon" crossOrigin="anonymous" />
-                         <span className='section-details-tag'> Location :</span>
-                         
-                      <div className='section-details'>
-                        <p>{eventDetails.location}</p>
-                      </div>
-                    </div>
-                    }
-                    {eventDetails.type &&
-                     <div  className='tag-flex'>
-                         <img src={tripType} alt="Terms icon" crossOrigin="anonymous" /> 
-                         <span className='section-details-tag'> Type :</span> 
-                      <div className='section-details'>
-                        <p>{eventDetails.type}</p>
-                      </div>
-                    </div>
-                    }
-                    {eventDetails.elevation && <div  className='tag-flex'>
-                      
-                        <FontAwesomeIcon icon={faMountainSun} size="lg" style={{'color':'orange'}}/> 
-                        <span className='section-details-tag'> Elevation :</span> 
-                        
-                      <div className='section-details'>
-                        <p>{eventDetails.elevation}</p>
-                      </div>
-                    </div>
-                    }
-                    {eventDetails.difficulty && <div  className='tag-flex'>
-                      
-                        <img src={endurance} alt="Terms icon" crossOrigin="anonymous" />
-                        <span className='section-details-tag'> Difficulty :</span> 
-                        
-                      <div className='section-details'>
-                        <p>{eventDetails.difficulty}</p>
-                      </div>
-                    </div>
-                    }
-                    {eventDetails.duration && <div  className='tag-flex'>
-                      
-                         <img src={duration} alt="Terms icon" crossOrigin="anonymous" /> 
-                         <span className='section-details-tag'> Duration :</span> 
-                         
-                      <div className='section-details'>
-                        <p>{eventDetails.duration}</p>
-                      </div>
-                    </div>
-                    }
-                    {eventDetails.trekDistance && <div  className='tag-flex'>
-                      
-                        <img src={distance} alt="Terms icon" crossOrigin="anonymous" />
-                         <span className='section-details-tag'> Total Trek Distance :</span>
-                         
-                      <div className='section-details'>
-                        <p>{eventDetails.trekDistance}</p>
-                      </div>
-                    </div>
-                    } */}
                   </div>
                 </div>
                 <hr />
@@ -1083,11 +1057,10 @@ const ShowEventDetails = () => {
                         <div className='finalCalculation'>
                           <span >Total To Pay</span>
                           <span></span>
-                          <span >₹{finalPrice + convenienceFee} /-                           
-                          </span>
-                          </div>
-                          <div className='calculation'>
-                          <span ><a
+                          <span ><div className='calculation'>
+                            <span >₹{finalPrice} /-
+                            </span>
+                            <span className='price-link'><a
                               href="#"
                               onClick={(e) => {
                                 e.preventDefault();
@@ -1095,53 +1068,55 @@ const ShowEventDetails = () => {
                               }}
                               style={{
                                 marginLeft: "10px",
-                                color: "blue",
-                                textDecoration: "underline",
+                                color: "orange",
                                 cursor: "pointer",
                               }}
                             >
-                             What's included; what's not
-                            </a> </span>
-                          <span></span>
-                          <span ><a
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleToggleBreakup();
-                              }}
-                              style={{
-                                marginLeft: "10px",
-                                color: "blue",
-                                textDecoration: "underline",
-                                cursor: "pointer",
-                              }}
-                            >
-                              (Price breakup)
-                            </a>                          
-                          </span>
+                              Show breakup
+                            </a>
+                            </span>
                           </div>
-                          
-                          {showBreakup && (
-                            <div className="fee-breakup">
-                              <table border="1" style={{ borderCollapse: "collapse", width: "100%" }}>
-                                <tbody>
-                                  <tr>
-                                    <td>Base Price</td>
-                                    <td>{noOfTrekkers} x ₹ {finalPrice} </td>
-                                    <td>₹ {finalPrice}</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Convenience Fee @1.5%</td>
-                                    <td> </td>
-                                    <td>₹ {convenienceFee}</td>
-                                  </tr>
-                                  
-                                </tbody>
-                              </table>
-                            </div>
-                          )}
-                      
-                      </div>}
+                          </span>
+                        </div>
+
+                        </div>
+                         }
+                        {showBreakup && 
+                          <div >
+                            <table className='pay-table'>
+                              <tr>
+                                <th className='pay-th'>Details</th>
+                                <th className='column2 pay-th'>Amount</th>
+                              </tr>
+                              <tr>
+                                <td className='pay-td'>Event Fees</td>
+                                 <td className='column2 pay-td'>{noOfTrekkers} x {price}</td>
+                              </tr>
+                              <tr>
+                                 <td className='pay-td'>Subtotal</td>
+                                 <td className='column2 pay-td'>{actualPrice}</td>
+                              </tr>
+                              <tr>
+                                 <td className='pay-td'>Convenience Fee (1.5 %)</td>
+                                 <td className='column2 pay-td'>{convenienceFee}</td>
+                              </tr>
+                              <tr>
+                                 <td className='pay-td'>Added On</td>
+                                 <td className='column2 pay-td'>0</td>
+                              </tr>
+                              {discount > 0 ? <tr>
+                                 <td className='pay-td'>Added Discount</td>
+                                 <td className='column2 pay-td'>- {discount}</td>
+                              </tr> : ''}
+                              <tr>
+                                <th className='pay-th'>Total Payment</th>
+                                <th className='column2 pay-th'>{finalPrice}</th>
+                              </tr>
+                            </table>
+                          </div>
+                        }
+
+                     
                   </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -1150,7 +1125,7 @@ const ShowEventDetails = () => {
                       <input type="submit" value="Next >>" />
                     </div>
                   }
-                  {buttonClick == 'pay-now' &&
+                  {buttonClick == 'pay-now' && showTermsAndConditions &&
                     <div>
                       <div className='termsAndCondition'>
                         <input
