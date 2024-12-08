@@ -6,6 +6,7 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { useNavigate } from "react-router-dom";
 import logo from '../../Images/logo.png';
+import * as XLSX from 'xlsx';
 function AdminDashboard() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [events, setEvents] = useState([]);
@@ -60,7 +61,24 @@ function AdminDashboard() {
     console.log("eventMap--", eventMap);
     return eventMap;
   }
-
+  const handleDownloadExcel = (key) => {
+    const tableElement = document.getElementById(`table-${key}`);
+    if (tableElement) {
+      // Parse HTML table to a worksheet
+      const worksheet = XLSX.utils.table_to_sheet(tableElement);
+  
+      // Create a new workbook and append the worksheet
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  
+      // Split trek name and batch for the file name
+      const [eventName, batch] = key.split(' : ');
+      const filename = `${eventName.replace(/ +/g, '_')}_${batch.replace(/ +/g, '_')}.xlsx`;
+  
+      // Save the workbook
+      XLSX.writeFile(workbook, filename);
+    }
+  };
   
   const generateTablesFromMap = (eventMap) => {
     return Array.from(eventMap.entries()).map(([key, bookings]) => (
@@ -68,6 +86,7 @@ function AdminDashboard() {
         <div className="container-table-header">
           <div className="table-caption">{key}</div>
           <button onClick={() => handleDownloadPDF(key)} className="download-button">Download PDF</button>
+          <button onClick={() => handleDownloadExcel(key)} className="download-button">Download Excel</button>
         </div>
         <table id={`table-${key}`} className="event-table">
           <thead>

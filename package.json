@@ -70,7 +70,8 @@
     "react-slideshow-image": "^4.3.1",
     "react-spinners": "^0.14.1",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.1.4"
+    "swiper": "^11.1.4",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/multer": "^1.4.11",
