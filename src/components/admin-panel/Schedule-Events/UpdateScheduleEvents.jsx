@@ -143,7 +143,7 @@ const UpdateScheduleEvents = () => {
     } else {
       setActiveError({ disply: false });
 
-      formData.append("active", isActive);
+      formData.append("active", isActive == 'on'? true : false );
       formData.append("eventId", eventIsScheduled);
       const search = events.filter(function (item) {
         console.log('item', item.eventId == eventIsScheduled)
@@ -152,6 +152,7 @@ const UpdateScheduleEvents = () => {
       console.log('search--', specialOfferEvent);
       let b2bValue = b2bPrice ==null ? 0 : b2bPrice;
       let specialOfferEventVar = specialOfferEvent == 'on'? true : false ;
+      
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
       formData.append('eventCostPerPerson', eventCostPerPerson);
