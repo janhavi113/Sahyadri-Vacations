@@ -149,7 +149,9 @@ const UpdateScheduleEvents = () => {
         console.log('item', item.eventId == eventIsScheduled)
         return item.eventId == eventIsScheduled;
       });
-      console.log('search--', search);
+      console.log('search--', specialOfferEvent);
+      let b2bValue = b2bPrice ==null ? 0 : b2bPrice;
+      let specialOfferEventVar = specialOfferEvent == 'on'? true : false ;
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
       formData.append('eventCostPerPerson', eventCostPerPerson);
@@ -158,9 +160,9 @@ const UpdateScheduleEvents = () => {
       formData.append('eventBatchCount', eventBatchCount);
       formData.append('everyWeekend', everyWeekend);
       formData.append('notScheduleYet', notScheduleYet);
-      formData.append('b2bPrice', b2bPrice);
+      formData.append('b2bPrice', b2bValue);
       formData.append('bookingTillDate', bookingTillDate);
-      formData.append('specialOfferEvent', specialOfferEvent);
+      formData.append('specialOfferEvent', specialOfferEventVar);
       formData.append('bookingTillTime', bookingTillTime.toString());
       formData.append('scheduleEventId', eventIsScheduled);
       const url = `${apiUrl}update-schedule-events/${eventId}`;
