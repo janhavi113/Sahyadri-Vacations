@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body, html {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .invoice {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .invoice-header h1 {
+            font-size: 28px;
+            margin: 0;
+            color: #333;
+        }
+        .logo {
+            width: 80px;
+        }
+        .customer-info, .invoice-info {
+            width: 50%;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .invoice-info {
+            text-align: right;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .invoice-table th, .invoice-table td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+        .total-label, .total-amount {
+            font-weight: bold;
+            font-size: 18px;
+            text-align: right;
+        }
+        .payment-summary {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .payment-summary p {
+            margin: 5px 0;
+        }
+        .thank-you {
+            margin-top: 30px;
+            font-size: 18px;
+            text-align: center;
+            color: #555;
+        }
+        .footer {
+            background-color: #00506b;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <header class="invoice-header">
+            <img src="${logo}" alt="Company Logo" class="logo">
+            <h1>Invoice</h1>
+        </header>
+        <section>
+            <div class="customer-info">
+                <h3>Invoice To:</h3>
+                <p>Name: ${bookingDetails.name}</p>
+                <p>Phone: ${bookingDetails.mobileNumber}</p>
+                <p>Email: ${bookingDetails.email}</p>
+                <p>Event: ${bookingDetails.eventName} (${bookingDetails.batch})</p>
+            </div>
+            <div class="invoice-info">
+                <h3>Invoice Details:</h3>
+                <p>Invoice Number: #${bookingDetails.bookingId}</p>
+                <p>Payment ID: ${bookingDetails.transactionId}</p>
+                <p>Date: ${bookingDetails.bookingDate}</p>
+                <p>Payment Method: ${bookingDetails.paymentMethod}</p>
+            </div>
+        </section>
+        <table class="invoice-table">
+            <tr>
+                <th>Description</th>
+                <th style="text-align: right;">Amount</th>
+            </tr>
+            <tr>
+                <td>Event Fees</td>
+                <td style="text-align: right;">${bookingDetails.numberOfPeoples} x ₹${bookingDetails.eventPrice}</td>
+            </tr>
+            ${bookingDetails.addedDiscount > 0 ? `
+            <tr>
+                <td>Discount</td>
+                <td style="text-align: right;">- ₹${bookingDetails.addedDiscount}</td>
+            </tr>` : ''}
+            <tr>
+                <th>Total</th>
+                <th style="text-align: right;">₹${total_price}</th>
+            </tr>
+        </table>
+        <section class="payment-summary">
+            <p><strong>Amount Paid:</strong> ₹${bookingDetails.amountPaid}</p>
+            <p><strong>Remaining Balance:</strong> ₹${bookingDetails.remainingAmount}</p>
+            <p><strong>Due Date:</strong> ${dueDate}</p>
+        </section>
+        <div class="thank-you">Thank you for your business!</div>
+        <footer class="footer">
+            www.sahyadrivacations.com | info@sahyadrivacations.com
+        </footer>
+    </div>
+</body>
+</html>

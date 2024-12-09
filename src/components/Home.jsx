@@ -62,6 +62,19 @@ const Home = () => {
     }
 
   })
+   
+  // const getSpecialOfferEvent = () =>{
+  //   let r = await fetch(`${apiUrl}getSpecialOfferEvent`, {
+  //     method: "GET", headers: {
+  //       "Content-Type": "application/json",
+  //     }
+  //   })
+
+  //   let res = await r.json()
+  //   console.log('res',res);
+  //   if (res.isSuccess == true) {
+  //   }
+  // }
 
   const getNextBatchDate = (event) => {
     var liveEvent = '';

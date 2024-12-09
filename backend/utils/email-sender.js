@@ -33,12 +33,12 @@ export const sendInvoiceEmail = async (recipientEmail, bookingDetails, pdfPath) 
     }
     let remainingAmountMessage = '';
      if(bookingDetails.remainingAmount > 0){
-        remainingAmountMessage = `<p>Please note: The remaining amount of INR ${bookingDetails.remainingAmount} will be collected two days before the journey starts.</p>`;
+        remainingAmountMessage = `<p>Please note: stating the booking is confirmed, but the remaining balance INR ${bookingDetails.remainingAmount} must be paid two days before the journey starts to retain the reservation. </p>`;
      }
     // Email details
     const mailOptions = {
         from: process.env.HOSTINGER_EMAIL_USERNAME,
-        to: recipientEmail,
+        to: 'janhavi9826@gmail.com',
         subject: `Invoice for Booking ${bookingDetails.bookingId}`,
         html: `
             <p>Hello <strong>${bookingDetails.name}</strong>,</p>

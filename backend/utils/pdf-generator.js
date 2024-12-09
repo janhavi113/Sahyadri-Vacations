@@ -103,7 +103,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         }
         .company-info-remaining-amount {
             font-size: 12px; /* Adjusted font size */
-            margin-top: 245px; /* Space before company info */
+            margin-top: 140px; /* Space before company info */
         }
         .thank-you {
             margin-top: 1px;
@@ -199,23 +199,28 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
                 <td>Added Discount</td>
                 <td style="text-align: right;">- ${bookingDetails.addedDiscount}</td>
               </tr>` : ''}
-
-               ${bookingDetails.remainingAmount > 0 ? `
-                <tr>
-                <td>Booking Amount</td>
-                <td style="text-align: right;"> ${bookingDetails.amountPaid}</td>
-              </tr>
-              <tr>
-                <td>Remaining Amount ()</td>
-                <td style="text-align: right;"> ${bookingDetails.remainingAmount}</td>
-              </tr>` : ''}
+             
             <tr>
                 <th>Total Payment</th>
                 <th style="text-align: right;">${total_price}</th>
               </tr>
             
           </table>
-          
+            ${bookingDetails.remainingAmount > 0 ? `
+                <br><br>
+               <div>
+                <span> <b>Booking Amount</b></span>
+                <td style="text-align: right;"> ${bookingDetails.amountPaid}</span>
+             </div>
+             <br>
+             <div>
+                <span><b>Remaining Amount</b></span>
+                <td style="text-align: right;"> ${bookingDetails.remainingAmount}</span>
+             </div>
+             <br>
+               <br>
+             <div style="color: red;"><i>Please note: stating the booking is confirmed, but the remaining balance INR ${bookingDetails.remainingAmount} must be paid two days before the journey starts to retain the reservation.</i></div>
+             ` : ''}
         <div class="${company_className}">
             <h2>Sahyadri Vacations And Adventure</h2>
             <p>Reg.No: MH-26-0256367</p>
