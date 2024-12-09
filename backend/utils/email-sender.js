@@ -43,7 +43,7 @@ export const sendInvoiceEmail = async (recipientEmail, bookingDetails, pdfPath) 
     }
     // Email details
     const mailOptions = {
-        from: process.env.HOSTINGER_EMAIL_USERNAME,
+        from: `"Sahyadri Vacations" ${process.env.HOSTINGER_EMAIL_USERNAME}`,
         to: recipientEmail,
         cc: 'sahyadrivacations21@gmail.com',
         subject: `Invoice for Booking ${bookingDetails.bookingId}`,
