@@ -43,7 +43,7 @@ const UpdateScheduleEvents = () => {
   const [bookingTillDate, setBookingTillDate] = useState();
   const [bookingTillTime, setBookingTillTime] = useState();
   const [specialOfferEvent, setSpecialOfferEvent] = useState();
-
+  const [partialBookingAmount, setPartialBookingAmount] = useState();
   const navigate = useNavigate();
   const {
     register,
@@ -106,6 +106,7 @@ const UpdateScheduleEvents = () => {
       setSpecialOfferEvent(res.scheduleBatch[0].specialOfferEvent);
       setEventIsScheduled(res.scheduleBatch[0].scheduleEventId);
       setEventId(res.scheduleBatch[0].eventId);
+      setPartialBookingAmount(res.scheduleBatch[0].partialBookingAmount);
     }
     console.log('events', res.scheduleBatch[0].scheduleEventId);
   }
@@ -166,6 +167,7 @@ const UpdateScheduleEvents = () => {
       formData.append('specialOfferEvent', specialOfferEventVar);
       formData.append('bookingTillTime', bookingTillTime.toString());
       formData.append('scheduleEventId', eventIsScheduled);
+      formData.append('partialBookingAmount',partialBookingAmount);
       const url = `${apiUrl}update-schedule-events/${eventId}`;
       let r = await fetch(url, {
         method: "POST",
@@ -217,6 +219,12 @@ const UpdateScheduleEvents = () => {
                     <span className="details">Booking Open Till Time</span>
                     <input type="time" value={bookingTillTime} onChange={(e) => setBookingTillTime(e.target.value)}   />
                   </div>
+                  {eventType == 'BackPackingTrip' &&
+                <div className="input-box-column ">
+                  <span className="details">Partial Booking Amount Per Person </span>
+                  <input   onChange={(e) => setPartialBookingAmount(e.target.value)}  type="text" />
+                </div>
+            }  
                   {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
                   <div className="input-box-column event-picker ">
                     <span className="details">Every Weekend </span>

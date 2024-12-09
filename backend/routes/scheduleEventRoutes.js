@@ -83,6 +83,7 @@ router.post("/schedule-event", async (req, res) => {
 			bookingTillDate,
 			bookingTillTime,
 			specialOfferEvent,
+			partialBookingAmount
 		} = req.body;
 
 		let scheduleRecordcount = 0;
@@ -110,6 +111,7 @@ router.post("/schedule-event", async (req, res) => {
 			eventname: eventname,
 			images: currUrl,
 			specialOfferEvent: specialOfferEvent,
+			partialBookingAmount:partialBookingAmount,
 			Url: "/event-details?eventid=" +
 				(scheduleRecordcount + 1).toString() +
 				"/" +
@@ -163,6 +165,7 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			bookingTillDate,
 			bookingTillTime,
 			specialOfferEvent,
+			partialBookingAmount
 		} = req.body;
 
 		// Update query
@@ -182,6 +185,7 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			eventname: eventname,
 			images: currUrl,
 			specialOfferEvent: specialOfferEvent,
+			partialBookingAmount:partialBookingAmount,
 			eventType: eventType,
 			scheduleEventId:scheduleEventId,
 			Url: "/event-details?eventid=" +event_Id.toString() +"/" +eventname.toString().replace(/\s/g, "-").toLowerCase(),

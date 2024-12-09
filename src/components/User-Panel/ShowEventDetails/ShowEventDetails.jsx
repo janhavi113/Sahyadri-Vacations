@@ -78,8 +78,40 @@ const ShowEventDetails = () => {
   const [showDiscountStatus, setShowDiscountStatus] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const[remainingAmount , setRemainingAmount] = useState(0);
   const [showBreakup, setShowBreakup] = useState(false);
+  const [paymentOption, setPaymentOption] = useState("full"); // Default to full payment
+  const [partialPayment ,setPartialPayment]= useState(0);
+
+  const handlePaymentChange = (event) => {
+    setPaymentOption(event.target.value);
+    if (event.target.value == "partial") {
+      //alert('partial');
+      let price = Number(scheduleBatch.partialBookingAmount) * Number(noOfTrekkers) ;
+      setConvenienceFee(Number(price) * 0.015);
+      price = price +(price* 0.015 );
+      setPartialPayment(price);  
+      setFinalPrice(price);     
+      setDiscount(0);
+      let remainingAmount  = Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers) ;
+      let remainingConvenienceFee = Number(remainingAmount) * 0.015;
+      remainingAmount = remainingAmount + remainingConvenienceFee;
+      setRemainingAmount(remainingAmount);
+    }else{
+      let price = Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers) ;
+      setConvenienceFee(Number(price) * 0.015);
+     
+      if (Number(discount) > 0 && (Number(noOfTrekkers) >= Number(noOfPeopleNeedforCoupon))) {
+        price = Number(price) - Number(discount);
+      } else {
+        setDiscount(0);
+      }
+      price = price +(price* 0.015 ); 
+      setActualPrice( Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers) );   
+      setFinalPrice(price); 
+    }    
+
+  };
 
   const handleToggleBreakup = () => {
     setShowBreakup((prev) => !prev);
@@ -158,6 +190,7 @@ const ShowEventDetails = () => {
         formData.append("eventStartDate", scheduleBatch.eventStartDate);
         formData.append("eventEndDate", scheduleBatch.eventEndDate);
         formData.append("addedDiscount", discount);
+        formData.append("remainingAmount",remainingAmount);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
           body: formData,
@@ -1050,10 +1083,32 @@ const ShowEventDetails = () => {
                             </div>
                           </div>
                         }
+                        {eventType == 'BackPackingTrip' &&
+                    <div className='payment-selection'>
+                      <label className='radio-display'>
+                        <input
+                          type="radio"
+                          value="full"
+                          checked={paymentOption === "full"}
+                          onChange={handlePaymentChange}
+                        />
+                        Full Payment
+                      </label>
+                      <label className='radio-display'>
+                        <input
+                          type="radio"
+                          value="partial"
+                          checked={paymentOption === "partial"}
+                          onChange={handlePaymentChange}
+                        />
+                        Partial Payment
+                      </label>
+                    </div>
+                } 
                         {showDiscountStatus && discount > 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': 'green', 'gap': '5px' }}> Discount Applied   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.007 8.27C22.194 9.125 23 10.45 23 12c0 1.55-.806 2.876-1.993 3.73.24 1.442-.134 2.958-1.227 4.05-1.095 1.095-2.61 1.459-4.046 1.225C14.883 22.196 13.546 23 12 23c-1.55 0-2.878-.807-3.731-1.996-1.438.235-2.954-.128-4.05-1.224-1.095-1.095-1.459-2.611-1.217-4.05C1.816 14.877 1 13.551 1 12s.816-2.878 2.002-3.73c-.242-1.439.122-2.955 1.218-4.05 1.093-1.094 2.61-1.467 4.057-1.227C9.125 1.804 10.453 1 12 1c1.545 0 2.88.803 3.732 1.993 1.442-.24 2.956.135 4.048 1.227 1.093 1.092 1.468 2.608 1.227 4.05Zm-4.426-.084a1 1 0 0 1 .233 1.395l-5 7a1 1 0 0 1-1.521.126l-3-3a1 1 0 0 1 1.414-1.414l2.165 2.165 4.314-6.04a1 1 0 0 1 1.395-.232Z" fill="#009912"></path></g></svg></p>}
                         {showDiscountStatus && discount == 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> Coupon Not Applied  <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
                         <div className='hr'></div>
-
+                       
                         <div className='finalCalculation'>
                           <span >Total To Pay</span>
                           <span></span>
@@ -1079,46 +1134,77 @@ const ShowEventDetails = () => {
                           </span>
                         </div>
 
+                      </div>
+                    }
+                    {
+                      showBreakup && paymentOption == 'partial' &&
+                        <div >
+                          <table className='pay-table'>
+                            <tr>
+                              <th className='pay-th'>Details</th>
+                              <th className='column2 pay-th'>Amount</th>
+                            </tr>
+                            <tr>
+                              <td className='pay-td'>Event Fees</td>
+                              <td className='column2 pay-td'>{noOfTrekkers} x {scheduleBatch.partialBookingAmount}</td>
+                            </tr>
+                            <tr>
+                              <td className='pay-td'>Subtotal</td>
+                              <td className='column2 pay-td'>{ Number(noOfTrekkers)* Number(scheduleBatch.partialBookingAmount)}</td>
+                            </tr>
+                            <tr>
+                              <td className='pay-td'>Convenience Fee (1.5 %)</td>
+                              <td className='column2 pay-td'>{convenienceFee}</td>
+                            </tr>
+                            <tr>
+                              <td className='pay-td'>Added On</td>
+                              <td className='column2 pay-td'>0</td>
+                            </tr>
+                            <tr>
+                              <th className='pay-th'>Total Payment</th>
+                              <th className='column2 pay-th'>{partialPayment}</th>
+                            </tr>
+                          </table>
                         </div>
-                         }
-                        {showBreakup && 
-                          <div >
-                            <table className='pay-table'>
-                              <tr>
-                                <th className='pay-th'>Details</th>
-                                <th className='column2 pay-th'>Amount</th>
-                              </tr>
-                              <tr>
-                                <td className='pay-td'>Event Fees</td>
-                                 <td className='column2 pay-td'>{noOfTrekkers} x {price}</td>
-                              </tr>
-                              <tr>
-                                 <td className='pay-td'>Subtotal</td>
-                                 <td className='column2 pay-td'>{actualPrice}</td>
-                              </tr>
-                              <tr>
-                                 <td className='pay-td'>Convenience Fee (1.5 %)</td>
-                                 <td className='column2 pay-td'>{convenienceFee}</td>
-                              </tr>
-                              <tr>
-                                 <td className='pay-td'>Added On</td>
-                                 <td className='column2 pay-td'>0</td>
-                              </tr>
-                              {discount > 0 ? <tr>
-                                 <td className='pay-td'>Added Discount</td>
-                                 <td className='column2 pay-td'>- {discount}</td>
-                              </tr> : ''}
-                              <tr>
-                                <th className='pay-th'>Total Payment</th>
-                                <th className='column2 pay-th'>{finalPrice}</th>
-                              </tr>
-                            </table>
-                          </div>
-                        }
-
-                     
+                      
+                    }
+                    {showBreakup && paymentOption == 'full' &&
+                      <div >
+                        <table className='pay-table'>
+                          <tr>
+                            <th className='pay-th'>Details</th>
+                            <th className='column2 pay-th'>Amount</th>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Event Fees</td>
+                            <td className='column2 pay-td'>{noOfTrekkers} x {price}</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Subtotal</td>
+                            <td className='column2 pay-td'>{actualPrice}</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Convenience Fee (1.5 %)</td>
+                            <td className='column2 pay-td'>{convenienceFee}</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Added On</td>
+                            <td className='column2 pay-td'>0</td>
+                          </tr>
+                          {discount > 0 ? <tr>
+                            <td className='pay-td'>Added Discount</td>
+                            <td className='column2 pay-td'>- {discount}</td>
+                          </tr> : ''}
+                          <tr>
+                            <th className='pay-th'>Total Payment</th>
+                            <th className='column2 pay-th'>{finalPrice}</th>
+                          </tr>
+                        </table>
+                      </div>
+                    }
+                   
                   </div>
-               
+
                   {buttonClick != 'pay-now' &&
                     <div className="button">
                       <input type="submit" value="Next >>" />

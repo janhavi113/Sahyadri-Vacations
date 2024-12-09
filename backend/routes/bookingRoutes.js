@@ -71,7 +71,8 @@ router.put("/confirmed-booking", async (req, res) => {
             scheduleEventId,
             eventStartDate,
             eventEndDate,
-            addedDiscount
+            addedDiscount,
+            remainingAmount
         } = req.body;
 
 
@@ -94,6 +95,7 @@ router.put("/confirmed-booking", async (req, res) => {
                     eventEndDate: eventEndDate,
                     status: "Pending",
                     addedDiscount:addedDiscount,
+                    remainingAmount:remainingAmount,
                 }
             },
             { new: true } // Return the updated document

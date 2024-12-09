@@ -16,10 +16,16 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
 
     // Construct the path to the logo
     const logo = getImageAsBase64(path.join(__dirname, '../../public/logo.jpg')); // Adjusted path to logo
-    const finalPrice = bookingDetails.eventPrice * bookingDetails.numberOfPeoples;
-    const convenienceFee = bookingDetails.eventPrice * bookingDetails.numberOfPeoples * 0.015;
-
+    const finalPrice = (bookingDetails.eventPrice * bookingDetails.numberOfPeoples ) + Number(bookingDetails.addedOn);
+    let convenienceFee = ((bookingDetails.eventPrice * bookingDetails.numberOfPeoples) + Number(bookingDetails.addedOn) ) * 0.015;
+    convenienceFee = convenienceFee.toFixed(2);
+    const total_price = Number(finalPrice) + Number(convenienceFee) - Number(bookingDetails.addedDiscount)
     console.log('Booking Details:', bookingDetails);
+    let company_className = 'company-info';
+    if(bookingDetails.remainingAmount > 0){
+        company_className = 'company-info-remaining-amount';
+    }
+
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,6 +100,10 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         .company-info {
             font-size: 12px; /* Adjusted font size */
             margin-top: 280px; /* Space before company info */
+        }
+        .company-info-remaining-amount {
+            font-size: 12px; /* Adjusted font size */
+            margin-top: 245px; /* Space before company info */
         }
         .thank-you {
             margin-top: 1px;
@@ -172,6 +182,10 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
               <td>Event Fees</td>
               <td style="text-align: right;">${bookingDetails.numberOfPeoples} x ${bookingDetails.eventPrice}</td>
             </tr>
+             ${bookingDetails.addedOn > 0 ? `<tr>
+                <td>Added Discount</td>
+                <td style="text-align: right;">- ${bookingDetails.addedOn}</td>
+              </tr>` : ''}
             <tr>
               <td>Subtotal</td>
               <td style="text-align: right;">${finalPrice}</td>
@@ -180,21 +194,29 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
               <td>Convenience Fee (1.5 %)</td>
               <td style="text-align: right;">${convenienceFee}</td>
             </tr>
-            ${bookingDetails.addedOn > 0 ? `<tr>
-                <td>Added Discount</td>
-                <td style="text-align: right;">- ${bookingDetails.addedOn}</td>
-              </tr>` : ''}
+           
               ${bookingDetails.addedDiscount > 0 ? `<tr>
                 <td>Added Discount</td>
                 <td style="text-align: right;">- ${bookingDetails.addedDiscount}</td>
               </tr>` : ''}
+
+               ${bookingDetails.remainingAmount > 0 ? `
+                <tr>
+                <td>Booking Amount</td>
+                <td style="text-align: right;"> ${bookingDetails.amountPaid}</td>
+              </tr>
+              <tr>
+                <td>Remaining Amount ()</td>
+                <td style="text-align: right;"> ${bookingDetails.remainingAmount}</td>
+              </tr>` : ''}
             <tr>
                 <th>Total Payment</th>
-                <th style="text-align: right;">${bookingDetails.amountPaid}</th>
+                <th style="text-align: right;">${total_price}</th>
               </tr>
+            
           </table>
           
-        <div class="company-info">
+        <div class="${company_className}">
             <h2>Sahyadri Vacations And Adventure</h2>
             <p>Reg.No: MH-26-0256367</p>
             <p>1, Opp. to Komal sweets, Gulab Nagar Chowk, Dhankawdi, Pune -43</p>

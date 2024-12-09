@@ -31,7 +31,10 @@ export const sendInvoiceEmail = async (recipientEmail, bookingDetails, pdfPath) 
     if (!fs.existsSync(pdfPath)) {
         throw new Error('PDF file does not exist');
     }
-
+    let remainingAmountMessage = '';
+     if(bookingDetails.remainingAmount > 0){
+        remainingAmountMessage = `<p>Please note: The remaining amount of INR ${bookingDetails.remainingAmount} will be collected two days before the journey starts.</p>`;
+     }
     // Email details
     const mailOptions = {
         from: process.env.HOSTINGER_EMAIL_USERNAME,
@@ -41,7 +44,7 @@ export const sendInvoiceEmail = async (recipientEmail, bookingDetails, pdfPath) 
             <p>Hello <strong>${bookingDetails.name}</strong>,</p>
             <p>Greetings from <strong>Sahyadri Vacations and Adventures</strong>!</p>
             <p>We are thrilled to organize your <strong>${bookingDetails.eventName} (${bookingDetails.batch})</strong>.</p>
-            <p>We have received your payment of <strong>INR ${bookingDetails.amountPaid}</strong>. Your Trek to <strong>${bookingDetails.eventName} (${bookingDetails.batch})</strong> is confirmed.</p>`,
+            <p>We have received your payment of <strong>INR ${bookingDetails.amountPaid}</strong>. Your Trek to <strong>${bookingDetails.eventName} (${bookingDetails.batch})</strong> is confirmed.</p> ${remainingAmountMessage}`,
         attachments: [
             {
                 filename: path.basename(pdfPath),
