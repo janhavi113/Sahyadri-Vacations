@@ -990,7 +990,7 @@ const ShowEventDetails = () => {
                                       onChange={handleSelection}
                                       checked={selectedLocation === location.name}
                                     />
-                                    {location.name} : {location.time}
+                                    {location.name} 
                                   </label>
                                 </li>
                               ))}

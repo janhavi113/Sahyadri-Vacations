@@ -187,14 +187,24 @@ async function updateExpiredBookings() {
     }
 }
  
-app.get("/show-all-bookings", async (req, res) => {
+app.get("/show-all-bookings/:showOptions", async (req, res) => {
 	try {
+		
+		
 		updateExpiredBookings();
-		let bookings = await Bookings.find({ active: true });
+		let query;
+		console.log('req.params.showOptions--',req.params.showOptions);
+		if(req.params.showOptions == 'all'){
+			query = { active: true };
+		}else{
+			query = { active: true , status : 'confirmed'};
+		}
+		let bookings = await Bookings.find(query);
 		res.send({
 			isSuccess: true,
 			bookings: bookings
 		});
+
 	} catch (error) {
 		console.error(error);
 		res.send({

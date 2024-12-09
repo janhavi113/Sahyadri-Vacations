@@ -12,40 +12,46 @@ function AdminDashboard() {
   const [events, setEvents] = useState([]);
   const [tables, setTables] = useState([]);
   const [isSuccess, setSuccess] = useState(false);
+  const [showOptions, setShowOptions] = useState('all');
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchEvents = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/admin-login");
-        return;
-      }
+  useEffect(() => {  
 
-      const response = await fetch(`${apiUrl}show-all-bookings`, {
-        headers: { Authorization: token },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // console.log('data--bookings--'+JSON.stringify(data));
-        // Create the map
-        if (data.isSuccess) {
-          setSuccess(true);
-          const resultMap = createEventMap(data.bookings);
-
-          // Output the result
-          console.log("resultMap--");
-          setEvents(resultMap);
-          const tables = generateTablesFromMap(resultMap);
-          setTables(tables);
-        }
-      } else {
-        navigate("/admin-login");
-      }
-    };
-
-    fetchEvents();
+    fetchEvents('all');
   }, [navigate]);
+
+  const handleFilter = async (filter) => {
+   
+    fetchEvents(filter);
+  }
+  const fetchEvents = async (filter) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/admin-login");
+      return;
+    }
+
+    const response = await fetch(`${apiUrl}show-all-bookings/${filter}`, {
+      headers: { Authorization: token },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      // console.log('data--bookings--'+JSON.stringify(data));
+      // Create the map
+      if (data.isSuccess) {
+        setSuccess(true);
+        const resultMap = createEventMap(data.bookings);
+
+        // Output the result
+        console.log("resultMap--");
+        setEvents(resultMap);
+        const tables = generateTablesFromMap(resultMap);
+        setTables(tables);
+      }
+    } else {
+      navigate("/admin-login");
+    }
+  };
   function createEventMap(bookings) {
     const eventMap = new Map();
 
@@ -66,20 +72,20 @@ function AdminDashboard() {
     if (tableElement) {
       // Parse HTML table to a worksheet
       const worksheet = XLSX.utils.table_to_sheet(tableElement);
-  
+
       // Create a new workbook and append the worksheet
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-  
+
       // Split trek name and batch for the file name
       const [eventName, batch] = key.split(' : ');
       const filename = `${eventName.replace(/ +/g, '_')}_${batch.replace(/ +/g, '_')}.xlsx`;
-  
+
       // Save the workbook
       XLSX.writeFile(workbook, filename);
     }
   };
-  
+
   const generateTablesFromMap = (eventMap) => {
     return Array.from(eventMap.entries()).map(([key, bookings]) => (
       <div key={key} className="table-container">
@@ -193,8 +199,15 @@ function AdminDashboard() {
     <AdminNavbar>
       <div className=" contentbody">
         <div className="container justify-content-center py-md-5">
-          <div>
+          <div className="dashboard-title">
             <b className="home-dashboard">Welcome, Bookings for next batches..</b>
+            <div className="dashboard-details">
+              <span >Show Bookigs<span style={{ 'color': 'red' }}>*</span></span>
+              <select onChange={(e) => handleFilter(e.target.value)}>
+                <option value={'all'} >All</option>
+                <option value={'confirmed'} >Confirmed</option>
+              </select>
+            </div>
           </div>
           <div className="row justify-content- py-4">
             <div>
@@ -203,8 +216,8 @@ function AdminDashboard() {
           </div>
         </div>
       </div>
-  </AdminNavbar>
+    </AdminNavbar>
   );
- }
+}
 
 export default AdminDashboard;

@@ -8,7 +8,14 @@
 .event-tables-container {
   padding: 20px;
 }
-
+.dashboard-title{
+  display: flex;
+  justify-content: space-between;
+  
+}
+.dashboard-details{
+  width: 30%;
+}
 /* Style for each table */
 .event-table {
   width: 100%;
