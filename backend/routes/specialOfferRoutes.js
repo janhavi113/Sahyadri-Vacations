@@ -16,6 +16,18 @@ router.get('/special-event', async (req, res) => {
   }
 });
 
+
+router.get('/getSpecialOfferEvent', async (req, res) => {
+  console.log('I am here ');
+  try {
+    const offers = await SpecialOffer.find({active : true});
+    console.log('offers ',offers);
+    res.status(200).json({ message: 'Special offer record found', offer:offers });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Get all special offers (populate events)
 router.get('/special-offer', async (req, res) => {
   

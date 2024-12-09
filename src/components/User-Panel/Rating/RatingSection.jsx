@@ -13,6 +13,11 @@ import { Autoplay,  Navigation } from 'swiper/modules';
 const RatingSection = () => {
  
   var reviewList = [
+    {
+      name: 'Durva Shinde ',
+      Date: 'November 24, 2024',
+      reviewBody: 'I had great experience with Sahyadri Vacations. They were very friendly and provided best services which includes comfortable traveling, good food, comfortable stay. You should travel with them if you want to experience something different from your regular boring life. Do visit guys and have fun❤️'
+    },
   {
     name: 'Shrikant Gawande',
     Date: 'November 06, 2024',
@@ -42,6 +47,12 @@ const RatingSection = () => {
     name: 'Gargi Botaljee',
     Date: 'July 06, 2024',
     reviewBody: 'Was the best experience with every member so supportive and motivating ❤️ made wonderful memories with complete fun and enjoyment🤝 thanku so much'
+  }
+  ,
+  {
+    name: 'Ankita Walunj',
+    Date: 'June 10, 2024',
+    reviewBody: 'What an amazing trek it was ! Bang on…! 🥳 It was so adventurous. 🤯 Our guides have guided us so well and took us to difficult points which was superb experience. 🤘🏻🫡 It was an amazing trek with wonderful memories. Being a female traveller i did not encounter any problem or any hassle. Even the food was sooo delicious.Looking forward for upcoming treks . Definitely, I am gonna recommend this group to my friends n family. Thanks guys…! 🤗'
   },
   {
     name: 'Anjali Ahuja',
@@ -58,7 +69,32 @@ const RatingSection = () => {
     name: 'Shivani Kasar',
     Date: 'May 13, 2024',
     reviewBody: 'I recently joined "Sahyadri Vacations" for a Trek which was organised specially for women on the occasion of International Women\'s Day, and it was an absolute delight! The guides were knowledgeable, friendly and ensured everyone felt at ease. Kudos to Sahyadri Vacations - highly recommended !!!'
-  }
+  },
+  {
+    name: 'Priti Nikam',
+    Date: 'January 17, 2024',
+    reviewBody: 'My name is Priti Nikam. This was my second trek with Sahyadri Vacation & Adventures. The team leaders were extremely cooperative and supportive, and the arrangements made by the whole team were very comfortable. The information about the fort and the surrounding forts was perfectly explained.Thank you so much, Sahyadri Vacation & Adventures, for giving us such an amazing experience. I look forward to doing further treks with your team.जय भवानी जय शिवराय जय शंभुराजे🚩🧡'
+  },
+  {
+    name: 'Tejashree Khedkar ',
+    Date: 'December 24, 2023',
+    reviewBody: 'It\'s been almost 2 yrs now I\'m trekking frequently with Sahyadri Vacations.💫 Every trek was wonderfully coordinated by the team- from transportation, food, trek schedule -everything was seamless, which have always made the experience enjoyable. The trek leaders always make sure to educate everyone about our history and significance of the place we are visiting. I have always felt safe throughout every trek. The personalized attention each participant receives on trek is very commendable- trek leaders always carefully consider trekking experience of every participant and guide accordingly to make each and everyone\'s trek memorable. Cheers to the wonderful team 👏🏻🎉😁. Always looking forward to many more wonderful experiences with Sahyadri Vacations family ❣️'
+  },
+  {
+    name: 'Prasanna Kalyan ',
+    Date: 'August 23, 2023',
+    reviewBody: 'Sahyadri team was highly professional, ensuring both safety & enjoyment throughout the journey. The guides were knowledgeable, friendly and enjoyed every moment and am already looking to my next adventure with you all. Thank you for an amazing experience 😊'
+  },
+  {
+    name: 'Ankit Dere ',
+    Date: 'July 23, 2023',
+    reviewBody: 'I recently had the pleasure of embarking on the Andharban Jungle Trek with Sahyadri Vacations. It was my fourth trekking experience with them. Trekking through the dense forest was a truly memorable adventure. Sahyadri Vacations\' organization was impeccable from start to finish. Our trek leaders, Venkatesh, Janhavi, Sairaj, and Shivam, were outstanding. They ensured everything ran smoothly while keeping the group motivated and well-informed. The trek itself was a challenging yet exhilarating journey, requiring over six hours of walking through lush jungle terrain. The guides were incredibly knowledgeable, sharing fascinating insights about the flora and fauna, adding a rich educational aspect to the experience.Overall, I am excited to join them for more treks in the future. If you\'re looking for a well-organized trek with knowledgeable guides, I highly recommend Sahyadri Vacations!'
+  },
+  {
+    name: 'Vijay Tamhankar',
+    Date: 'October 03, 2022',
+    reviewBody: 'Where Sahyadri Vacations and team shines is in their total dedication to providing clients with an exceptional hiking experience. While you are in-trek, their choices of accommodations, dining, transportation, local experts, hike options, add-ons, and even unexpected small surprises, provides one with a truly cut-to-fit experience. Pravin Sir possess top-shelf communications skills. It’s clear they care about their clients and want you to feel confident in travelling with them.You have best to best and caring team because they have behind Praveen Sir....Best and lovingly warm regards from Vijay and Harshada'
+  },
 ];
   return (
     <>

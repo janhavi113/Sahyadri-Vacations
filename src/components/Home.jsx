@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Contact_Us from "./User-Panel/Contact_Us/Contact_Us";
 import FunFact from "./User-Panel/FunFact/FunFact";
 import Rating from "./User-Panel/Rating/RatingSection";
+import SpecialOffer from "./User-Panel/SpecialOfferService/SpecialOfferSection";
 import slide1 from './Images/Screen_2.jpg';
 import slide2 from './Images/Screen_3.webp';
 import slide3 from './Images/Screen_4.webp';
@@ -55,26 +56,30 @@ const Home = () => {
   const [backPackingEvents, setBackPackingEvents] = useState();
   const [campingEvents, setCampingEvents] = useState();
   const [trekkingEvents, setTrekkingEvents] = useState();
+  const [specialOffer , setSpecialOffer]= useState();
   useEffect(() => {
     // console.log('isSuccess--'+isSuccess);
     if (isSuccess == false) {
       getAllRecord();
+      getSpecialOfferEvent();
     }
 
   })
    
-  // const getSpecialOfferEvent = () =>{
-  //   let r = await fetch(`${apiUrl}getSpecialOfferEvent`, {
-  //     method: "GET", headers: {
-  //       "Content-Type": "application/json",
-  //     }
-  //   })
+  const getSpecialOfferEvent =  async() =>{
+   console.log('record found');
+    let r = await fetch(`${apiUrl}getSpecialOfferEvent`, {
+      method: "GET", headers: {
+        "Content-Type": "application/json",
+      }
+    })
 
-  //   let res = await r.json()
-  //   console.log('res',res);
-  //   if (res.isSuccess == true) {
-  //   }
-  // }
+    let res = await r.json()
+    if (r.ok) {
+      setSpecialOffer(res.offer);
+      console.log('record found',res.offer);
+    }
+  }
 
   const getNextBatchDate = (event) => {
     var liveEvent = '';
@@ -490,6 +495,9 @@ const Home = () => {
           </Swiper>
         </div>
       </div>
+      {/* {specialOffer && 
+      <specialOffer  specialOffer={specialOffer} onSendData={sendDataToParent}/> 
+      } */}
       <Rating />
       <div>
         <FunFact />

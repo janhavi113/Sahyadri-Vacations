@@ -13,7 +13,13 @@ export const sendInvoiceEmail = async (recipientEmail, bookingDetails, pdfPath) 
     console.log('Recipient Email:', recipientEmail);
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-
+    // Signature
+    const signature = `
+                <p>Best regards,</p>
+                <p><strong>Sahyadri Vacations and Adventures</strong></p>
+                <p>Contact: 7028740961</p>
+                <p>Website: <a href="https://sahyadrivacations.com/">sahyadrivacations.com</a></p>
+                `;
     // SMTP Transporter with connection pooling
     const transporter = nodemailer.createTransport({
         host: 'smtp.hostinger.com',
@@ -32,19 +38,22 @@ export const sendInvoiceEmail = async (recipientEmail, bookingDetails, pdfPath) 
         throw new Error('PDF file does not exist');
     }
     let remainingAmountMessage = '';
-     if(bookingDetails.remainingAmount > 0){
+    if (bookingDetails.remainingAmount > 0) {
         remainingAmountMessage = `<p>Please note: stating the booking is confirmed, but the remaining balance INR ${bookingDetails.remainingAmount} must be paid two days before the journey starts to retain the reservation. </p>`;
-     }
+    }
     // Email details
     const mailOptions = {
         from: process.env.HOSTINGER_EMAIL_USERNAME,
         to: recipientEmail,
+        cc: 'sahyadrivacations21@gmail.com',
         subject: `Invoice for Booking ${bookingDetails.bookingId}`,
         html: `
             <p>Hello <strong>${bookingDetails.name}</strong>,</p>
             <p>Greetings from <strong>Sahyadri Vacations and Adventures</strong>!</p>
             <p>We are thrilled to organize your <strong>${bookingDetails.eventName} (${bookingDetails.batch})</strong>.</p>
-            <p>We have received your payment of <strong>INR ${bookingDetails.amountPaid}</strong>. Your Trek to <strong>${bookingDetails.eventName} (${bookingDetails.batch})</strong> is confirmed.</p> ${remainingAmountMessage}`,
+            <p>We have received your payment of <strong>INR ${bookingDetails.amountPaid}</strong>. Your Trek to <strong>${bookingDetails.eventName} (${bookingDetails.batch})</strong> is confirmed.</p> 
+            ${remainingAmountMessage}<br><br>
+            ${signature}`,
         attachments: [
             {
                 filename: path.basename(pdfPath),
