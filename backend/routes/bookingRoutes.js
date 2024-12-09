@@ -12,6 +12,18 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Function to check if the date is today
+function isBookingDateToday(dateString) {
+    const [month, day, year] = dateString.split("/").map(Number);
+    const booking = new Date(year, month - 1, day);
+
+    const today = new Date();
+    return (
+        booking.getDate() === today.getDate() &&
+        booking.getMonth() === today.getMonth() &&
+        booking.getFullYear() === today.getFullYear()
+    );
+}
 
 router.post("/booking", async (req, res) => {
     try {
@@ -25,9 +37,15 @@ router.post("/booking", async (req, res) => {
             bookingDate,
             eventPrice,
         } = req.body;
+        let bookingIdVar;
 
-        let confirmedBookings = await Bookings.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
-        let bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + confirmedBookings.length;
+        let confirmedBookings = await Bookings.findOne().sort({ _id: -1 });//.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
+        if(isBookingDateToday(confirmedBookings.bookingDate)){
+            bookingIdVar = Number(confirmedBookings.bookingId) + 1;
+        }else{
+            bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + 1;
+        }
+          console.log('bookingIdVar---',bookingIdVar);
 
         const booking = new Bookings({
             bookingId: bookingIdVar,
