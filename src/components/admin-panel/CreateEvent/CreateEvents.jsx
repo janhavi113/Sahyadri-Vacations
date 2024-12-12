@@ -25,6 +25,7 @@ function CreateEvents() {
   const [itinerary, setItinerary] = useState();
   const [highlights, setHighlights] = useState();
   const [pickupPoints, setPickupPoints] = useState();
+  const [pickupPointsfromMumbai, setPickupPointsfromMumbai] = useState();
   const [thingsToCarry, setThingsToCarry] = useState();
   const [costIncludes, setCostIncludes] = useState();
   const [costExcludes, setCostExcludes] = useState();
@@ -45,6 +46,7 @@ function CreateEvents() {
         formData.append("files", uploadedFiles[index]);
       }
     }
+    console.log('itinerary--',itinerary);
     formData.append("costIncludes", costIncludes);
     formData.append("costExcludes", costExcludes);
     formData.append("FAQ", FAQ);
@@ -54,6 +56,8 @@ function CreateEvents() {
     formData.append("highlights", highlights);
     formData.append("itinerary", itinerary);
     formData.append("pickupPoints", pickupPoints);
+    formData.append("pickupPointsfromMumbai", pickupPointsfromMumbai);
+    formData.append("b2bLocaion", data.b2bLocaion);
     formData.append("thingsToCarry", thingsToCarry);
     formData.append("location", data.location);
     formData.append("type", data.type);
@@ -111,7 +115,7 @@ function CreateEvents() {
           <div className="title-header">Event Details</div>
           <div className="content">
             {isSubmitting && <div>Loading...</div>}
-            <div className="user-details">
+            <div className="user-details addscroller">
               <div className="input-box ">
                 <span className="details">Event Name</span>
                 <input {...register("eventName", { required: { value: true, message: "This field is required" }, })} type="text" required />
@@ -175,14 +179,24 @@ function CreateEvents() {
                 <span className="details">Trek Distance</span>
                 <input {...register("trekDistance",)} type="text" />
               </div>
+              
+              <div className="input-select-box">
+                <span className="details">B2B Location</span>
+                <input {...register("b2bLocation",)} type="text" />
+              </div>
+              <div className="input-select-box">
+                <span className="details">Pickup Points from Pune</span>
+                <Editor sendDataToParent={setPickupPoints} />
+              </div>
+              <div className="input-select-box">
+                <span className="details">Pickup Points from Mumbai</span>
+                <Editor sendDataToParent={setPickupPointsfromMumbai} />
+              </div>
               <div className="input-select-box">
                 <span className="details">Highlights</span>
                 <Editor sendDataToParent={setHighlights} />
               </div>
-              <div className="input-select-box">
-                <span className="details">Pickup Points</span>
-                <Editor sendDataToParent={setPickupPoints} />
-              </div>
+              
               <div className="input-select-box">
                 <span className="details">Cost Includes</span>
                 <Editor sendDataToParent={setCostIncludes} />

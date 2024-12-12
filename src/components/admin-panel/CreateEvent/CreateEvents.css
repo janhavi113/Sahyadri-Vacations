@@ -176,7 +176,7 @@ ul .details-list  {
    .category{
     width: 100%;
   }
-  .content  .user-details{
+  .content  .addscroller{
     max-height: 300px;
     overflow-y: scroll;
   }

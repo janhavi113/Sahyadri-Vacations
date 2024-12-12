@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./admin-panel/CreateEvent/CreateEvents.css"
 import "./Modal.css";
 import Editor from "./Editor";
+
 function EventDetails() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [modal, setModal] = useState(false);
@@ -60,6 +61,8 @@ function EventDetails() {
   const [event, setEvent] = useState();
   const [currentImages, setcurrentImages] = useState();
   const [costExcludes, setCostExcludes] = useState();
+  const [pickupPointsfromMumbai, setPickupPointsfromMumbai] = useState();
+  const [b2bLocation , setB2BLocation] = useState();
   const [FAQ ,setFAQ] = useState();
   const navigate = useNavigate();
   const params = useParams()
@@ -86,6 +89,7 @@ function EventDetails() {
     setcurrentImages(currentImages => currentImages.filter(file => file !== name))
   }
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  
   const getCurrentrecord = async () => {
     fetch(`${apiUrl}create-event/event-details/:${eventId}`, {
       method: "GET", headers: {
@@ -100,6 +104,8 @@ function EventDetails() {
           setItinerary(data.events[0]?.itinerary);
           setHighlights(data.events[0]?.highlights);
           setPickupPoints(data.events[0]?.pickupPoints);
+          setB2BLocation(data.events[0]?.b2bLocaion);
+          setPickupPointsfromMumbai(data.events[0]?.pickupPointsfromMumbai);
           setThingsToCarry(data.events[0]?.thingsToCarry);
           setCostIncludes(data.events[0]?.costIncludes);
           setCostExcludes(data.events[0]?.costExcludes);
@@ -114,6 +120,7 @@ function EventDetails() {
           setTotalDistanceValue(data.events[0]?.totalDistance);
           setAgeGroupValue(data.events[0]?.ageGroup);
           setTrekDistanceValue(data.events[0]?.trekDistance);
+
           console.log('event-%8', event);
         }
       });
@@ -158,7 +165,6 @@ function EventDetails() {
     return splitedList;
   }
 
- 
   const handleUpload = async (data) => {
     if (currentImages.length === 0 && uploadedFiles!= 'undefined' && uploadedFiles.length === 0) {
       setError("dropzone", {
@@ -180,6 +186,7 @@ function EventDetails() {
         formData.append("currentImages", currentImages[index])
       }
     }
+    
     formData.append("costIncludes", costIncludes);
     formData.append("costExcludes", costExcludes);
     formData.append("FAQ", FAQ);
@@ -188,7 +195,9 @@ function EventDetails() {
     formData.append("eventType", data.eventType);
     formData.append("highlights", highlights);
     formData.append("itinerary", itinerary);
-    formData.append("pickupPoints", pickupPoints);
+    formData.append("pickupPoints", pickupPoints);    
+    formData.append("pickupPointsfromMumbai", pickupPointsfromMumbai);
+    formData.append("b2bLocaion", b2bLocation);
     formData.append("thingsToCarry", thingsToCarry);
     formData.append("location", data.location);
     formData.append("type", data.type);
@@ -199,6 +208,7 @@ function EventDetails() {
     formData.append("totalDistance", data.totalDistance);
     formData.append("ageGroup", data.ageGroup);
     formData.append("trekDistance", data.trekDistance);
+
     console.log('formData ===', formData);
     //Assuming you only accept one file     
     // console.log("file logging drop/selected file", JSON.stringify(formData));
@@ -316,8 +326,16 @@ function EventDetails() {
                     <div dangerouslySetInnerHTML={{ __html: displayList(event.highlights) }} />
                   </div>
                   <div className="input-select-box">
-                    <span className="details">Pickup Points</span>
+                    <span className="details">B2B Location</span>
+                    <div>{event.b2bLocaion}</div>
+                  </div>
+                  <div className="input-select-box">
+                    <span className="details">Pickup Points from Pune</span>
                     <div dangerouslySetInnerHTML={{ __html: displayList(event.pickupPoints) }} />
+                  </div>
+                  <div className="input-select-box">
+                    <span className="details">Pickup Points form Mumbai</span>
+                    <div dangerouslySetInnerHTML={{ __html: displayList(event.pickupPointsfromMumbai) }} />
                   </div>
                   <div className="input-select-box">
                     <span className="details">Cost Includes</span>
@@ -450,10 +468,20 @@ function EventDetails() {
                   <span className="details">Things To Carry</span>
                   <Editor value={thingsToCarry} sendDataToParent={setThingsToCarry} />
                 </div>
+                
+              <div className="input-select-box">
+                <span className="details">B2B Location</span>
+                <input value={b2bLocation}  onChange={(e) => setB2BLocation(e.target.value)} type="text" />
+              </div>
                 <div className="input-select-box">
                   <span className="details">Pickup Points</span>
                   <Editor value={pickupPoints} sendDataToParent={setPickupPoints} />
                 </div>
+                
+              <div className="input-select-box">
+                <span className="details">Pickup Points from Mumbai</span>
+                <Editor value={pickupPointsfromMumbai} sendDataToParent={setPickupPointsfromMumbai} />
+              </div>
                 <div className="input-select-box">
                   <span className="details">FAQ</span>
                   <Editor value={FAQ} sendDataToParent={setFAQ} />

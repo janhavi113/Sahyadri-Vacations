@@ -11,6 +11,8 @@ const eventSchema = new mongoose.Schema({
     FAQ:  { type :String},
     thingsToCarry:  { type :String},
     pickupPoints:  { type :String},
+    pickupPointsfromMumbai:  { type :String},
+    b2bLocaion: { type :String},
     highlights:  { type :String},
     url: { type :String},
     eventId: { type :Number},

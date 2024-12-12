@@ -11,7 +11,7 @@ const SpecialOfferSchema = new mongoose.Schema({
     type: Date, 
     required: true
   },
- 
+  starts_with: { type: String },
   active: { type: Boolean, default: true },
 });
 

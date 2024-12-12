@@ -31,6 +31,7 @@ import { css } from '@emotion/react';
 import ClipLoader from 'react-spinners/ClipLoader'; // Import the loading spinner component
 
 import "react-datepicker/dist/react-datepicker.css";
+import { set } from 'mongoose';
 const ShowEventDetails = () => {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -45,6 +46,8 @@ const ShowEventDetails = () => {
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
   const [pickupPoints, setPickupPoints] = useState([]);
+  const [pickupPointsfromMumbai, setPickupPointsfromMumbai] = useState([]);
+  const [b2bLocation, setB2bLocation] = useState();
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
   const [actualPrice, setActualPrice] = useState(0);
@@ -57,8 +60,10 @@ const ShowEventDetails = () => {
   const [bookedSlot, setBookedSlot] = useState();
   const [bookingPhone, setBookingPhone] = useState();
   const [availableSlot, setAvailableSlot] = useState();
-  const [eventType, seteEventType] = useState();
+  const [eventType, setEventType] = useState();
+  const [currentEventId, setCurrentEventId] = useState();
   const [noOfPeopleNeedforCoupon, setNoOfPeopleNeedforCoupon] = useState();
+  const [selectDate, setSelectDate] = useState();
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
   const [participants, setParticipants] = useState([]);
@@ -78,45 +83,71 @@ const ShowEventDetails = () => {
   const [showDiscountStatus, setShowDiscountStatus] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const[remainingAmount , setRemainingAmount] = useState(0);
+  const [remainingAmount, setRemainingAmount] = useState(0);
   const [showBreakup, setShowBreakup] = useState(false);
   const [paymentOption, setPaymentOption] = useState("full"); // Default to full payment
-  const [partialPayment ,setPartialPayment]= useState(0);
+  const [partialPayment, setPartialPayment] = useState(0);
+  const [finalBatchesList, setFinalBatchesList] = useState();
+  const [selected, setSelected] = useState('Pune');
+  const [errorMessageforNext, setErrorMessageforNext] = useState(false);
+  const [isLoadingMSG, setIsLoadingMSG] = useState(false);
+  const [showLocations, setShowLocations] = useState([]);
+  const handleSelect = (option) => {
+    setSelected(option);
+    const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == selectedDate);
+    
+    let price = 0;
+    if (option == 'Pune') {
+      price = foundRecord.eventCostPerPerson;
+    } else if (option == 'Mumbai') {
+      price = foundRecord.eventCostPerPersonFromMumbai;
+    } else {
+      setSelectedLocation(option);
+      price = foundRecord.b2bPrice;
+    }
+    console.log('price---',price);
+    let convenienceFeePerPerson = (Number(price) * 0.015).toFixed(2);
+    setMaxBooking(foundRecord.batchSize);
+    setBookedSlot(foundRecord.bookedSize);
+    setFinalPrice(Number(price) + Number(convenienceFeePerPerson));
+    setConvenienceFee(convenienceFeePerPerson);
+    setActualPrice(Number(price));
+    setPrice(price);
+  };
 
   const handlePaymentChange = (event) => {
     setPaymentOption(event.target.value);
     if (event.target.value == "partial") {
       //alert('partial');
-      let price = Number(scheduleBatch.partialBookingAmount) * Number(noOfTrekkers) ;
+      let price = Number(scheduleBatch.partialBookingAmount) * Number(noOfTrekkers);
       setConvenienceFee(Number(price) * 0.015);
-      price = price +(price* 0.015 );
-      setPartialPayment(price);  
-      setFinalPrice(price);     
+      price = price + (price * 0.015);
+      setPartialPayment(price);
+      setFinalPrice(price);
       setDiscount(0);
-      let remainingAmount  = Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers) ;
+      let remainingAmount = Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers);
       let remainingConvenienceFee = Number(remainingAmount) * 0.015;
       remainingAmount = remainingAmount + remainingConvenienceFee;
       setRemainingAmount(remainingAmount);
-    }else{
-      let price = Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers) ;
+    } else {
+      let price = Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers);
       setConvenienceFee(Number(price) * 0.015);
-     
+
       if (Number(discount) > 0 && (Number(noOfTrekkers) >= Number(noOfPeopleNeedforCoupon))) {
         price = Number(price) - Number(discount);
       } else {
         setDiscount(0);
       }
-      price = price +(price* 0.015 ); 
-      setActualPrice( Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers) );   
-      setFinalPrice(price); 
-    }    
+      price = price + (price * 0.015);
+      setActualPrice(Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers));
+      setFinalPrice(price);
+    }
 
   };
 
   const handleToggleBreakup = () => {
     setShowBreakup((prev) => !prev);
   };
-
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -129,12 +160,10 @@ const ShowEventDetails = () => {
   }
 
   const handleParticipantChange = (index, field, value) => {
-    //console.log(g('index---',index,'---field----', field,'---value----',value);
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
     setParticipants(newParticipants);
   };
-
 
   if (modal) {
     document.body.classList.add('active-modal')
@@ -175,7 +204,6 @@ const ShowEventDetails = () => {
   const onSubmit = async (data) => {
     setIsLoading(true); // Set loading to true before starting the request
     try {
-      ////console.log(g('selectedLocation--',);
       if (buttonClick == 'pay-now') {
 
         const formData = new FormData();
@@ -186,18 +214,21 @@ const ShowEventDetails = () => {
         formData.append("bookingDate", today);
         formData.append("otherParticipants", JSON.stringify(participants));
         formData.append("bookingId", bookingId);
-        formData.append("scheduleEventId", scheduleBatch.eventId);
-        formData.append("eventStartDate", scheduleBatch.eventStartDate);
-        formData.append("eventEndDate", scheduleBatch.eventEndDate);
+        formData.append("scheduleEventId", eventDetails.eventId);
+        if (scheduleBatch.eventStartDate) {
+          formData.append("eventStartDate", scheduleBatch.eventStartDate);
+        }
+        if (scheduleBatch.eventEndDate) {
+          formData.append("eventEndDate", scheduleBatch.eventEndDate);
+        }
         formData.append("addedDiscount", discount);
-        formData.append("remainingAmount",remainingAmount);
+        formData.append("remainingAmount", remainingAmount);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
           body: formData,
         });
 
         let res = await r.json()
-        ////console.log(g('booking---', JSON.stringify(res));
         if (res.isSuccess == true) {
           // try {
           //alert('In Pay Now');
@@ -219,17 +250,16 @@ const ShowEventDetails = () => {
             // Redirect the user to PhonePe for payment
             window.location.href = data.redirectUrl;
           } else {
-            //console.log(g('Payment initiation failed. Please try again.');
+            console.log('Payment initiation failed. Please try again.');
           }
         }
       } else {
-
         const formData = new FormData();
         setBookingPhone(data.whatsappNumber);
         formData.append("fullName", data.fullName);
         formData.append("email", data.emailId);
         formData.append("mobileNumber", data.whatsappNumber);
-        formData.append("batch", data.selectDate);
+        formData.append("batch", selectDate);
         formData.append("eventId", eventDetails.eventId);
         formData.append("eventName", eventDetails.name);
         const today = new Date();
@@ -241,7 +271,7 @@ const ShowEventDetails = () => {
         });
 
         let res = await r.json()
-        ////console.log(g('booking---', JSON.stringify(res));
+
         if (res.isSuccess == true) {
           setButtonClick('pay-now');
           setBookingId(res.booking.bookingId);
@@ -256,7 +286,6 @@ const ShowEventDetails = () => {
   }
 
   const handleSelection = (event) => {
-    console.log('handleSelection----', event.target.value);
     setSelectedLocation(event.target.value);
     setShowTermsAndConditions(true);
   };
@@ -321,23 +350,26 @@ const ShowEventDetails = () => {
     var splitedList;
     splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
     splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
-    //console.log(g(splitedList);
     let s = splitedList;
     splitedList = s.includes('?') ? splitedList.replaceAll('?', '? <br>') : splitedList;
     splitedList = splitedList.replaceAll('<ol>', '<ol class="display-bulletin">');
     splitedList = splitedList.replaceAll('<p>', '<p class="ql-p">');
-
+    splitedList = splitedList.replaceAll('<a href="', '<a class="link-show" href="');
     return splitedList;
   }
 
-  const getNextBatchDate = (event) => {
+  const getNextBatchDate = async (event) => {
+    setIsLoadingMSG(true); // Start loading
     let batchdate;
     let batchSize = -1;
     let bookedSize = 0;
-    let eventCostPerPerson;
+    let b2bPrice = 0;
+    let eventCostPerPerson = 0;
+    let eventCostPerPersonFromMumbai = 0;
     let batchDates = [];
-    let eventType = event.eventType;
-    seteEventType(eventType);
+    let batchesList = [];
+    let eventType = event[0]?.eventType;
+    setEventType(eventType);
 
     if (eventType == 'CampingEvent') {
       setShowTermsAndConditions(true);
@@ -374,49 +406,107 @@ const ShowEventDetails = () => {
         }
       }
     } else {
-      if (batchSize == -1 && new Date(event.eventStartDate) - Q >= 0 && event.eventBatchCount > 0) {
-        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear();
-        eventCostPerPerson = event.eventCostPerPerson;
-        batchSize = event.eventBatchCount;
-        bookedSize = event.alreadyBoockedCount;
-      } else if (event.everyWeekend == true) {
-        batchdate = 'Available On All Weekends';
-        eventCostPerPerson = event.eventCostPerPerson;
-        batchSize = event.eventBatchCount;
-        bookedSize = event.alreadyBoockedCount;
-        setEveryWeekend(true);
-      }
-      else if (event.notScheduleYet == true) {
-        batchdate = 'On Demand';
-        setInquery(true);
-        eventCostPerPerson = event.eventCostPerPerson;
-        batchSize = event.eventBatchCount;
-        bookedSize = event.alreadyBoockedCount;
-      }
-      if (event.everyWeekend == false && event.notScheduleYet == false) {
-        batchDates.push(new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear());
-      } else if (event.notScheduleYet == true) {
-        batchDates.push('On Demand');
-      } else if (event.everyWeekend == true) {
-        batchDates.push('Available On All Weekends');
-      }
-    }
-    if (batchdate && eventCostPerPerson) {
+      for (let index = 0; index < event.length; index++) {
+        batchSize = 0;
+        bookedSize = 0;
+        eventCostPerPerson = 0;
+        eventCostPerPersonFromMumbai = 0;
+        b2bPrice = 0;
+        batchdate = '';
+        if (new Date(event[index].eventStartDate) - Q >= 0 && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
+          batchdate = new Date(event[index].eventStartDate).getDate() + ' ' + months[new Date(event[index].eventStartDate).getMonth()] + ' - ' + new Date(event[index].eventEndDate).getDate() + ' ' + months[new Date(event[index].eventEndDate).getMonth()] + ' ' + new Date(event[index].eventStartDate).getFullYear();
+          eventCostPerPerson = event[index]?.eventCostPerPerson;
+          eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
+          b2bPrice = event[index]?.b2bPrice;
+          batchSize = event[index]?.eventBatchCount;
+          bookedSize = event[index]?.alreadyBoockedCount;
+        } else if (event[index].everyWeekend == true && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
+          batchdate = 'Available On All Weekends';
+          eventCostPerPerson = event[index]?.eventCostPerPerson;
+          eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
+          b2bPrice = event[index]?.b2bPrice;
+          batchSize = event[index]?.eventBatchCount;
+          bookedSize = event[index]?.alreadyBoockedCount;
+          setEveryWeekend(true);
+        } else if (event[index].notScheduleYet == true) {
+          batchdate = 'On Demand';
+          setInquery(true);
+          eventCostPerPerson = event[index]?.eventCostPerPerson;
+          eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
+          b2bPrice = event[index]?.b2bPrice;
+          batchSize = event[index]?.eventBatchCount;
+          bookedSize = event[index]?.alreadyBoockedCount;
+        }
 
-      let convenienceFeePerPerson = eventCostPerPerson * 0.015;
-      console.log('convenienceFeePerPerson----', convenienceFeePerPerson);
-      convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
-      console.log('convenienceFeePerPerson===', convenienceFeePerPerson);
-      //Math.round(((eventCostPerPerson * 0.015)/ 10) * 100) / 100;
-      setAvailableBatches(batchDates);
-      setPrice(eventCostPerPerson);
-      setBatchDate(batchdate);
-      setMaxBooking(batchSize);
-      setBookedSlot(bookedSize);
-      setFinalPrice(Number(eventCostPerPerson) + Number(convenienceFeePerPerson));
-      setConvenienceFee(convenienceFeePerPerson);
-      setActualPrice(Number(eventCostPerPerson));
+        if (batchSize > 0 && eventCostPerPerson > 0 && batchdate != '') {
+
+          batchesList.push({
+            batchSize: batchSize,
+            bookedSize: bookedSize,
+            eventCostPerPerson: eventCostPerPerson,
+            batchdate: batchdate,
+            eventCostPerPersonFromMumbai: eventCostPerPersonFromMumbai,
+            b2bPrice: b2bPrice,
+            eventId: event[index].eventId
+          })
+        }
+
+        if (event[index].everyWeekend == false && event[index].notScheduleYet == false) {
+          batchDates.push(new Date(event[index].eventStartDate).getDate() + ' ' + months[new Date(event[index].eventStartDate).getMonth()] + ' - ' + new Date(event[index].eventEndDate).getDate() + ' ' + months[new Date(event[index].eventEndDate).getMonth()] + ' ' + new Date(event[index].eventStartDate).getFullYear());
+        } else if (event[index].notScheduleYet == true) {
+          batchDates.push('On Demand');
+        } else if (event[index].everyWeekend == true) {
+          batchDates.push('Available On All Weekends');
+        }
+
+      }
     }
+
+    if (batchesList.length <= 0) {
+      setButtonDisabled(true);
+    } else {
+      setButtonDisabled(false);
+      setFinalBatchesList(batchesList);
+    }
+
+    let currentbatch = batchesList.find(batch => batch['eventId'] == currentEventId);
+    if (currentbatch) {
+      let convenienceFeePerPerson = currentbatch.eventCostPerPerson * 0.015;
+      convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
+      console.log('here', currentbatch);
+      if (batchDates.length > 0 && currentbatch.batchdate != 'Available On All Weekends') {
+
+        setSelectedDate(currentbatch.batchdate);
+      }
+      setAvailableBatches(batchDates);
+      setBatchDate(currentbatch.batchdate);
+      setMaxBooking(currentbatch.batchSize);
+      setBookedSlot(currentbatch.bookedSize);
+      setFinalPrice(Number(currentbatch.eventCostPerPerson) + Number(convenienceFeePerPerson));
+      setConvenienceFee(convenienceFeePerPerson);
+      setActualPrice(Number(currentbatch.eventCostPerPerson));
+      setPrice(currentbatch.eventCostPerPerson);
+      setErrorMessageforNext(false);
+    } else if (batchesList.length > 0) {
+      let convenienceFeePerPerson = batchesList[0].eventCostPerPerson * 0.015;
+      convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
+      //Math.round(((eventCostPerPerson * 0.015)/ 10) * 100) / 100;
+      if (batchDates.length > 0 && batchesList[0].batchdate != 'Available On All Weekends') {
+        setSelectedDate(batchesList[0].batchdate);
+      }
+      setAvailableBatches(batchDates);
+      setBatchDate(batchesList[0].batchdate);
+      setMaxBooking(batchesList[0].batchSize);
+      setBookedSlot(batchesList[0].bookedSize);
+      setFinalPrice(Number(batchesList[0].eventCostPerPerson) + Number(convenienceFeePerPerson));
+      setConvenienceFee(convenienceFeePerPerson);
+      setActualPrice(Number(batchesList[0].eventCostPerPerson));
+      setPrice(batchesList[0].eventCostPerPerson);
+      setErrorMessageforNext(true);
+      setButtonDisabled(false);
+      setSelectDate(batchesList[0].batchdate);
+    }
+    setIsLoadingMSG(false); // Start loading
   }
 
   useEffect(() => {
@@ -453,29 +543,47 @@ const ShowEventDetails = () => {
   }
 
   const getAllRecord = async () => {
+    //  alert(params[0]);
     let r = await fetch(`${apiUrl}event-details/eventid/${params[0]}/${params[1]}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
     })
+
+    setCurrentEventId(params[0]);
     let res = await r.json()
     if (res.isSuccess == true) {
       setLoading(false);
+      let tempLocations = [];
       setSuccess(true);
       setEventDetails(res.events);
       setScheduleBatch(res.ScheduleBatchesRecords);
+
       getNextBatchDate(res.ScheduleBatchesRecords);
+      console.log('res.ScheduleBatchesRecords--', res.ScheduleBatchesRecords);
       if (res.ScheduleBatchesRecords.alreadyBoockedCount >= res.ScheduleBatchesRecords.eventBatchCount) {
         setButtonDisabled(true);
       } else {
         setButtonDisabled(false);
       }
-      console.log('res.ScheduleBatchesRecords--', res.ScheduleBatchesRecords);
+
       if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
         const jsonData = convertHtmlToJSON(res.events.pickupPoints);
-        //console.log(g('jsonData--', JSON.stringify(jsonData));
         setPickupPoints(jsonData);
       }
+      if (res.events.pickupPointsfromMumbai != null && res.events.pickupPointsfromMumbai != 'undefine') {
+        const jsonData = convertHtmlToJSON(res.events.pickupPointsfromMumbai);
+        setPickupPointsfromMumbai(jsonData);
+      }
+      if (res.events.b2bLocaion != null && res.events.b2bLocaion != 'undefine') {
+        setB2bLocation(res.events.b2bLocaion);
+        tempLocations.push(res.events.b2bLocaion);
+      }
+      tempLocations.push('Pune');
+      if (res.ScheduleBatchesRecords[0]?.eventCostPerPersonFromMumbai != 'undefine' && res.ScheduleBatchesRecords[0]?.eventCostPerPersonFromMumbai > 0) {
+        tempLocations.push('Mumbai');
+      }
+      setShowLocations(tempLocations);
       getAvailableCoupons(res.ScheduleBatchesRecords);
     }
 
@@ -526,6 +634,7 @@ const ShowEventDetails = () => {
 
   // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
+    console.log('ScheduleBatchesRecords', ScheduleBatchesRecords);
     setDiscountAvailable(!ScheduleBatchesRecords.specialOfferEvent);
     if (!ScheduleBatchesRecords.specialOfferEvent) {
       let scheduleEventType = ScheduleBatchesRecords.eventType;
@@ -619,10 +728,15 @@ const ShowEventDetails = () => {
                             Upcoming Batch:
                           </span>
                         </td>
-                        <td className="section-details">
-                          {availableBatches && availableBatches.map((event, index) => (
-                            <div key={index}>{event}</div>
-                          ))}
+                      </tr> <tr>
+                        <td >
+                          <div className="section-details">
+                            <ul className="display-bulletin">
+                              {finalBatchesList && finalBatchesList.map((event, index) => (
+                                <li key={index}><b>{event.batchdate}</b></li>
+                              ))}
+                            </ul>
+                          </div>
                         </td>
                       </tr>
 
@@ -769,8 +883,26 @@ const ShowEventDetails = () => {
                 </div><hr />
                 {eventType != 'CampingEvent' &&
                   <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
-                    <h2 className="h3"> Pickup Points</h2>
-                    <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
+                    <h2 className="h3"> Pickup Points : </h2>
+                    <div className='margin-location'>
+                      {eventDetails.b2bLocaion &&
+                        <div className="section-details" >
+                          <h2 > <b>Base to Base : </b></h2>
+                          <ul className="display-bulletin"><li>{eventDetails.b2bLocaion} </li>
+                          </ul>
+                        </div>
+                      }
+                      <br />
+                      <h2 > <b>Pickup Points from Pune :</b> </h2>
+                      <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
+                      <br />
+                      {eventDetails.pickupPointsfromMumbai &&
+                        <div>
+                          <h2 > <b>Pickup Points from Mumbai :</b> </h2>
+                          <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPointsfromMumbai) }} />
+                        </div>
+                      }
+                    </div>
                   </div>
                 }
                 <hr />
@@ -864,6 +996,10 @@ const ShowEventDetails = () => {
                           <sub >Per Person</sub>
                         </center>
                         </h4>
+
+                        {!isLoadingMSG && errorMessageforNext &&
+                          <p className="bookingClosed" >**Current batch if full. To inquire about seat availability, please contact us directly or you can book for next batch on {batchDate}</p>
+                        }
                         {buttonDisabled &&
                           <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                         }
@@ -909,6 +1045,9 @@ const ShowEventDetails = () => {
                     <center> {batchDate} </center>
                   </div>
                 </div>
+                {!isLoadingMSG && errorMessageforNext &&
+                  <p className="bookingClosed" >**Current batch if full. To inquire about seat availability, please contact us directly or you can book for next batch on {batchDate}</p>
+                }
                 {buttonDisabled &&
                   <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                 }
@@ -930,214 +1069,263 @@ const ShowEventDetails = () => {
       }
       <div>
         {isSuccess &&
+          <div className='add-Scroller'>
+            <Modal show={show} onHide={handleClose}>
+              <form action="" onSubmit={handleSubmit(onSubmit)}>
+                <div className="container">
+                  <Modal.Header closeButton>
+                    <div className="show-title-header"> <br />
+                      <div className='booking-header'>
+                        <h2>BOOKING</h2>
+                        <p>{eventDetails.name}</p>
 
-          <Modal show={show} onHide={handleClose}>
-            <form action="" onSubmit={handleSubmit(onSubmit)}>
-              <div className="container">
-                <Modal.Header closeButton>
-                  <div className="show-title-header"> <br />
-                    <div className='booking-header'>
-                      <h2>BOOKING</h2>
-                      <p>{eventDetails.name}</p>
-
+                      </div>
                     </div>
-                  </div>
-                </Modal.Header>
-                <Modal.Body>
-                  <div className="content">
-                    {buttonClick != 'pay-now' &&
-                      <div className="user-details">
-                        <div className="input-box ">
-                          <span className="details">Full Name<span style={{ 'color': 'red' }}> *</span></span>
-                          <input {...register("fullName", { required: { value: true, message: "This field is required" }, })} type="text" required />
-                        </div>
-                        <div className="input-box ">
-                          <span className="details">Email ID<span style={{ 'color': 'red' }}> *</span></span>
-                          <input  {...register("emailId", { required: { value: true, message: "This field is required" }, })} type="email" required />
-                        </div>
-                        <div className="input-box">
-                          <span className="details">WhatsApp Mobile Number<span style={{ 'color': 'red' }}> *</span></span>
-                          <input placeholder='+91' {...register("whatsappNumber", { required: { value: true, message: "This field is required" }, })} type="tel" required />
-                        </div>
-                        {!everyWeekend && <div className="input-box">
-                          <span className="details">Select Batch<span style={{ 'color': 'red' }}> *</span></span>
-                          <select  {...register("selectDate", { required: { value: true, message: "This field is required" }, })} required>
-                            {availableBatches && availableBatches.map((event, index) => (
-                              <option key={index} value={event} >{event}</option>
-                            ))}
-                          </select>
-                        </div>}
-                        {everyWeekend && <div className="input-box">
-                          <span className="details">Select Batch</span>
-                          <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
-                        </div>}
-                      </div>}
-                    {buttonClick == 'pay-now' &&
-                      <div className="user-details">
-                        {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
-
-                        {eventType != 'CampingEvent' &&
-                          <div>
-                            <h3>Select a Location:<span style={{ 'color': 'red' }}> *</span></h3>
-                            <ul>
-                              {pickupPoints.map((location) => (
-                                <li key={location.id}>
-                                  <label className='radio-display'>
-                                    <input
-                                      type="radio"
-                                      name="location"
-                                      value={location.name}
-                                      onChange={handleSelection}
-                                      checked={selectedLocation === location.name}
-                                    />
-                                    {location.name} 
-                                  </label>
-                                </li>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <div className="content">
+                      {buttonClick != 'pay-now' &&
+                        <div className="user-details">
+                          <div className="input-box ">
+                            <span className="details">Full Name<span style={{ 'color': 'red' }}> *</span></span>
+                            <input {...register("fullName", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                          </div>
+                          <div className="input-box ">
+                            <span className="details">Email ID<span style={{ 'color': 'red' }}> *</span></span>
+                            <input  {...register("emailId", { required: { value: true, message: "This field is required" }, })} type="email" required />
+                          </div>
+                          <div className="input-box">
+                            <span className="details">WhatsApp Mobile Number<span style={{ 'color': 'red' }}> *</span></span>
+                            <input placeholder='+91' {...register("whatsappNumber", { required: { value: true, message: "This field is required" }, })} type="tel" required />
+                          </div>
+                          {!everyWeekend && <div className="input-box">
+                            <span className="details">Select Batch<span style={{ 'color': 'red' }}> *</span></span>
+                            <select onClick={(e) => setSelectDate(e)} required>
+                              {finalBatchesList && finalBatchesList.map((event, index) => (
+                                <option key={index} value={event.batchdate} >{event.batchdate}</option>
                               ))}
-                            </ul>
+                            </select>
+                          </div>}
+                          {everyWeekend && <div className="input-box">
+                            <span className="details">Select Batch</span>
+                            <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
+                          </div>}
+                        </div>}
+                      {buttonClick == 'pay-now' &&
+                        <div className="user-details">
+                          {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
 
-                          </div>
-                        }
+                          {eventType != 'CampingEvent' &&
 
-                        <div className="input-box finalCalculation">
-                          <div className="details">Number of Trekkers</div>
-                          <div></div>
-                          <div className='noOftrekkers'>
-                            <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>
-                            {noOfTrekkers}
-                            <span onClick={increaseCount}><FontAwesomeIcon icon={faCirclePlus} size="lg" style={{ color: "orange", }} /></span>
-                          </div>
-                        </div>
-                        {/* Render input fields for each participant */}
-                        {participants.map((participant, index) => (
-                          <div key={index} className="participant-box">
-                            <h2>participant {index + 2} </h2>
-                            <div key={index} className="Column-2 participant-inputs">
-                              <input
-                                type="text"
-                                placeholder="Name"
-                                value={participant.name}
-                                onChange={(e) =>
-                                  handleParticipantChange(index, "name", e.target.value)
-                                }
-                                required
-                              />
-                              <input
-                                type="text"
-                                placeholder="WhatsApp Number"
-                                value={participant.mobileNumber}
-                                onChange={(e) =>
-                                  handleParticipantChange(
-                                    index,
-                                    "mobileNumber",
-                                    e.target.value
-                                  )
-                                }
-                                required
-                              />
-                              {eventType != 'CampingEvent' &&
-                                <select
-                                  className="select-class"
-                                  name="location"
-                                  value={participant.pickupLocation}
+                            <div>
+                              <h3>Select a City:<span style={{ 'color': 'red' }}> *</span></h3>
+                              <div className="button-radio">
+                                {showLocations.map((option) => (
+                                  <div
+                                    key={option}
+                                    role="button"
+                                    tabIndex={0} // Makes the div focusable
+                                    className={`radio-button ${selected === option ? 'active' : ''}`}
+                                    onClick={() => handleSelect(option)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleSelect(option)} // Handles keyboard accessibility
+                                  >
+                                    {option}
+                                  </div>
+                                ))}
+                              </div>
+                              {selected == 'Pune' &&
+                                <div>
+                                  <h3>Select a Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <ul>
+                                    {pickupPoints.map((location) => (
+                                      <li key={location.id}>
+                                        <label className='radio-display'>
+                                          <input
+                                            type="radio"
+                                            name="location"
+                                            value={location.name}
+                                            onChange={handleSelection}
+                                            checked={selectedLocation === location.name}
+                                          />
+                                          {location.name}
+                                        </label>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              }
+                              {selected == 'Mumbai' &&
+                                <div>
+                                  <h3>Select a Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <ul>
+                                    {pickupPointsfromMumbai.map((location) => (
+                                      <li key={location.id}>
+                                        <label className='radio-display'>
+                                          <input
+                                            type="radio"
+                                            name="location"
+                                            value={location.name}
+                                            onChange={handleSelection}
+                                            checked={selectedLocation === location.name}
+                                          />
+                                          {location.name}
+                                        </label>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              }
+
+                              {selected == eventDetails.b2bLocaion &&
+                                <div>
+                                  <h3>Selected a Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <ul className="b2blocation display-bulletin"><li>{eventDetails.b2bLocaion}</li>
+                                  </ul>
+                                </div>
+                              }
+                            </div>
+                          }
+                          {selected &&
+                            <div className="input-box finalCalculation">
+                              <div className="details">Number of Trekkers</div>
+                              <div></div>
+                              <div className='noOftrekkers'>
+                                <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>
+                                {noOfTrekkers}
+                                <span onClick={increaseCount}><FontAwesomeIcon icon={faCirclePlus} size="lg" style={{ color: "orange", }} /></span>
+                              </div>
+                            </div>
+                          }
+                          {/* Render input fields for each participant */}
+                          {participants.map((participant, index) => (
+                            <div key={index} className="participant-box">
+                              <h2>participant {index + 2} </h2>
+                              <div key={index} className="Column-2 participant-inputs">
+                                <input
+                                  type="text"
+                                  placeholder="Name"
+                                  value={participant.name}
+                                  onChange={(e) =>
+                                    handleParticipantChange(index, "name", e.target.value)
+                                  }
+                                  required
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="WhatsApp Number"
+                                  value={participant.mobileNumber}
                                   onChange={(e) =>
                                     handleParticipantChange(
                                       index,
-                                      "pickupLocation",
+                                      "mobileNumber",
                                       e.target.value
                                     )
                                   }
                                   required
+                                />
+                                {eventType != 'CampingEvent' &&
+                                  <select
+                                    className="select-class"
+                                    name="location"
+                                    value={participant.pickupLocation}
+                                    onChange={(e) =>
+                                      handleParticipantChange(
+                                        index,
+                                        "pickupLocation",
+                                        e.target.value
+                                      )
+                                    }
+                                    required
+                                  >
+
+                                    <option value="">Select a location</option>{" "}
+                                    {/* Optional: Placeholder option */}
+                                    {pickupPoints.map((pickupPoint) => {
+                                      return (
+                                        <option value={pickupPoint.name} key={pickupPoint.id}>
+                                          {pickupPoint.name}
+                                        </option>
+                                      );
+                                    })}
+                                  </select>
+                                }
+                              </div>
+                            </div>
+                          ))}
+                          {batchFull &&
+                            <p className='bookingClosed'>Only {availableSlot} seats are currently available. Please reach out to us at +91 7028740961 to discuss the possibility of accommodating additional bookings.</p>
+                          }
+                          {
+                            selected && discountAvailable &&
+                            <div className="input-box" style={{ 'display': 'flex', 'gap': '10px' }}>
+                              <input
+                                type="text" className="input-box-discount"
+                                value={couponCode}
+                                onChange={(e) => setCouponCode(e.target.value)}
+                                placeholder="Enter coupon code"
+                              />
+                              <div className="button discount-button">
+                                <button type="button" onClick={handleCouponApply}>
+                                  Apply Coupon
+                                </button>
+                              </div>
+                            </div>
+                          }
+                          {selected && eventType == 'BackPackingTrip' &&
+                            <div className='payment-selection'>
+                              <label className='radio-display'>
+                                <input
+                                  type="radio"
+                                  value="full"
+                                  checked={paymentOption === "full"}
+                                  onChange={handlePaymentChange}
+                                />
+                                Full Payment
+                              </label>
+                              <label className='radio-display'>
+                                <input
+                                  type="radio"
+                                  value="partial"
+                                  checked={paymentOption === "partial"}
+                                  onChange={handlePaymentChange}
+                                />
+                                Partial Payment
+                              </label>
+                            </div>
+                          }
+                          {showDiscountStatus && discount > 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': 'green', 'gap': '5px' }}> Discount Applied   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.007 8.27C22.194 9.125 23 10.45 23 12c0 1.55-.806 2.876-1.993 3.73.24 1.442-.134 2.958-1.227 4.05-1.095 1.095-2.61 1.459-4.046 1.225C14.883 22.196 13.546 23 12 23c-1.55 0-2.878-.807-3.731-1.996-1.438.235-2.954-.128-4.05-1.224-1.095-1.095-1.459-2.611-1.217-4.05C1.816 14.877 1 13.551 1 12s.816-2.878 2.002-3.73c-.242-1.439.122-2.955 1.218-4.05 1.093-1.094 2.61-1.467 4.057-1.227C9.125 1.804 10.453 1 12 1c1.545 0 2.88.803 3.732 1.993 1.442-.24 2.956.135 4.048 1.227 1.093 1.092 1.468 2.608 1.227 4.05Zm-4.426-.084a1 1 0 0 1 .233 1.395l-5 7a1 1 0 0 1-1.521.126l-3-3a1 1 0 0 1 1.414-1.414l2.165 2.165 4.314-6.04a1 1 0 0 1 1.395-.232Z" fill="#009912"></path></g></svg></p>}
+                          {showDiscountStatus && discount == 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> Coupon Not Applied  <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
+                          <div className='hr'></div>
+                          {selected &&
+                            <div className='finalCalculation'>
+                              <span >Total To Pay</span>
+                              <span></span>
+                              <span ><div className='calculation'>
+                                <span >₹{finalPrice} /-
+                                </span>
+                                <span className='price-link'><a
+                                  href="#"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleToggleBreakup();
+                                  }}
+                                  style={{
+                                    marginLeft: "10px",
+                                    color: "orange",
+                                    cursor: "pointer",
+                                  }}
                                 >
-
-                                  <option value="">Select a location</option>{" "}
-                                  {/* Optional: Placeholder option */}
-                                  {pickupPoints.map((pickupPoint) => {
-                                    return (
-                                      <option value={pickupPoint.name} key={pickupPoint.id}>
-                                        {pickupPoint.name}
-                                      </option>
-                                    );
-                                  })}
-                                </select>
-                              }
+                                  Show breakup
+                                </a>
+                                </span>
+                              </div>
+                              </span>
                             </div>
-                          </div>
-                        ))}
-                        {batchFull &&
-                          <p className='bookingClosed'>Only {availableSlot} seats are currently available. Please reach out to us at +91 7028740961 to discuss the possibility of accommodating additional bookings.</p>
-                        }
-                        {
-                          discountAvailable &&
-                          <div className="input-box" style={{ 'display': 'flex', 'gap': '10px' }}>
-                            <input
-                              type="text" className="input-box-discount"
-                              value={couponCode}
-                              onChange={(e) => setCouponCode(e.target.value)}
-                              placeholder="Enter coupon code"
-                            />
-                            <div className="button discount-button">
-                              <button type="button" onClick={handleCouponApply}>
-                                Apply Coupon
-                              </button>
-                            </div>
-                          </div>
-                        }
-                        {eventType == 'BackPackingTrip' &&
-                    <div className='payment-selection'>
-                      <label className='radio-display'>
-                        <input
-                          type="radio"
-                          value="full"
-                          checked={paymentOption === "full"}
-                          onChange={handlePaymentChange}
-                        />
-                        Full Payment
-                      </label>
-                      <label className='radio-display'>
-                        <input
-                          type="radio"
-                          value="partial"
-                          checked={paymentOption === "partial"}
-                          onChange={handlePaymentChange}
-                        />
-                        Partial Payment
-                      </label>
-                    </div>
-                } 
-                        {showDiscountStatus && discount > 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': 'green', 'gap': '5px' }}> Discount Applied   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.007 8.27C22.194 9.125 23 10.45 23 12c0 1.55-.806 2.876-1.993 3.73.24 1.442-.134 2.958-1.227 4.05-1.095 1.095-2.61 1.459-4.046 1.225C14.883 22.196 13.546 23 12 23c-1.55 0-2.878-.807-3.731-1.996-1.438.235-2.954-.128-4.05-1.224-1.095-1.095-1.459-2.611-1.217-4.05C1.816 14.877 1 13.551 1 12s.816-2.878 2.002-3.73c-.242-1.439.122-2.955 1.218-4.05 1.093-1.094 2.61-1.467 4.057-1.227C9.125 1.804 10.453 1 12 1c1.545 0 2.88.803 3.732 1.993 1.442-.24 2.956.135 4.048 1.227 1.093 1.092 1.468 2.608 1.227 4.05Zm-4.426-.084a1 1 0 0 1 .233 1.395l-5 7a1 1 0 0 1-1.521.126l-3-3a1 1 0 0 1 1.414-1.414l2.165 2.165 4.314-6.04a1 1 0 0 1 1.395-.232Z" fill="#009912"></path></g></svg></p>}
-                        {showDiscountStatus && discount == 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> Coupon Not Applied  <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
-                        <div className='hr'></div>
-                       
-                        <div className='finalCalculation'>
-                          <span >Total To Pay</span>
-                          <span></span>
-                          <span ><div className='calculation'>
-                            <span >₹{finalPrice} /-
-                            </span>
-                            <span className='price-link'><a
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleToggleBreakup();
-                              }}
-                              style={{
-                                marginLeft: "10px",
-                                color: "orange",
-                                cursor: "pointer",
-                              }}
-                            >
-                              Show breakup
-                            </a>
-                            </span>
-                          </div>
-                          </span>
+                          }
                         </div>
-
-                      </div>
-                    }
-                    {
-                      showBreakup && paymentOption == 'partial' &&
+                      }
+                      {
+                        showBreakup && paymentOption == 'partial' &&
                         <div >
                           <table className='pay-table'>
                             <tr>
@@ -1150,7 +1338,7 @@ const ShowEventDetails = () => {
                             </tr>
                             <tr>
                               <td className='pay-td'>Subtotal</td>
-                              <td className='column2 pay-td'>{ Number(noOfTrekkers)* Number(scheduleBatch.partialBookingAmount)}</td>
+                              <td className='column2 pay-td'>{Number(noOfTrekkers) * Number(scheduleBatch.partialBookingAmount)}</td>
                             </tr>
                             <tr>
                               <td className='pay-td'>Convenience Fee (1.5 %)</td>
@@ -1166,81 +1354,81 @@ const ShowEventDetails = () => {
                             </tr>
                           </table>
                         </div>
-                      
-                    }
-                    {showBreakup && paymentOption == 'full' &&
-                      <div >
-                        <table className='pay-table'>
-                          <tr>
-                            <th className='pay-th'>Details</th>
-                            <th className='column2 pay-th'>Amount</th>
-                          </tr>
-                          <tr>
-                            <td className='pay-td'>Event Fees</td>
-                            <td className='column2 pay-td'>{noOfTrekkers} x {price}</td>
-                          </tr>
-                          <tr>
-                            <td className='pay-td'>Subtotal</td>
-                            <td className='column2 pay-td'>{actualPrice}</td>
-                          </tr>
-                          <tr>
-                            <td className='pay-td'>Convenience Fee (1.5 %)</td>
-                            <td className='column2 pay-td'>{convenienceFee}</td>
-                          </tr>
-                          <tr>
-                            <td className='pay-td'>Added On</td>
-                            <td className='column2 pay-td'>0</td>
-                          </tr>
-                          {discount > 0 ? <tr>
-                            <td className='pay-td'>Added Discount</td>
-                            <td className='column2 pay-td'>- {discount}</td>
-                          </tr> : ''}
-                          <tr>
-                            <th className='pay-th'>Total Payment</th>
-                            <th className='column2 pay-th'>{finalPrice}</th>
-                          </tr>
-                        </table>
+
+                      }
+                      {showBreakup && paymentOption == 'full' &&
+                        <div >
+                          <table className='pay-table'>
+                            <tr>
+                              <th className='pay-th'>Details</th>
+                              <th className='column2 pay-th'>Amount</th>
+                            </tr>
+                            <tr>
+                              <td className='pay-td'>Event Fees</td>
+                              <td className='column2 pay-td'>{noOfTrekkers} x {price}</td>
+                            </tr>
+                            <tr>
+                              <td className='pay-td'>Subtotal</td>
+                              <td className='column2 pay-td'>{actualPrice}</td>
+                            </tr>
+                            <tr>
+                              <td className='pay-td'>Convenience Fee (1.5 %)</td>
+                              <td className='column2 pay-td'>{convenienceFee}</td>
+                            </tr>
+                            <tr>
+                              <td className='pay-td'>Added On</td>
+                              <td className='column2 pay-td'>0</td>
+                            </tr>
+                            {discount > 0 ? <tr>
+                              <td className='pay-td'>Added Discount</td>
+                              <td className='column2 pay-td'>- {discount}</td>
+                            </tr> : ''}
+                            <tr>
+                              <th className='pay-th'>Total Payment</th>
+                              <th className='column2 pay-th'>{finalPrice}</th>
+                            </tr>
+                          </table>
+                        </div>
+                      }
+
+                    </div>
+
+                    {buttonClick != 'pay-now' &&
+                      <div className="button">
+                        <input type="submit" value="Next >>" />
                       </div>
                     }
-                   
-                  </div>
+                    {buttonClick == 'pay-now' && showTermsAndConditions &&
+                      <div>
+                        <div className='termsAndCondition'>
+                          <input
+                            type="checkbox"
+                            {...register("termsAndconditions", {
+                              required: {
+                                value: true,
+                                message: "This field is required"
+                              }
+                            })}
+                            required
+                            onMouseOver={handleCheckboxBlur}
+                            checked={termsChecked} // Controlled component
+                          />
+                          <div >
+                            Accept all
+                            <a className='link' href={'https://sahyadrivacations.com/user-agreement'} target="_blank"> terms & conditions</a>
+                          </div>
+                        </div>
 
-                  {buttonClick != 'pay-now' &&
-                    <div className="button">
-                      <input type="submit" value="Next >>" />
-                    </div>
-                  }
-                  {buttonClick == 'pay-now' && showTermsAndConditions &&
-                    <div>
-                      <div className='termsAndCondition'>
-                        <input
-                          type="checkbox"
-                          {...register("termsAndconditions", {
-                            required: {
-                              value: true,
-                              message: "This field is required"
-                            }
-                          })}
-                          required
-                          onMouseOver={handleCheckboxBlur}
-                          checked={termsChecked} // Controlled component
-                        />
-                        <div >
-                          Accept all
-                          <a className='link' href={'https://sahyadrivacations.com/user-agreement'} target="_blank"> terms & conditions</a>
+                        <div className="button">
+                          <input style={{ "background": "green" }} disabled={buttonDisabled} type="submit" value="Pay Now" />
                         </div>
                       </div>
-
-                      <div className="button">
-                        <input style={{ "background": "green" }} disabled={buttonDisabled} type="submit" value="Pay Now" />
-                      </div>
-                    </div>
-                  }
-                </Modal.Body>
-              </div>
-            </form>
-          </Modal>
-
+                    }
+                  </Modal.Body>
+                </div>
+              </form>
+            </Modal>
+          </div>
         }
       </div>
       {show == false && <ContactSection />}

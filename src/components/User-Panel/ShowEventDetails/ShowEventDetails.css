@@ -4,6 +4,40 @@
     object-fit: cover;
     object-position: center;
 }
+.link-show{
+    color: blue;
+    text-decoration: underline;
+}
+.button-radio {
+    display: flex;
+    gap: 10px;
+    margin:  10px 0 10px 0;
+  }
+  .margin-location{
+    margin-left: 10px;
+  }
+  .b2blocation{
+    margin-left: 5.2rem;
+  }
+  .radio-button {
+    padding: 10px 20px;
+    border: 2px solid #ccc;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  
+  .radio-button.active {
+    background-color: #4caf50;
+    color: white;
+    border-color: #4caf50;
+  }
+  
+  .radio-button:hover {
+    background-color: #e0e0e0;
+  }
+  
 @media (max-width: 768px) {
     .event-section-header-img {
         width: 100%;
@@ -525,6 +559,10 @@ h3 {
     .swiper-button-next:after {
         content: none;
     }
+    .add-Scroller{
+        max-height: 350px;
+        overflow-y: scroll;
+      }
 }
 
 .Column-2 {

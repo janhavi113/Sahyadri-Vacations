@@ -292,16 +292,47 @@ app.get("/delete-scheduled-events/eventid/:eventId", async (req, res) => {
 		});
 	}
 });
-app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
-	let event_Id = req.params.eventId;
+app.get("/event-details-admin/eventid/:eventId/:apiName", async (req, res) => {
+	console.log('apiName---',req.params.apiName);
+	console.log('eventId---',req.params.eventId);
 	let apiname = req.params.apiName;
 	var events = await Events.findOne({
 		apiname: apiname
 	});
+   
 	let ScheduleBatchesRecords = await ScheduleBatches.findOne({
-		eventId: event_Id,
+		eventId: req.params.eventId
 	});
-	
+	console.log('ScheduleBatchesRecords---',ScheduleBatchesRecords);
+	if (events && ScheduleBatchesRecords) {
+		
+		res.send({
+			isSuccess: true,
+			events: events,
+			ScheduleBatchesRecords: ScheduleBatchesRecords,
+		});
+	} else {
+		res.send({
+			isSuccess: false
+		});
+	}
+});
+
+
+app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
+	console.log('apiName---',req.params.apiName);
+	console.log('eventId---',req.params.eventId);
+	let apiname = req.params.apiName;
+	var events = await Events.findOne({
+		apiname: apiname
+	});
+   
+	let event_Id = events.eventId.toString();
+	console.log('event_Id---',typeof event_Id);
+	let ScheduleBatchesRecords = await ScheduleBatches.find({
+		scheduleEventId: event_Id
+	});
+	console.log('ScheduleBatchesRecords---',ScheduleBatchesRecords);
 	if (events && ScheduleBatchesRecords) {
 		
 		res.send({

@@ -53,7 +53,9 @@ router.post('/create-event', async (req, res) => {
 			difficulty,
 			endurance,
 			duration,
-			totalDistance,
+			totalDistance,			
+			pickupPointsfromMumbai,
+			b2bLocaion,
         } = req.body;
 
         let apiName = req.body.eventName;
@@ -81,6 +83,8 @@ router.post('/create-event', async (req, res) => {
 			endurance:endurance,
 			duration:duration,
 			totalDistance:totalDistance,
+			b2bLocaion:b2bLocaion,
+			pickupPointsfromMumbai:pickupPointsfromMumbai
         });
 
         await event.save();
@@ -179,8 +183,9 @@ router.put("/create-event/event-details/:eventId", async (req, res) => {
 			duration,
 			totalDistance,
 			ageGroup,
-            trekDistance,
-		
+            trekDistance,				
+			pickupPointsfromMumbai,
+			b2bLocaion,
 		} = req.body;
 
 		let imageList = [];
@@ -229,6 +234,8 @@ router.put("/create-event/event-details/:eventId", async (req, res) => {
 			totalDistance:totalDistance,
 			ageGroup:ageGroup,
             trekDistance:trekDistance,
+			b2bLocaion:b2bLocaion,
+			pickupPointsfromMumbai:pickupPointsfromMumbai
 		};
 
 		// Update and fetch events

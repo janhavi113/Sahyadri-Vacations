@@ -8,20 +8,21 @@ const scheduleBatchesSchema = new mongoose.Schema({
   eventApi: { type: String },
   Url: { type: String },
   eventType: { type: String },
-  eventCostPerPerson: { type: Number },
-  b2bPrice: { type: Number },
+  eventCostPerPerson: { type: Number , default: 0},
+  b2bPrice: { type: Number , default: 0},
+  eventCostPerPersonFromMumbai: { type: Number , default: 0},
   bookingTillDate: { type: String },  // format: YYYY-MM-DD
   bookingTillTime: { type: String },  // format: HH:mm
   eventEndDate: { type: Date },
   eventStartDate: { type: Date },
-  eventBatchCount: { type: Number },
+  eventBatchCount: { type: Number , default: 0},
   everyWeekend: { type: Boolean },
   notScheduleYet: { type: Boolean },
   images: { type: String },
   scheduleEventId: { type: String },
   alreadyBoockedCount: { type: Number , default: 0},
   specialOfferEvent: { type: Boolean , default: false },
-  partialBookingAmount : { type: Number },
+  partialBookingAmount : { type: Number , default: 0},
 });
 
 // Middleware to check and update `active` field before each query

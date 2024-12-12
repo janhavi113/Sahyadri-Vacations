@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import Contact_Us from "./User-Panel/Contact_Us/Contact_Us";
 import FunFact from "./User-Panel/FunFact/FunFact";
 import Rating from "./User-Panel/Rating/RatingSection";
-import SpecialOffer from "./User-Panel/SpecialOfferService/SpecialOfferSection";
+import SpecialOfferSection from "./User-Panel/SpecialOfferService/SpecialOfferSection";
 import slide1 from './Images/Screen_2.jpg';
 import slide2 from './Images/Screen_3.webp';
 import slide3 from './Images/Screen_4.webp';
@@ -59,6 +59,7 @@ const Home = () => {
   const [specialOffer , setSpecialOffer]= useState();
   useEffect(() => {
     // console.log('isSuccess--'+isSuccess);
+   
     if (isSuccess == false) {
       getAllRecord();
       getSpecialOfferEvent();
@@ -80,7 +81,7 @@ const Home = () => {
       console.log('record found',res.offer);
     }
   }
-
+ 
   const getNextBatchDate = (event) => {
     var liveEvent = '';
     let batchdate;
@@ -495,9 +496,9 @@ const Home = () => {
           </Swiper>
         </div>
       </div>
-      {/* {specialOffer && 
-      <specialOffer  specialOffer={specialOffer} onSendData={sendDataToParent}/> 
-      } */}
+      {specialOffer && 
+      <SpecialOfferSection  specialOffer={specialOffer} /> 
+      }
       <Rating />
       <div>
         <FunFact />

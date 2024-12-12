@@ -20,8 +20,8 @@ function ScheduleEvents() {
   const [activeError, setActiveError] = useState({ disply: false });
   const [count, setCount] = useState(1);
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
-  const [search , setSearch]= useState();
-  const[ eventType , setEventType]= useState();
+  const [search, setSearch] = useState();
+  const [eventType, setEventType] = useState();
   const navigate = useNavigate();
   const {
     register,
@@ -106,13 +106,18 @@ function ScheduleEvents() {
 
       formData.append("active", active);
       //formData.append("eventId", data.Event);
-      
+
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
-      formData.append('scheduleEventId',search[0].eventId);
+      formData.append('scheduleEventId', search[0].eventId);
       formData.append('eventCostPerPerson', data.eventCostPerPerson);
+      formData.append('eventCostPerPersonFromMumbai', data.eventCostPerPersonFromMumbai);
+      if(data.eventEndDate){
       formData.append('eventEndDate', new Date(data.eventEndDate));
+      }
+      if(data.eventStartDate){
       formData.append('eventStartDate', new Date(data.eventStartDate));
+      }
       formData.append('eventBatchCount', data.eventBatchCount);
       formData.append('everyWeekend', data.everyWeekend);
       formData.append('notScheduleYet', data.notScheduleYet);
@@ -120,7 +125,9 @@ function ScheduleEvents() {
       formData.append('bookingTillDate', data.bookingTillDate);
       formData.append('specialOfferEvent', data.specialOfferEvent);
       formData.append('bookingTillTime', data.bookingTillTime.toString());
-      formData.append('partialBookingAmount', data.partialBookingAmount);
+      if (data.partialBookingAmount) {
+        formData.append('partialBookingAmount', data.partialBookingAmount);
+      }
       const url = `${apiUrl}schedule-event`;
       let r = await fetch(url, {
         method: "POST",
@@ -134,161 +141,167 @@ function ScheduleEvents() {
     }
   }
 
- const handleSelectEvent= async (eventId) => {
-  const search = events.filter(function (item) {
-    //console.log('item', item.eventId == data.Event)
-    return item.eventId == eventId;
-  });
-  if(search){
-  setEventType(search[0].eventType);
-  setSearch(search);
+  const handleSelectEvent = async (eventId) => {
+    const search = events.filter(function (item) {
+      //console.log('item', item.eventId == data.Event)
+      return item.eventId == eventId;
+    });
+    if (search) {
+      setEventType(search[0].eventType);
+      setSearch(search);
+    }
+    //console.log('search--', search);
   }
-  //console.log('search--', search);
- }
 
   return (
     <div>
       <AdminNavbar>
 
-      < form action="" onSubmit={handleSubmit(onSubmit)}>
-        <div className="schedule-form container">
-          <div className="title-header">Schedule Event</div>
+        < form action="" onSubmit={handleSubmit(onSubmit)}>
+          <div className="schedule-form container">
+            <div className="title-header">Schedule Event</div>
 
-          <div className="content">
-            {isSuccess &&
-              <div className="user-details">
-                <div className="input-box ">
-                  <span className="details">Event Name<span style={{ 'color': 'red' }}>*</span></span>
-                  <select onChange={(e) => handleSelectEvent(e.target.value)}>
-                  <option>---Select----</option>
-                    {events.map(event => (
-                      <option value={event.eventId} key={event.eventId}>{event.name}</option>
-                    ))}
-                  </select>
-                </div>
+            <div className="content">
+              {isSuccess &&
+                <div className="user-details">
+                  <div className="input-box ">
+                    <span className="details">Event Name<span style={{ 'color': 'red' }}>*</span></span>
+                    <select onChange={(e) => handleSelectEvent(e.target.value)}>
+                      <option>---Select----</option>
+                      {events.map(event => (
+                        <option value={event.eventId} key={event.eventId}>{event.name}</option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="input-box-column ">
-                  <span className="details">Start Date </span>
-                  <input type="date" {...register("eventStartDate")} />
-                </div>
-                <div className="input-box-column ">
-                  <span className="details">End Date </span>
-                  <input type="date" {...register("eventEndDate")} />
-                </div>
-                <br />
-                <div className="input-box-column ">
-                  <span className="details">Booking Open Till Date </span>
-                  <input type="date" {...register("bookingTillDate")} />
-                </div>
-                <div className="input-box-column ">
-                  <span className="details">Booking Open Till Time</span>
-                  <input type="time" {...register("bookingTillTime")} />
-                </div>
-                {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
-                <div className="input-box-column event-picker ">
-                  <span className="details">Every Weekend </span>
-                  <input type="checkbox"  {...register("everyWeekend")} />
-                </div>
+                  <div className="input-box-column ">
+                    <span className="details">Start Date </span>
+                    <input type="date" {...register("eventStartDate")} />
+                  </div>
+                  <div className="input-box-column ">
+                    <span className="details">End Date </span>
+                    <input type="date" {...register("eventEndDate")} />
+                  </div>
+                  <br />
+                  <div className="input-box-column ">
+                    <span className="details">Booking Open Till Date </span>
+                    <input type="date" {...register("bookingTillDate")} />
+                  </div>
+                  <div className="input-box-column ">
+                    <span className="details">Booking Open Till Time</span>
+                    <input type="time" {...register("bookingTillTime")} />
+                  </div>
+                  {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
+                  <div className="input-box-column event-picker ">
+                    <span className="details">Every Weekend </span>
+                    <input type="checkbox"  {...register("everyWeekend")} />
+                  </div>
 
-                <div className="input-box-column event-picker ">
-                  <span className="details">On Public Demand </span>
-                  <input type="checkbox"   {...register("notScheduleYet")} />
-                </div>
-                {activeError.disply && <div className='errorMessage'>{activeError.message}</div>}
+                  <div className="input-box-column event-picker ">
+                    <span className="details">On Public Demand </span>
+                    <input type="checkbox"   {...register("notScheduleYet")} />
+                  </div>
+                  {activeError.disply && <div className='errorMessage'>{activeError.message}</div>}
 
-                <div className="input-box-column ">
-                  <span className="details">B2B Per Person </span>
-                  <input  {...register("b2bPrice")} type="text" />
-                </div>
-                
-                <div className="input-box-column">
-                  <span className="details">Cost Per Person <span style={{ 'color': 'red' }}>*</span></span>
-                  <input  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="text" required />
-                </div>
-              {eventType == 'BackPackingTrip' &&
-                <div className="input-box-column ">
-                  <span className="details">Partial Booking Amount Per Person </span>
-                  <input  {...register("partialBookingAmount")} type="text" />
-                </div>
-            }  
-                <div className="input-box-column ">
-                  <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
-                  <input  {...register("eventBatchCount", { required: { value: true, message: "This field is required" }, })} min="1" type="number" required />
-                </div>
-                <div className="input-box-column ">
-                  <span className="details">Active</span>
-                  <input  {...register("Active")} type="checkbox" id="active" name="Active" value={true} />
-                </div>
-                <div className="input-box-column ">
-                  <span className="details">Special Offer Event</span>
-                  <input  {...register("specialOfferEvent")} type="checkbox" id="active" name="Active" value={true} />
-                </div>
-                <div className="input-box-column ">
-                  <span className="details"></span>
-                 </div>
-                <div className="input-box-column ">
-                <span className="details">Upload Cover Photo <span style={{ 'color': 'red' }}>*</span></span>
-                </div>
-                 {/* Dropzone for file uploads */}
-                <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
-                  {({ getRootProps, getInputProps }) => (
-                    <section className="dropzone">
-                      <div {...getRootProps({ className: "dropzone" })}>
-                        <input {...getInputProps()} />
-                        <p>
-                          Drag 'n' drop some files here, or click to select files
-                        </p>
-                      </div>
-                    </section>
-                  )}
-                </Dropzone>
-                {/* Show validation error if no file is uploaded */}
-                {errors.dropzone && (
-                  <p className="error-message">{errors.dropzone.message}</p>
-                )}
+                  <div className="input-box-column ">
+                    <span className="details">B2B Per Person </span>
+                    <input  {...register("b2bPrice")} type="text" />
+                  </div>
 
-                {/* Preview Uploaded Images */}
-                <div className="image-preview-container">
-                  {uploadedFiles.map((file) => (
-                    <div key={file.name} className="image-preview">
-                      <img
-                        src={file.preview}
-                        alt={file.name}
-                        style={{
-                          width: "150px",
-                          height: "175px",
-                          objectFit: "cover",
-                        }}
-                      />
-                      <button type="button" onClick={() => removeFile(file)}>
-                        <FontAwesomeIcon
-                          icon={faCircleXmark}
-                          size="lg"
-                          style={{ color: "orange" }}
-                        />
-                      </button>
+                  <div className="input-box-column">
+                    <span className="details">Cost Per Person from Pune<span style={{ 'color': 'red' }}>*</span></span>
+                    <input  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                  </div>
+                  <div className="input-box-column">
+                    <span className="details">Cost Per Person from Mumbai<span style={{ 'color': 'red' }}>*</span></span>
+                    <input  {...register("eventCostPerPersonFromMumbai")} type="text" />
+                  </div>
+
+                  {eventType == 'BackPackingTrip' &&
+                    <div className="input-box-column ">
+                      <span className="details">Partial Booking Amount Per Person </span>
+                      <input  {...register("partialBookingAmount")} type="number" />
                     </div>
-                  ))}
-                </div>
-              </div>
-            }
-          </div>
-          <div className='button-group'>
-            <div className="button-edit-container">
-              <div className="button">
-                {
-                  /* <input onClick={() => {
-                    setCount(count => count + 1)
-                    addChildComponent()
                   }
-                  } type="submit" value="Add Batch + " /> */
-                }
-                <input type="submit" value="Schedule Batches" />
+
+                  <div className="input-box-column ">
+                    <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
+                    <input  {...register("eventBatchCount", { required: { value: true, message: "This field is required" }, })} min="1" type="number" required />
+                  </div>
+                  <div className="input-box-column ">
+                    <span className="details">Active</span>
+                    <input  {...register("Active")} type="checkbox" id="active" name="Active" value={true} />
+                  </div>
+                  <div className="input-box-column ">
+                    <span className="details">Special Offer Event</span>
+                    <input  {...register("specialOfferEvent")} type="checkbox" id="active" name="Active" value={true} />
+                  </div>
+                  <div className="input-box-column ">
+                    <span className="details"></span>
+                  </div>
+                  <div className="input-box-column ">
+                    <span className="details">Upload Cover Photo <span style={{ 'color': 'red' }}>*</span></span>
+                  </div>
+                  {/* Dropzone for file uploads */}
+                  <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
+                    {({ getRootProps, getInputProps }) => (
+                      <section className="dropzone">
+                        <div {...getRootProps({ className: "dropzone" })}>
+                          <input {...getInputProps()} />
+                          <p>
+                            Drag 'n' drop some files here, or click to select files
+                          </p>
+                        </div>
+                      </section>
+                    )}
+                  </Dropzone>
+                  {/* Show validation error if no file is uploaded */}
+                  {errors.dropzone && (
+                    <p className="error-message">{errors.dropzone.message}</p>
+                  )}
+
+                  {/* Preview Uploaded Images */}
+                  <div className="image-preview-container">
+                    {uploadedFiles.map((file) => (
+                      <div key={file.name} className="image-preview">
+                        <img
+                          src={file.preview}
+                          alt={file.name}
+                          style={{
+                            width: "150px",
+                            height: "175px",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <button type="button" onClick={() => removeFile(file)}>
+                          <FontAwesomeIcon
+                            icon={faCircleXmark}
+                            size="lg"
+                            style={{ color: "orange" }}
+                          />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              }
+            </div>
+            <div className='button-group'>
+              <div className="button-edit-container">
+                <div className="button">
+                  {
+                    /* <input onClick={() => {
+                      setCount(count => count + 1)
+                      addChildComponent()
+                    }
+                    } type="submit" value="Add Batch + " /> */
+                  }
+                  <input type="submit" value="Schedule Batches" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
       </AdminNavbar>
     </div>
 

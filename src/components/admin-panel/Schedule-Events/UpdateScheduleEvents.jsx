@@ -44,6 +44,7 @@ const UpdateScheduleEvents = () => {
   const [bookingTillTime, setBookingTillTime] = useState();
   const [specialOfferEvent, setSpecialOfferEvent] = useState();
   const [partialBookingAmount, setPartialBookingAmount] = useState();
+  const [eventCostPerPersonFromMumbai , setEventCostPerPersonFromMumbai] = useState();
   const navigate = useNavigate();
   const {
     register,
@@ -168,6 +169,7 @@ const UpdateScheduleEvents = () => {
       formData.append('bookingTillTime', bookingTillTime.toString());
       formData.append('scheduleEventId', eventIsScheduled);
       formData.append('partialBookingAmount',partialBookingAmount);
+      formData.append('eventCostPerPersonFromMumbai',eventCostPerPersonFromMumbai);
       const url = `${apiUrl}update-schedule-events/${eventId}`;
       let r = await fetch(url, {
         method: "POST",
@@ -242,8 +244,12 @@ const UpdateScheduleEvents = () => {
                     <input value={b2bPrice} onChange={(e) => setB2bPrice(e.target.value)} type="text" />
                   </div>
                   <div className="input-box-column">
-                    <span className="details">Cost Per Person <span style={{ 'color': 'red' }}>*</span></span>
+                    <span className="details">Cost Per Person from Pune<span style={{ 'color': 'red' }}>*</span></span>
                     <input value={eventCostPerPerson} onChange={(e) => setEventCostPerPerson(e.target.value)} type="text" required />
+                  </div>
+                  <div className="input-box-column">
+                    <span className="details">Cost Per Person from Mumbai <span style={{ 'color': 'red' }}>*</span></span>
+                    <input value={eventCostPerPerson} onChange={(e) => setEventCostPerPersonFromMumbai(e.target.value)} type="text" required />
                   </div>
                   <div className="input-box-column ">
                     <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>

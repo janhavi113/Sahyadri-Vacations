@@ -113,7 +113,7 @@ const ScheduledEventsDetails = () => {
     }
   }
   const getAllRecord = async () => {
-    let r = await fetch(`${apiUrl}event-details/eventid/${params[0]}/${params[1]}`, {
+    let r = await fetch(`${apiUrl}event-details-admin/eventid/${params[0]}/${params[1]}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
@@ -217,8 +217,8 @@ const ScheduledEventsDetails = () => {
                     <div ><b>Base to Base Price: </b>{ scheduleBatch.b2bPrice}</div>
                     </div>
                     <div className='scheduled-flex'>
-                    <div><b>eventEndDate: </b>{new Date(scheduleBatch.eventEndDate).toISOString().split('T')[0]}</div>
-                    <div><b>eventStartDate: </b>{ new Date(scheduleBatch.eventStartDate).toISOString().split('T')[0]}</div>
+                    {scheduleBatch.eventEndDate && <div><b>eventEndDate: </b>{new Date(scheduleBatch.eventEndDate).toISOString().split('T')[0]}</div> }
+                    {scheduleBatch.eventStartDate &&<div><b>eventStartDate: </b>{ new Date(scheduleBatch.eventStartDate).toISOString().split('T')[0]}</div>}
                     </div>
                     </div>
                     <hr/>

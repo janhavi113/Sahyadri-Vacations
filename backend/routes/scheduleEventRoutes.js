@@ -80,6 +80,7 @@ router.post("/schedule-event", async (req, res) => {
 			everyWeekend,
 			notScheduleYet,
 			b2bPrice,
+			eventCostPerPersonFromMumbai,
 			bookingTillDate,
 			bookingTillTime,
 			specialOfferEvent,
@@ -110,6 +111,7 @@ router.post("/schedule-event", async (req, res) => {
 			bookingTillTime: bookingTillTime,
 			eventname: eventname,
 			images: currUrl,
+			eventCostPerPersonFromMumbai:eventCostPerPersonFromMumbai,
 			specialOfferEvent: specialOfferEvent,
 			partialBookingAmount:partialBookingAmount,
 			Url: "/event-details?eventid=" +

@@ -1,0 +1,70 @@
+.special-offer {
+    width: 100%;
+    padding: 20px 0;
+    background-color: #f8f8f800;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+  }
+  
+  .offer-image-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 10px 14px 16px rgba(0, 0.6, 0, 0.6); /* Shadow added to the image container */
+    
+  }
+    
+  .offer-image-container img {
+    width: 100%;
+    height: 80vh;
+    display: block;
+  }
+ 
+  .offer-button {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px;
+    background-color: orange; /* Button background color */
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  .offer-title{
+    position: absolute;
+    top: 30%;
+    left: 55%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    background-color: transparent; /* Button background color */
+    color: yellow;
+    border: none;
+    font-size: 75px;
+    font-weight: bolder;
+    cursor: pointer;
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.721);
+  }
+  .offer-title-starts-with{
+    position: absolute;
+    top: 50%;
+    left: 85%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    background-color: transparent; /* Button background color */
+    color: white;
+    border: none;
+    font-size: 40px;
+    font-weight: bolder;
+    cursor: pointer;
+    text-shadow: 0px 0px 5px #f44602, 0px 0px 10px #bcf405, 0px 0px 15px #1e03e3;
+  }
+  .offer-button:hover {
+    background-color: rgb(253, 131, 2); /* Darker color on hover */
+  }
+  

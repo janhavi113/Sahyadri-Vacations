@@ -43,6 +43,7 @@ function Editor(props){
     props.sendDataToParent(value);
   }
   const handleProcedureContentChange = (content, delta, source, editor) => {
+    console.log('content--',content);
     setValue(content);
   };
   return (

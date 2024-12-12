@@ -60,7 +60,7 @@ router.get('/get-coupons', async (req, res) => {
 });
 router.get('/get-coupons-event/:eventType', async (req, res) => {
   try {
-    console.log('req.params',req.params.eventType);
+    console.log('#req.params--',req.params.eventType);
     const coupons = await Coupon.find({eventType: req.params.eventType}); // Fetch all coupons from the database
     coupons.sort((a, b) => a.numberOfPeople - b.numberOfPeople);
     res.status(200).json({ success: true, coupons:coupons });
