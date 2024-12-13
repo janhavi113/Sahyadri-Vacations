@@ -998,9 +998,9 @@ const ShowEventDetails = () => {
                         </center>
                         </h4>
 
-                        {!isLoadingMSG && errorMessageforNext &&
+                        {/* {!isLoadingMSG && errorMessageforNext &&
                           <p className="bookingClosed" >**Current batch if full. To inquire about seat availability, please contact us directly or you can book for next batch on {batchDate}</p>
-                        }
+                        } */}
                         {buttonDisabled &&
                           <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                         }
@@ -1050,9 +1050,9 @@ const ShowEventDetails = () => {
                     <center> {batchDate} </center>
                   </div>
                 </div>
-                {!isLoadingMSG && errorMessageforNext &&
+                {/* {!isLoadingMSG && errorMessageforNext &&
                   <p className="bookingClosed" >**Current batch if full. To inquire about seat availability, please contact us directly or you can book for next batch on {batchDate}</p>
-                }
+                } */}
                 {buttonDisabled &&
                   <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                 }
