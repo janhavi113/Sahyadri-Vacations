@@ -39,7 +39,7 @@ const ShowEventDetails = () => {
   const [type, setType] = useState(queryParameters.get("eventid"));
   const [params, setParams] = useState(type.split('/'));
   const [isSuccess, setSuccess] = useState(false);
-  const [inquery, setInquery] = useState(false);
+  const [inquery, setInquery] = useState(true);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonClick, setButtonClick] = useState(null);
@@ -88,7 +88,7 @@ const ShowEventDetails = () => {
   const [paymentOption, setPaymentOption] = useState("full"); // Default to full payment
   const [partialPayment, setPartialPayment] = useState(0);
   const [finalBatchesList, setFinalBatchesList] = useState();
-  const [selected, setSelected] = useState('Pune');
+  const [selected, setSelected] = useState('Pune to Pune');
   const [errorMessageforNext, setErrorMessageforNext] = useState(false);
   const [isLoadingMSG, setIsLoadingMSG] = useState(false);
   const [showLocations, setShowLocations] = useState([]);
@@ -97,9 +97,9 @@ const ShowEventDetails = () => {
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == selectedDate);
     
     let price = 0;
-    if (option == 'Pune') {
+    if (option == 'Pune to Pune') {
       price = foundRecord.eventCostPerPerson;
-    } else if (option == 'Mumbai') {
+    } else if (option == 'Mumbai to Mumbai') {
       price = foundRecord.eventCostPerPersonFromMumbai;
     } else {
       setSelectedLocation(option);
@@ -231,7 +231,7 @@ const ShowEventDetails = () => {
         let res = await r.json()
         if (res.isSuccess == true) {
           // try {
-          //alert('In Pay Now');
+          alert('In Pay Now');
           // Send the payment request to your backend
           const response = await fetch(`${apiUrl}api/phonepe/payment`, {
             method: 'POST',
@@ -244,8 +244,9 @@ const ShowEventDetails = () => {
               mobileNumber: bookingPhone,
             }),
           });
-
+ 
           const data = await response.json();
+          console.log('data---',data);
           if (data && data.redirectUrl) {
             // Redirect the user to PhonePe for payment
             window.location.href = data.redirectUrl;
@@ -579,9 +580,9 @@ const ShowEventDetails = () => {
         setB2bLocation(res.events.b2bLocaion);
         tempLocations.push(res.events.b2bLocaion);
       }
-      tempLocations.push('Pune');
+      tempLocations.push('Pune to Pune');
       if (res.ScheduleBatchesRecords[0]?.eventCostPerPersonFromMumbai != 'undefine' && res.ScheduleBatchesRecords[0]?.eventCostPerPersonFromMumbai > 0) {
-        tempLocations.push('Mumbai');
+        tempLocations.push('Mumbai to Mumbai');
       }
       setShowLocations(tempLocations);
       getAvailableCoupons(res.ScheduleBatchesRecords);
@@ -1017,8 +1018,12 @@ const ShowEventDetails = () => {
                           </div>
                         }
                         {inquery &&
+                           <div>
+                          <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website , please contact us directly.</p>
+                      
                           <div className="button-margin button">
                             <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                          </div>
                           </div>
                         }
                         <br />
@@ -1051,12 +1056,16 @@ const ShowEventDetails = () => {
                 {buttonDisabled &&
                   <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                 }
+                 <div>
+                     <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website, please contact us directly.</p>
+                 </div>
                 <div className="button-edit-container">
                   <div className="button button-margin ">
                     {!inquery && !buttonDisabled &&
                       <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
                     }
-                    {inquery || buttonDisabled &&
+                    
+                    {inquery  &&
                       <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
                     }
                     <button type="button"><a href="tel:07028740961"> <strong>&nbsp;CALL NOW </strong></a> </button>
@@ -1118,7 +1127,7 @@ const ShowEventDetails = () => {
                           {eventType != 'CampingEvent' &&
 
                             <div>
-                              <h3>Select a City:<span style={{ 'color': 'red' }}> *</span></h3>
+                              <h3>Join Us From:<span style={{ 'color': 'red' }}> *</span></h3>
                               <div className="button-radio">
                                 {showLocations.map((option) => (
                                   <div
@@ -1133,7 +1142,7 @@ const ShowEventDetails = () => {
                                   </div>
                                 ))}
                               </div>
-                              {selected == 'Pune' &&
+                              {selected == 'Pune to Pune' &&
                                 <div>
                                   <h3>Select a Location:<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul>
@@ -1154,7 +1163,7 @@ const ShowEventDetails = () => {
                                   </ul>
                                 </div>
                               }
-                              {selected == 'Mumbai' &&
+                              {selected == 'Mumbai to Mumbai' &&
                                 <div>
                                   <h3>Select a Location:<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul>
@@ -1178,7 +1187,7 @@ const ShowEventDetails = () => {
 
                               {selected == eventDetails.b2bLocaion &&
                                 <div>
-                                  <h3>Selected a Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <h3>Selected Pickup Location:<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul className="b2blocation display-bulletin"><li>{eventDetails.b2bLocaion}</li>
                                   </ul>
                                 </div>
@@ -1187,7 +1196,7 @@ const ShowEventDetails = () => {
                           }
                           {selected &&
                             <div className="input-box finalCalculation">
-                              <div className="details">Number of Trekkers</div>
+                              <div className="details">Add More Participants:</div>
                               <div></div>
                               <div className='noOftrekkers'>
                                 <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>

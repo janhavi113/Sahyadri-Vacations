@@ -496,9 +496,9 @@ const Home = () => {
           </Swiper>
         </div>
       </div>
-      {specialOffer && 
+      {/* {specialOffer && 
       <SpecialOfferSection  specialOffer={specialOffer} /> 
-      }
+      } */}
       <Rating />
       <div>
         <FunFact />
