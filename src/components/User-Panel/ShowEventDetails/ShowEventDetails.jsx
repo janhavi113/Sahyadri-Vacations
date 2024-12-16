@@ -601,7 +601,7 @@ const ShowEventDetails = () => {
         tempLocations.push('Mumbai to Mumbai');
       }
       setShowLocations(tempLocations);
-      getAvailableCoupons(res.ScheduleBatchesRecords);
+      getAvailableCoupons(res.events);
     }
 
   }
@@ -651,7 +651,7 @@ const ShowEventDetails = () => {
 
   // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
-    console.log('ScheduleBatchesRecords', ScheduleBatchesRecords);
+    console.log('ScheduleBatchesRecords', ScheduleBatchesRecords.eventType);
     setDiscountAvailable(!ScheduleBatchesRecords.specialOfferEvent);
     if (!ScheduleBatchesRecords.specialOfferEvent) {
       let scheduleEventType = ScheduleBatchesRecords.eventType;
