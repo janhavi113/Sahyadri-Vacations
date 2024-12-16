@@ -1161,7 +1161,7 @@ const ShowEventDetails = () => {
                               </div>
                               {selected == 'Pune to Pune' &&
                                 <div>
-                                  <h3>Select Pickup Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <h3>Please Select Pickup Location<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul>
                                     {pickupPoints.map((location) => (
                                       <li key={location.id}>
@@ -1182,7 +1182,7 @@ const ShowEventDetails = () => {
                               }
                               {selected == 'Mumbai to Mumbai' &&
                                 <div>
-                                  <h3>Select Pickup Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <h3>Please Select Pickup Location<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul>
                                     {pickupPointsfromMumbai.map((location) => (
                                       <li key={location.id}>
