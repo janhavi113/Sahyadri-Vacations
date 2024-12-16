@@ -39,13 +39,14 @@ const ShowEventDetails = () => {
   const [type, setType] = useState(queryParameters.get("eventid"));
   const [params, setParams] = useState(type.split('/'));
   const [isSuccess, setSuccess] = useState(false);
-  const [inquery, setInquery] = useState(true);
+  const [inquery, setInquery] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonClick, setButtonClick] = useState(null);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
   const [pickupPoints, setPickupPoints] = useState([]);
+  const [participantsPickupPoints, setParticipantsPickupPoints] = useState([]);
   const [pickupPointsfromMumbai, setPickupPointsfromMumbai] = useState([]);
   const [b2bLocation, setB2bLocation] = useState();
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
@@ -95,17 +96,20 @@ const ShowEventDetails = () => {
   const handleSelect = (option) => {
     setSelected(option);
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == selectedDate);
-    
+
     let price = 0;
     if (option == 'Pune to Pune') {
       price = foundRecord.eventCostPerPerson;
+      setShowTermsAndConditions(false);
     } else if (option == 'Mumbai to Mumbai') {
       price = foundRecord.eventCostPerPersonFromMumbai;
+      setShowTermsAndConditions(false);
     } else {
       setSelectedLocation(option);
+      setShowTermsAndConditions(true);
       price = foundRecord.b2bPrice;
     }
-    console.log('price---',price);
+    console.log('price---', price);
     let convenienceFeePerPerson = (Number(price) * 0.015).toFixed(2);
     setMaxBooking(foundRecord.batchSize);
     setBookedSlot(foundRecord.bookedSize);
@@ -160,6 +164,17 @@ const ShowEventDetails = () => {
   }
 
   const handleParticipantChange = (index, field, value) => {
+    if(field == 'locationCity' ){
+             console.log('pickupPoints---',pickupPoints);
+             if(value =='Pune to Pune'){
+              setParticipantsPickupPoints(pickupPoints);
+             }else if(value =='Mumbai to Mumbai'){
+              setParticipantsPickupPoints(pickupPointsfromMumbai);
+             }else{
+              setParticipantsPickupPoints([{'Id': 1 ,'name':eventDetails.b2bLocaion}]);
+             }
+    }
+
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
     setParticipants(newParticipants);
@@ -231,7 +246,7 @@ const ShowEventDetails = () => {
         let res = await r.json()
         if (res.isSuccess == true) {
           // try {
-          alert('In Pay Now');
+         // alert('In Pay Now');
           // Send the payment request to your backend
           const response = await fetch(`${apiUrl}api/phonepe/payment`, {
             method: 'POST',
@@ -244,9 +259,9 @@ const ShowEventDetails = () => {
               mobileNumber: bookingPhone,
             }),
           });
- 
+
           const data = await response.json();
-          console.log('data---',data);
+          console.log('data---', data);
           if (data && data.redirectUrl) {
             // Redirect the user to PhonePe for payment
             window.location.href = data.redirectUrl;
@@ -571,6 +586,7 @@ const ShowEventDetails = () => {
       if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
         const jsonData = convertHtmlToJSON(res.events.pickupPoints);
         setPickupPoints(jsonData);
+        setParticipantsPickupPoints(jsonData);
       }
       if (res.events.pickupPointsfromMumbai != null && res.events.pickupPointsfromMumbai != 'undefine') {
         const jsonData = convertHtmlToJSON(res.events.pickupPointsfromMumbai);
@@ -1018,12 +1034,12 @@ const ShowEventDetails = () => {
                           </div>
                         }
                         {inquery &&
-                           <div>
-                          <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website , please contact us directly.</p>
-                      
-                          <div className="button-margin button">
-                            <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
-                          </div>
+                          <div>
+                            <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website , please contact us directly.</p>
+
+                            <div className="button-margin button">
+                              <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                            </div>
                           </div>
                         }
                         <br />
@@ -1056,16 +1072,17 @@ const ShowEventDetails = () => {
                 {buttonDisabled &&
                   <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                 }
-                 <div>
-                     <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website, please contact us directly.</p>
-                 </div>
+                {inquery && <div>
+                  <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website, please contact us directly.</p>
+                </div>
+                }
                 <div className="button-edit-container">
                   <div className="button button-margin ">
                     {!inquery && !buttonDisabled &&
                       <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
                     }
-                    
-                    {inquery  &&
+
+                    {inquery &&
                       <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
                     }
                     <button type="button"><a href="tel:07028740961"> <strong>&nbsp;CALL NOW </strong></a> </button>
@@ -1144,7 +1161,7 @@ const ShowEventDetails = () => {
                               </div>
                               {selected == 'Pune to Pune' &&
                                 <div>
-                                  <h3>Select a Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <h3>Select Pickup Location:<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul>
                                     {pickupPoints.map((location) => (
                                       <li key={location.id}>
@@ -1165,7 +1182,7 @@ const ShowEventDetails = () => {
                               }
                               {selected == 'Mumbai to Mumbai' &&
                                 <div>
-                                  <h3>Select a Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <h3>Select Pickup Location:<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul>
                                     {pickupPointsfromMumbai.map((location) => (
                                       <li key={location.id}>
@@ -1233,6 +1250,33 @@ const ShowEventDetails = () => {
                                   required
                                 />
                                 {eventType != 'CampingEvent' &&
+
+                                  <select
+                                    className="select-class"
+                                    name="locationCity"
+                                    value={participant.locationCity}
+                                    onChange={(e) =>
+                                      handleParticipantChange(
+                                        index,
+                                        "locationCity",
+                                        e.target.value
+                                      )
+                                    }
+                                    required
+                                  >
+
+                                    <option value="">Join Us From</option>{" "}
+                                    {/* Optional: Placeholder option */}
+                                    {showLocations.map((option) => {
+                                      return (
+                                        <option value={option} key={option}>
+                                          {option}
+                                        </option>
+                                      );
+                                    })}
+                                  </select>
+                                }
+                                {eventType != 'CampingEvent' &&
                                   <select
                                     className="select-class"
                                     name="location"
@@ -1247,9 +1291,9 @@ const ShowEventDetails = () => {
                                     required
                                   >
 
-                                    <option value="">Select a location</option>{" "}
-                                    {/* Optional: Placeholder option */}
-                                    {pickupPoints.map((pickupPoint) => {
+                                    <option value="">Select Pickup Location</option>{" "}
+                                    {console.log('participantsPickupPoints-----',participantsPickupPoints )}
+                                    {participantsPickupPoints.map((pickupPoint) => {
                                       return (
                                         <option value={pickupPoint.name} key={pickupPoint.id}>
                                           {pickupPoint.name}
