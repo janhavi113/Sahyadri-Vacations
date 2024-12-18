@@ -175,44 +175,7 @@ app.use('/api', cors({
 	credentials: true,
 }));
 
-async function updateExpiredBookings() {
-    try {
-        const currentDate = new Date();
-        const result = await Bookings.updateMany(
-            { eventEndDate: { $lt: currentDate }, active: true },
-            { $set: { active: false } }
-        );
-    } catch (error) {
-        console.error("Error updating records:", error);
-    }
-}
- 
-app.get("/show-all-bookings/:showOptions", async (req, res) => {
-	try {
-		
-		
-		updateExpiredBookings();
-		let query;
-		console.log('req.params.showOptions--',req.params.showOptions);
-		if(req.params.showOptions == 'all'){
-			query = { active: true };
-		}else{
-			query = { active: true , status : 'confirmed'};
-		}
-		let bookings = await Bookings.find(query);
-		res.send({
-			isSuccess: true,
-			bookings: bookings
-		});
 
-	} catch (error) {
-		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
-	}
-});
 
 app.get("/schedule-event-details", async (req, res) => {
 	try {

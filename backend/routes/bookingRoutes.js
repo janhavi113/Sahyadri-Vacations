@@ -35,7 +35,9 @@ router.post("/booking", async (req, res) => {
             eventId,
             eventName,
             bookingDate,
-            eventPrice,
+            eventPrice,            
+            eventStartDate,
+            eventEndDate,
         } = req.body;
         let bookingIdVar;
 
@@ -57,7 +59,9 @@ router.post("/booking", async (req, res) => {
             eventName: eventName,
             bookingDate: new Date(bookingDate).toLocaleDateString(),
             status: "New",
-            eventPrice: eventPrice,
+            eventPrice: eventPrice,                      
+            eventStartDate:eventStartDate ,
+            eventEndDate:eventEndDate,
         });
         await booking.save();
         //console.log("booking --", booking);
@@ -75,6 +79,23 @@ router.post("/booking", async (req, res) => {
         });
     }
 });
+// DELETE endpoint to delete booking records with name "Janhavi Jadhav"
+router.delete('/delete-bookings', async (req, res) => {
+    try {
+      // Deleting records with the name "Janhavi Jadhav"
+      const result = await Bookings.deleteMany({ mobileNumber: 9922978022 });
+      console.log('result---',result);
+      res.status(200).json({
+        message: `${result.deletedCount} booking(s) deleted successfully.`,
+      });
+    } catch (err) {
+      console.error('Error deleting booking records:', err);
+      res.status(500).json({
+        message: 'An error occurred while deleting booking records.',
+        error: err.message,
+      });
+    }
+  });
 
 router.put("/confirmed-booking", async (req, res) => {
     try {
@@ -87,8 +108,6 @@ router.put("/confirmed-booking", async (req, res) => {
             otherParticipants,
             bookingId,
             scheduleEventId,
-            eventStartDate,
-            eventEndDate,
             addedDiscount,
             remainingAmount
         } = req.body;
@@ -109,8 +128,6 @@ router.put("/confirmed-booking", async (req, res) => {
                     pickupLocation: pickupLocation,
                     otherParticipants: parsedParticipants,
                     scheduleEventId: scheduleEventId,
-                    eventStartDate: eventStartDate,
-                    eventEndDate: eventEndDate,
                     status: "Pending",
                     addedDiscount:addedDiscount,
                     remainingAmount:remainingAmount,
@@ -246,5 +263,42 @@ router.post("/sendInvoice", async (req, res) => {
         return res.status(500).send('Error processing invoice');
     }
 });
+router.get("/show-all-bookings/:showOptions", async (req, res) => {
+    try {
+        updateExpiredBookings();
+        let query;
+        console.log('req.params.showOptions--',req.params.showOptions);
+        if(req.params.showOptions == 'all'){
+            query = { active: true };
+        }else{
+            query = { active: true , status : 'confirmed'};
+        }
+        let bookings = await Bookings.find(query);
+        res.send({
+            isSuccess: true,
+            bookings: bookings
+        });
 
+    } catch (error) {
+        console.error(error);
+        res.send({
+            isSuccess: false,
+            error: error
+        });
+    }
+});
+async function updateExpiredBookings() {
+    try {
+        const currentDate = new Date();
+        console.log('currentDate--',currentDate);
+        const result = await Bookings.updateMany(
+            { eventEndDate: { $lt: currentDate }, active: true },
+            { $set: { active: false } }
+        );
+        console.log('result---',result);
+    } catch (error) {
+        console.error("Error updating records:", error);
+    }
+}
+ 
 export default router;

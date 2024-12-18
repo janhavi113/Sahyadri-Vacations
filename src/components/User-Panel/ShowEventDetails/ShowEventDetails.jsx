@@ -71,6 +71,8 @@ const ShowEventDetails = () => {
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEandDate] = useState(null);
   const [bookingId, setBookingId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showTermsAndConditions, setShowTermsAndConditions] = useState(false);
@@ -109,7 +111,7 @@ const ShowEventDetails = () => {
       setShowTermsAndConditions(true);
       price = foundRecord.b2bPrice;
     }
-    console.log('price---', price);
+    //console.log('price---', price);
     let convenienceFeePerPerson = (Number(price) * 0.015).toFixed(2);
     setMaxBooking(foundRecord.batchSize);
     setBookedSlot(foundRecord.bookedSize);
@@ -118,11 +120,16 @@ const ShowEventDetails = () => {
     setActualPrice(Number(price));
     setPrice(price);
   };
+  const handleSelectDate= (option) => {
+    setSelectDate(option.target.value);
+    const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == option.target.value);
+    setSelectedStartDate(foundRecord.eventEndDate);
+    setSelectedEandDate(foundRecord.eventStartDate);
 
+  }
   const handlePaymentChange = (event) => {
     setPaymentOption(event.target.value);
     if (event.target.value == "partial") {
-      //alert('partial');
       let price = Number(scheduleBatch.partialBookingAmount) * Number(noOfTrekkers);
       setConvenienceFee(Number(price) * 0.015);
       price = price + (price * 0.015);
@@ -165,7 +172,7 @@ const ShowEventDetails = () => {
 
   const handleParticipantChange = (index, field, value) => {
     if(field == 'locationCity' ){
-             console.log('pickupPoints---',pickupPoints);
+             //console.log('pickupPoints---',pickupPoints);
              if(value =='Pune to Pune'){
               setParticipantsPickupPoints(pickupPoints);
              }else if(value =='Mumbai to Mumbai'){
@@ -214,8 +221,7 @@ const ShowEventDetails = () => {
       setButtonDisabled(false);
     }
   }
-  // Set checkbox to unchecked on blur if it is currently checked
-
+  
   const onSubmit = async (data) => {
     setIsLoading(true); // Set loading to true before starting the request
     try {
@@ -230,12 +236,6 @@ const ShowEventDetails = () => {
         formData.append("otherParticipants", JSON.stringify(participants));
         formData.append("bookingId", bookingId);
         formData.append("scheduleEventId", eventDetails.eventId);
-        if (scheduleBatch.eventStartDate) {
-          formData.append("eventStartDate", scheduleBatch.eventStartDate);
-        }
-        if (scheduleBatch.eventEndDate) {
-          formData.append("eventEndDate", scheduleBatch.eventEndDate);
-        }
         formData.append("addedDiscount", discount);
         formData.append("remainingAmount", remainingAmount);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
@@ -245,8 +245,6 @@ const ShowEventDetails = () => {
 
         let res = await r.json()
         if (res.isSuccess == true) {
-          // try {
-         // alert('In Pay Now');
           // Send the payment request to your backend
           const response = await fetch(`${apiUrl}api/phonepe/payment`, {
             method: 'POST',
@@ -261,12 +259,12 @@ const ShowEventDetails = () => {
           });
 
           const data = await response.json();
-          console.log('data---', data);
+          //console.log('data---', data);
           if (data && data.redirectUrl) {
             // Redirect the user to PhonePe for payment
             window.location.href = data.redirectUrl;
           } else {
-            console.log('Payment initiation failed. Please try again.');
+            //console.log('Payment initiation failed. Please try again.');
           }
         }
       } else {
@@ -281,6 +279,12 @@ const ShowEventDetails = () => {
         const today = new Date();
         formData.append("bookingDate", today);
         formData.append("eventPrice", price);
+        if (selectedStartDate) {
+          formData.append("eventStartDate", selectedStartDate);
+        }
+        if (selectedEndDate) {
+          formData.append("eventEndDate", selectedEndDate);
+        }
         let r = await fetch(`${apiUrl}booking`, {
           method: "POST",
           body: formData,
@@ -385,6 +389,8 @@ const ShowEventDetails = () => {
     let batchDates = [];
     let batchesList = [];
     let eventType = event[0]?.eventType;
+    let eventEndDate;
+    let eventStartDate;
     setEventType(eventType);
 
     if (eventType == 'CampingEvent') {
@@ -399,6 +405,8 @@ const ShowEventDetails = () => {
           batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           batchSize = event.batches[i].eventBatchCount;
+          eventEndDate =  event.batches[i].eventEndDate;
+          eventStartDate = event.batches[i].eventStartDate;
         } else if (event.batches[i].everyWeekend == true) {
           batchdate = 'Available On All Weekends';
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
@@ -436,6 +444,8 @@ const ShowEventDetails = () => {
           b2bPrice = event[index]?.b2bPrice;
           batchSize = event[index]?.eventBatchCount;
           bookedSize = event[index]?.alreadyBoockedCount;
+          eventEndDate =  event[index]?.eventEndDate;
+          eventStartDate = event[index]?.eventStartDate;
         } else if (event[index].everyWeekend == true && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
           batchdate = 'Available On All Weekends';
           eventCostPerPerson = event[index]?.eventCostPerPerson;
@@ -461,6 +471,8 @@ const ShowEventDetails = () => {
             bookedSize: bookedSize,
             eventCostPerPerson: eventCostPerPerson,
             batchdate: batchdate,
+            eventEndDate :eventEndDate,
+            eventStartDate : eventStartDate,
             eventCostPerPersonFromMumbai: eventCostPerPersonFromMumbai,
             b2bPrice: b2bPrice,
             eventId: event[index].eventId
@@ -484,12 +496,12 @@ const ShowEventDetails = () => {
       setButtonDisabled(false);
       setFinalBatchesList(batchesList);
     }
-
+    console.log('batchesList--',batchesList);
     let currentbatch = batchesList.find(batch => batch['eventId'] == currentEventId);
     if (currentbatch) {
       let convenienceFeePerPerson = currentbatch.eventCostPerPerson * 0.015;
       convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
-      console.log('here', currentbatch);
+      //console.log('here', currentbatch);
       if (batchDates.length > 0 && currentbatch.batchdate != 'Available On All Weekends') {
 
         setSelectedDate(currentbatch.batchdate);
@@ -503,6 +515,9 @@ const ShowEventDetails = () => {
       setActualPrice(Number(currentbatch.eventCostPerPerson));
       setPrice(currentbatch.eventCostPerPerson);
       setErrorMessageforNext(false);
+      // setSelectDate(currentbatch.batchdate);
+      // setSelectedStartDate(currentbatch.eventEndDate);
+      // setSelectedEandDate(currentbatch.eventStartDate);
     } else if (batchesList.length > 0) {
       let convenienceFeePerPerson = batchesList[0].eventCostPerPerson * 0.015;
       convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
@@ -521,6 +536,9 @@ const ShowEventDetails = () => {
       setErrorMessageforNext(true);
       setButtonDisabled(false);
       setSelectDate(batchesList[0].batchdate);
+      setSelectedStartDate(batchesList[0].eventEndDate);
+      setSelectedEandDate(batchesList[0].eventStartDate);
+
     }
     setIsLoadingMSG(false); // Start loading
   }
@@ -559,13 +577,12 @@ const ShowEventDetails = () => {
   }
 
   const getAllRecord = async () => {
-    //  alert(params[0]);
     let r = await fetch(`${apiUrl}event-details/eventid/${params[0]}/${params[1]}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
     })
-
+   
     setCurrentEventId(params[0]);
     let res = await r.json()
     if (res.isSuccess == true) {
@@ -576,7 +593,7 @@ const ShowEventDetails = () => {
       setScheduleBatch(res.ScheduleBatchesRecords);
 
       getNextBatchDate(res.ScheduleBatchesRecords);
-      console.log('res.ScheduleBatchesRecords--', res.ScheduleBatchesRecords);
+      //console.log('res.ScheduleBatchesRecords--', res.ScheduleBatchesRecords);
       if (res.ScheduleBatchesRecords.alreadyBoockedCount >= res.ScheduleBatchesRecords.eventBatchCount) {
         setButtonDisabled(true);
       } else {
@@ -651,7 +668,7 @@ const ShowEventDetails = () => {
 
   // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
-    console.log('ScheduleBatchesRecords', ScheduleBatchesRecords.eventType);
+    //console.log('ScheduleBatchesRecords', ScheduleBatchesRecords.eventType);
     setDiscountAvailable(!ScheduleBatchesRecords.specialOfferEvent);
     if (!ScheduleBatchesRecords.specialOfferEvent) {
       let scheduleEventType = ScheduleBatchesRecords.eventType;
@@ -1126,7 +1143,7 @@ const ShowEventDetails = () => {
                           </div>
                           {!everyWeekend && <div className="input-box">
                             <span className="details">Select Batch<span style={{ 'color': 'red' }}> *</span></span>
-                            <select onClick={(e) => setSelectDate(e)} required>
+                            <select onClick={(e) => handleSelectDate(e)} required>
                               {finalBatchesList && finalBatchesList.map((event, index) => (
                                 <option key={index} value={event.batchdate} >{event.batchdate}</option>
                               ))}
