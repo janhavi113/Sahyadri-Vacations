@@ -669,7 +669,7 @@ const ShowEventDetails = () => {
   // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
     //console.log('ScheduleBatchesRecords', ScheduleBatchesRecords.eventType);
-    setDiscountAvailable(!ScheduleBatchesRecords.specialOfferEvent);
+    setDiscountAvailable(!ScheduleBatchesRecords[0].specialOfferEvent);
     if (!ScheduleBatchesRecords.specialOfferEvent) {
       let scheduleEventType = ScheduleBatchesRecords.eventType;
       if (scheduleEventType == 'TrekEvent' || scheduleEventType == 'AdventureActivity') {
@@ -940,10 +940,11 @@ const ShowEventDetails = () => {
                   </div>
                 }
                 <hr />
-                <div>
-
+                {discountAvailable&&<div>
+             
                   <MinimalCoupons coupons={coupons} />
                 </div>
+               } 
                 <div>
                   <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
                     <h2 className="h3">THINGS TO KNOW</h2>
