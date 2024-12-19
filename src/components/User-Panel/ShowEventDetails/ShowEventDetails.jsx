@@ -609,7 +609,8 @@ const ShowEventDetails = () => {
         const jsonData = convertHtmlToJSON(res.events.pickupPointsfromMumbai);
         setPickupPointsfromMumbai(jsonData);
       }
-      if (res.events.b2bLocaion != null && res.events.b2bLocaion != 'undefine') {
+
+      if (res.events.b2bLocaion != null && res.events.b2bLocaion != 'undefine' && res.events.b2bLocaion.trim() !='') {
         setB2bLocation(res.events.b2bLocaion);
         tempLocations.push(res.events.b2bLocaion);
       }
