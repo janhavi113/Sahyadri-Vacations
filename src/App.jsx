@@ -10,6 +10,7 @@ import ScheduledEventsDetails from "./components/admin-panel/Scheduled_Events/Sc
 import ScheduleEvents from "./components/admin-panel/Schedule-Events/ScheduleEvents";
 import UpdateScheduleEvents from "./components/admin-panel/Schedule-Events/UpdateScheduleEvents";
 import CouponCode from "./components/admin-panel/CouponCode/CouponForm";
+import SortScheduleBatches from "./components/admin-panel/SortScheduleBatches/SortScheduleBatches";
 import EventDetails from "./components/EventDetails";
 import ShowEventDetails from "./components/User-Panel/ShowEventDetails/ShowEventDetails";
 import CreateEvent from "./components/admin-panel/CreateEvent/CreateEvents" ;  
@@ -40,6 +41,10 @@ function App() {
     {
       path: "/login",
       element: <Login />,
+    }, 
+    {
+      path: "/sort-schedule-batches",
+      element: <SortScheduleBatches/>,
     }, 
     {
       path: "/search-event",

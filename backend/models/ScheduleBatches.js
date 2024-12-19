@@ -23,7 +23,8 @@ const scheduleBatchesSchema = new mongoose.Schema({
   alreadyBoockedCount: { type: Number , default: 0},
   specialOfferEvent: { type: Boolean , default: false },
   partialBookingAmount : { type: Number , default: 0},
-});
+  sort: { type: Number, required: true }, // Field to hold the sort order
+}, { timestamps: true });
 
 // Middleware to check and update `active` field before each query
 scheduleBatchesSchema.pre(['find', 'findOne', 'findById'], async function (next) {
@@ -65,5 +66,6 @@ scheduleBatchesSchema.pre(['find', 'findOne', 'findById'], async function (next)
 
   next();
 });
+
 
 export const ScheduleBatches = mongoose.model('ScheduleBatches', scheduleBatchesSchema);

@@ -37,7 +37,7 @@ router.get("/schedule-event", async (req, res) => {
 
 router.get("/schedule-event-to-update/:eventId", async (req, res) => {
 	try {
-		let event_Id =req.params.eventId;
+		let event_Id = req.params.eventId;
 		var events = await Events.find({});
 		var scheduleBatch = await ScheduleBatches.find({ eventId: event_Id });
 		res.send({
@@ -88,6 +88,11 @@ router.post("/schedule-event", async (req, res) => {
 		} = req.body;
 
 		let scheduleRecordcount = 0;
+		const latest = await ScheduleBatches.findOne({
+			notScheduleYet: false,
+			everyWeekend: false
+		}).sort({ updatedAt: -1 });
+
 		var events = await ScheduleBatches.find().sort([
 			["_id", -1]
 		]).limit(1);
@@ -98,7 +103,7 @@ router.post("/schedule-event", async (req, res) => {
 		}
 		const scheduleBatches = new ScheduleBatches({
 			active: active,
-			scheduleEventId:scheduleEventId,
+			scheduleEventId: scheduleEventId,
 			eventId: scheduleRecordcount + 1,
 			eventCostPerPerson: eventCostPerPerson,
 			eventEndDate: eventEndDate,
@@ -111,9 +116,9 @@ router.post("/schedule-event", async (req, res) => {
 			bookingTillTime: bookingTillTime,
 			eventname: eventname,
 			images: currUrl,
-			eventCostPerPersonFromMumbai:eventCostPerPersonFromMumbai,
+			eventCostPerPersonFromMumbai: eventCostPerPersonFromMumbai,
 			specialOfferEvent: specialOfferEvent,
-			partialBookingAmount:partialBookingAmount,
+			partialBookingAmount: partialBookingAmount,
 			Url: "/event-details?eventid=" +
 				(scheduleRecordcount + 1).toString() +
 				"/" +
@@ -121,7 +126,7 @@ router.post("/schedule-event", async (req, res) => {
 			eventType: eventType,
 			eventApi: eventname.toString().replace(/\s/g, "-").toLowerCase(),
 		});
-
+		scheduleBatches.sort = latest ? latest.sort + 1 : 1;
 		scheduleBatches.save();
 		if (scheduleBatches._id) {
 			res.send({
@@ -140,7 +145,7 @@ router.post("/schedule-event", async (req, res) => {
 router.post("/update-schedule-events/:eventId", async (req, res) => {
 	try {
 		console.log("req.params--", req.params.eventId);
-		let event_Id =req.params.eventId;
+		let event_Id = req.params.eventId;
 		var currUrl = "";
 		let sampleFile = req.files.file;
 		let uploadPath = path.join(__dirname, '../../public/Images', sampleFile.name);
@@ -187,22 +192,22 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			eventname: eventname,
 			images: currUrl,
 			specialOfferEvent: specialOfferEvent,
-			partialBookingAmount:partialBookingAmount,
+			partialBookingAmount: partialBookingAmount,
 			eventType: eventType,
-			scheduleEventId:scheduleEventId,
-			Url: "/event-details?eventid=" +event_Id.toString() +"/" +eventname.toString().replace(/\s/g, "-").toLowerCase(),
-		    eventApi: eventname.toString().replace(/\s/g, "-").toLowerCase()
-				};
+			scheduleEventId: scheduleEventId,
+			Url: "/event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").toLowerCase(),
+			eventApi: eventname.toString().replace(/\s/g, "-").toLowerCase()
+		};
 
 		// Update and fetch events
 		await ScheduleBatches.updateOne(myquery, updateDoc, options);
 		let events = await ScheduleBatches.find(myquery);
-        
+
 		res.send({
-					isSuccess: true,
-					events:events
-				});
-		
+			isSuccess: true,
+			events: events
+		});
+
 	} catch (error) {
 		console.error(error);
 		res.send({
@@ -211,4 +216,21 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 		});
 	}
 });
+
+// Update sort order of batches
+router.post("/update-sort-order", async (req, res) => {
+	const { batches } = req.body;
+
+	try {
+		// Update each batch's sort field
+		for (const batch of batches) {
+			await ScheduleBatches.findByIdAndUpdate(batch._id, { sort: batch.sort });
+		}
+		res.json({ success: true, message: "Sort order updated successfully" });
+	} catch (error) {
+		console.error("Error updating sort order:", error);
+		res.status(500).json({ error: "Failed to update sort order" });
+	}
+});
+
 export default router;
