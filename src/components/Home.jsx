@@ -58,7 +58,7 @@ const Home = () => {
   const [trekkingEvents, setTrekkingEvents] = useState();
   const [specialOffer , setSpecialOffer]= useState();
   useEffect(() => {
-    // console.log('isSuccess--'+isSuccess);
+    // //console.log('isSuccess--'+isSuccess);
    
     if (isSuccess == false) {
       getAllRecord();
@@ -68,7 +68,7 @@ const Home = () => {
   })
    
   const getSpecialOfferEvent =  async() =>{
-   console.log('record found');
+   //console.log('record found');
     let r = await fetch(`${apiUrl}getSpecialOfferEvent`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ const Home = () => {
     let res = await r.json()
     if (r.ok) {
       setSpecialOffer(res.offer);
-      console.log('record found',res.offer);
+      //console.log('record found',res.offer);
     }
   }
  
@@ -135,6 +135,7 @@ const Home = () => {
         eventCostPerPerson: eventCostPerPerson,
         sortDate: sortdate,
         inactive: false,
+        sort: event.sort,
       }
     } else if (batchdate == undefined && eventCostPerPerson == undefined) {
       liveEvent = {
@@ -146,14 +147,14 @@ const Home = () => {
   }
   
   const getAllRecord = async () => {
-    //console.log('getAllRecord--');
+    ////console.log('getAllRecord--');
     let liveEvents = [];
     let trekkingEvents = [];
     let campingEvents = [];
     let backPackingEvents = [];
     let inactivateEvent = [];
-    //console.log('show-all-events');
-    // console.log(`${apiUrl}show-all-events`);
+    ////console.log('show-all-events');
+    // //console.log(`${apiUrl}show-all-events`);
     let r = await fetch(`${apiUrl}show-all-events`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
@@ -161,7 +162,7 @@ const Home = () => {
     })
 
     let res = await r.json()
-    console.log('res',res);
+    //console.log('res',res);
     if (res.isSuccess == true) {
       setSuccess(true);
       for (let i = 0; i < res.events.length; i++) {
@@ -180,9 +181,11 @@ const Home = () => {
           backPackingEvents.push(tempEvent);
         }
       }
-
-      setEvent(sortEventsBySortDate(liveEvents));
-      setTrekkingEvents(sortEventsBySortDate(trekkingEvents));
+      liveEvents.sort((a, b) => a.sort - b.sort);
+      console.log('liveEvents----',liveEvents);
+      setEvent(liveEvents);
+      trekkingEvents.sort((a, b) => a.sort - b.sort);
+      setTrekkingEvents(trekkingEvents);
       setCampingEvents(sortEventsBySortDate(campingEvents));
       setBackPackingEvents(sortEventsBySortDate(backPackingEvents));
     }

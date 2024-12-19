@@ -91,7 +91,6 @@ const Events = () => {
                 images: `${apiUrl}` + event.images,
                 batchdate: batchdate,
                 eventCostPerPerson: eventCostPerPerson,
-
             }
         }
         return liveEvent;
