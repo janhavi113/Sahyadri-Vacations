@@ -91,7 +91,7 @@ router.post("/schedule-event", async (req, res) => {
 		const latest = await ScheduleBatches.findOne({
 			notScheduleYet: false,
 			everyWeekend: false
-		}).sort({ updatedAt: -1 });
+		}).sort({ sort: -1 });
 
 		var events = await ScheduleBatches.find().sort([
 			["_id", -1]
