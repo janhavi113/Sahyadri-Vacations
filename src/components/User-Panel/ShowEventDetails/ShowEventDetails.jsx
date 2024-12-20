@@ -210,7 +210,7 @@ const ShowEventDetails = () => {
     if (selectedLocation == null && eventType != 'CampingEvent') {
       setError("dateError", {
         type: "manual",
-        message: "Please select Pickup Location and again click Pay Now",
+        message: "Please select Pickup Location and accept terms & condition to proceed",
       })
       setButtonDisabled(false);
       if (termsChecked) {
@@ -619,7 +619,7 @@ const ShowEventDetails = () => {
         tempLocations.push('Mumbai to Mumbai');
       }
       setShowLocations(tempLocations);
-      getAvailableCoupons(res.events);
+      getAvailableCoupons(res.ScheduleBatchesRecords);
     }
 
   }
@@ -670,11 +670,13 @@ const ShowEventDetails = () => {
   // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
     let ScheduleBatchesRecord;
+  
     if(Array.isArray(ScheduleBatchesRecords)){
       ScheduleBatchesRecord = ScheduleBatchesRecords[0];
     }else{
       ScheduleBatchesRecord = ScheduleBatchesRecords;
     }
+    console.log('ScheduleBatchesRecord---',ScheduleBatchesRecord);
     setDiscountAvailable(!ScheduleBatchesRecord.specialOfferEvent);
     if (!ScheduleBatchesRecord.specialOfferEvent) {
       let scheduleEventType = ScheduleBatchesRecord.eventType;
@@ -1163,12 +1165,12 @@ const ShowEventDetails = () => {
                         </div>}
                       {buttonClick == 'pay-now' &&
                         <div className="user-details">
-                          {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
+                          
 
                           {eventType != 'CampingEvent' &&
 
                             <div>
-                              <h3>Join Us From:<span style={{ 'color': 'red' }}> *</span></h3>
+                              <h3 className='add-bold'>Join Us From :<span style={{ 'color': 'red' }}> *</span></h3>
                               <div className="button-radio">
                                 {showLocations.map((option) => (
                                   <div
@@ -1185,7 +1187,7 @@ const ShowEventDetails = () => {
                               </div>
                               {selected == 'Pune to Pune' &&
                                 <div>
-                                  <h3>Please Select Pickup Location<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <h3 className='add-bold'>Please Select Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul>
                                     {pickupPoints.map((location) => (
                                       <li key={location.id}>
@@ -1206,7 +1208,7 @@ const ShowEventDetails = () => {
                               }
                               {selected == 'Mumbai to Mumbai' &&
                                 <div>
-                                  <h3>Please Select Pickup Location<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <h3 className='add-bold'>Please Select Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul>
                                     {pickupPointsfromMumbai.map((location) => (
                                       <li key={location.id}>
@@ -1228,7 +1230,7 @@ const ShowEventDetails = () => {
 
                               {selected == eventDetails.b2bLocaion &&
                                 <div>
-                                  <h3>Selected Pickup Location:<span style={{ 'color': 'red' }}> *</span></h3>
+                                  <h3 className='add-bold'>Selected Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
                                   <ul className="b2blocation display-bulletin"><li>{eventDetails.b2bLocaion}</li>
                                   </ul>
                                 </div>
@@ -1237,7 +1239,7 @@ const ShowEventDetails = () => {
                           }
                           {selected && showTermsAndConditions &&
                             <div className="input-box finalCalculation">
-                              <div className="details">Add More Participants:</div>
+                              <div className="add-bold details">Add More Participants :</div>
                               <div></div>
                               <div className='noOftrekkers'>
                                 <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>
@@ -1475,7 +1477,7 @@ const ShowEventDetails = () => {
                         <input type="submit" value="Next >>" />
                       </div>
                     }
-                    {buttonClick == 'pay-now' && showTermsAndConditions &&
+                    {buttonClick == 'pay-now'  &&
                       <div>
                         <div className='termsAndCondition'>
                           <input
@@ -1489,15 +1491,16 @@ const ShowEventDetails = () => {
                             required
                             onMouseOver={handleCheckboxBlur}
                             checked={termsChecked} // Controlled component
+                            disabled={!showTermsAndConditions}
                           />
                           <div >
                             Accept all
                             <a className='link' href={'https://sahyadrivacations.com/user-agreement'} target="_blank"> terms & conditions</a>
                           </div>
                         </div>
-
+                        {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
                         <div className="button">
-                          <input style={{ "background": "green" }} disabled={buttonDisabled} type="submit" value="Pay Now" />
+                          <input onMouseOver={handleCheckboxBlur} className={!showTermsAndConditions ?'disable-paynow' : 'paynow-button' } disabled={!showTermsAndConditions} type="submit" value="Pay Now" />
                         </div>
                       </div>
                     }

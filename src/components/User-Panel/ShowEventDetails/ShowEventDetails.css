@@ -8,6 +8,21 @@
     color: blue;
     text-decoration: underline;
 }
+
+.paynow-button {
+    background-color: #4caf50 !important;
+    color: white !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s ease !important;
+  }
+  .disable-paynow{
+    background-color:#4caf4f8a !important;
+    color: white !important;
+  }
+  .paynow-button:hover {
+    background-color: green !important;
+  }
+
 .button-radio {
     display: flex;
     gap: 10px;
@@ -37,6 +52,11 @@
   
   .radio-button:hover {
     background-color: #e0e0e0;
+  }
+  .add-bold{
+    font-size: 18px !important;
+    font-weight: bold !important;
+    padding: 10px 0px 0px 0px !important;
   }
   
 @media (max-width: 768px) {
