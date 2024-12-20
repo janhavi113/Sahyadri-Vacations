@@ -308,6 +308,7 @@ const ShowEventDetails = () => {
   const handleSelection = (event) => {
     setSelectedLocation(event.target.value);
     setShowTermsAndConditions(true);
+    clearErrors('dateError');
   };
 
   const increaseCount = async () => {
