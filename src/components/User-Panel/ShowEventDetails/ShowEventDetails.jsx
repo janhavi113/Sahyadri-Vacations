@@ -609,8 +609,8 @@ const ShowEventDetails = () => {
         const jsonData = convertHtmlToJSON(res.events.pickupPointsfromMumbai);
         setPickupPointsfromMumbai(jsonData);
       }
-
-      if (res.events.b2bLocaion != null && res.events.b2bLocaion != 'undefine' && res.events.b2bLocaion.trim() !='') {
+   
+      if (res.events.b2bLocaion != null && res.events.b2bLocaion != undefined && res.events.b2bLocaion.trim() !=''&& res.events.b2bLocaion.trim() != 'undefined') {
         setB2bLocation(res.events.b2bLocaion);
         tempLocations.push(res.events.b2bLocaion);
       }
@@ -669,14 +669,19 @@ const ShowEventDetails = () => {
 
   // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
-    //console.log('ScheduleBatchesRecords', ScheduleBatchesRecords.eventType);
-    setDiscountAvailable(!ScheduleBatchesRecords[0].specialOfferEvent);
-    if (!ScheduleBatchesRecords.specialOfferEvent) {
-      let scheduleEventType = ScheduleBatchesRecords.eventType;
+    let ScheduleBatchesRecord;
+    if(Array.isArray(ScheduleBatchesRecords)){
+      ScheduleBatchesRecord = ScheduleBatchesRecords[0];
+    }else{
+      ScheduleBatchesRecord = ScheduleBatchesRecords;
+    }
+    setDiscountAvailable(!ScheduleBatchesRecord.specialOfferEvent);
+    if (!ScheduleBatchesRecord.specialOfferEvent) {
+      let scheduleEventType = ScheduleBatchesRecord.eventType;
       if (scheduleEventType == 'TrekEvent' || scheduleEventType == 'AdventureActivity') {
         scheduleEventType = 'TrekEvent';
       } else {
-        scheduleEventType = ScheduleBatchesRecords.eventType;
+        scheduleEventType = ScheduleBatchesRecord.eventType;
       }
 
       const response = await fetch(`${apiUrl}get-coupons-event/${scheduleEventType}`, {
@@ -1230,7 +1235,7 @@ const ShowEventDetails = () => {
                               }
                             </div>
                           }
-                          {selected &&
+                          {selected && showTermsAndConditions &&
                             <div className="input-box finalCalculation">
                               <div className="details">Add More Participants:</div>
                               <div></div>
