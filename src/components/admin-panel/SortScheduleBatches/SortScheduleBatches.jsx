@@ -117,7 +117,7 @@ const SortScheduleBatches = () => {
                                 </button>
                             </div>
                         </div>
-                        <ul>
+                        <ul className="sort-section">
                             {batches.map((batch, index) => (
                                 <li
                                     key={batch._id}
@@ -125,12 +125,9 @@ const SortScheduleBatches = () => {
                                     onDragStart={(e) => handleDragStart(e, index)}
                                     onDragOver={handleDragOver}
                                     onDrop={(e) => handleDrop(e, index)}
+                                    className="sort-list"
                                     style={{
-                                        border: "1px solid #ccc",
-                                        padding: "10px",
-                                        margin: "10px 0",
-                                        cursor: "grab",
-                                        backgroundColor: "#f9f9f9",
+                                        
                                     }}
                                 >
                                     <strong>{batch.eventname} : {batch.batchName}</strong>
