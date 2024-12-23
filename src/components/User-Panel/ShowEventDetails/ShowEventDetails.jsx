@@ -463,7 +463,7 @@ const ShowEventDetails = () => {
           eventEndDate =  event[index]?.eventEndDate;
           eventStartDate = event[index]?.eventStartDate;
           console.log('event[index]',event[index]);
-          partialBookingAmount = 3000;
+          partialBookingAmount = event[index]?.partialBookingAmount ? event[index]?.partialBookingAmount : 3000;
         } else if (event[index].everyWeekend == true && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
           batchdate = 'Available On All Weekends';
           eventCostPerPerson = event[index]?.eventCostPerPerson;
