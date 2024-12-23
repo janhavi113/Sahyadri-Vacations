@@ -109,6 +109,18 @@ function convertDateToCustomFormat(dateString) {
     return customFormattedDate;
 }
 
+// Function to check if the date is today
+function isBookingDateToday(dateString) {
+    const [month, day, year] = dateString.split("/").map(Number);
+    const booking = new Date(year, month - 1, day);
+
+    const today = new Date();
+    return (
+        booking.getDate() === today.getDate() &&
+        booking.getMonth() === today.getMonth() &&
+        booking.getFullYear() === today.getFullYear()
+    );
+}
 router.post('/confirm-booking/:id', async (req, res) => {
     const { id } = req.params;
   
@@ -116,8 +128,13 @@ router.post('/confirm-booking/:id', async (req, res) => {
       // Find the booking in DirectBookings
       const directBooking = await DirectBookings.findById(id);
 
-      let bookings = await Bookings.find({bookingDate : directBooking.bookingDate});
-      let bookingIdVar = convertDateToCustomFormat(directBooking.bookingDate) + bookings.length;
+      let bookingIdVar ;
+       let confirmedBookings = await Bookings.findOne().sort({ _id: -1 });//.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
+        if(isBookingDateToday(confirmedBookings.bookingDate)){
+            bookingIdVar = Number(confirmedBookings.bookingDate) + 1;
+        }else{
+            bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + 1;
+        }
 
       if (!directBooking) {
         return res.status(404).json({ message: "Booking not found." });
@@ -145,7 +162,7 @@ router.post('/confirm-booking/:id', async (req, res) => {
       // Delete the booking from DirectBookings
        await DirectBookings.findByIdAndDelete(id);
   
-      res.status(200).json({ message: "Booking confirmed successfully." });
+      res.status(200).json({ message: "Booking confirmed successfully." ,booking : newBooking});
     } catch (error) {
       console.error("Error confirming the booking:", error);
       res.status(500).json({ message: "Failed to confirm booking." });

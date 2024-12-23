@@ -73,6 +73,7 @@ const ShowEventDetails = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEandDate] = useState(null);
+  const [selectedBatch , setSelectedbatch] = useState(null);
   const [bookingId, setBookingId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showTermsAndConditions, setShowTermsAndConditions] = useState(false);
@@ -82,6 +83,7 @@ const ShowEventDetails = () => {
   const [coupons, setCoupons] = useState([]);
   const [preCouponCode, setPreCouponCode] = useState('');
   const [discount, setDiscount] = useState(-1);
+  const [tempDiscount, setTempDiscount] = useState(0);
   const [discountAvailable, setDiscountAvailable] = useState(false);
   const [showDiscountStatus, setShowDiscountStatus] = useState(false);
   const handleClose = () => setShow(false);
@@ -98,7 +100,7 @@ const ShowEventDetails = () => {
   const handleSelect = (option) => {
     setSelected(option);
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == selectedDate);
-
+    setSelectedbatch(foundRecord);
     let price = 0;
     if (option == 'Pune to Pune') {
       price = foundRecord.eventCostPerPerson;
@@ -125,33 +127,40 @@ const ShowEventDetails = () => {
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == option.target.value);
     setSelectedStartDate(foundRecord.eventEndDate);
     setSelectedEandDate(foundRecord.eventStartDate);
+    setSelectedbatch(foundRecord);
 
   }
   const handlePaymentChange = (event) => {
     setPaymentOption(event.target.value);
+    console.log('selectedBatch   ',selectedBatch);
     if (event.target.value == "partial") {
-      let price = Number(scheduleBatch.partialBookingAmount) * Number(noOfTrekkers);
+      let price = Number(selectedBatch.partialBookingAmount) * Number(noOfTrekkers);
       setConvenienceFee(Number(price) * 0.015);
       price = price + (price * 0.015);
       setPartialPayment(price);
       setFinalPrice(price);
+      setTempDiscount(discount);
       setDiscount(0);
-      let remainingAmount = Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers);
+      let remainingAmount = Number(selectedBatch.eventCostPerPerson) * Number(noOfTrekkers);
       let remainingConvenienceFee = Number(remainingAmount) * 0.015;
       remainingAmount = remainingAmount + remainingConvenienceFee;
       setRemainingAmount(remainingAmount);
+      setPrice(Number(selectedBatch.partialBookingAmount));
+      
     } else {
-      let price = Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers);
+      let price = Number(selectedBatch.eventCostPerPerson) * Number(noOfTrekkers);
       setConvenienceFee(Number(price) * 0.015);
 
       if (Number(discount) > 0 && (Number(noOfTrekkers) >= Number(noOfPeopleNeedforCoupon))) {
         price = Number(price) - Number(discount);
+        setDiscount(tempDiscount);
       } else {
         setDiscount(0);
       }
       price = price + (price * 0.015);
-      setActualPrice(Number(scheduleBatch.eventCostPerPerson) * Number(noOfTrekkers));
+      setActualPrice(Number(selectedBatch.eventCostPerPerson) * Number(noOfTrekkers));
       setFinalPrice(price);
+      setPrice(Number(selectedBatch.eventCostPerPerson));
     }
 
   };
@@ -325,6 +334,9 @@ const ShowEventDetails = () => {
       } else {
         setDiscount(0);
       }
+      if(paymentOption == 'partial'){
+        setPartialPayment(final_Price);
+      }
       setFinalPrice(final_Price);
       setActualPrice(Number(totalPrice));
       setConvenienceFee(Number(convenienceFee));
@@ -332,6 +344,7 @@ const ShowEventDetails = () => {
         ...participants,
         { name: "", mobileNumber: "", pickupLocation: "" },
       ]);
+    
     } else {
       setBatchFull(true);
       setAvailableSlot(Number(maxBooking) - Number(bookedSlot));
@@ -350,6 +363,7 @@ const ShowEventDetails = () => {
       let final_Price = Number(amount) + Number(convenienceFee);
       if (Number(discount) > 0 && (Number(count) >= Number(noOfPeopleNeedforCoupon))) {
         final_Price = Number(final_Price) - Number(discount);
+        setDiscount(tempDiscount);
       } else {
         setDiscount(0);
       }
@@ -358,6 +372,9 @@ const ShowEventDetails = () => {
       setFinalPrice(Number(final_Price));
       setConvenienceFee(Number(convenienceFee));
       setParticipants(participants.slice(0, -1));
+      if(paymentOption == 'partial'){
+        setPartialPayment(final_Price);
+      }
     }
 
   }
@@ -392,6 +409,7 @@ const ShowEventDetails = () => {
     let eventType = event[0]?.eventType;
     let eventEndDate;
     let eventStartDate;
+    let partialBookingAmount = 3000;
     setEventType(eventType);
 
     if (eventType == 'CampingEvent') {
@@ -408,6 +426,7 @@ const ShowEventDetails = () => {
           batchSize = event.batches[i].eventBatchCount;
           eventEndDate =  event.batches[i].eventEndDate;
           eventStartDate = event.batches[i].eventStartDate;
+          partialBookingAmount = event.batches[i].partialBookingAmount;
         } else if (event.batches[i].everyWeekend == true) {
           batchdate = 'Available On All Weekends';
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
@@ -447,6 +466,8 @@ const ShowEventDetails = () => {
           bookedSize = event[index]?.alreadyBoockedCount;
           eventEndDate =  event[index]?.eventEndDate;
           eventStartDate = event[index]?.eventStartDate;
+          console.log('event[index]',event[index]);
+          partialBookingAmount = 3000;
         } else if (event[index].everyWeekend == true && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
           batchdate = 'Available On All Weekends';
           eventCostPerPerson = event[index]?.eventCostPerPerson;
@@ -454,6 +475,7 @@ const ShowEventDetails = () => {
           b2bPrice = event[index]?.b2bPrice;
           batchSize = event[index]?.eventBatchCount;
           bookedSize = event[index]?.alreadyBoockedCount;
+          partialBookingAmount = event.batches[index]?.partialBookingAmount;
           setEveryWeekend(true);
         } else if (event[index].notScheduleYet == true) {
           batchdate = 'On Demand';
@@ -463,6 +485,7 @@ const ShowEventDetails = () => {
           b2bPrice = event[index]?.b2bPrice;
           batchSize = event[index]?.eventBatchCount;
           bookedSize = event[index]?.alreadyBoockedCount;
+          partialBookingAmount = event.batches[index]?.partialBookingAmount;
         }
 
         if (batchSize > 0 && eventCostPerPerson > 0 && batchdate != '') {
@@ -476,7 +499,8 @@ const ShowEventDetails = () => {
             eventStartDate : eventStartDate,
             eventCostPerPersonFromMumbai: eventCostPerPersonFromMumbai,
             b2bPrice: b2bPrice,
-            eventId: event[index].eventId
+            eventId: event[index].eventId,
+            partialBookingAmount: partialBookingAmount
           })
         }
 
@@ -539,6 +563,7 @@ const ShowEventDetails = () => {
       setSelectDate(batchesList[0].batchdate);
       setSelectedStartDate(batchesList[0].eventEndDate);
       setSelectedEandDate(batchesList[0].eventStartDate);
+      setSelectedbatch(batchesList[0]);
 
     }
     setIsLoadingMSG(false); // Start loading
@@ -1414,11 +1439,11 @@ const ShowEventDetails = () => {
                             </tr>
                             <tr>
                               <td className='pay-td'>Event Fees</td>
-                              <td className='column2 pay-td'>{noOfTrekkers} x {scheduleBatch.partialBookingAmount}</td>
+                              <td className='column2 pay-td'>{noOfTrekkers} x {selectedBatch.partialBookingAmount}</td>
                             </tr>
                             <tr>
                               <td className='pay-td'>Subtotal</td>
-                              <td className='column2 pay-td'>{Number(noOfTrekkers) * Number(scheduleBatch.partialBookingAmount)}</td>
+                              <td className='column2 pay-td'>{Number(noOfTrekkers) * Number(selectedBatch.partialBookingAmount)}</td>
                             </tr>
                             <tr>
                               <td className='pay-td'>Convenience Fee (1.5 %)</td>
