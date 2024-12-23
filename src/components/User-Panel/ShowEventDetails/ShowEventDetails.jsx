@@ -83,7 +83,6 @@ const ShowEventDetails = () => {
   const [coupons, setCoupons] = useState([]);
   const [preCouponCode, setPreCouponCode] = useState('');
   const [discount, setDiscount] = useState(-1);
-  const [tempDiscount, setTempDiscount] = useState(0);
   const [discountAvailable, setDiscountAvailable] = useState(false);
   const [showDiscountStatus, setShowDiscountStatus] = useState(false);
   const handleClose = () => setShow(false);
@@ -139,7 +138,6 @@ const ShowEventDetails = () => {
       price = price + (price * 0.015);
       setPartialPayment(price);
       setFinalPrice(price);
-      setTempDiscount(discount);
       setDiscount(0);
       let remainingAmount = Number(selectedBatch.eventCostPerPerson) * Number(noOfTrekkers);
       let remainingConvenienceFee = Number(remainingAmount) * 0.015;
@@ -153,7 +151,6 @@ const ShowEventDetails = () => {
 
       if (Number(discount) > 0 && (Number(noOfTrekkers) >= Number(noOfPeopleNeedforCoupon))) {
         price = Number(price) - Number(discount);
-        setDiscount(tempDiscount);
       } else {
         setDiscount(0);
       }
@@ -363,7 +360,6 @@ const ShowEventDetails = () => {
       let final_Price = Number(amount) + Number(convenienceFee);
       if (Number(discount) > 0 && (Number(count) >= Number(noOfPeopleNeedforCoupon))) {
         final_Price = Number(final_Price) - Number(discount);
-        setDiscount(tempDiscount);
       } else {
         setDiscount(0);
       }
@@ -372,7 +368,7 @@ const ShowEventDetails = () => {
       setFinalPrice(Number(final_Price));
       setConvenienceFee(Number(convenienceFee));
       setParticipants(participants.slice(0, -1));
-      if(paymentOption == 'partial'){
+       if(paymentOption == 'partial'){
         setPartialPayment(final_Price);
       }
     }
