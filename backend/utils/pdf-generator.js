@@ -100,7 +100,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         }
         .company-info {
             font-size: 12px; /* Adjusted font size */
-            margin-top: 280px; /* Space before company info */
+            margin-top: 220px; /* Space before company info */
         }
         .company-info-remaining-amount {
             font-size: 12px; /* Adjusted font size */
@@ -114,8 +114,8 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             font-family: 'Segoe Script', cursive, sans-serif;
         }
         .footer-strip {
-            background-color: #00506b;
-            color: white;
+            background-color:white;
+            color: black;
             text-align: center;
             padding: 10px;
             position: relative; /* Changed from absolute */
@@ -198,7 +198,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
            
               ${bookingDetails.addedDiscount > 0 ? `<tr>
                 <td>Added Discount</td>
-                <td style="text-align: right;"> ${bookingDetails.addedDiscount}</td>
+                <td style="text-align: right;">- ${bookingDetails.addedDiscount}</td>
               </tr>` : ''}
              
             <tr>

@@ -74,7 +74,7 @@ const DirectBookings = ({ onSendData }) => {
     formData.append("eventName", eventName);
     formData.append("numberOfPeoples", noOfTrekkers);
     formData.append("amountPaid", data.amountPaid);
-    formData.append("remainingAmount", Number(finalPrice) - Number(data.amountPaid));
+    formData.append("remainingAmount", (Number(finalPrice) - Number(data.amountPaid) - Number(data.Discount)).toFixed(2));
    // formData.append("packageGiven",Number(data.finalPrice));
     formData.append("eventPrice",Number(selectedBatch.eventCostPerPerson));
     formData.append("bookingMode", 'Direct Booking ');
@@ -648,6 +648,7 @@ const DirectBookings = ({ onSendData }) => {
                     },
                   })}
                   type="number"
+                  step="0.01"
                   required
                 />
               </div>
