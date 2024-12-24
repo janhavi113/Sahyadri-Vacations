@@ -1162,11 +1162,42 @@ const ShowEventDetails = () => {
                           </div>
                           <div className="input-box ">
                             <span className="details">Email ID<span style={{ 'color': 'red' }}> *</span></span>
-                            <input  {...register("emailId", { required: { value: true, message: "This field is required" }, })} type="email" required />
+                            <input
+                              {...register("emailId", {
+                                required: {
+                                  value: true,
+                                  message: "This field is required",
+                                },
+                                pattern: {
+                                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                  message: "Enter a valid email address (e.g., example@example.com)",
+                                },
+                              })}
+                              type="email"
+                            />
+                            {errors.emailId && (
+                              <span style={{ color: "red" }}>{errors.emailId.message}</span>
+                            )}
                           </div>
                           <div className="input-box">
                             <span className="details">WhatsApp Mobile Number<span style={{ 'color': 'red' }}> *</span></span>
-                            <input placeholder='+91' {...register("whatsappNumber", { required: { value: true, message: "This field is required" }, })} type="tel" required />
+                            <input
+                              placeholder="+91"
+                              {...register("whatsappNumber", {
+                                required: {
+                                  value: true,
+                                  message: "This field is required",
+                                },
+                                pattern: {
+                                  value: /^\d{10}$/, // Regex for valid Indian mobile number
+                                  message: "Enter a valid mobile number (e.g., XXXXXXXXXX)",
+                                },
+                              })}
+                              type="tel"
+                            />
+                            {errors.whatsappNumber && (
+                              <span style={{ color: "red" }}>{errors.whatsappNumber.message}</span>
+                            )}
                           </div>
                           {!everyWeekend && <div className="input-box">
                             <span className="details">Select Batch<span style={{ 'color': 'red' }}> *</span></span>
