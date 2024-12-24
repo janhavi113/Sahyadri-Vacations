@@ -271,7 +271,7 @@ router.get("/show-all-bookings/:showOptions", async (req, res) => {
         if(req.params.showOptions == 'all'){
             query = { active: true };
         }else{
-            query = { active: true , status : 'confirmed'};
+            query = { active: true , status : 'Confirmed'};
         }
         let bookings = await Bookings.find(query);
         res.send({
