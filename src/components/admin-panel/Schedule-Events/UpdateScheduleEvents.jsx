@@ -181,7 +181,7 @@ const UpdateScheduleEvents = () => {
                 <div className="user-details">
                   <div className="input-box ">
                     <span className="details">Event Name<span style={{ 'color': 'red' }}>*</span></span>
-                    <select value={eventIsScheduled} onChange={(e) => setEventIsScheduled(e.target.value)} >
+                    <select value={eventIsScheduled} onChange={(e) => setEventIsScheduled(e.target.value)} disabled >
                       {events.map(event => (
                         <option value={event.eventId} key={event.eventId}>{event.name}</option>
                       ))}
