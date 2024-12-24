@@ -599,12 +599,10 @@ const ShowEventDetails = () => {
         "Content-Type": "application/json",
       }
     })
-
     setCurrentEventId(params[0]);
     let res = await r.json()
     if (res.isSuccess == true) {
       setLoading(false);
-      let tempLocations = [];
       setSuccess(true);
       setEventDetails(res.events);
       setScheduleBatch(res.ScheduleBatchesRecords);
@@ -614,27 +612,35 @@ const ShowEventDetails = () => {
       } else {
         setButtonDisabled(false);
       }
-      if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
-        const jsonData = convertHtmlToJSON(res.events.pickupPoints);
-        setPickupPoints(jsonData);
-        setParticipantsPickupPoints(jsonData);
-      }
-      if (res.events.pickupPointsfromMumbai != null && res.events.pickupPointsfromMumbai != 'undefine') {
-        const jsonData = convertHtmlToJSON(res.events.pickupPointsfromMumbai);
-        setPickupPointsfromMumbai(jsonData);
-      }
-      if (res.events.b2bLocaion != null && res.events.b2bLocaion != undefined && res.events.b2bLocaion.trim() != '' && res.events.b2bLocaion.trim() != 'undefined') {
-        setB2bLocation(res.events.b2bLocaion);
-        tempLocations.push(res.events.b2bLocaion);
-      }
-      tempLocations.push('Pune to Pune');
-      if (res.ScheduleBatchesRecords[0]?.eventCostPerPersonFromMumbai != 'undefine' && res.ScheduleBatchesRecords[0]?.eventCostPerPersonFromMumbai > 0) {
-        tempLocations.push('Mumbai to Mumbai');
-      }
-      setShowLocations(tempLocations);
-      getAvailableCoupons(res.ScheduleBatchesRecords);
+      let currentScheduleBatch = res.ScheduleBatchesRecords.find(batch => batch['eventId'] == params[0]);
+      getAvailableCoupons(currentScheduleBatch);
+      handleShowLocation(res.events, currentScheduleBatch);
+    }
+  }
+
+  const handleShowLocation = (event, scheduleEvent) => {
+    let tempLocations = [];
+    tempLocations.push('Pune to Pune');
+    if (event.pickupPoints != null && event.pickupPoints != 'undefine') {
+      const jsonData = convertHtmlToJSON(event.pickupPoints);
+      setPickupPoints(jsonData);
+      setParticipantsPickupPoints(jsonData);
     }
 
+    if (event.pickupPointsfromMumbai != null && event.pickupPointsfromMumbai != 'undefine') {
+      const jsonData = convertHtmlToJSON(event.pickupPointsfromMumbai);
+      setPickupPointsfromMumbai(jsonData);
+    }
+
+    if (event.b2bLocaion != null && event.b2bLocaion != undefined && event.b2bLocaion.trim() != '' && event.b2bLocaion.trim() != 'undefined') {
+      setB2bLocation(event.b2bLocaion);
+      tempLocations.push(event.b2bLocaion);
+    }
+
+    if (scheduleEvent?.eventCostPerPersonFromMumbai != 'undefine' && scheduleEvent?.eventCostPerPersonFromMumbai > 0) {
+      tempLocations.push('Mumbai to Mumbai');
+    }
+    setShowLocations(tempLocations);
   }
 
   const handleCouponApply = async () => {
@@ -689,7 +695,6 @@ const ShowEventDetails = () => {
     } else {
       ScheduleBatchesRecord = ScheduleBatchesRecords;
     }
-    console.log('ScheduleBatchesRecord---', ScheduleBatchesRecord);
     setDiscountAvailable(!ScheduleBatchesRecord.specialOfferEvent);
     if (!ScheduleBatchesRecord.specialOfferEvent) {
       let scheduleEventType = ScheduleBatchesRecord.eventType;
@@ -940,10 +945,10 @@ const ShowEventDetails = () => {
                   <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
                     <h2 className="h3"> Pickup Points : </h2>
                     <div className='margin-location'>
-                      {eventDetails.b2bLocaion &&
+                      {b2bLocation &&
                         <div className="section-details" >
                           <h2 > <b>Base to Base : </b></h2>
-                          <ul className="display-bulletin"><li>{eventDetails.b2bLocaion} </li>
+                          <ul className="display-bulletin"><li>{b2bLocation} </li>
                           </ul>
                         </div>
                       }

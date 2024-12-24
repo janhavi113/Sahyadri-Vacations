@@ -27,7 +27,6 @@ const UpdateScheduleEvents = () => {
   const queryParameters = new URLSearchParams(window.location.search);
   const [type, setType] = useState(queryParameters.get("eventid"));
   const [params, setParams] = useState(type.split('/'));
-
   const [isActive, setActive] = useState();
   const [eventname, setEventname] = useState();
   const [eventType, setEventType] = useState();
@@ -44,7 +43,7 @@ const UpdateScheduleEvents = () => {
   const [bookingTillTime, setBookingTillTime] = useState();
   const [specialOfferEvent, setSpecialOfferEvent] = useState();
   const [partialBookingAmount, setPartialBookingAmount] = useState();
-  const [eventCostPerPersonFromMumbai , setEventCostPerPersonFromMumbai] = useState();
+  const [eventCostPerPersonFromMumbai, setEventCostPerPersonFromMumbai] = useState(0);
   const navigate = useNavigate();
   const {
     register,
@@ -64,31 +63,15 @@ const UpdateScheduleEvents = () => {
   }, [navigate]);
 
   const [file, setFiles] = useState(null);
-  const [currentImages, setcurrentImages] = useState();
-
-  const addUploadedInages = () => {
-    console.log('file', file);
-    var allFiles = [];
-    if (file) {
-      for (let index = 0; index < file.length; index++) {
-        const url = URL.createObjectURL(file[index])
-        console.log(url)
-        allFiles.push(url);
-      }
-      console.log('allFiles', allFiles);
-    }
-    setcurrentImages(allFiles);
-  }
-
+ 
   const getCurrentrecord = async () => {
-
     let r = await fetch(`${apiUrl}schedule-event-to-update/${params}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
     })
     let res = await r.json()
-    console.log('res ===', JSON.stringify(res));
+    //console.log('res ===', JSON.stringify(res));
     if (res.isSuccess == true) {
       setSuccess(res.isSuccess);
       setEvent(res.events);
@@ -105,11 +88,14 @@ const UpdateScheduleEvents = () => {
       setBookingTillDate(res.scheduleBatch[0].bookingTillDate);
       setBookingTillTime(res.scheduleBatch[0].bookingTillTime);
       setSpecialOfferEvent(res.scheduleBatch[0].specialOfferEvent);
-      setEventIsScheduled(res.scheduleBatch[0].scheduleEventId);
+      setEventIsScheduled(res.scheduleBatch[0].scheduleEventId);     
       setEventId(res.scheduleBatch[0].eventId);
       setPartialBookingAmount(res.scheduleBatch[0].partialBookingAmount);
+      let images = [];
+      images.push(res.scheduleBatch[0]?.images);
+      setUploadedFiles(images);
     }
-    console.log('events', res.scheduleBatch[0].scheduleEventId);
+    //console.log('events', res.scheduleBatch[0].scheduleEventId);
   }
 
   const onDrop = (acceptedFiles) => {
@@ -118,17 +104,19 @@ const UpdateScheduleEvents = () => {
         preview: URL.createObjectURL(file), // Create a preview URL for the image
       })
     );
-    setUploadedFiles((prev) => [...prev, ...newFiles]); // Add new files to the uploaded files state
+    setUploadedFiles(newFiles); // Add new files to the uploaded files state
     clearErrors("dropzone");
   };
+
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const removeFile = (file) => {
     setUploadedFiles((prev) => prev.filter((f) => f !== file)); // Remove the file from the state
   };
+
   const onSubmit = async (data) => {
     const formData = new FormData();
-    console.log('data---', data);
+    //console.log('uploadedFiles---', uploadedFiles);
     if (uploadedFiles.length === 0) {
       setError("dropzone", {
         type: "manual",
@@ -139,24 +127,22 @@ const UpdateScheduleEvents = () => {
       formData.append("file", uploadedFiles[0]);
     }
 
-   
+
     if (isActive && ((everyWeekend == true && eventEndDate != '' && notScheduleYet == true) || (everyWeekend == true && eventEndDate != '') || (eventEndDate != '' && notScheduleYet == true) || (everyWeekend == true && notScheduleYet == true))) {
       setActiveError({ disply: true, message: "You can only selet one from Every Weekend / Not Schedule Yet / Event EndDate " });
     } else {
       setActiveError({ disply: false });
-
-      formData.append("active", isActive == 'on'? true : false );
+      //console.log('isActive',isActive);
+      formData.append("active", isActive );
       formData.append("eventId", eventIsScheduled);
       const search = events.filter(function (item) {
-        console.log('item', item.eventId == eventIsScheduled)
+        //console.log('item', item.eventId == eventIsScheduled)
         return item.eventId == eventIsScheduled;
       });
-      console.log('search--', specialOfferEvent);
-      let b2bValue = b2bPrice ==null ? 0 : b2bPrice;
-      let specialOfferEventVar = specialOfferEvent == 'on'? true : false ;
-      
+      console.log('search--', ( specialOfferEvent == 'on' || specialOfferEvent == true));
+      let b2bValue = b2bPrice == null ? 0 : b2bPrice;
       formData.append('eventname', search[0].name);
-      formData.append('eventType', search[0].eventType);
+      formData.append('eventType', eventType);
       formData.append('eventCostPerPerson', eventCostPerPerson);
       formData.append('eventEndDate', new Date(eventEndDate));
       formData.append('eventStartDate', new Date(eventStartDate));
@@ -165,11 +151,11 @@ const UpdateScheduleEvents = () => {
       formData.append('notScheduleYet', notScheduleYet);
       formData.append('b2bPrice', b2bValue);
       formData.append('bookingTillDate', bookingTillDate);
-      formData.append('specialOfferEvent', specialOfferEventVar);
+      formData.append('specialOfferEvent', specialOfferEvent);
       formData.append('bookingTillTime', bookingTillTime.toString());
       formData.append('scheduleEventId', eventIsScheduled);
-      formData.append('partialBookingAmount',partialBookingAmount);
-      formData.append('eventCostPerPersonFromMumbai',eventCostPerPersonFromMumbai);
+      formData.append('partialBookingAmount', partialBookingAmount);
+      formData.append('eventCostPerPersonFromMumbai', eventCostPerPersonFromMumbai);
       const url = `${apiUrl}update-schedule-events/${eventId}`;
       let r = await fetch(url, {
         method: "POST",
@@ -187,11 +173,9 @@ const UpdateScheduleEvents = () => {
   return (
     <div>
       <AdminNavbar>
-
         < form action="" onSubmit={handleSubmit(onSubmit)}>
           <div className="schedule-form container">
             <div className="title-header">Schedule Event</div>
-
             <div className="content">
               {isSuccess &&
                 <div className="user-details">
@@ -206,7 +190,7 @@ const UpdateScheduleEvents = () => {
 
                   <div className="input-box-column ">
                     <span className="details">Start Date </span>
-                    <input type="date" value={eventStartDate} onChange={(e) => setEventStartDate(e.target.value)}  />
+                    <input type="date" value={eventStartDate} onChange={(e) => setEventStartDate(e.target.value)} />
                   </div>
                   <div className="input-box-column ">
                     <span className="details">End Date </span>
@@ -215,30 +199,30 @@ const UpdateScheduleEvents = () => {
                   <br />
                   <div className="input-box-column ">
                     <span className="details">Booking Open Till Date </span>
-                    <input type="date" value={bookingTillDate} onChange={(e) => setBookingTillDate(e.target.value)}  />
+                    <input type="date" value={bookingTillDate} onChange={(e) => setBookingTillDate(e.target.value)} />
                   </div>
                   <div className="input-box-column ">
                     <span className="details">Booking Open Till Time</span>
-                    <input type="time" value={bookingTillTime} onChange={(e) => setBookingTillTime(e.target.value)}   />
+                    <input type="time" value={bookingTillTime} onChange={(e) => setBookingTillTime(e.target.value)} />
                   </div>
-                  {eventType == 'BackPackingTrip' &&
-                <div className="input-box-column ">
-                  <span className="details">Partial Booking Amount Per Person </span>
-                  <input   onChange={(e) => setPartialBookingAmount(e.target.value)}  type="text" />
-                </div>
-            }  
+                 
                   {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
                   <div className="input-box-column event-picker ">
                     <span className="details">Every Weekend </span>
-                    <input type="checkbox" defaultChecked={everyWeekend} onChange={(e) => setEveryWeekend(e.target.value)}  />
+                    <input type="checkbox" defaultChecked={everyWeekend} onChange={(e) => setEveryWeekend(e.target.checked)} />
                   </div>
 
                   <div className="input-box-column event-picker ">
                     <span className="details">On Public Demand </span>
-                    <input type="checkbox" defaultChecked={notScheduleYet} onChange={(e) => setNotScheduleYet(e.target.value)}  />
+                    <input type="checkbox" defaultChecked={notScheduleYet} onChange={(e) => setNotScheduleYet(e.target.checked)} />
                   </div>
                   {activeError.disply && <div className='errorMessage'>{activeError.message}</div>}
-
+                  {eventType == 'BackPackingTrip' &&
+                    <div className="input-box-column ">
+                      <span className="details">Partial Booking Amount Per Person </span>
+                      <input value={partialBookingAmount} onChange={(e) => setPartialBookingAmount(e.target.value)} type="text" />
+                    </div>
+                  }
                   <div className="input-box-column ">
                     <span className="details">B2B Per Person </span>
                     <input value={b2bPrice} onChange={(e) => setB2bPrice(e.target.value)} type="text" />
@@ -249,7 +233,7 @@ const UpdateScheduleEvents = () => {
                   </div>
                   <div className="input-box-column">
                     <span className="details">Cost Per Person from Mumbai <span style={{ 'color': 'red' }}>*</span></span>
-                    <input value={eventCostPerPerson} onChange={(e) => setEventCostPerPersonFromMumbai(e.target.value)} type="text" required />
+                    <input value={eventCostPerPersonFromMumbai} onChange={(e) => setEventCostPerPersonFromMumbai(e.target.value)} type="text" required />
                   </div>
                   <div className="input-box-column ">
                     <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
@@ -263,11 +247,11 @@ const UpdateScheduleEvents = () => {
                   </div>
                   <div className="input-box-column ">
                     <span className="details">Active</span>
-                    <input defaultChecked={isActive} onChange={(e) => setActive(e.target.value)}   type="checkbox" id="active" name="Active" />
+                    <input defaultChecked={isActive} onChange={(e) => setActive(e.target.checked)} type="checkbox" id="active" name="Active" />
                   </div>
                   <div className="input-box-column ">
                     <span className="details">Special Offer Event</span>
-                    <input defaultChecked={specialOfferEvent} onChange={(e) => setSpecialOfferEvent(e.target.value)}   type="checkbox" id="active" name="Active" />
+                    <input defaultChecked={specialOfferEvent} onChange={(e) => setSpecialOfferEvent(e.target.checked)} type="checkbox" id="active" name="Active" />
                   </div>
                   <div className="input-box-column ">
                     <span className="details"></span>
@@ -295,10 +279,10 @@ const UpdateScheduleEvents = () => {
 
                   {/* Preview Uploaded Images */}
                   <div className="image-preview-container">
-                    {uploadedFiles.map((file) => (
+                    {uploadedFiles.map((file) => (                  
                       <div key={file.name} className="image-preview">
                         <img
-                          src={file.preview}
+                          src={file.preview ? file.preview : `${apiUrl}${file}` } 
                           alt={file.name}
                           style={{
                             width: "150px",

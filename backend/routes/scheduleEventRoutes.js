@@ -144,19 +144,22 @@ router.post("/schedule-event", async (req, res) => {
 
 router.post("/update-schedule-events/:eventId", async (req, res) => {
 	try {
-		console.log("req.params--", req.params.eventId);
+		
 		let event_Id = req.params.eventId;
 		var currUrl = "";
-		let sampleFile = req.files.file;
-		let uploadPath = path.join(__dirname, '../../public/Images', sampleFile.name);
-		currUrl = 'public/Images/' + sampleFile.name;
-		sampleFile.mv(uploadPath, (err) => {
-			if (err) {
-				return res.status(500).send(err);
-			}
-		});
-
-		console.log("schedule-event --", req.body);
+		if (req.files != null) {
+			let sampleFile = req.files.file;
+			let uploadPath = path.join(__dirname, '../../public/Images', sampleFile.name);
+			currUrl = 'public/Images/' + sampleFile.name;
+			sampleFile.mv(uploadPath, (err) => {
+				if (err) {
+					return res.status(500).send(err);
+				}
+			});
+		}else{
+			currUrl = req.body.file;
+		}
+		
 		const {
 			active,
 			scheduleEventId,
