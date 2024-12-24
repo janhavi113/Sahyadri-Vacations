@@ -159,7 +159,7 @@ router.post('/confirm-booking/:id', async (req, res) => {
         eventId: directBooking.eventId,
         eventName: directBooking.eventName,
         otherParticipants:directBooking.otherParticipants,
-        status:'Confirmed',
+        status:'confirmed',
         batch:directBooking.batch,
         eventPrice: directBooking.eventPrice,
         addedDiscount:directBooking.addedDiscount,
