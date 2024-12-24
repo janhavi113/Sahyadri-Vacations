@@ -184,7 +184,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
               <td style="text-align: right;">${bookingDetails.numberOfPeoples} x ${bookingDetails.eventPrice}</td>
             </tr>
              <tr>
-                <td>Added Discount</td>
+                <td>Add On</td>
                 <td style="text-align: right;">- ${bookingDetails.addedOn}</td>
               </tr> 
             <tr>
