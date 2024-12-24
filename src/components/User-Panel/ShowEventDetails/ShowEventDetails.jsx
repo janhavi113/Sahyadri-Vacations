@@ -73,7 +73,7 @@ const ShowEventDetails = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEandDate] = useState(null);
-  const [selectedBatch , setSelectedbatch] = useState(null);
+  const [selectedBatch, setSelectedbatch] = useState(null);
   const [bookingId, setBookingId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showTermsAndConditions, setShowTermsAndConditions] = useState(false);
@@ -121,7 +121,7 @@ const ShowEventDetails = () => {
     setActualPrice(Number(price));
     setPrice(price);
   };
-  const handleSelectDate= (option) => {
+  const handleSelectDate = (option) => {
     setSelectDate(option.target.value);
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == option.target.value);
     setSelectedStartDate(foundRecord.eventEndDate);
@@ -131,7 +131,7 @@ const ShowEventDetails = () => {
   }
   const handlePaymentChange = (event) => {
     setPaymentOption(event.target.value);
-    console.log('selectedBatch   ',selectedBatch);
+    console.log('selectedBatch   ', selectedBatch);
     if (event.target.value == "partial") {
       let price = Number(selectedBatch.partialBookingAmount) * Number(noOfTrekkers);
       setConvenienceFee(Number(price) * 0.015);
@@ -144,7 +144,7 @@ const ShowEventDetails = () => {
       remainingAmount = remainingAmount + remainingConvenienceFee;
       setRemainingAmount(remainingAmount);
       setPrice(Number(selectedBatch.partialBookingAmount));
-      
+
     } else {
       let price = Number(selectedBatch.eventCostPerPerson) * Number(noOfTrekkers);
       setConvenienceFee(Number(price) * 0.015);
@@ -177,15 +177,15 @@ const ShowEventDetails = () => {
   }
 
   const handleParticipantChange = (index, field, value) => {
-    if(field == 'locationCity' ){
-             //console.log('pickupPoints---',pickupPoints);
-             if(value =='Pune to Pune'){
-              setParticipantsPickupPoints(pickupPoints);
-             }else if(value =='Mumbai to Mumbai'){
-              setParticipantsPickupPoints(pickupPointsfromMumbai);
-             }else{
-              setParticipantsPickupPoints([{'Id': 1 ,'name':eventDetails.b2bLocaion}]);
-             }
+    if (field == 'locationCity') {
+      //console.log('pickupPoints---',pickupPoints);
+      if (value == 'Pune to Pune') {
+        setParticipantsPickupPoints(pickupPoints);
+      } else if (value == 'Mumbai to Mumbai') {
+        setParticipantsPickupPoints(pickupPointsfromMumbai);
+      } else {
+        setParticipantsPickupPoints([{ 'Id': 1, 'name': eventDetails.b2bLocaion }]);
+      }
     }
 
     const newParticipants = [...participants];
@@ -227,7 +227,7 @@ const ShowEventDetails = () => {
       setButtonDisabled(false);
     }
   }
-  
+
   const onSubmit = async (data) => {
     setIsLoading(true); // Set loading to true before starting the request
     try {
@@ -331,7 +331,7 @@ const ShowEventDetails = () => {
       } else {
         setDiscount(0);
       }
-      if(paymentOption == 'partial'){
+      if (paymentOption == 'partial') {
         setPartialPayment(final_Price);
       }
       setFinalPrice(final_Price);
@@ -341,7 +341,7 @@ const ShowEventDetails = () => {
         ...participants,
         { name: "", mobileNumber: "", pickupLocation: "" },
       ]);
-    
+
     } else {
       setBatchFull(true);
       setAvailableSlot(Number(maxBooking) - Number(bookedSlot));
@@ -368,7 +368,7 @@ const ShowEventDetails = () => {
       setFinalPrice(Number(final_Price));
       setConvenienceFee(Number(convenienceFee));
       setParticipants(participants.slice(0, -1));
-       if(paymentOption == 'partial'){
+      if (paymentOption == 'partial') {
         setPartialPayment(final_Price);
       }
     }
@@ -420,7 +420,7 @@ const ShowEventDetails = () => {
           batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear();
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           batchSize = event.batches[i].eventBatchCount;
-          eventEndDate =  event.batches[i].eventEndDate;
+          eventEndDate = event.batches[i].eventEndDate;
           eventStartDate = event.batches[i].eventStartDate;
           partialBookingAmount = event.batches[i].partialBookingAmount;
         } else if (event.batches[i].everyWeekend == true) {
@@ -460,9 +460,9 @@ const ShowEventDetails = () => {
           b2bPrice = event[index]?.b2bPrice;
           batchSize = event[index]?.eventBatchCount;
           bookedSize = event[index]?.alreadyBoockedCount;
-          eventEndDate =  event[index]?.eventEndDate;
+          eventEndDate = event[index]?.eventEndDate;
           eventStartDate = event[index]?.eventStartDate;
-          console.log('event[index]',event[index]);
+          console.log('event[index]', event[index]);
           partialBookingAmount = event[index]?.partialBookingAmount ? event[index]?.partialBookingAmount : 3000;
         } else if (event[index].everyWeekend == true && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
           batchdate = 'Available On All Weekends';
@@ -491,8 +491,8 @@ const ShowEventDetails = () => {
             bookedSize: bookedSize,
             eventCostPerPerson: eventCostPerPerson,
             batchdate: batchdate,
-            eventEndDate :eventEndDate,
-            eventStartDate : eventStartDate,
+            eventEndDate: eventEndDate,
+            eventStartDate: eventStartDate,
             eventCostPerPersonFromMumbai: eventCostPerPersonFromMumbai,
             b2bPrice: b2bPrice,
             eventId: event[index].eventId,
@@ -517,15 +517,15 @@ const ShowEventDetails = () => {
       setButtonDisabled(false);
       setFinalBatchesList(batchesList);
     }
-    console.log('batchesList--',batchesList);
+    console.log('batchesList--', batchesList);
     let currentbatch = batchesList.find(batch => batch['eventId'] == currentEventId);
     if (currentbatch) {
       let convenienceFeePerPerson = currentbatch.eventCostPerPerson * 0.015;
       convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
       //console.log('here', currentbatch);
       if (batchDates.length > 0 && currentbatch.batchdate != 'Available On All Weekends') {
-
         setSelectedDate(currentbatch.batchdate);
+        setSelectedbatch(currentbatch);
       }
       setAvailableBatches(batchDates);
       setBatchDate(currentbatch.batchdate);
@@ -536,13 +536,9 @@ const ShowEventDetails = () => {
       setActualPrice(Number(currentbatch.eventCostPerPerson));
       setPrice(currentbatch.eventCostPerPerson);
       setErrorMessageforNext(false);
-      // setSelectDate(currentbatch.batchdate);
-      // setSelectedStartDate(currentbatch.eventEndDate);
-      // setSelectedEandDate(currentbatch.eventStartDate);
     } else if (batchesList.length > 0) {
       let convenienceFeePerPerson = batchesList[0].eventCostPerPerson * 0.015;
       convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
-      //Math.round(((eventCostPerPerson * 0.015)/ 10) * 100) / 100;
       if (batchDates.length > 0 && batchesList[0].batchdate != 'Available On All Weekends') {
         setSelectedDate(batchesList[0].batchdate);
       }
@@ -560,7 +556,6 @@ const ShowEventDetails = () => {
       setSelectedStartDate(batchesList[0].eventEndDate);
       setSelectedEandDate(batchesList[0].eventStartDate);
       setSelectedbatch(batchesList[0]);
-
     }
     setIsLoadingMSG(false); // Start loading
   }
@@ -604,7 +599,7 @@ const ShowEventDetails = () => {
         "Content-Type": "application/json",
       }
     })
-   
+
     setCurrentEventId(params[0]);
     let res = await r.json()
     if (res.isSuccess == true) {
@@ -613,15 +608,12 @@ const ShowEventDetails = () => {
       setSuccess(true);
       setEventDetails(res.events);
       setScheduleBatch(res.ScheduleBatchesRecords);
-
       getNextBatchDate(res.ScheduleBatchesRecords);
-      //console.log('res.ScheduleBatchesRecords--', res.ScheduleBatchesRecords);
       if (res.ScheduleBatchesRecords.alreadyBoockedCount >= res.ScheduleBatchesRecords.eventBatchCount) {
         setButtonDisabled(true);
       } else {
         setButtonDisabled(false);
       }
-
       if (res.events.pickupPoints != null && res.events.pickupPoints != 'undefine') {
         const jsonData = convertHtmlToJSON(res.events.pickupPoints);
         setPickupPoints(jsonData);
@@ -631,8 +623,7 @@ const ShowEventDetails = () => {
         const jsonData = convertHtmlToJSON(res.events.pickupPointsfromMumbai);
         setPickupPointsfromMumbai(jsonData);
       }
-   
-      if (res.events.b2bLocaion != null && res.events.b2bLocaion != undefined && res.events.b2bLocaion.trim() !=''&& res.events.b2bLocaion.trim() != 'undefined') {
+      if (res.events.b2bLocaion != null && res.events.b2bLocaion != undefined && res.events.b2bLocaion.trim() != '' && res.events.b2bLocaion.trim() != 'undefined') {
         setB2bLocation(res.events.b2bLocaion);
         tempLocations.push(res.events.b2bLocaion);
       }
@@ -692,13 +683,13 @@ const ShowEventDetails = () => {
   // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
     let ScheduleBatchesRecord;
-  
-    if(Array.isArray(ScheduleBatchesRecords)){
+
+    if (Array.isArray(ScheduleBatchesRecords)) {
       ScheduleBatchesRecord = ScheduleBatchesRecords[0];
-    }else{
+    } else {
       ScheduleBatchesRecord = ScheduleBatchesRecords;
     }
-    console.log('ScheduleBatchesRecord---',ScheduleBatchesRecord);
+    console.log('ScheduleBatchesRecord---', ScheduleBatchesRecord);
     setDiscountAvailable(!ScheduleBatchesRecord.specialOfferEvent);
     if (!ScheduleBatchesRecord.specialOfferEvent) {
       let scheduleEventType = ScheduleBatchesRecord.eventType;
@@ -970,11 +961,11 @@ const ShowEventDetails = () => {
                   </div>
                 }
                 <hr />
-                {discountAvailable&&<div>
-             
+                {discountAvailable && <div>
+
                   <MinimalCoupons coupons={coupons} />
                 </div>
-               } 
+                }
                 <div>
                   <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
                     <h2 className="h3">THINGS TO KNOW</h2>
@@ -1187,7 +1178,7 @@ const ShowEventDetails = () => {
                         </div>}
                       {buttonClick == 'pay-now' &&
                         <div className="user-details">
-                          
+
 
                           {eventType != 'CampingEvent' &&
 
@@ -1340,7 +1331,7 @@ const ShowEventDetails = () => {
                                   >
 
                                     <option value="">Select Pickup Location</option>{" "}
-                                    {console.log('participantsPickupPoints-----',participantsPickupPoints )}
+                                    {console.log('participantsPickupPoints-----', participantsPickupPoints)}
                                     {participantsPickupPoints.map((pickupPoint) => {
                                       return (
                                         <option value={pickupPoint.name} key={pickupPoint.id}>
@@ -1499,7 +1490,7 @@ const ShowEventDetails = () => {
                         <input type="submit" value="Next >>" />
                       </div>
                     }
-                    {buttonClick == 'pay-now'  &&
+                    {buttonClick == 'pay-now' &&
                       <div>
                         <div className='termsAndCondition'>
                           <input
@@ -1522,7 +1513,7 @@ const ShowEventDetails = () => {
                         </div>
                         {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
                         <div className="button">
-                          <input onMouseOver={handleCheckboxBlur} className={!showTermsAndConditions ?'disable-paynow' : 'paynow-button' } disabled={!showTermsAndConditions} type="submit" value="Pay Now" />
+                          <input onMouseOver={handleCheckboxBlur} className={!showTermsAndConditions ? 'disable-paynow' : 'paynow-button'} disabled={!showTermsAndConditions} type="submit" value="Pay Now" />
                         </div>
                       </div>
                     }

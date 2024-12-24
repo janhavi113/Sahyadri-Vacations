@@ -34,17 +34,7 @@ router.get("/show-all-direct-bookings", async (req, res) => {
 router.post('/direct-booking', async (req, res) => {
     try {
         console.log("create req.body --", req.body);
-        var currUrl = "";
-        if (req.files) {
-            let sampleFile = req.files.images;
-            let uploadPath = path.join(__dirname, '../../public/Images', sampleFile.name);
-            currUrl = '/public/Images/' + sampleFile.name;
-            sampleFile.mv(uploadPath, (err) => {
-                if (err) {
-                    return res.status(500).send(err);
-                }
-            });
-        }
+        
         const {
             fullName,
             email,
@@ -58,6 +48,14 @@ router.post('/direct-booking', async (req, res) => {
             bookingDate,
             otherParticipants,
             eventPrice,
+            addedDiscount,
+            paymentMethod,
+            bookingMode,
+            transactionId,
+            packageGiven,
+            remainingAmount,
+            eventStartDate,
+            eventEndDate,
         } = req.body;
 
         let parsedParticipants = [];
@@ -77,9 +75,16 @@ router.post('/direct-booking', async (req, res) => {
             pickupLocation: pickupLocation,
             bookingDate: new Date(bookingDate).toLocaleDateString(),
             otherParticipants: parsedParticipants,
-            images: currUrl,
             status: "Pending",
             eventPrice: eventPrice,
+            addedDiscount:addedDiscount,
+            paymentMethod:paymentMethod,
+            bookingMode:bookingMode,
+            transactionId:transactionId,
+            packageGiven:packageGiven,
+            remainingAmount:remainingAmount,
+            eventStartDate:eventStartDate,
+            eventEndDate:eventEndDate,
         });
 
         await booking.save();
@@ -129,11 +134,12 @@ router.post('/confirm-booking/:id', async (req, res) => {
       const directBooking = await DirectBookings.findById(id);
 
       let bookingIdVar ;
-       let confirmedBookings = await Bookings.findOne().sort({ _id: -1 });//.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
-        if(isBookingDateToday(confirmedBookings.bookingDate)){
-            bookingIdVar = Number(confirmedBookings.bookingDate) + 1;
+       let confirmedBookings = await Bookings.findOne({bookingDate: directBooking.bookingDate}).sort({ _id: -1 });//.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
+      console.log('confirmedBookings--',confirmedBookings.bookingId);
+       if(isBookingDateToday(confirmedBookings.bookingDate)){
+            bookingIdVar = Number(confirmedBookings.bookingId) + 1;
         }else{
-            bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + 1;
+            bookingIdVar = convertDateToCustomFormat(new Date(directBooking.bookingDate).toLocaleDateString()) + 1;
         }
 
       if (!directBooking) {
@@ -155,12 +161,21 @@ router.post('/confirm-booking/:id', async (req, res) => {
         otherParticipants:directBooking.otherParticipants,
         status:'Confirmed',
         batch:directBooking.batch,
+        eventPrice: directBooking.eventPrice,
+        addedDiscount:directBooking.addedDiscount,
+        paymentMethod:directBooking.paymentMethod,
+        bookingMode:directBooking.bookingMode,
+        transactionId:directBooking.transactionId,
+        packageGiven:directBooking.packageGiven,
+        remainingAmount:directBooking.remainingAmount,
+        eventStartDate:directBooking.eventStartDate,
+        eventEndDate:directBooking.eventEndDate,
       });
   
       await newBooking.save();
   
-      // Delete the booking from DirectBookings
-       await DirectBookings.findByIdAndDelete(id);
+      //Delete the booking from DirectBookings
+        await DirectBookings.findByIdAndDelete(id);
   
       res.status(200).json({ message: "Booking confirmed successfully." ,booking : newBooking});
     } catch (error) {

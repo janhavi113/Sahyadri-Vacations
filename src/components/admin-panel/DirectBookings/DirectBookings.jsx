@@ -26,13 +26,19 @@ const DirectBookings = ({ onSendData }) => {
   const [participants, setParticipants] = useState([]);
   const [price, setPrice] = useState(0);
   const [batchDate, setBatchDate] = useState();
+  const [pickupPointsfromMumbai, setPickupPointsfromMumbai] = useState([]);
+  const [b2bLocation, setB2bLocation] = useState();
   const [availableSlot, setAvailableSlot] = useState();
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isBookingConfirmed, setBookingConfirmed] = useState(false);
   const [events, setEvent] = useState();
   const [file, setFile] = useState(null); // State to store uploaded file
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
-
+  const [showLocations, setShowLocations] = useState([]);
+  const [selected, setSelected] = useState('Pune to Pune');
+  const [eventType, setEventType] = useState();
+  const [selectedBatch, setSelectedBatch]  = useState();
+  const [participantsPickupPoints, setParticipantsPickupPoints] = useState([]);
   const {
     register,
     handleSubmit,
@@ -40,7 +46,9 @@ const DirectBookings = ({ onSendData }) => {
     clearErrors,
     formState: { errors, isSubmitting },
   } = useForm();
-
+  const handleSelect = (option) => {
+    setSelected(option);
+  }
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.map((file) =>
       Object.assign(file, {
@@ -50,19 +58,13 @@ const DirectBookings = ({ onSendData }) => {
     setUploadedFiles((prev) => [...prev, ...newFiles]); // Add new files to the uploaded files state
     clearErrors("dropzone");
   };
-
+  const [selectedDate, setSelectedDate] = useState(null);
   const removeFile = (file) => {
     setUploadedFiles((prev) => prev.filter((f) => f !== file)); // Remove the file from the state
   };
 
   const onSubmit = async (data) => {
-    if (uploadedFiles.length === 0) {
-      setError("dropzone", {
-        type: "manual",
-        message: "Please upload at least one file.",
-      });
-      return;
-    }
+    console.log('selectedBatch---',Number(selectedBatch.eventCostPerPerson));
     const formData = new FormData();
     formData.append("fullName", data.fullName);
     formData.append("email", data.emailId);
@@ -71,15 +73,20 @@ const DirectBookings = ({ onSendData }) => {
     formData.append("eventId", data.Event);
     formData.append("eventName", eventName);
     formData.append("numberOfPeoples", noOfTrekkers);
-    formData.append("amountPaid", finalPrice);
+    formData.append("amountPaid", data.amountPaid);
+    formData.append("remainingAmount", Number(finalPrice) - Number(data.amountPaid));
+   // formData.append("packageGiven",Number(data.finalPrice));
+    formData.append("eventPrice",Number(selectedBatch.eventCostPerPerson));
+    formData.append("bookingMode", 'Direct Booking ');
+    formData.append("paymentMethod", data.paymentMethod);
+    formData.append("transactionId", data.transactionId);
+    formData.append("addedDiscount", data.Discount);
     formData.append("pickupLocation", selectedLocation);
+    formData.append("eventStartDate",selectedBatch.eventStartDate);
+    formData.append("eventEndDate",selectedBatch.eventEndDate);
     const today = new Date();
     formData.append("bookingDate", today);
     formData.append("otherParticipants", JSON.stringify(participants));
-    formData.append("eventPrice",price);
-    console.log("uploadedFiles--", uploadedFiles);
-    formData.append("images", uploadedFiles[0]); // Adjust the name as needed
-
     let r = await fetch(`${apiUrl}direct-booking`, {
       method: "POST",
       body: formData,
@@ -102,8 +109,11 @@ const DirectBookings = ({ onSendData }) => {
       let count = noOfTrekkers;
       let price1 = price;
       count++;
+      let convenienceFee = (Number(price1) * Number(count) * 0.015).toFixed(2);
+      let totalPrice = (Number(price1) * Number(count));
+      let final_Price = Number(totalPrice) + Number(convenienceFee);
       setNoOfTrekkers(count);
-      setFinalPrice(price1 * count);
+      setFinalPrice(final_Price);
       setParticipants([
         ...participants,
         { name: "", mobileNumber: "", pickupLocation: "" },
@@ -116,13 +126,26 @@ const DirectBookings = ({ onSendData }) => {
       let count = noOfTrekkers;
       let price1 = price;
       count--;
+      let amount = Number(price1) * Number(count);
+      let convenienceFee = (Number(amount) * 0.015).toFixed(2);
+      let final_Price = Number(amount) + Number(convenienceFee);
       setNoOfTrekkers(count);
-      setFinalPrice(price1 * count);
+      setFinalPrice(final_Price);
       setParticipants(participants.slice(0, -1));
     }
   };
 
   const handleParticipantChange = (index, field, value) => {
+    if (field == 'locationCity') {
+      //console.log('pickupPoints---',pickupPoints);
+      if (value == 'Pune to Pune') {
+        setParticipantsPickupPoints(eventPickupPoints);
+      } else if (value == 'Mumbai to Mumbai') {
+        setParticipantsPickupPoints(pickupPointsfromMumbai);
+      } else {
+        setParticipantsPickupPoints([{ 'Id': 1, 'name': b2bLocation }]);
+      }
+    }
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
     setParticipants(newParticipants);
@@ -184,14 +207,14 @@ const DirectBookings = ({ onSendData }) => {
         ) {
           batchDates.push(
             new Date(event.batches[i].eventStartDate).getDate() +
-              " " +
-              months[new Date(event.batches[i].eventStartDate).getMonth()] +
-              " - " +
-              new Date(event.batches[i].eventEndDate).getDate() +
-              " " +
-              months[new Date(event.batches[i].eventEndDate).getMonth()] +
-              " " +
-              new Date(event.batches[i].eventStartDate).getFullYear()
+            " " +
+            months[new Date(event.batches[i].eventStartDate).getMonth()] +
+            " - " +
+            new Date(event.batches[i].eventEndDate).getDate() +
+            " " +
+            months[new Date(event.batches[i].eventEndDate).getMonth()] +
+            " " +
+            new Date(event.batches[i].eventStartDate).getFullYear()
           );
         } else if (event.batches[i].notScheduleYet == true) {
           batchDates.push("On Demand");
@@ -203,14 +226,14 @@ const DirectBookings = ({ onSendData }) => {
       if (event.everyWeekend == false && event.notScheduleYet == false) {
         batchDates.push(
           new Date(event.eventStartDate).getDate() +
-            " " +
-            months[new Date(event.eventStartDate).getMonth()] +
-            " - " +
-            new Date(event.eventEndDate).getDate() +
-            " " +
-            months[new Date(event.eventEndDate).getMonth()] +
-            " " +
-            new Date(event.eventStartDate).getFullYear()
+          " " +
+          months[new Date(event.eventStartDate).getMonth()] +
+          " - " +
+          new Date(event.eventEndDate).getDate() +
+          " " +
+          months[new Date(event.eventEndDate).getMonth()] +
+          " " +
+          new Date(event.eventStartDate).getFullYear()
         );
         batchdate =
           new Date(event.eventStartDate).getDate() +
@@ -236,7 +259,9 @@ const DirectBookings = ({ onSendData }) => {
       setPrice(eventCostPerPerson);
       setBatchDate(batchdate);
       setAvailableSlot(batchSize);
-      setFinalPrice(eventCostPerPerson);
+      
+      let convenienceFee = (Number(eventCostPerPerson) * 0.015).toFixed(2);
+      setFinalPrice(Number(eventCostPerPerson) + Number(convenienceFee));
       setEventName(eventName);
     }
   };
@@ -276,30 +301,51 @@ const DirectBookings = ({ onSendData }) => {
       setSuccess(res.isSuccess);
       setEventDetails(res.events);
       setEvent(res.scheduleBatches);
-      console.log('res.scheduleBatches--',res.scheduleBatches);
-
       const scheduleBatches = res.scheduleBatches[0];
+      setSelectedBatch(scheduleBatches);
       let eventApi = scheduleBatches.eventApi;
       const event = res.events.find((e) => e.apiname == eventApi);
-      const jsonData = convertHtmlToJSON(event.pickupPoints);
-      setEventPickupPoints(jsonData);
+      setSelectedbatchDetails(event);
       getNextBatchDate(scheduleBatches);
+      setEventType(res.events.eventType);
     }
   };
 
   function handleSelectEventChange(e) {
     let eventId = e.target.value;
     eventChange(eventId);
+
+
   }
 
   function eventChange(eventId) {
     const scheduleBatches = events.find((e) => e.eventId == eventId);
+    console.log(scheduleBatches);
     getNextBatchDate(scheduleBatches);
-
+    setSelectedBatch(scheduleBatches);
     let eventApi = scheduleBatches.eventApi;
     const event = eventDetails.find((e) => e.apiname == eventApi);
+    setSelectedbatchDetails(event);
+  }
+
+
+  function setSelectedbatchDetails(event) {
     const jsonData = convertHtmlToJSON(event.pickupPoints);
+    let tempLocations = [];
     setEventPickupPoints(jsonData);
+    tempLocations.push('Pune to Pune');
+    console.log('event---', event);
+    if (event?.b2bLocaion != null && event?.b2bLocaion != undefined && event?.b2bLocaion.trim() != '' && event?.b2bLocaion.trim() != 'undefined') {
+      setB2bLocation(event?.b2bLocaion);
+      tempLocations.push(event?.b2bLocaion);
+    }
+    if (event.pickupPointsfromMumbai != null && event.pickupPointsfromMumbai != 'undefine') {
+      const jsonDataMumbai = convertHtmlToJSON(event.pickupPointsfromMumbai);
+      setPickupPointsfromMumbai(jsonDataMumbai);
+      tempLocations.push('Mumbai to Mumbai');
+    }
+   
+    setShowLocations(tempLocations);
   }
 
   return (
@@ -325,16 +371,16 @@ const DirectBookings = ({ onSendData }) => {
                       // Format the start and end dates to show only the date part
                       const formattedStartDate =
                         new Date(event.eventStartDate).toLocaleDateString() ==
-                        "Invalid Date"
+                          "Invalid Date"
                           ? ""
                           : " : " +
-                            new Date(
-                              event.eventStartDate
-                            ).toLocaleDateString() +
-                            " - ";
+                          new Date(
+                            event.eventStartDate
+                          ).toLocaleDateString() +
+                          " - ";
                       const formattedEndDate =
                         new Date(event.eventEndDate).toLocaleDateString() ==
-                        "Invalid Date"
+                          "Invalid Date"
                           ? ""
                           : new Date(event.eventEndDate).toLocaleDateString();
 
@@ -388,26 +434,79 @@ const DirectBookings = ({ onSendData }) => {
                   required
                 />
               </div>
-              <div className="select-pickup">
-                <h3>Select a Location:</h3>
-                <ul>
-                  {eventPickupPoints.map((location) => (
-                    <li key={location.id}>
-                      <label className="radio-display">
-                        <input
-                          type="radio"
-                          name="location"
-                          value={location.name}
-                          onChange={handleSelection}
-                          checked={selectedLocation === location.name}
-                        />
-                        {location.name}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+
               <br></br>
+
+              {eventType != 'CampingEvent' &&
+
+                <div className="flex-apply">
+                  <h3 className='add-bold'>Join Us From :<span style={{ 'color': 'red' }}> *</span></h3>
+                  <div className="button-radio">
+                    {showLocations.map((option) => (
+                      <div
+                        key={option}
+                        role="button"
+                        tabIndex={0} // Makes the div focusable
+                        className={`radio-button ${selected === option ? 'active' : ''}`}
+                        onClick={() => handleSelect(option)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSelect(option)} // Handles keyboard accessibility
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </div>
+                  {selected == 'Pune to Pune' &&
+                    <div>
+                      <h3 className='add-bold'>Please Select Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
+                      <ul>
+                        {eventPickupPoints.map((location) => (
+                          <li key={location.id}>
+                            <label className='radio-display'>
+                              <input
+                                type="radio"
+                                name="location"
+                                value={location.name}
+                                onChange={handleSelection}
+                                checked={selectedLocation === location.name}
+                              />
+                              {location.name}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  }
+                  {selected == 'Mumbai to Mumbai' &&
+                    <div>
+                      <h3 className='add-bold'>Please Select Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
+                      <ul>
+                        {pickupPointsfromMumbai.map((location) => (
+                          <li key={location.id}>
+                            <label className='radio-display'>
+                              <input
+                                type="radio"
+                                name="location"
+                                value={location.name}
+                                onChange={handleSelection}
+                                checked={selectedLocation === location.name}
+                              />
+                              {location.name}
+                            </label>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  }
+
+                  {selected == b2bLocation &&
+                    <div>
+                      <h3 className='add-bold'>Selected Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
+                      <ul className="b2blocation display-bulletin"><li>{b2bLocation}</li>
+                      </ul>
+                    </div>
+                  }
+                </div>
+              }
               <div className="input-box finalCalculation">
                 <div className="details">Number of participants</div>
                 <div></div>
@@ -434,7 +533,7 @@ const DirectBookings = ({ onSendData }) => {
               {participants.map((participant, index) => (
                 <div key={index} className="participant-box">
                   <h2>participant {index + 2} </h2>
-                  <div key={index} className="participant-inputs">
+                  <div key={index} className="Column-2 participant-inputs">
                     <input
                       type="text"
                       placeholder="Name"
@@ -442,6 +541,7 @@ const DirectBookings = ({ onSendData }) => {
                       onChange={(e) =>
                         handleParticipantChange(index, "name", e.target.value)
                       }
+                      required
                     />
                     <input
                       type="text"
@@ -454,79 +554,132 @@ const DirectBookings = ({ onSendData }) => {
                           e.target.value
                         )
                       }
+                      required
                     />
-                    <select
-                      className="select-class"
-                      name="location"
-                      value={participant.pickupLocation}
-                      onChange={(e) =>
-                        handleParticipantChange(
-                          index,
-                          "pickupLocation",
-                          e.target.value
-                        )
-                      }
-                    >
-                      <option value="">Select a location</option>{" "}
-                      {/* Optional: Placeholder option */}
-                      {eventPickupPoints.map((pickupPoint) => {
-                        return (
-                          <option value={pickupPoint.name} key={pickupPoint.id}>
-                            {pickupPoint.name}
-                          </option>
-                        );
-                      })}
-                    </select>
+                    {eventType != 'CampingEvent' &&
+
+                      <select
+                        className="select-class"
+                        name="locationCity"
+                        value={participant.locationCity}
+                        onChange={(e) =>
+                          handleParticipantChange(
+                            index,
+                            "locationCity",
+                            e.target.value
+                          )
+                        }
+                        required
+                      >
+
+                        <option value="">Join Us From</option>{" "}
+                        {/* Optional: Placeholder option */}
+                        {showLocations.map((option) => {
+                          return (
+                            <option value={option} key={option}>
+                              {option}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    }
+                    {eventType != 'CampingEvent' &&
+                      <select
+                        className="select-class"
+                        name="location"
+                        value={participant.pickupLocation}
+                        onChange={(e) =>
+                          handleParticipantChange(
+                            index,
+                            "pickupLocation",
+                            e.target.value
+                          )
+                        }
+                        required
+                      >
+
+                        <option value="">Select Pickup Location</option>{" "}
+                        {console.log('participantsPickupPoints-----', participantsPickupPoints)}
+                        {participantsPickupPoints.map((pickupPoint) => {
+                          return (
+                            <option value={pickupPoint.name} key={pickupPoint.id}>
+                              {pickupPoint.name}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    }
                   </div>
                 </div>
               ))}
 
-              {/* Dropzone for file uploads */}
-              <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">
-                {({ getRootProps, getInputProps }) => (
-                  <section className="dropzone">
-                    <div {...getRootProps({ className: "dropzone" })}>
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag 'n' drop some files here, or click to select files
-                      </p>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
-              {/* Show validation error if no file is uploaded */}
-              {errors.dropzone && (
-                <p className="error-message">{errors.dropzone.message}</p>
-              )}
 
-              {/* Preview Uploaded Images */}
-              <div className="image-preview-container">
-                {uploadedFiles.map((file) => (
-                  <div key={file.name} className="image-preview">
-                    <img
-                      src={file.preview}
-                      alt={file.name}
-                      style={{
-                        width: "150px",
-                        height: "175px",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <button type="button" onClick={() => removeFile(file)}>
-                      <FontAwesomeIcon
-                        icon={faCircleXmark}
-                        size="lg"
-                        style={{ color: "orange" }}
-                      />
-                    </button>
-                  </div>
-                ))}
-              </div>
               <div className="hr"></div>
               <div className="finalCalculation">
                 <span>Total Payment</span>
                 <span></span>
                 <span>₹{finalPrice} /-</span>
+              </div>
+              <div className="hr" style={{ 'margin': '15px 0 15px 0', 'height': '1px', 'backgroundColor': 'gray' }}></div>
+              <div className="input-box finalCalculation">
+                <span className="details">Given Discount</span>
+                <span></span>
+                <input
+                  style={{ 'width': "33%" }}
+                  {...register("Discount", {
+                    required: {
+                      value: true,
+                      message: "This field is required",
+                    },
+                  })}
+                  type="number"
+                  required
+                />
+              </div>
+              <div className="input-box finalCalculation">
+                <span className="details">Amount Paid</span>
+                <span></span>
+                <input
+                  style={{ 'width': "33%" }}
+                  {...register("amountPaid", {
+                    required: {
+                      value: true,
+                      message: "This field is required",
+                    },
+                  })}
+                  type="number"
+                  required
+                />
+              </div>
+              <div className="input-box finalCalculation">
+                <span className="details">Payment Method</span>
+                <span></span>
+                <input
+                  style={{ 'width': "33%" }}
+                  {...register("paymentMethod", {
+                    required: {
+                      value: true,
+                      message: "This field is required",
+                    },
+                  })}
+                  type="text"
+                  required
+                />
+              </div>
+              <div className="input-box finalCalculation">
+                <span className="details">TransactionId</span>
+                <span></span>
+                <input
+                  style={{ 'width': "33%" }}
+                  {...register("transactionId", {
+                    required: {
+                      value: true,
+                      message: "This field is required",
+                    },
+                  })}
+                  type="text"
+                  required
+                />
               </div>
             </div>
           </div>

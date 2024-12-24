@@ -75,6 +75,8 @@ function DirectBookingConfirmationPannel() {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        sendInvoiceRequest(data.booking);
         let bookingId = booking._id;
         // Booking confirmed successfully
         await setEvents((prevEvents) => {
@@ -118,7 +120,25 @@ function DirectBookingConfirmationPannel() {
       bookings, // Pass the bookings array for later use
     }));
   };
+  const sendInvoiceRequest = async (booking) => {
+    console.log('booking---', booking)
+    try {
+        const response = await fetch(`${apiUrl}sendInvoice`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(booking),
+        });
 
+        const result = await response.text();
+        if (response.ok) {
+            console.log("Invoice sent successfully:", result);
+        } else {
+            console.error("Failed to send invoice:", result);
+        }
+    } catch (error) {
+        console.error("Error sending invoice:", error);
+    }
+};
   return (
     <div>
       <AdminNavbar>

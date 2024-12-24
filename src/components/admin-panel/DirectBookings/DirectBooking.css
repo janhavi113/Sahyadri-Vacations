@@ -4,7 +4,12 @@
   padding-top: 130px;
 
 }
-
+.flex-apply{
+  display: flex;
+  justify-content: space-between;
+  gap: 15%;
+  width: 90%;
+}
 @media(max-width: 584px) {
   .direct-bookings-form {
     padding-top: 100px !important;
@@ -26,6 +31,9 @@
   }
   .direct-bookings-form {
     padding-top: 80px !important;
+  }
+  .flex-apply{
+    flex-direction: column;
   }
 }
 .participant-inputs {
@@ -70,6 +78,9 @@
     width: 100%;  /* Full width on smaller screens */
     margin-bottom: 10px;  /* Add space between rows */
     background-color: white;
+  }
+  .flex-apply{
+    flex-direction: column;
   }
 }
 

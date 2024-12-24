@@ -16,6 +16,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
 
     // Construct the path to the logo
     const logo = getImageAsBase64(path.join(__dirname, '../../public/logo.jpg')); // Adjusted path to logo
+
     const finalPrice = (bookingDetails.eventPrice * bookingDetails.numberOfPeoples ) + Number(bookingDetails.addedOn);
     let convenienceFee = ((bookingDetails.eventPrice * bookingDetails.numberOfPeoples) + Number(bookingDetails.addedOn) ) * 0.015;
     convenienceFee = convenienceFee.toFixed(2);
@@ -103,7 +104,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
         }
         .company-info-remaining-amount {
             font-size: 12px; /* Adjusted font size */
-            margin-top: 140px; /* Space before company info */
+            margin-top: 75px; /* Space before company info */
         }
         .thank-you {
             margin-top: 1px;
@@ -152,7 +153,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             <h1>Invoice</h1>
         </header>
         <section class="invoice-details">
-            <table style="width: 100%;">
+         <table style="width: 100%;">
                 <tr>
                     <td class="customer-info">
                         <h3>Invoice To:</h3>
@@ -182,10 +183,10 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
               <td>Event Fees</td>
               <td style="text-align: right;">${bookingDetails.numberOfPeoples} x ${bookingDetails.eventPrice}</td>
             </tr>
-             ${bookingDetails.addedOn > 0 ? `<tr>
+             <tr>
                 <td>Added Discount</td>
                 <td style="text-align: right;">- ${bookingDetails.addedOn}</td>
-              </tr>` : ''}
+              </tr> 
             <tr>
               <td>Subtotal</td>
               <td style="text-align: right;">${finalPrice}</td>
@@ -197,7 +198,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
            
               ${bookingDetails.addedDiscount > 0 ? `<tr>
                 <td>Added Discount</td>
-                <td style="text-align: right;">- ${bookingDetails.addedDiscount}</td>
+                <td style="text-align: right;"> ${bookingDetails.addedDiscount}</td>
               </tr>` : ''}
              
             <tr>
@@ -209,7 +210,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             ${bookingDetails.remainingAmount > 0 ? `
                 <br><br>
                <div>
-                <span> <b>Booking Amount</b></span>
+                <span> <b>Booking Amount Paid</b></span>
                 <td style="text-align: right;"> ${bookingDetails.amountPaid}</span>
              </div>
              <br>
