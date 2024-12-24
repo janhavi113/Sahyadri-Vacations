@@ -185,7 +185,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             </tr>
              <tr>
                 <td>Add On</td>
-                <td style="text-align: right;">- ${bookingDetails.addedOn}</td>
+                <td style="text-align: right;"> ${bookingDetails.addedOn}</td>
               </tr> 
             <tr>
               <td>Subtotal</td>
