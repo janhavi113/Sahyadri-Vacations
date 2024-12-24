@@ -173,7 +173,7 @@ router.put("/payment-confirmed", async (req, res) => {
                 $set: {
                     transactionId:transactionId,
                     paymentMethod:paymentMethod,
-                    status: "confirmed",
+                    status: "Confirmed",
                 }
             },
             { new: true } // Return the updated document

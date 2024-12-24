@@ -205,7 +205,7 @@ function AdminDashboard() {
               <span >Show Bookigs<span style={{ 'color': 'red' }}>*</span></span>
               <select onChange={(e) => handleFilter(e.target.value)}>
                 <option value={'all'} >All</option>
-                <option value={'confirmed'} >Confirmed</option>
+                <option value={'Confirmed'} >Confirmed</option>
               </select>
             </div>
           </div>
