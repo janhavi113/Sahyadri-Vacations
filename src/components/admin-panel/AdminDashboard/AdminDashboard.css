@@ -87,3 +87,64 @@
   background-color: #f1f1f1; /* Light grey background for the sub-rows */
 }
 
+/* Mobile View Styles */
+@media (max-width: 768px) {
+  .home-dashboard {
+    font-size: 1.2rem;
+  }
+
+  .table-container {
+    padding: 10px;
+  }
+
+  .event-table th, .event-table td {
+    padding: 6px;
+  }
+
+  .event-table {
+    font-size: 0.8rem;
+    overflow-x: auto;
+    display: block;
+    max-width: 100%;
+  }
+
+  .table-caption {
+    font-size: 1rem;
+  }
+
+  .confirm-button {
+    padding: 4px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-dashboard {
+    font-size: 1rem;
+  }
+
+  .event-table {
+    font-size: 0.75rem;
+  }
+
+  .confirm-button {
+    padding: 3px 8px;
+    font-size: 0.7rem;
+  }
+
+  .container-table-header {
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .event-table th, .event-table td {
+    padding: 5px;
+    font-size: 0.75rem;
+  }
+
+  .table-caption {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
