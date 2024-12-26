@@ -183,3 +183,18 @@
   
 }
  
+.confirm-button:hover {
+  background-color: #FF8F00; /* Darker Orange on hover */
+}
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+  .confirm-button {
+    background-color: #FF6F00 !important; /* Ensure button is orange */
+    color: white;
+  }
+
+  .confirm-button:hover {
+    background-color: #FF8F00 !important; /* Darker orange on hover */
+  }
+}
