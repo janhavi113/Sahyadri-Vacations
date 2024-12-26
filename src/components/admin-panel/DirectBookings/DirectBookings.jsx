@@ -158,20 +158,7 @@ const DirectBookings = ({ onSendData }) => {
     let batchDates = [];
     let eventName = event.eventname;
     const Q = new Date();
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "Nov",
-      "Dec",
-    ];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     if (event.batches) {
       for (let i = 0; i < event.batches.length; i++) {
         if (
