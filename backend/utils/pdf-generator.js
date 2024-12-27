@@ -18,9 +18,9 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
     const logo = getImageAsBase64(path.join(__dirname, '../../public/logo.jpg')); // Adjusted path to logo
 
     const finalPrice = (bookingDetails.eventPrice * bookingDetails.numberOfPeoples ) + Number(bookingDetails.addedOn);
-    let convenienceFee = 0 ; //((bookingDetails.eventPrice * bookingDetails.numberOfPeoples) + Number(bookingDetails.addedOn) ) * 0.015;
-    //convenienceFee = convenienceFee.toFixed(2);
-    const total_price = Number(finalPrice) + Number(convenienceFee) - Number(bookingDetails.addedDiscount)
+    let convenienceFee = ((bookingDetails.eventPrice * bookingDetails.numberOfPeoples) + Number(bookingDetails.addedOn) ) * 0.015;
+    convenienceFee = convenienceFee.toFixed(2);
+    const total_price = Number(finalPrice) - Number(bookingDetails.addedDiscount)
     console.log('Booking Details:', bookingDetails);
     let company_className = 'company-info';
     if(bookingDetails.remainingAmount > 0){
@@ -195,7 +195,10 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
               <td>Convenience Fee (1.5 %)</td>
               <td style="text-align: right;">${convenienceFee}</td>
             </tr>
-           
+           <tr>
+              <td>Discount</td>
+              <td style="text-align: right;">-${convenienceFee}</td>
+            </tr>
               ${bookingDetails.addedDiscount > 0 ? `<tr>
                 <td>Added Discount</td>
                 <td style="text-align: right;">- ${bookingDetails.addedDiscount}</td>
