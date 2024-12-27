@@ -111,7 +111,7 @@ const DirectBookings = ({ onSendData }) => {
       count++;
       let convenienceFee = (Number(price1) * Number(count) * 0.015).toFixed(2);
       let totalPrice = (Number(price1) * Number(count));
-      let final_Price = Number(totalPrice) + Number(convenienceFee);
+      let final_Price = Number(totalPrice);
       setNoOfTrekkers(count);
       setFinalPrice(final_Price);
       setParticipants([
@@ -128,7 +128,7 @@ const DirectBookings = ({ onSendData }) => {
       count--;
       let amount = Number(price1) * Number(count);
       let convenienceFee = (Number(amount) * 0.015).toFixed(2);
-      let final_Price = Number(amount) + Number(convenienceFee);
+      let final_Price = Number(amount);
       setNoOfTrekkers(count);
       setFinalPrice(final_Price);
       setParticipants(participants.slice(0, -1));
@@ -248,7 +248,7 @@ const DirectBookings = ({ onSendData }) => {
       setAvailableSlot(batchSize);
       
       let convenienceFee = (Number(eventCostPerPerson) * 0.015).toFixed(2);
-      setFinalPrice(Number(eventCostPerPerson) + Number(convenienceFee));
+      setFinalPrice(Number(eventCostPerPerson));
       setEventName(eventName);
     }
   };
