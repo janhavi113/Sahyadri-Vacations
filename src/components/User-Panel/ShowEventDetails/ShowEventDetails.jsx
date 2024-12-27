@@ -116,7 +116,7 @@ const ShowEventDetails = () => {
     let convenienceFeePerPerson = (Number(price) * 0.015).toFixed(2);
     setMaxBooking(foundRecord.batchSize);
     setBookedSlot(foundRecord.bookedSize);
-    setFinalPrice(Number(price) + Number(convenienceFeePerPerson));
+    setFinalPrice(Number(price) );
     setConvenienceFee(convenienceFeePerPerson);
     setActualPrice(Number(price));
     setPrice(price);
@@ -325,7 +325,7 @@ const ShowEventDetails = () => {
       let convenienceFee = (Number(price1) * Number(count) * 0.015).toFixed(2);
       setNoOfTrekkers(count);
       let totalPrice = (Number(price1) * Number(count));
-      let final_Price = Number(totalPrice) + Number(convenienceFee);
+      let final_Price = Number(totalPrice);
       if (Number(discount) > 0 && (Number(count) >= Number(noOfPeopleNeedforCoupon))) {
         final_Price = Number(final_Price) - Number(discount);
       } else {
@@ -357,7 +357,7 @@ const ShowEventDetails = () => {
       count--;
       let amount = Number(price1) * Number(count);
       let convenienceFee = (Number(amount) * 0.015).toFixed(2);
-      let final_Price = Number(amount) + Number(convenienceFee);
+      let final_Price = Number(amount) ;
       if (Number(discount) > 0 && (Number(count) >= Number(noOfPeopleNeedforCoupon))) {
         final_Price = Number(final_Price) - Number(discount);
       } else {
@@ -531,7 +531,7 @@ const ShowEventDetails = () => {
       setBatchDate(currentbatch.batchdate);
       setMaxBooking(currentbatch.batchSize);
       setBookedSlot(currentbatch.bookedSize);
-      setFinalPrice(Number(currentbatch.eventCostPerPerson) + Number(convenienceFeePerPerson));
+      setFinalPrice(Number(currentbatch.eventCostPerPerson) );
       setConvenienceFee(convenienceFeePerPerson);
       setActualPrice(Number(currentbatch.eventCostPerPerson));
       setPrice(currentbatch.eventCostPerPerson);
@@ -546,7 +546,7 @@ const ShowEventDetails = () => {
       setBatchDate(batchesList[0].batchdate);
       setMaxBooking(batchesList[0].batchSize);
       setBookedSlot(batchesList[0].bookedSize);
-      setFinalPrice(Number(batchesList[0].eventCostPerPerson) + Number(convenienceFeePerPerson));
+      setFinalPrice(Number(batchesList[0].eventCostPerPerson) );
       setConvenienceFee(convenienceFeePerPerson);
       setActualPrice(Number(batchesList[0].eventCostPerPerson));
       setPrice(batchesList[0].eventCostPerPerson);
@@ -655,7 +655,7 @@ const ShowEventDetails = () => {
           setPreCouponCode(couponCode);
           const data = await response.json();
           let calculatedDiscount;
-          let final_price = Number(actualPrice) + Number(convenienceFee);
+          let final_price = Number(actualPrice) ;
           if (response.ok && data.isValid) {
             if (data.coupon == null) {
               calculatedDiscount = 0;
@@ -1504,8 +1504,8 @@ const ShowEventDetails = () => {
                               <td className='column2 pay-td'>{convenienceFee}</td>
                             </tr>
                             <tr>
-                              <td className='pay-td'>Added On</td>
-                              <td className='column2 pay-td'>0</td>
+                              <td className='pay-td'>Discount</td>
+                              <td className='column2 pay-td'>-{convenienceFee}</td>
                             </tr>
                             {discount > 0 ? <tr>
                               <td className='pay-td'>Added Discount</td>
