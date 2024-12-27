@@ -72,7 +72,7 @@ const ShowEventDetails = () => {
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEandDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedBatch, setSelectedbatch] = useState(null);
   const [bookingId, setBookingId] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -124,8 +124,8 @@ const ShowEventDetails = () => {
   const handleSelectDate = (option) => {
     setSelectDate(option.target.value);
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == option.target.value);
-    setSelectedStartDate(foundRecord.eventEndDate);
-    setSelectedEandDate(foundRecord.eventStartDate);
+    setSelectedStartDate(foundRecord.eventStartDate);
+    setSelectedEndDate(foundRecord.eventEndDate);
     setSelectedbatch(foundRecord);
 
   }
@@ -553,8 +553,8 @@ const ShowEventDetails = () => {
       setErrorMessageforNext(true);
       setButtonDisabled(false);
       setSelectDate(batchesList[0].batchdate);
-      setSelectedStartDate(batchesList[0].eventEndDate);
-      setSelectedEandDate(batchesList[0].eventStartDate);
+      setSelectedStartDate(batchesList[0].eventStartDate);
+      setSelectedEndDate(batchesList[0].eventEndDate);
       setSelectedbatch(batchesList[0]);
     }
     setIsLoadingMSG(false); // Start loading
