@@ -34,7 +34,7 @@ const bookingsSchema = new mongoose.Schema({
     active: { type: Boolean, default: true },
     otherParticipants: [ otherParticipantsSchema
     ]
-});
+}, { strict: false });
 
 export const Bookings = mongoose.model('bookings', bookingsSchema);
 
