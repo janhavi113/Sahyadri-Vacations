@@ -122,9 +122,15 @@ router.post("/schedule-event", async (req, res) => {
 			Url: "/event-details?eventid=" +
 				(scheduleRecordcount + 1).toString() +
 				"/" +
-				eventname.toString().replace(/\s/g, "-").toLowerCase(),
+				eventname.toString()
+					.replace(/\s/g, "-") // Replace spaces with hyphens
+					.replace(/-+/g, "-") // Replace multiple consecutive hyphens with a single one
+					.toLowerCase(),
 			eventType: eventType,
-			eventApi: eventname.toString().replace(/\s/g, "-").toLowerCase(),
+			eventApi: eventname.toString()
+				.replace(/\s/g, "-") // Replace spaces with hyphens
+				.replace(/-+/g, "-") // Replace multiple consecutive hyphens with a single one
+				.toLowerCase(),
 		});
 		scheduleBatches.sort = latest ? latest.sort + 1 : 1;
 		scheduleBatches.save();
@@ -144,7 +150,7 @@ router.post("/schedule-event", async (req, res) => {
 
 router.post("/update-schedule-events/:eventId", async (req, res) => {
 	try {
-		
+
 		let event_Id = req.params.eventId;
 		var currUrl = "";
 		if (req.files != null) {
@@ -156,10 +162,10 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 					return res.status(500).send(err);
 				}
 			});
-		}else{
+		} else {
 			currUrl = req.body.file;
 		}
-		
+
 		const {
 			active,
 			scheduleEventId,
@@ -198,8 +204,8 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			partialBookingAmount: partialBookingAmount,
 			eventType: eventType,
 			scheduleEventId: scheduleEventId,
-			Url: "/event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").toLowerCase(),
-			eventApi: eventname.toString().replace(/\s/g, "-").toLowerCase()
+			Url: "/event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase(),
+			eventApi: eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase()
 		};
 
 		// Update and fetch events

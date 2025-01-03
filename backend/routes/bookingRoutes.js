@@ -289,7 +289,6 @@ router.get("/show-all-bookings/:showOptions", async (req, res) => {
 });
 async function updateExpiredBookings() {
     try {
-       // Update all records where `eventStartDate` and `eventEndDate` need swapping
         const currentDate = new Date();
         console.log('currentDate--',currentDate);
         const result = await Bookings.updateMany(
