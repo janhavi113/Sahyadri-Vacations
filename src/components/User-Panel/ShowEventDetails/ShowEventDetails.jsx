@@ -116,7 +116,7 @@ const ShowEventDetails = () => {
     let convenienceFeePerPerson = (Number(price) * 0.015).toFixed(2);
     setMaxBooking(foundRecord.batchSize);
     setBookedSlot(foundRecord.bookedSize);
-    setFinalPrice(Number(price) );
+    setFinalPrice(Number(price));
     setConvenienceFee(convenienceFeePerPerson);
     setActualPrice(Number(price));
     setPrice(price);
@@ -357,7 +357,7 @@ const ShowEventDetails = () => {
       count--;
       let amount = Number(price1) * Number(count);
       let convenienceFee = (Number(amount) * 0.015).toFixed(2);
-      let final_Price = Number(amount) ;
+      let final_Price = Number(amount);
       if (Number(discount) > 0 && (Number(count) >= Number(noOfPeopleNeedforCoupon))) {
         final_Price = Number(final_Price) - Number(discount);
       } else {
@@ -531,7 +531,7 @@ const ShowEventDetails = () => {
       setBatchDate(currentbatch.batchdate);
       setMaxBooking(currentbatch.batchSize);
       setBookedSlot(currentbatch.bookedSize);
-      setFinalPrice(Number(currentbatch.eventCostPerPerson) );
+      setFinalPrice(Number(currentbatch.eventCostPerPerson));
       setConvenienceFee(convenienceFeePerPerson);
       setActualPrice(Number(currentbatch.eventCostPerPerson));
       setPrice(currentbatch.eventCostPerPerson);
@@ -546,7 +546,7 @@ const ShowEventDetails = () => {
       setBatchDate(batchesList[0].batchdate);
       setMaxBooking(batchesList[0].batchSize);
       setBookedSlot(batchesList[0].bookedSize);
-      setFinalPrice(Number(batchesList[0].eventCostPerPerson) );
+      setFinalPrice(Number(batchesList[0].eventCostPerPerson));
       setConvenienceFee(convenienceFeePerPerson);
       setActualPrice(Number(batchesList[0].eventCostPerPerson));
       setPrice(batchesList[0].eventCostPerPerson);
@@ -655,7 +655,7 @@ const ShowEventDetails = () => {
           setPreCouponCode(couponCode);
           const data = await response.json();
           let calculatedDiscount;
-          let final_price = Number(actualPrice) ;
+          let final_price = Number(actualPrice);
           if (response.ok && data.isValid) {
             if (data.coupon == null) {
               calculatedDiscount = 0;
@@ -1189,8 +1189,8 @@ const ShowEventDetails = () => {
                                   message: "This field is required",
                                 },
                                 pattern: {
-                                  value: /^\d{10}$/, // Regex for valid Indian mobile number
-                                  message: "Enter a valid mobile number (e.g., XXXXXXXXXX)",
+                                  value: /^[0-9]{10}$/, // Regex for exactly 10 digits (numbers only)
+                                  message: "Enter a valid 10-digit mobile number (e.g., 987xxxxxxx)",
                                 },
                               })}
                               type="tel"
@@ -1312,7 +1312,7 @@ const ShowEventDetails = () => {
                                   required
                                 />
                                 <input
-                                  type="text"
+                                  type="tel" // Changed to 'tel'
                                   placeholder="WhatsApp Number"
                                   value={participant.mobileNumber}
                                   onChange={(e) =>
@@ -1322,6 +1322,8 @@ const ShowEventDetails = () => {
                                       e.target.value
                                     )
                                   }
+                                  pattern="[0-9]{10}" // Restricts to exactly 10 digits
+                                  title="Please enter a valid 10-digit mobile number (e.g., 987xxxxxxx)"
                                   required
                                 />
                                 {eventType != 'CampingEvent' &&
