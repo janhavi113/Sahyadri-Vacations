@@ -175,7 +175,7 @@ router.post('/confirm-booking/:id', async (req, res) => {
       await newBooking.save();
   
       //Delete the booking from DirectBookings
-        //await DirectBookings.findByIdAndDelete(id);
+      await DirectBookings.findByIdAndDelete(id);
   
       res.status(200).json({ message: "Booking confirmed successfully." ,booking : newBooking});
     } catch (error) {
