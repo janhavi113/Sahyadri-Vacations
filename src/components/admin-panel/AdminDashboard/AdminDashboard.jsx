@@ -14,13 +14,13 @@ function AdminDashboard() {
   const [isSuccess, setSuccess] = useState(false);
   const [showOptions, setShowOptions] = useState('all');
   const navigate = useNavigate();
-  useEffect(() => {  
+  useEffect(() => {
 
     fetchEvents('all');
   }, [navigate]);
 
   const handleFilter = async (filter) => {
-   
+
     fetchEvents(filter);
   }
   const fetchEvents = async (filter) => {
@@ -95,59 +95,57 @@ function AdminDashboard() {
           <button onClick={() => handleDownloadExcel(key)} className="download-button">Download Excel</button>
         </div>
         <table id={`table-${key}`} className="event-table">
-  <thead>
-    <tr>
-      <th>#</th> {/* Index column */}
-      <th>Booking ID</th>
-      <th>Name</th>
-      <th>Mobile Number</th>
-      <th>Number of People</th>
-      <th>Amount Paid</th>
-      <th>Pickup Location</th>
-      <th>Status</th>
-      <th>Booking Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {(() => {
-      let globalIndex = 1; // Single global counter
-      return bookings.map((booking) => (
-        <React.Fragment key={booking._id}>
-          {/* Main booking row */}
-          <tr>
-            <td>{globalIndex++}</td> {/* Increment global index */}
-            <td>{booking.bookingId}</td>
-            <td>{booking.name}</td>
-            <td>{booking.mobileNumber}</td>
-            <td>{booking.numberOfPeoples}</td>
-            <td>{booking.amountPaid}</td>
-            <td>{booking.pickupLocation}</td>
-            <td>{booking.status}</td>
-            <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
-          </tr>
-          {/* Rows for other participants */}
-          {booking.otherParticipants &&
-            booking.otherParticipants.length > 0 &&
-            booking.otherParticipants.map((participant, index) => (
-              <tr key={`${booking._id}-participant-${index}`} className="sub-row">
-                <td>{globalIndex++}</td> {/* Increment global index */}
-                <td></td> {/* Empty cell for Booking ID */}
-                <td>{participant.name}</td>
-                <td>{participant.mobileNumber}</td>
-                <td></td> {/* Empty cell for Number of People */}
-                <td></td> {/* Empty cell for Amount Paid */}
-                <td>{participant.pickupLocation}</td>
-                <td>{participant.status}</td>
-                <td></td> {/* Empty cell for Booking Date */}
-              </tr>
-            ))}
-        </React.Fragment>
-      ));
-    })()}
-  </tbody>
-</table>
-
-
+          <thead>
+            <tr>
+              <th>#</th> {/* Index column */}
+              <th>Booking ID</th>
+              <th>Name</th>
+              <th>Mobile Number</th>
+              <th>Number of People</th>
+              <th>Amount Paid</th>
+              <th>Pickup Location</th>
+              <th>Status</th>
+              <th>Booking Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(() => {
+              let globalIndex = 1; // Single global counter
+              return bookings.map((booking) => (
+                <React.Fragment key={booking._id}>
+                  {/* Main booking row */}
+                  <tr>
+                    <td>{globalIndex++}</td> {/* Increment global index */}
+                    <td>{booking.bookingId}</td>
+                    <td>{booking.name}</td>
+                    <td>{booking.mobileNumber}</td>
+                    <td>{booking.numberOfPeoples}</td>
+                    <td>{booking.amountPaid}</td>
+                    <td>{booking.pickupLocation}</td>
+                    <td>{booking.status}</td>
+                    <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
+                  </tr>
+                  {/* Rows for other participants */}
+                  {booking.otherParticipants &&
+                    booking.otherParticipants.length > 0 &&
+                    booking.otherParticipants.map((participant, index) => (
+                      <tr key={`${booking._id}-participant-${index}`} className="sub-row">
+                        <td>{globalIndex++}</td> {/* Increment global index */}
+                        <td></td> {/* Empty cell for Booking ID */}
+                        <td>{participant.name}</td>
+                        <td>{participant.mobileNumber}</td>
+                        <td></td> {/* Empty cell for Number of People */}
+                        <td></td> {/* Empty cell for Amount Paid */}
+                        <td>{participant.pickupLocation}</td>
+                        <td>{participant.status}</td>
+                        <td></td> {/* Empty cell for Booking Date */}
+                      </tr>
+                    ))}
+                </React.Fragment>
+              ));
+            })()}
+          </tbody>
+        </table>
       </div>
     ));
   };
