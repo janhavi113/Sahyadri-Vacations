@@ -23,6 +23,21 @@
     background-color: green !important;
   }
 
+
+  .confirm-button {
+    background-color: #ff7300 !important;
+    color: white !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s ease !important;
+  }
+  .confirm-disable-paynow{
+    background-color:#fc9948 !important;
+    color: white !important;
+  }
+  .confirm-button:hover {
+    background-color: #ff7300 !important;
+  }
+
 .button-radio {
     display: flex;
     gap: 10px;

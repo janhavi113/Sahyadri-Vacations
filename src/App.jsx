@@ -25,6 +25,7 @@ import PrivacyPolicy from "./components/User-Panel/UserAgreement/PrivacyPolicy";
 import Gallery from "./components/User-Panel/Gallery/PhotoGallery" ;
 import ContactUs from "./components/User-Panel/Contact_Us/ContactUs" ;
 import Register from './components/Register/Register';
+import CustomerBookings from "./components/User-Panel/ShowEventDetails/CustomerBookings";
 import DirectBookingDashboard from "./components/admin-panel/DirectBookings/DirectBookingDashboard" ;
 import DirectBookings from "./components/admin-panel/DirectBookings/ConfirmDirectBooking" ;
 import AddSpecialOfferEvents from "./components/admin-panel/SpecialOfferEvents/AddSpecialOfferEvents" ;
@@ -148,8 +149,11 @@ function App() {
     {
       path: "/direct-bookings",
       element: <DirectBookings />,
-    }
-    ,
+    },
+    {
+      path: "/customerPayNowScreen",
+      element: <CustomerBookings />,
+    },
     {
       path: "/direct-bookings-dashboard",
       element: <DirectBookingDashboard />,

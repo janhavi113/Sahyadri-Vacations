@@ -36,11 +36,11 @@ router.post('/api/validate-coupon', async (req, res) => {
   const { code, eventType, numberOfPeople } = req.body;
  
   try {
-    const newCoupon = await Coupon.findOne({ couponName: code });
-    console.log('numberOfPeople----', typeof numberOfPeople);
-    console.log('newCoupon.numberOfPeople----', typeof newCoupon.numberOfPeople);
+    const newCoupon = await Coupon.findOne({ couponName: code ,$or: [
+      {eventType: eventType},
+      {eventType : 'Special'} ]});
     if ((numberOfPeople >= newCoupon.numberOfPeople) &&  (eventType == newCoupon.eventType || newCoupon.eventType == 'Special' )) {
-
+     
       res.status(201).json({ message: 'Coupon Applied', isValid: true, coupon: newCoupon });
     } else {
       res.status(500).json({ message: 'Error creating coupon', error: error.message });

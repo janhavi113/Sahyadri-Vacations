@@ -109,7 +109,10 @@ router.put("/confirmed-booking", async (req, res) => {
             bookingId,
             scheduleEventId,
             addedDiscount,
-            remainingAmount
+            remainingAmount,
+            doubleSharing,
+            tripalSharing,
+            thirdAcUpgrate
         } = req.body;
 
 
@@ -131,6 +134,9 @@ router.put("/confirmed-booking", async (req, res) => {
                     status: "Pending",
                     addedDiscount:addedDiscount,
                     remainingAmount:remainingAmount,
+                    doubleSharing:doubleSharing,
+                    tripalSharing:tripalSharing,
+                    thirdAcUpgrate:thirdAcUpgrate,
                 }
             },
             { new: true } // Return the updated document

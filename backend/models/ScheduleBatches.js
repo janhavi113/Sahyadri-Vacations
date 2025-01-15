@@ -23,6 +23,13 @@ const scheduleBatchesSchema = new mongoose.Schema({
   alreadyBoockedCount: { type: Number , default: 0},
   specialOfferEvent: { type: Boolean , default: false },
   partialBookingAmount : { type: Number , default: 0},
+  doubleSharing : { type: Number , default: 0},
+  doubleSharingNote : { type: String },
+  tripalSharing : { type: Number , default: 0},
+  tripalSharingNote : { type: String },
+  thirdAcUpgrate: { type: Number , default: 0},
+  thirdAcUpgrateNote : { type: String },
+  note : { type: String },
   sort: { type: Number, required: true }, // Field to hold the sort order
 }, { timestamps: true });
 
