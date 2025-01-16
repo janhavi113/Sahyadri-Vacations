@@ -145,10 +145,11 @@ const ShowEventDetails = () => {
         let res = await r.json()
 
         if (res.isSuccess == true) {
+          console.log('res.booking.bookingId',res.booking.bookingId);
           setButtonClick('confirm-details');
           //setButtonClick('pay-now');
           setBookingId(res.booking.bookingId);
-          handleNavigate();
+          handleNavigate(res.booking.bookingId);
         }
       
     } catch (error) {
@@ -459,7 +460,7 @@ const ShowEventDetails = () => {
     setShowLocations(tempLocations);
   }
 
-  const handleNavigate = () => {
+  const handleNavigate = (bookingIdVar) => {
     navigate("/customerPayNowScreen", {
       state: {
         eventDetails: eventDetails,
@@ -470,7 +471,7 @@ const ShowEventDetails = () => {
         pickupPointsfromMumbai: pickupPointsfromMumbai,
         selectedDate: selectedDate,
         isSuccess: true,
-        bookingId: bookingId,
+        bookingId: bookingIdVar,
         discountAvailable: discountAvailable,
         coupons: coupons
       },
