@@ -34,11 +34,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { set } from 'mongoose';
 const CustomerBookings = () => {
   const location = useLocation();
-  const { eventDetails, batch, showLocations, pickupPoints, pickupPointsfromMumbai, isSuccess, finalBatchesList, selectedDate, bookingId, discountAvailable, coupons } = location.state || {}; // Extract the data safely
   const navigate = useNavigate();
+  const { eventDetails, batch, showLocations, pickupPoints, pickupPointsfromMumbai, isSuccess, finalBatchesList, selectedDate, bookingId, discountAvailable, coupons } = location.state || {}; // Extract the data safely
+  console.log('---location.state----', location.state);
   const apiUrl = import.meta.env.VITE_API_URL;
   const [inquery, setInquery] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonClick, setButtonClick] = useState('confirm-details');
   const [everyWeekend, setEveryWeekend] = useState(false);
@@ -112,7 +113,7 @@ const CustomerBookings = () => {
   const handleBookingSlot = () => {
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == selectedDate);
     setSelectedbatch(foundRecord);
-    console.log('foundRecord----   ', foundRecord);
+    console.log('finalPrice----   ', finalPrice);
     setMaxBooking(foundRecord.batchSize);
     setBookedSlot(foundRecord.bookedSize);
     if (finalPrice <= 0) {
@@ -231,7 +232,6 @@ const CustomerBookings = () => {
           setButtonClick('pay-now');
         }
       } else if (buttonClick == 'pay-now') {
-        alert('I am here');
         const formData = new FormData();
         formData.append("numberOfPeoples", noOfTrekkers);
         formData.append("amountPaid", Number(finalPrice));
@@ -276,6 +276,13 @@ const CustomerBookings = () => {
           }
         }
       }
+      setLoading(true);
+
+      // Simulate API call
+      setTimeout(() => {
+        setLoading(false);
+       // alert('Booking submitted successfully!');
+      }, 2000);
     } catch (error) {
       console.error('Error during booking:', error);
       // Optionally, show an error message to the user
@@ -328,8 +335,14 @@ const CustomerBookings = () => {
   }
 
   useEffect(() => {
-    const foundRecord = handleBookingSlot();
-  })
+    console.log("useEffect triggered, checking location.state...");
+    if (!location.state) {
+      console.log("No location.state found, navigating to home...");
+      navigate('/');
+    }else{
+      const foundRecord = handleBookingSlot();
+    }
+  }, [location.state, navigate]);
 
   const handleCouponApply = async () => {
     try {
@@ -411,442 +424,445 @@ const CustomerBookings = () => {
         <div className="user-agreement-header">
         </div>
       </div>
-      <div className="h3"> <center>
-        <h2>{eventDetails.name}</h2>
-        <p>Batch: {batch}</p></center>
-      </div>
-      <div>
-        {isSuccess &&
-          <div >
-            <form action="" onSubmit={handleSubmit(onSubmit)}>
-              <div className="container">
+      {loading ? (
+        <CircularLoading />
+      ) : (
+        <div>
+          <div className="h3"> <center>
+            <h2>{eventDetails.name}</h2>
+            <p>Batch: {batch}</p></center>
+          </div>
+          {isSuccess && eventDetails &&
+            <div >
+              <form action="" onSubmit={handleSubmit(onSubmit)}>
+                <div className="container">
 
-                <div className="content">
-                  {buttonClick == 'confirm-details' &&
-                    <div className="user-details">
+                  <div className="content">
+                    {buttonClick == 'confirm-details' &&
+                      <div className="user-details">
 
-                      {eventDetails.eventType != 'CampingEvent' &&
-                        <div>
-                          <h3 className='add-bold'>Join Us From :<span style={{ 'color': 'red' }}> *</span></h3>
-                          <div className="button-radio">
-                            {showLocations.map((option) => (
-                              <div
-                                key={option}
-                                role="button"
-                                tabIndex={0} // Makes the div focusable
-                                className={`radio-button ${selected === option ? 'active' : ''}`}
-                                onClick={() => handleSelect(option)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSelect(option)} // Handles keyboard accessibility
-                              >
-                                {option}
+                        {eventDetails.eventType != 'CampingEvent' &&
+                          <div>
+                            <h3 className='add-bold'>Join Us From :<span style={{ 'color': 'red' }}> *</span></h3>
+                            <div className="button-radio">
+                              {showLocations.map((option) => (
+                                <div
+                                  key={option}
+                                  role="button"
+                                  tabIndex={0} // Makes the div focusable
+                                  className={`radio-button ${selected === option ? 'active' : ''}`}
+                                  onClick={() => handleSelect(option)}
+                                  onKeyDown={(e) => e.key === 'Enter' && handleSelect(option)} // Handles keyboard accessibility
+                                >
+                                  {option}
+                                </div>
+                              ))}
+                            </div>
+                            {selected == 'Pune to Pune' &&
+                              <div>
+                                <h3 className='add-bold'>Please Select Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
+                                <ul>
+                                  {pickupPoints.map((location) => (
+                                    <li key={location.id}>
+                                      <label className='radio-display'>
+                                        <input
+                                          type="radio"
+                                          name="location"
+                                          value={location.name}
+                                          onChange={handleSelection}
+                                          checked={selectedLocation === location.name}
+                                        />
+                                        {location.name}
+                                      </label>
+                                    </li>
+                                  ))}
+                                </ul>
                               </div>
-                            ))}
-                          </div>
-                          {selected == 'Pune to Pune' &&
-                            <div>
-                              <h3 className='add-bold'>Please Select Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
-                              <ul>
-                                {pickupPoints.map((location) => (
-                                  <li key={location.id}>
-                                    <label className='radio-display'>
-                                      <input
-                                        type="radio"
-                                        name="location"
-                                        value={location.name}
-                                        onChange={handleSelection}
-                                        checked={selectedLocation === location.name}
-                                      />
-                                      {location.name}
-                                    </label>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          }
-                          {selected == 'Mumbai to Mumbai' &&
-                            <div>
-                              <h3 className='add-bold'>Please Select Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
-                              <ul>
-                                {pickupPointsfromMumbai.map((location) => (
-                                  <li key={location.id}>
-                                    <label className='radio-display'>
-                                      <input
-                                        type="radio"
-                                        name="location"
-                                        value={location.name}
-                                        onChange={handleSelection}
-                                        checked={selectedLocation === location.name}
-                                      />
-                                      {location.name}
-                                    </label>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          }
+                            }
+                            {selected == 'Mumbai to Mumbai' &&
+                              <div>
+                                <h3 className='add-bold'>Please Select Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
+                                <ul>
+                                  {pickupPointsfromMumbai.map((location) => (
+                                    <li key={location.id}>
+                                      <label className='radio-display'>
+                                        <input
+                                          type="radio"
+                                          name="location"
+                                          value={location.name}
+                                          onChange={handleSelection}
+                                          checked={selectedLocation === location.name}
+                                        />
+                                        {location.name}
+                                      </label>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            }
 
-                          {selected == eventDetails.b2bLocaion &&
-                            <div>
-                              <h3 className='add-bold'>Selected Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
-                              <ul className="b2blocation display-bulletin"><li>{eventDetails.b2bLocaion}</li>
-                              </ul>
-                            </div>
-                          }
-                        </div>
-                      }
-                      {selected && showTermsAndConditions &&
-                        <div className="input-box finalCalculation">
-                          <div className="add-bold details">Add More Participants :</div>
-                          <div></div>
-                          <div className='noOftrekkers'>
-                            <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>
-                            {noOfTrekkers}
-                            <span onClick={increaseCount}><FontAwesomeIcon icon={faCirclePlus} size="lg" style={{ color: "orange", }} /></span>
+                            {selected == eventDetails.b2bLocaion &&
+                              <div>
+                                <h3 className='add-bold'>Selected Pickup Location :<span style={{ 'color': 'red' }}> *</span></h3>
+                                <ul className="b2blocation display-bulletin"><li>{eventDetails.b2bLocaion}</li>
+                                </ul>
+                              </div>
+                            }
                           </div>
-                        </div>
-                      }
-                      {/* Render input fields for each participant */}
-                      {participants.map((participant, index) => (
-                        <div key={index} className="participant-box">
-                          <h2>participant {index + 2} </h2>
-                          <div key={index} className="Column-2 participant-inputs">
-                            <input
-                              type="text"
-                              placeholder="Name"
-                              value={participant.name}
-                              onChange={(e) =>
-                                handleParticipantChange(index, "name", e.target.value)
-                              }
-                              required
-                            />
-                            <input
-                              type="tel" // Changed to 'tel'
-                              placeholder="WhatsApp Number"
-                              value={participant.mobileNumber}
-                              onChange={(e) =>
-                                handleParticipantChange(
-                                  index,
-                                  "mobileNumber",
-                                  e.target.value
-                                )
-                              }
-                              pattern="[0-9]{10}" // Restricts to exactly 10 digits
-                              title="Please enter a valid 10-digit mobile number (e.g., 987xxxxxxx)"
-                              required
-                            />
-                            {eventDetails.eventType != 'CampingEvent' &&
-
-                              <select
-                                className="select-class"
-                                name="locationCity"
-                                value={participant.locationCity}
+                        }
+                        {selected && showTermsAndConditions &&
+                          <div className="input-box finalCalculation">
+                            <div className="add-bold details">Add More Participants :</div>
+                            <div></div>
+                            <div className='noOftrekkers'>
+                              <span onClick={decreaseCount}>  <FontAwesomeIcon icon={faCircleMinus} size="lg" style={{ color: "orange", }} /></span>
+                              {noOfTrekkers}
+                              <span onClick={increaseCount}><FontAwesomeIcon icon={faCirclePlus} size="lg" style={{ color: "orange", }} /></span>
+                            </div>
+                          </div>
+                        }
+                        {/* Render input fields for each participant */}
+                        {participants.map((participant, index) => (
+                          <div key={index} className="participant-box">
+                            <h2>participant {index + 2} </h2>
+                            <div key={index} className="Column-2 participant-inputs">
+                              <input
+                                type="text"
+                                placeholder="Name"
+                                value={participant.name}
+                                onChange={(e) =>
+                                  handleParticipantChange(index, "name", e.target.value)
+                                }
+                                required
+                              />
+                              <input
+                                type="tel" // Changed to 'tel'
+                                placeholder="WhatsApp Number"
+                                value={participant.mobileNumber}
                                 onChange={(e) =>
                                   handleParticipantChange(
                                     index,
-                                    "locationCity",
+                                    "mobileNumber",
                                     e.target.value
                                   )
                                 }
+                                pattern="[0-9]{10}" // Restricts to exactly 10 digits
+                                title="Please enter a valid 10-digit mobile number (e.g., 987xxxxxxx)"
                                 required
-                              >
+                              />
+                              {eventDetails.eventType != 'CampingEvent' &&
 
-                                <option value="">Join Us From</option>{" "}
-                                {/* Optional: Placeholder option */}
-                                {showLocations.map((option) => {
-                                  return (
-                                    <option value={option} key={option}>
-                                      {option}
-                                    </option>
-                                  );
-                                })}
-                              </select>
-                            }
-                            {eventDetails.eventType != 'CampingEvent' &&
-                              <select
-                                className="select-class"
-                                name="location"
-                                value={participant.pickupLocation}
-                                onChange={(e) =>
-                                  handleParticipantChange(
-                                    index,
-                                    "pickupLocation",
-                                    e.target.value
-                                  )
-                                }
-                                required
-                              >
+                                <select
+                                  className="select-class"
+                                  name="locationCity"
+                                  value={participant.locationCity}
+                                  onChange={(e) =>
+                                    handleParticipantChange(
+                                      index,
+                                      "locationCity",
+                                      e.target.value
+                                    )
+                                  }
+                                  required
+                                >
 
-                                <option value="">Select Pickup Location</option>{" "}
+                                  <option value="">Join Us From</option>{" "}
+                                  {/* Optional: Placeholder option */}
+                                  {showLocations.map((option) => {
+                                    return (
+                                      <option value={option} key={option}>
+                                        {option}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                              }
+                              {eventDetails.eventType != 'CampingEvent' &&
+                                <select
+                                  className="select-class"
+                                  name="location"
+                                  value={participant.pickupLocation}
+                                  onChange={(e) =>
+                                    handleParticipantChange(
+                                      index,
+                                      "pickupLocation",
+                                      e.target.value
+                                    )
+                                  }
+                                  required
+                                >
 
-                                {participantsPickupPoints.map((pickupPoint) => {
-                                  return (
-                                    <option value={pickupPoint.name} key={pickupPoint.id}>
-                                      {pickupPoint.name}
-                                    </option>
-                                  );
-                                })}
-                              </select>
-                            }
+                                  <option value="">Select Pickup Location</option>{" "}
+
+                                  {participantsPickupPoints.map((pickupPoint) => {
+                                    return (
+                                      <option value={pickupPoint.name} key={pickupPoint.id}>
+                                        {pickupPoint.name}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                              }
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                      {batchFull &&
-                        <p className='bookingClosed'>Only {availableSlot} seats are currently available. Please reach out to us at +91 7028740961 to discuss the possibility of accommodating additional bookings.</p>
-                      }
-                    </div>
-                  }
-                  {buttonClick == 'pay-now' && (selectedBatch?.doubleSharing > 0 || selectedBatch?.tripalSharing > 0 || selectedBatch?.thirdAcUpgrate > 0) &&
-                    <div> <div className='finalCalculation' style={{
-                      color: "rgb(255, 115, 0)",
-                      cursor: "pointer",
-                    }}> Add On Details</div>
-                      <table className='pay-table'>
-                        <tr>
-                          <th className='pay-th'></th>
-                          <th className='column2 pay-th'></th>
-                          <th className='column2 pay-th'></th>
-                        </tr>
-                        {selectedBatch?.doubleSharing > 0 ? <tr>
-                          <td className='pay-td'><b>Couple Room</b><br /><span>{selectedBatch?.doubleSharingNote}</span></td>
-                          <td className='column2 pay-td'>₹ {selectedBatch?.doubleSharing}</td>
-                          <td className='column2 pay-td'>  <select
-                            id="double-sharing-picklist"
-                            value={doubleSharingCount}
-                            onChange={handleAddOnChange}
-                          >
-                            {generateOptions()}
-                          </select></td>
-                        </tr> : ''}
-                        {selectedBatch?.tripalSharing > 0 ? <tr>
-                          <td className='pay-td'><b>Tripal Sharing Room</b><br /><span>{selectedBatch?.tripalSharingNote}</span></td>
-                          <td className='column2 pay-td'>₹ {selectedBatch?.tripalSharing}</td>
-                          <td className='column2 pay-td'> <select
-                            id="tripal-sharing-picklist"
-                            value={tripalSharingCount}
-                            onChange={handleAddOnChange}
-                          >
-                            {generateOptions()}
-                          </select></td>
-                        </tr> : ''}
-                        {selectedBatch?.thirdAcUpgrate > 0 ? <tr>
-                          <td className='pay-td'><b>Tripal Sharing Room</b><br /><span>{selectedBatch?.thirdAcUpgrateNote}</span></td>
-                          <td className='column2 pay-td'>₹ {selectedBatch?.thirdAcUpgrate}</td>
-                          <td className='column2 pay-td'> <select
-                            id="third-ac-upgrate-picklist"
-                            value={thirdAcUpgrateCount}
-                            onChange={handleAddOnChange}
-                          >
-                            {generateOptions()}
-                          </select></td>
-                        </tr> : ''}
-                      </table>
-                      <br></br>
-                      <br></br></div>
-                  }
-                  {
-                    buttonClick == 'pay-now' && showBreakup && paymentOption == 'partial' &&
-                    <div >
-                      <div className='finalCalculation' style={{
-                        color: "orange",
-                        cursor: "pointer",
-                      }}> Show breakup</div>
-                      <table className='pay-table'>
-                        <tr>
-                          <th className='pay-th'>Details</th>
-                          <th className='column2 pay-th'>Amount</th>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Event Fees</td>
-                          <td className='column2 pay-td'>{noOfTrekkers} x {selectedBatch.partialBookingAmount} /- </td>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Subtotal</td>
-                          <td className='column2 pay-td'>{Number(noOfTrekkers) * Number(selectedBatch.partialBookingAmount)} /-</td>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Add on</td>
-                          <td className='column2 pay-td'>{Number(addOn)} /- </td>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Convenience Fee (1.5 %)</td>
-                          <td className='column2 pay-td'>{convenienceFee} /- </td>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Discount</td>
-                          <td className='column2 pay-td'>- ₹ {convenienceFee} /-</td>
-                        </tr>
-                        <tr>
-                          <td className='pay-th' style={{ color: 'green' }}><b>Remaining </b></td>
-                          <td className='column2 pay-th' style={{ color: 'green' }}><b>₹ {remainingAmount} /-</b></td>
-                        </tr>
-                      </table>
-                    </div>
-
-                  }
-                  {buttonClick == 'pay-now' && showBreakup && paymentOption == 'full' &&
-                    <div >
-
-                      <div className='finalCalculation' style={{
+                        ))}
+                        {batchFull &&
+                          <p className='bookingClosed'>Only {availableSlot} seats are currently available. Please reach out to us at +91 7028740961 to discuss the possibility of accommodating additional bookings.</p>
+                        }
+                      </div>
+                    }
+                    {buttonClick == 'pay-now' && (selectedBatch?.doubleSharing > 0 || selectedBatch?.tripalSharing > 0 || selectedBatch?.thirdAcUpgrate > 0) &&
+                      <div> <div className='finalCalculation' style={{
                         color: "rgb(255, 115, 0)",
                         cursor: "pointer",
-                      }}> Show breakup</div>
-                      <table className='pay-table'>
-                        <tr>
-                          <th className='pay-th'>Details</th>
-                          <th className='column2 pay-th'></th>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Event Fees</td>
-                          <td className='column2 pay-td'>₹ {actualPrice} /-</td>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>No of Participant</td>
-                          <td className='column2 pay-td'>{Number(noOfTrekkers)}</td>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Add on</td>
-                          <td className='column2 pay-td'>{Number(addOn)}</td>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Convenience Fee (1.5 %)</td>
-                          <td className='column2 pay-td'>₹ {convenienceFee} /-</td>
-                        </tr>
-                        <tr>
-                          <td className='pay-td'>Discount</td>
-                          <td className='column2 pay-td'>- ₹ {convenienceFee} /-</td>
-                        </tr>
-                        {discount > 0 ? <tr>
-                          <td className='pay-td'>Added Discount</td>
-                          <td className='column2 pay-td'>- ₹ {discount} /-</td>
-                        </tr> : ''}
+                      }}> Add On Details</div>
+                        <table className='pay-table'>
+                          <tr>
+                            <th className='pay-th'></th>
+                            <th className='column2 pay-th'></th>
+                            <th className='column2 pay-th'></th>
+                          </tr>
+                          {selectedBatch?.doubleSharing > 0 ? <tr>
+                            <td className='pay-td'><b>Couple Room</b><br /><span>{selectedBatch?.doubleSharingNote}</span></td>
+                            <td className='column2 pay-td'>₹ {selectedBatch?.doubleSharing}</td>
+                            <td className='column2 pay-td'>  <select
+                              id="double-sharing-picklist"
+                              value={doubleSharingCount}
+                              onChange={handleAddOnChange}
+                            >
+                              {generateOptions()}
+                            </select></td>
+                          </tr> : ''}
+                          {selectedBatch?.tripalSharing > 0 ? <tr>
+                            <td className='pay-td'><b>Tripal Sharing Room</b><br /><span>{selectedBatch?.tripalSharingNote}</span></td>
+                            <td className='column2 pay-td'>₹ {selectedBatch?.tripalSharing}</td>
+                            <td className='column2 pay-td'> <select
+                              id="tripal-sharing-picklist"
+                              value={tripalSharingCount}
+                              onChange={handleAddOnChange}
+                            >
+                              {generateOptions()}
+                            </select></td>
+                          </tr> : ''}
+                          {selectedBatch?.thirdAcUpgrate > 0 ? <tr>
+                            <td className='pay-td'><b>Tripal Sharing Room</b><br /><span>{selectedBatch?.thirdAcUpgrateNote}</span></td>
+                            <td className='column2 pay-td'>₹ {selectedBatch?.thirdAcUpgrate}</td>
+                            <td className='column2 pay-td'> <select
+                              id="third-ac-upgrate-picklist"
+                              value={thirdAcUpgrateCount}
+                              onChange={handleAddOnChange}
+                            >
+                              {generateOptions()}
+                            </select></td>
+                          </tr> : ''}
+                        </table>
+                        <br></br>
+                        <br></br></div>
+                    }
+                    {
+                      buttonClick == 'pay-now' && showBreakup && paymentOption == 'partial' &&
+                      <div >
+                        <div className='finalCalculation' style={{
+                          color: "orange",
+                          cursor: "pointer",
+                        }}> Show breakup</div>
+                        <table className='pay-table'>
+                          <tr>
+                            <th className='pay-th'>Details</th>
+                            <th className='column2 pay-th'>Amount</th>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Event Fees</td>
+                            <td className='column2 pay-td'>{noOfTrekkers} x {selectedBatch.partialBookingAmount} /- </td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Subtotal</td>
+                            <td className='column2 pay-td'>{Number(noOfTrekkers) * Number(selectedBatch.partialBookingAmount)} /-</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Add on</td>
+                            <td className='column2 pay-td'>{Number(addOn)} /- </td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Convenience Fee (1.5 %)</td>
+                            <td className='column2 pay-td'>{convenienceFee} /- </td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Discount</td>
+                            <td className='column2 pay-td'>- ₹ {convenienceFee} /-</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-th' style={{ color: 'green' }}><b>Remaining </b></td>
+                            <td className='column2 pay-th' style={{ color: 'green' }}><b>₹ {remainingAmount} /-</b></td>
+                          </tr>
+                        </table>
+                      </div>
 
-                      </table>
+                    }
+                    {buttonClick == 'pay-now' && showBreakup && paymentOption == 'full' &&
+                      <div >
+
+                        <div className='finalCalculation' style={{
+                          color: "rgb(255, 115, 0)",
+                          cursor: "pointer",
+                        }}> Show breakup</div>
+                        <table className='pay-table'>
+                          <tr>
+                            <th className='pay-th'>Details</th>
+                            <th className='column2 pay-th'></th>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Event Fees</td>
+                            <td className='column2 pay-td'>₹ {actualPrice} /-</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>No of Participant</td>
+                            <td className='column2 pay-td'>{Number(noOfTrekkers)}</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Add on</td>
+                            <td className='column2 pay-td'>{Number(addOn)}</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Convenience Fee (1.5 %)</td>
+                            <td className='column2 pay-td'>₹ {convenienceFee} /-</td>
+                          </tr>
+                          <tr>
+                            <td className='pay-td'>Discount</td>
+                            <td className='column2 pay-td'>- ₹ {convenienceFee} /-</td>
+                          </tr>
+                          {discount > 0 ? <tr>
+                            <td className='pay-td'>Added Discount</td>
+                            <td className='column2 pay-td'>- ₹ {discount} /-</td>
+                          </tr> : ''}
+
+                        </table>
+                      </div>
+                    }
+                    {buttonClick == 'pay-now' &&
+                      <div>
+                        <div className="user-details">
+                          {
+                            selected && discountAvailable &&
+                            <div className="input-box" style={{ 'display': 'flex', 'gap': '10px' }}>
+                              <input
+                                type="text" className="input-box-discount"
+                                value={couponCode}
+                                onChange={(e) => setCouponCode(e.target.value)}
+                                placeholder="Enter coupon code"
+                              />
+                              <div className="button discount-button">
+                                <button type="button" onClick={handleCouponApply}>
+                                  Apply Coupon
+                                </button>
+                              </div>
+                            </div>
+                          }
+                          {showDiscountStatus && paymentOption == 'partial' && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> You can not apply coupon code for Partial Payment. <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
+                          {showDiscountStatus && paymentOption != 'partial' && discount > 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': 'green', 'gap': '5px' }}> Discount Applied   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.007 8.27C22.194 9.125 23 10.45 23 12c0 1.55-.806 2.876-1.993 3.73.24 1.442-.134 2.958-1.227 4.05-1.095 1.095-2.61 1.459-4.046 1.225C14.883 22.196 13.546 23 12 23c-1.55 0-2.878-.807-3.731-1.996-1.438.235-2.954-.128-4.05-1.224-1.095-1.095-1.459-2.611-1.217-4.05C1.816 14.877 1 13.551 1 12s.816-2.878 2.002-3.73c-.242-1.439.122-2.955 1.218-4.05 1.093-1.094 2.61-1.467 4.057-1.227C9.125 1.804 10.453 1 12 1c1.545 0 2.88.803 3.732 1.993 1.442-.24 2.956.135 4.048 1.227 1.093 1.092 1.468 2.608 1.227 4.05Zm-4.426-.084a1 1 0 0 1 .233 1.395l-5 7a1 1 0 0 1-1.521.126l-3-3a1 1 0 0 1 1.414-1.414l2.165 2.165 4.314-6.04a1 1 0 0 1 1.395-.232Z" fill="#009912"></path></g></svg></p>}
+                          {showDiscountStatus && paymentOption != 'partial' && discount == 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> Please try to apply the coupon again. <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
+                        </div>
+                        {selected && eventDetails.eventType == 'BackPackingTrip' &&
+                          <div>
+                            <span className="details">Select Payment Type:<span style={{ 'color': 'red' }}> *</span></span>
+                            <div className='payment-selection'>
+                              <label className='radio-display'>
+                                <input
+                                  type="radio"
+                                  value="full"
+                                  checked={paymentOption === "full"}
+                                  onChange={handlePaymentChange}
+                                />
+                                Full Payment
+                              </label>
+                              <label className='radio-display'>
+                                <input
+                                  type="radio"
+                                  value="partial"
+                                  checked={paymentOption === "partial"}
+                                  onChange={handlePaymentChange}
+                                />
+                                Partial Payment
+                              </label>
+                            </div>
+                          </div>
+                        }
+
+                      </div>
+                    }
+                    {buttonClick == 'pay-now' && selected &&
+                      <div>
+                        <div className='hr'></div>
+
+                        <div className='finalCalculation'>
+                          <span >Total To Pay</span>
+                          <span></span>
+                          <span ><div className='calculation'>
+                            <span >₹ {finalPrice} /-
+                            </span>
+                            <span className='price-link'><a
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleToggleBreakup();
+                              }}
+                              style={{
+                                marginLeft: "10px",
+                                color: "orange",
+                                cursor: "pointer",
+                              }}
+                            >{showBreakup ? ' Hide breakup' : 'Show breakup'}
+
+                            </a>
+                            </span>
+                          </div>
+                          </span>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                  {buttonClick == 'confirm-details' &&
+                    <div className="button">
+                      <input type="submit" className={!selectedLocation ? 'confirm-disable-paynow' : 'confirm-button'} disabled={selectedLocation ? false : true} value="Confirm Details >>" />
+                    </div>
+                  }
+                  {buttonClick != 'pay-now' && buttonClick != 'confirm-details' &&
+                    <div className="button">
+                      <input type="submit" value="Next >>" />
                     </div>
                   }
                   {buttonClick == 'pay-now' &&
                     <div>
-                      <div className="user-details">
-                        {
-                          selected && discountAvailable &&
-                          <div className="input-box" style={{ 'display': 'flex', 'gap': '10px' }}>
-                            <input
-                              type="text" className="input-box-discount"
-                              value={couponCode}
-                              onChange={(e) => setCouponCode(e.target.value)}
-                              placeholder="Enter coupon code"
-                            />
-                            <div className="button discount-button">
-                              <button type="button" onClick={handleCouponApply}>
-                                Apply Coupon
-                              </button>
-                            </div>
-                          </div>
-                        }
-                        {showDiscountStatus && paymentOption == 'partial' && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> You can not apply coupon code for Partial Payment. <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
-                        {showDiscountStatus && paymentOption != 'partial' && discount > 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': 'green', 'gap': '5px' }}> Discount Applied   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.007 8.27C22.194 9.125 23 10.45 23 12c0 1.55-.806 2.876-1.993 3.73.24 1.442-.134 2.958-1.227 4.05-1.095 1.095-2.61 1.459-4.046 1.225C14.883 22.196 13.546 23 12 23c-1.55 0-2.878-.807-3.731-1.996-1.438.235-2.954-.128-4.05-1.224-1.095-1.095-1.459-2.611-1.217-4.05C1.816 14.877 1 13.551 1 12s.816-2.878 2.002-3.73c-.242-1.439.122-2.955 1.218-4.05 1.093-1.094 2.61-1.467 4.057-1.227C9.125 1.804 10.453 1 12 1c1.545 0 2.88.803 3.732 1.993 1.442-.24 2.956.135 4.048 1.227 1.093 1.092 1.468 2.608 1.227 4.05Zm-4.426-.084a1 1 0 0 1 .233 1.395l-5 7a1 1 0 0 1-1.521.126l-3-3a1 1 0 0 1 1.414-1.414l2.165 2.165 4.314-6.04a1 1 0 0 1 1.395-.232Z" fill="#009912"></path></g></svg></p>}
-                        {showDiscountStatus && paymentOption != 'partial' && discount == 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> Please try to apply the coupon again. <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
+                      <div className='termsAndCondition'>
+                        <input
+                          type="checkbox"
+                          {...register("termsAndconditions", {
+                            required: {
+                              value: true,
+                              message: "This field is required"
+                            }
+                          })}
+                          required
+                          onMouseOver={handleCheckboxBlur}
+                          checked={termsChecked} // Controlled component
+                          disabled={!showTermsAndConditions}
+                        />
+                        <div >
+                          I accept all terms & conditions.{paynowButtonDisabled}
+                          <a className='link' href={'https://sahyadrivacations.com/user-agreement'} target="_blank"> (View)</a>
+                        </div>
                       </div>
-                      {selected && eventDetails.eventType == 'BackPackingTrip' &&
-                        <div>
-                          <span className="details">Select Payment Type:<span style={{ 'color': 'red' }}> *</span></span>
-                          <div className='payment-selection'>
-                            <label className='radio-display'>
-                              <input
-                                type="radio"
-                                value="full"
-                                checked={paymentOption === "full"}
-                                onChange={handlePaymentChange}
-                              />
-                              Full Payment
-                            </label>
-                            <label className='radio-display'>
-                              <input
-                                type="radio"
-                                value="partial"
-                                checked={paymentOption === "partial"}
-                                onChange={handlePaymentChange}
-                              />
-                              Partial Payment
-                            </label>
-                          </div>
-                        </div>
-                      }
-
-                    </div>
-                  }
-                  {buttonClick == 'pay-now' && selected &&
-                    <div>
-                      <div className='hr'></div>
-
-                      <div className='finalCalculation'>
-                        <span >Total To Pay</span>
-                        <span></span>
-                        <span ><div className='calculation'>
-                          <span >₹ {finalPrice} /-
-                          </span>
-                          <span className='price-link'><a
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleToggleBreakup();
-                            }}
-                            style={{
-                              marginLeft: "10px",
-                              color: "orange",
-                              cursor: "pointer",
-                            }}
-                          >{showBreakup ? ' Hide breakup' : 'Show breakup'}
-
-                          </a>
-                          </span>
-                        </div>
-                        </span>
+                      {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
+                      <div className="button">
+                        <input onMouseOver={handleCheckboxBlur} className={!paynowButtonDisabled ? 'disable-paynow' : 'paynow-button'} disabled={paynowButtonDisabled ? false : true} type="submit" value="Pay Now" />
                       </div>
                     </div>
                   }
                 </div>
-                {buttonClick == 'confirm-details'  &&
-                  <div className="button">
-                    <input type="submit" className={!selectedLocation ? 'confirm-disable-paynow' : 'confirm-button'} disabled={selectedLocation ? false : true } value="Confirm Details >>" />
-                  </div>
-                }
-                {buttonClick != 'pay-now' && buttonClick != 'confirm-details' &&
-                  <div className="button">
-                    <input type="submit" value="Next >>" />
-                  </div>
-                }
-                {buttonClick == 'pay-now' &&
-                  <div>
-                    <div className='termsAndCondition'>
-                      <input
-                        type="checkbox"
-                        {...register("termsAndconditions", {
-                          required: {
-                            value: true,
-                            message: "This field is required"
-                          }
-                        })}
-                        required
-                        onMouseOver={handleCheckboxBlur}
-                        checked={termsChecked} // Controlled component
-                        disabled={!showTermsAndConditions}
-                      />
-                      <div >
-                        I accept all terms & conditions.{paynowButtonDisabled}
-                        <a className='link' href={'https://sahyadrivacations.com/user-agreement'} target="_blank"> (View)</a>
-                      </div>
-                    </div>
-                    {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
-                    <div className="button">
-                      <input onMouseOver={handleCheckboxBlur} className={!paynowButtonDisabled ? 'disable-paynow' : 'paynow-button'} disabled={paynowButtonDisabled ? false : true} type="submit" value="Pay Now" />
-                    </div>
-                  </div>
-                }
-              </div>
-            </form>
-          </div >
-        }
-      </div >
+              </form>
+            </div >
+          }
+        </div >)}
       <ContactSection />
       <Footer />
     </div>
