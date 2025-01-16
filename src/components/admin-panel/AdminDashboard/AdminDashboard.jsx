@@ -104,7 +104,11 @@ function AdminDashboard() {
               <th>Number of People</th>
               <th>Amount Paid</th>
               <th>Pickup Location</th>
-              <th>Status</th>
+              <th>Status</th>             
+              <th>Double Sharing</th>
+              <th>Tripal Sharing</th>
+              <th>ThirdAc / Sleeper Upgrate</th>
+              <th>Special Note</th>
               <th>Booking Date</th>
             </tr>
           </thead>
@@ -123,6 +127,10 @@ function AdminDashboard() {
                     <td>{booking.amountPaid}</td>
                     <td>{booking.pickupLocation}</td>
                     <td>{booking.status}</td>
+                    <td>{booking.doubleSharing}</td>
+                    <td>{booking.tripalSharing}</td>
+                    <td>{booking.thirdAcUpgrate}</td>
+                    <td>{booking.specialNote}</td>
                     <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
                   </tr>
                   {/* Rows for other participants */}
@@ -139,6 +147,10 @@ function AdminDashboard() {
                         <td>{participant.pickupLocation}</td>
                         <td>{participant.status}</td>
                         <td></td> {/* Empty cell for Booking Date */}
+                        <td></td> {/* Empty cell for Number of People */}
+                        <td></td> {/* Empty cell for Number of People */}
+                        <td></td> {/* Empty cell for Number of People */}
+                        <td></td> {/* Empty cell for Number of People */}
                       </tr>
                     ))}
                 </React.Fragment>
