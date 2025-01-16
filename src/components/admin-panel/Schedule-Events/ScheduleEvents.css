@@ -6,7 +6,7 @@
 .button-group{
   padding: 10px;
 }
-.input-box select{ 
+.input-box select ,.input-box textarea{ 
     height: 65px;
     width: 100%;
     outline: none;

@@ -624,7 +624,7 @@ const CustomerBookings = () => {
                       
                         
                   {/* General Note */}
-                  <div className="input-box-column">
+                  <div className="input-box">
                     <span className="details">Custom Message (if Any)</span>
                     <textarea
                       value={specialNote}
