@@ -628,6 +628,7 @@ const CustomerBookings = () => {
                     <span className="details">Custom Message (if Any)</span>
                     <textarea
                       value={specialNote}
+                      placeholder='Enter Custom Message'
                       onChange={(e) => setSpecialNote(e.target.value)}
                     />
                   </div>
