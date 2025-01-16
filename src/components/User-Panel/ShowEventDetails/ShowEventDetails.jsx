@@ -178,6 +178,8 @@ const ShowEventDetails = () => {
   }
 
   const getNextBatchDate = async (event) => {
+
+    
     setIsLoadingMSG(true); // Start loading
     let batchdate;
     let batchSize = -1;
@@ -199,11 +201,6 @@ const ShowEventDetails = () => {
     let thirdAcUpgrateNote = '';
     let note = '';
     setEventType(eventType);
-
-    if (eventType == 'CampingEvent') {
-      setShowTermsAndConditions(true);
-      console.log('fiest 5');
-    }
 
     const Q = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -253,6 +250,7 @@ const ShowEventDetails = () => {
         thirdAcUpgrate = 0;
         thirdAcUpgrateNote = '';
         note = '';
+      
         if (new Date(event[index].eventStartDate) - Q >= 0 && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
           batchdate = new Date(event[index].eventStartDate).getDate() + ' ' + months[new Date(event[index].eventStartDate).getMonth()] + ' - ' + new Date(event[index].eventEndDate).getDate() + ' ' + months[new Date(event[index].eventEndDate).getMonth()] + ' ' + new Date(event[index].eventStartDate).getFullYear();
           eventCostPerPerson = event[index]?.eventCostPerPerson;
@@ -274,12 +272,13 @@ const ShowEventDetails = () => {
 
         } else if (event[index].everyWeekend == true && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
           batchdate = 'Available On All Weekends';
+          console.log('---event['+index+']---',event[index]);
           eventCostPerPerson = event[index]?.eventCostPerPerson;
           eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
           b2bPrice = event[index]?.b2bPrice;
           batchSize = event[index]?.eventBatchCount;
           bookedSize = event[index]?.alreadyBoockedCount;
-          partialBookingAmount = event.batches[index]?.partialBookingAmount;
+          partialBookingAmount = event[index]?.partialBookingAmount;
           doubleSharing = event[index]?.doubleSharing;
           doubleSharingNote = event[index]?.doubleSharingNote;
           tripalSharing = event[index]?.tripalSharing;
@@ -290,13 +289,14 @@ const ShowEventDetails = () => {
           setEveryWeekend(true);
         } else if (event[index].notScheduleYet == true) {
           batchdate = 'On Demand';
+          console.log('---event['+index+']---',event[index]);
           setInquery(true);
           eventCostPerPerson = event[index]?.eventCostPerPerson;
           eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
           b2bPrice = event[index]?.b2bPrice;
           batchSize = event[index]?.eventBatchCount;
           bookedSize = event[index]?.alreadyBoockedCount;
-          partialBookingAmount = event.batches[index]?.partialBookingAmount;
+          partialBookingAmount = event[index]?.partialBookingAmount;
           doubleSharing = event[index]?.doubleSharing;
           doubleSharingNote = event[index]?.doubleSharingNote;
           tripalSharing = event[index]?.tripalSharing;
@@ -305,7 +305,7 @@ const ShowEventDetails = () => {
           thirdAcUpgrateNote = event[index]?.thirdAcUpgrateNote;
           note = event[index]?.note;
         }
-
+        console.log('--batchSize---',batchSize);
         if (batchSize > 0 && eventCostPerPerson > 0 && batchdate != '') {
 
           batchesList.push({
@@ -867,7 +867,7 @@ const ShowEventDetails = () => {
                         }
                         {inquery &&
                           <div>
-                            <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website , please contact us directly.</p>
+                            {/* <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website , please contact us directly.</p> */}
 
                             <div className="button-margin button">
                               <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
