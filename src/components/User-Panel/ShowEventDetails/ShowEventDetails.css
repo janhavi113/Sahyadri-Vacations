@@ -545,6 +545,9 @@ h3 {
     .content-row {
         padding: 0 !important;
     }
+    .noOftrekkers{
+        margin-top: 12px !important;
+    }
     .finalCalculation {
         display: flex;
         font-size: 18px;
@@ -603,4 +606,10 @@ h3 {
 
 .Column-2 {
     grid-template-columns: repeat(2, 1fr) !important;
+}
+
+@media (max-width: 584px) {
+    .noOftrekkers{
+        margin-top: 12px !important;
+    }
 }
