@@ -115,7 +115,7 @@ const ShowEventDetails = () => {
       if (res.isSuccess == true) {
         console.log('res.booking.bookingId', res.booking.bookingId);
         setButtonClick('confirm-details');
-        handleNavigate(res.booking.bookingId);
+        handleNavigate(res.booking.bookingId , data.whatsappNumber);
       }
 
     } catch (error) {
@@ -396,7 +396,7 @@ const ShowEventDetails = () => {
     setShowLocations(tempLocations);
   }
 
-  const handleNavigate = (bookingIdVar) => {
+  const handleNavigate = (bookingIdVar , bookingPhoneVar) => {
     navigate("/customerPayNowScreen", {
       state: {
         eventDetails: eventDetails,
@@ -407,7 +407,7 @@ const ShowEventDetails = () => {
         pickupPointsfromMumbai: pickupPointsfromMumbai,
         selectedDate: selectedDate,
         isSuccess: true,
-        bookingPhone:bookingPhone,
+        bookingPhone:bookingPhoneVar,
         bookingId: bookingIdVar,
         discountAvailable: discountAvailable,
         coupons: coupons
