@@ -7,7 +7,7 @@ import Footer from "../../footer";
 import ContactSection from "../ContactLogo/contactSection";
 import Navbar from "../../Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCirclePlus, faCircleMinus } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faCircleMinus} from '@fortawesome/free-solid-svg-icons';
 import "../../admin-panel/CreateEvent/CreateEvents.css"
 import CircularLoading from '../Loading/CircularLoading';
 import "../../Modal.css";
@@ -20,7 +20,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const CustomerBookings = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { eventDetails, batch, showLocations, pickupPoints, bookingPhone, pickupPointsfromMumbai, isSuccess, finalBatchesList, selectedDate, bookingId, discountAvailable, coupons } = location.state || {}; // Extract the data safely
+  const { eventDetails, batch, showLocations, pickupPoints,bookingPhone, pickupPointsfromMumbai, isSuccess, finalBatchesList, selectedDate, bookingId, discountAvailable, coupons } = location.state || {}; // Extract the data safely
   console.log('---location.state----', location.state);
   const apiUrl = import.meta.env.VITE_API_URL;
   const [loading, setLoading] = useState(false);
@@ -90,7 +90,7 @@ const CustomerBookings = () => {
       setActualPrice(Number(price));
       let convenience_Fee = (Number(price) * 0.015).toFixed(2);
       setConvenienceFee(convenience_Fee);
-      //setPrice(price);
+//setPrice(price);
     }
     return foundRecord;
   }
@@ -113,7 +113,7 @@ const CustomerBookings = () => {
       final_price = final_price + Number(addOn) + Number(selectedBatch.eventCostPerPerson);
       let remainingAmount = final_price - price;
       setRemainingAmount(remainingAmount);
-      //  setPrice(Number(selectedBatch.partialBookingAmount));
+    //  setPrice(Number(selectedBatch.partialBookingAmount));
 
     } else {
       let final_price = 0;
@@ -212,7 +212,7 @@ const CustomerBookings = () => {
         formData.append("doubleSharing", doubleSharingCount);
         formData.append("tripalSharing", tripalSharingCount);
         formData.append("thirdAcUpgrate", thirdAcUpgrateCount);
-        formData.append("specialNote", specialNote);
+        formData.append("specialNote",specialNote);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
           body: formData,
@@ -248,12 +248,12 @@ const CustomerBookings = () => {
       // Simulate API call
       setTimeout(() => {
         setLoading(false);
-        // alert('Booking submitted successfully!');
+       // alert('Booking submitted successfully!');
       }, 2000);
     } catch (error) {
       console.error('Error during booking:', error);
       // Optionally, show an error message to the user
-    }
+    } 
   }
 
   const handleSelection = (event) => {
@@ -304,7 +304,7 @@ const CustomerBookings = () => {
     if (!location.state) {
       console.log("No location.state found, navigating to home...");
       navigate('/');
-    } else {
+    }else{
       const foundRecord = handleBookingSlot();
     }
   }, [location.state, navigate]);
@@ -621,19 +621,19 @@ const CustomerBookings = () => {
                           </tr> : ''}
                         </table>
                         <br></br>
-
-
-                        {/* General Note */}
-                        <div className="input-box">
-                          <span className="details">Custom Message (if Any)</span>
-                          <textarea
-                            value={specialNote}
-                            placeholder='Enter Custom Message'
-                            onChange={(e) => setSpecialNote(e.target.value)}
-                          />
+                      
+                        
+                  {/* General Note */}
+                  <div className="input-box-column">
+                    <span className="details">Custom Message (if Any)</span>
+                    <textarea
+                      value={specialNote}
+                      placeholder='Enter Custom Message'
+                      onChange={(e) => setSpecialNote(e.target.value)}
+                    />
+                  </div>
+                   <br></br>
                         </div>
-                        <br></br>
-                      </div>
                     }
                     {
                       buttonClick == 'pay-now' && showBreakup && paymentOption == 'partial' &&
