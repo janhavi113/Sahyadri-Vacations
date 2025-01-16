@@ -44,7 +44,7 @@
 
 .close:hover {background: #bbb;}
 
-.user-details .input-box input{ 
+.user-details .input-box input , .user-details .input-box  textarea{ 
     height: 45px;
   width: 100%;
   outline: none;
