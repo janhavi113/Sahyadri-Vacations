@@ -7,71 +7,40 @@ import Footer from "../../footer";
 import ContactSection from "../ContactLogo/contactSection";
 import Navbar from "../../Navbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSun, faCirclePlus, faCircleMinus, faCalendarDays, faLocationDot, faMountainSun } from '@fortawesome/free-solid-svg-icons';
-import { Modal } from "react-bootstrap";
+import { faCirclePlus, faCircleMinus} from '@fortawesome/free-solid-svg-icons';
 import "../../admin-panel/CreateEvent/CreateEvents.css"
-import tripType from '../../Images/type.svg'
-import duration from '../../Images/duration.svg'
-import distance from '../../Images/distance.svg'
-import endurance from '../../Images/endurance.svg'
-import locationicon from '../../Images/location.svg'
-import Loading from '../Loading/Loading';
 import CircularLoading from '../Loading/CircularLoading';
-import MinimalCoupons from './MinimalCoupons';
 import "../../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
 // import required modules
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import DatePicker from "react-datepicker";
-import { isWeekend } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
-import CollapsibleSection from './CollapsibleSection';
-import { css } from '@emotion/react';
-import ClipLoader from 'react-spinners/ClipLoader'; // Import the loading spinner component
 
 import "react-datepicker/dist/react-datepicker.css";
-import { set } from 'mongoose';
 const CustomerBookings = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { eventDetails, batch, showLocations, pickupPoints, pickupPointsfromMumbai, isSuccess, finalBatchesList, selectedDate, bookingId, discountAvailable, coupons } = location.state || {}; // Extract the data safely
+  const { eventDetails, batch, showLocations, pickupPoints,bookingPhone, pickupPointsfromMumbai, isSuccess, finalBatchesList, selectedDate, bookingId, discountAvailable, coupons } = location.state || {}; // Extract the data safely
   console.log('---location.state----', location.state);
   const apiUrl = import.meta.env.VITE_API_URL;
-  const [inquery, setInquery] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [buttonClick, setButtonClick] = useState('confirm-details');
-  const [everyWeekend, setEveryWeekend] = useState(false);
   const [participantsPickupPoints, setParticipantsPickupPoints] = useState([]);
-  const [b2bLocation, setB2bLocation] = useState();
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
   const [actualPrice, setActualPrice] = useState(0);
   const [convenienceFee, setConvenienceFee] = useState(0);
-  const [scheduleBatch, setScheduleBatch] = useState();
-  const [availableBatches, setAvailableBatches] = useState();
-  const [price, setPrice] = useState(0);
-  const [batchDate, setBatchDate] = useState();
   const [maxBooking, setMaxBooking] = useState();
   const [bookedSlot, setBookedSlot] = useState();
-  const [bookingPhone, setBookingPhone] = useState();
   const [availableSlot, setAvailableSlot] = useState();
-  const [eventType, setEventType] = useState();
-  const [currentEventId, setCurrentEventId] = useState();
-  const [noOfPeopleNeedforCoupon, setNoOfPeopleNeedforCoupon] = useState();
-  const [selectDate, setSelectDate] = useState();
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
   const [participants, setParticipants] = useState([]);
   const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
-  const [selectedStartDate, setSelectedStartDate] = useState(null);
-  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [selectedBatch, setSelectedbatch] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showTermsAndConditions, setShowTermsAndConditions] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
   const [paynowButtonDisabled, setPayNowButtonDisabled] = useState(false);
   const [batchFull, setBatchFull] = useState(false);
   const [couponCode, setCouponCode] = useState('');
@@ -107,7 +76,6 @@ const CustomerBookings = () => {
     setActualPrice(Number(price));
     let convenience_Fee = (Number(price) * 0.015).toFixed(2);
     setConvenienceFee(convenience_Fee);
-    setPrice(price);
   }
 
   const handleBookingSlot = () => {
@@ -122,7 +90,7 @@ const CustomerBookings = () => {
       setActualPrice(Number(price));
       let convenience_Fee = (Number(price) * 0.015).toFixed(2);
       setConvenienceFee(convenience_Fee);
-      setPrice(price);
+//setPrice(price);
     }
     return foundRecord;
   }
@@ -145,7 +113,7 @@ const CustomerBookings = () => {
       final_price = final_price + Number(addOn) + Number(selectedBatch.eventCostPerPerson);
       let remainingAmount = final_price - price;
       setRemainingAmount(remainingAmount);
-      setPrice(Number(selectedBatch.partialBookingAmount));
+    //  setPrice(Number(selectedBatch.partialBookingAmount));
 
     } else {
       let final_price = 0;
@@ -206,7 +174,7 @@ const CustomerBookings = () => {
   // Handle blur to toggle the value
   const handleCheckboxBlur = () => {
 
-    if (selectedLocation == null && eventType != 'CampingEvent') {
+    if (selectedLocation == null && eventDetails.eventType != 'CampingEvent') {
 
       setError("dateError", {
         type: "manual",
@@ -224,8 +192,6 @@ const CustomerBookings = () => {
   }
 
   const onSubmit = async (data) => {
-
-    setIsLoading(true); // Set loading to true before starting the request
     try {
       if (buttonClick == 'confirm-details') {
         if (selectedLocation) {
@@ -286,9 +252,7 @@ const CustomerBookings = () => {
     } catch (error) {
       console.error('Error during booking:', error);
       // Optionally, show an error message to the user
-    } finally {
-      setIsLoading(false); // Reset loading to false after the request is complete
-    }
+    } 
   }
 
   const handleSelection = (event) => {
@@ -368,7 +332,6 @@ const CustomerBookings = () => {
             } else if (data.coupon.discountPrice) {
               calculatedDiscount = data.coupon.discountPrice;
             }
-            setNoOfPeopleNeedforCoupon(data.coupon.numberOfPeople)
             setShowDiscountStatus(true);
             setDiscount(Number(calculatedDiscount));
             setFinalPrice(Number(final_price) + Number(addOn) - Number(calculatedDiscount));
@@ -645,7 +608,7 @@ const CustomerBookings = () => {
                             </select></td>
                           </tr> : ''}
                           {selectedBatch?.thirdAcUpgrate > 0 ? <tr>
-                            <td className='pay-td'><b>Tripal Sharing Room</b><br /><span>{selectedBatch?.thirdAcUpgrateNote}</span></td>
+                            <td className='pay-td'><b>{selectedBatch?.thirdAcUpgrateNote}</b><br /></td>
                             <td className='column2 pay-td'>₹ {selectedBatch?.thirdAcUpgrate}</td>
                             <td className='column2 pay-td'> <select
                               id="third-ac-upgrate-picklist"

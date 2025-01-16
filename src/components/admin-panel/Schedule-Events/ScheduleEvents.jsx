@@ -22,6 +22,13 @@ function ScheduleEvents() {
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const [search, setSearch] = useState();
   const [eventType, setEventType] = useState();
+  const [doubleSharing, setDoubleSharing] = useState(0);
+  const [doubleSharingNote, setDoubleSharingNote] = useState('');
+  const [tripalSharing, setTripalSharing] = useState(0);
+  const [tripalSharingNote, setTripalSharingNote] = useState('');
+  const [thirdAcUpgrate, setThirdAcUpgrate] = useState(0);
+  const [thirdAcUpgrateNote, setThirdAcUpgrateNote] = useState('');
+  const [note, setNote] = useState('');
   const navigate = useNavigate();
   const {
     register,
@@ -112,11 +119,11 @@ function ScheduleEvents() {
       formData.append('scheduleEventId', search[0].eventId);
       formData.append('eventCostPerPerson', data.eventCostPerPerson);
       formData.append('eventCostPerPersonFromMumbai', data.eventCostPerPersonFromMumbai);
-      if(data.eventEndDate){
-      formData.append('eventEndDate', new Date(data.eventEndDate));
+      if (data.eventEndDate) {
+        formData.append('eventEndDate', new Date(data.eventEndDate));
       }
-      if(data.eventStartDate){
-      formData.append('eventStartDate', new Date(data.eventStartDate));
+      if (data.eventStartDate) {
+        formData.append('eventStartDate', new Date(data.eventStartDate));
       }
       formData.append('eventBatchCount', data.eventBatchCount);
       formData.append('everyWeekend', data.everyWeekend);
@@ -125,6 +132,13 @@ function ScheduleEvents() {
       formData.append('bookingTillDate', data.bookingTillDate);
       formData.append('specialOfferEvent', data.specialOfferEvent);
       formData.append('bookingTillTime', data.bookingTillTime.toString());
+      // New fields added
+      formData.append('doubleSharing', doubleSharing);
+      formData.append('doubleSharingNote', doubleSharingNote);
+      formData.append('tripalSharing', tripalSharing);
+      formData.append('tripalSharingNote', tripalSharingNote);
+      formData.append('thirdAcUpgrate', thirdAcUpgrate);
+      formData.append('thirdAcUpgrateNote', thirdAcUpgrateNote);
       if (data.partialBookingAmount) {
         formData.append('partialBookingAmount', data.partialBookingAmount);
       }
@@ -205,16 +219,16 @@ function ScheduleEvents() {
 
                   <div className="input-box-column ">
                     <span className="details">B2B Per Person </span>
-                    <input  {...register("b2bPrice")} type="text" />
+                    <input  {...register("b2bPrice")} type="number"  defaultValue={0} />
                   </div>
 
                   <div className="input-box-column">
                     <span className="details">Cost Per Person from Pune<span style={{ 'color': 'red' }}>*</span></span>
-                    <input  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                    <input   defaultValue={0}  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="number" required />
                   </div>
                   <div className="input-box-column">
                     <span className="details">Cost Per Person from Mumbai<span style={{ 'color': 'red' }}>*</span></span>
-                    <input  {...register("eventCostPerPersonFromMumbai")} type="text" />
+                    <input   defaultValue={0}  {...register("eventCostPerPersonFromMumbai")} type="number"/>
                   </div>
 
                   {eventType == 'BackPackingTrip' &&
@@ -223,11 +237,79 @@ function ScheduleEvents() {
                       <input  {...register("partialBookingAmount")} type="number" />
                     </div>
                   }
-
-                  <div className="input-box-column ">
+                   <div className="input-box-column ">
                     <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
-                    <input  {...register("eventBatchCount", { required: { value: true, message: "This field is required" }, })} min="1" type="number" required />
+                    <input defaultValue={0} {...register("eventBatchCount", { required: { value: true, message: "This field is required" }, })} min="1" type="number" required />
                   </div>
+                  {/* Double Sharing */}
+                  <div className="input-box-column">
+                    <span className="details">
+                      Double Sharing <span style={{ color: 'red' }}>*</span>
+                    </span>
+                    <input
+                      type="number"
+                      value={doubleSharing}
+                      onChange={(e) => setDoubleSharing(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="input-box-column">
+                    <span className="details">Double Sharing Note</span>
+                    <textarea
+                      value={doubleSharingNote}
+                      onChange={(e) => setDoubleSharingNote(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Tripal Sharing */}
+                  <div className="input-box-column">
+                    <span className="details">
+                      Tripal Sharing <span style={{ color: 'red' }}>*</span>
+                    </span>
+                    <input
+                      type="number"
+                      value={tripalSharing}
+                      onChange={(e) => setTripalSharing(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="input-box-column">
+                    <span className="details">Tripal Sharing Note</span>
+                    <textarea
+                      value={tripalSharingNote}
+                      onChange={(e) => setTripalSharingNote(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Third AC Upgrade */}
+                  <div className="input-box-column">
+                    <span className="details">
+                      Third AC Upgrade <span style={{ color: 'red' }}>*</span>
+                    </span>
+                    <input
+                      type="number"
+                      value={thirdAcUpgrate}
+                      onChange={(e) => setThirdAcUpgrate(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="input-box-column">
+                    <span className="details">Third AC Upgrade Note</span>
+                    <textarea
+                      value={thirdAcUpgrateNote}
+                      onChange={(e) => setThirdAcUpgrateNote(e.target.value)}
+                    />
+                  </div>
+
+                  {/* General Note */}
+                  <div className="input-box-column">
+                    <span className="details">General Note</span>
+                    <textarea
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                    />
+                  </div>
+                 
                   <div className="input-box-column ">
                     <span className="details">Active</span>
                     <input  {...register("Active")} type="checkbox" id="active" name="Active" value={true} />

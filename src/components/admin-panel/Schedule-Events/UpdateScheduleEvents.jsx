@@ -44,6 +44,13 @@ const UpdateScheduleEvents = () => {
   const [specialOfferEvent, setSpecialOfferEvent] = useState();
   const [partialBookingAmount, setPartialBookingAmount] = useState();
   const [eventCostPerPersonFromMumbai, setEventCostPerPersonFromMumbai] = useState(0);
+  const [doubleSharing, setDoubleSharing] = useState(0);
+  const [doubleSharingNote, setDoubleSharingNote] = useState('');
+  const [tripalSharing, setTripalSharing] = useState(0);
+  const [tripalSharingNote, setTripalSharingNote] = useState('');
+  const [thirdAcUpgrate, setThirdAcUpgrate] = useState(0);
+  const [thirdAcUpgrateNote, setThirdAcUpgrateNote] = useState('');
+  const [note, setNote] = useState('');
   const navigate = useNavigate();
   const {
     register,
@@ -63,16 +70,16 @@ const UpdateScheduleEvents = () => {
   }, [navigate]);
 
   const [file, setFiles] = useState(null);
- 
+
   const getCurrentrecord = async () => {
     let r = await fetch(`${apiUrl}schedule-event-to-update/${params}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
     })
-    let res = await r.json()
-    //console.log('res ===', JSON.stringify(res));
+    let res = await r.json();
     if (res.isSuccess == true) {
+      // Set values from the response
       setSuccess(res.isSuccess);
       setEvent(res.events);
       setActive(res.scheduleBatch[0].active);
@@ -88,9 +95,20 @@ const UpdateScheduleEvents = () => {
       setBookingTillDate(res.scheduleBatch[0].bookingTillDate);
       setBookingTillTime(res.scheduleBatch[0].bookingTillTime);
       setSpecialOfferEvent(res.scheduleBatch[0].specialOfferEvent);
-      setEventIsScheduled(res.scheduleBatch[0].scheduleEventId);     
+      setEventIsScheduled(res.scheduleBatch[0].scheduleEventId);
       setEventId(res.scheduleBatch[0].eventId);
       setPartialBookingAmount(res.scheduleBatch[0].partialBookingAmount);
+
+      // Set new fields
+      setDoubleSharing(res.scheduleBatch[0].doubleSharing);
+      setDoubleSharingNote(res.scheduleBatch[0].doubleSharingNote);
+      setTripalSharing(res.scheduleBatch[0].tripalSharing);
+      setTripalSharingNote(res.scheduleBatch[0].tripalSharingNote);
+      setThirdAcUpgrate(res.scheduleBatch[0].thirdAcUpgrate);
+      setThirdAcUpgrateNote(res.scheduleBatch[0].thirdAcUpgrateNote);
+      setNote(res.scheduleBatch[0].note);
+
+      // Handle uploaded images
       let images = [];
       images.push(res.scheduleBatch[0]?.images);
       setUploadedFiles(images);
@@ -133,13 +151,13 @@ const UpdateScheduleEvents = () => {
     } else {
       setActiveError({ disply: false });
       //console.log('isActive',isActive);
-      formData.append("active", isActive );
+      formData.append("active", isActive);
       formData.append("eventId", eventIsScheduled);
       const search = events.filter(function (item) {
         //console.log('item', item.eventId == eventIsScheduled)
         return item.eventId == eventIsScheduled;
       });
-      console.log('search--', ( specialOfferEvent == 'on' || specialOfferEvent == true));
+      console.log('search--', (specialOfferEvent == 'on' || specialOfferEvent == true));
       let b2bValue = b2bPrice == null ? 0 : b2bPrice;
       formData.append('eventname', search[0].name);
       formData.append('eventType', eventType);
@@ -156,6 +174,15 @@ const UpdateScheduleEvents = () => {
       formData.append('scheduleEventId', eventIsScheduled);
       formData.append('partialBookingAmount', partialBookingAmount);
       formData.append('eventCostPerPersonFromMumbai', eventCostPerPersonFromMumbai);
+      // New fields added
+      formData.append('doubleSharing', doubleSharing);
+      formData.append('doubleSharingNote', doubleSharingNote);
+      formData.append('tripalSharing', tripalSharing);
+      formData.append('tripalSharingNote', tripalSharingNote);
+      formData.append('thirdAcUpgrate', thirdAcUpgrate);
+      formData.append('thirdAcUpgrateNote', thirdAcUpgrateNote);
+      formData.append('note', note);
+
       const url = `${apiUrl}update-schedule-events/${eventId}`;
       let r = await fetch(url, {
         method: "POST",
@@ -205,7 +232,7 @@ const UpdateScheduleEvents = () => {
                     <span className="details">Booking Open Till Time</span>
                     <input type="time" value={bookingTillTime} onChange={(e) => setBookingTillTime(e.target.value)} />
                   </div>
-                 
+
                   {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
                   <div className="input-box-column event-picker ">
                     <span className="details">Every Weekend </span>
@@ -235,6 +262,76 @@ const UpdateScheduleEvents = () => {
                     <span className="details">Cost Per Person from Mumbai <span style={{ 'color': 'red' }}>*</span></span>
                     <input value={eventCostPerPersonFromMumbai} onChange={(e) => setEventCostPerPersonFromMumbai(e.target.value)} type="text" required />
                   </div>
+
+                  {/* Double Sharing */}
+                  <div className="input-box-column">
+                    <span className="details">
+                      Double Sharing <span style={{ color: 'red' }}>*</span>
+                    </span>
+                    <input
+                      type="number"
+                      value={doubleSharing}
+                      onChange={(e) => setDoubleSharing(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="input-box-column">
+                    <span className="details">Double Sharing Note</span>
+                    <textarea
+                      value={doubleSharingNote}
+                      onChange={(e) => setDoubleSharingNote(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Tripal Sharing */}
+                  <div className="input-box-column">
+                    <span className="details">
+                      Tripal Sharing <span style={{ color: 'red' }}>*</span>
+                    </span>
+                    <input
+                      type="number"
+                      value={tripalSharing}
+                      onChange={(e) => setTripalSharing(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="input-box-column">
+                    <span className="details">Tripal Sharing Note</span>
+                    <textarea
+                      value={tripalSharingNote}
+                      onChange={(e) => setTripalSharingNote(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Third AC Upgrade */}
+                  <div className="input-box-column">
+                    <span className="details">
+                      Third AC Upgrade <span style={{ color: 'red' }}>*</span>
+                    </span>
+                    <input
+                      type="number"
+                      value={thirdAcUpgrate}
+                      onChange={(e) => setThirdAcUpgrate(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="input-box-column">
+                    <span className="details">Third AC Upgrade Note</span>
+                    <textarea
+                      value={thirdAcUpgrateNote}
+                      onChange={(e) => setThirdAcUpgrateNote(e.target.value)}
+                    />
+                  </div>
+
+                  {/* General Note */}
+                  <div className="input-box-column">
+                    <span className="details">General Note</span>
+                    <textarea
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                    />
+                  </div>
+
                   <div className="input-box-column ">
                     <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
                     <input
@@ -279,10 +376,10 @@ const UpdateScheduleEvents = () => {
 
                   {/* Preview Uploaded Images */}
                   <div className="image-preview-container">
-                    {uploadedFiles.map((file) => (                  
+                    {uploadedFiles.map((file) => (
                       <div key={file.name} className="image-preview">
                         <img
-                          src={file.preview ? file.preview : `${apiUrl}${file}` } 
+                          src={file.preview ? file.preview : `${apiUrl}${file}`}
                           alt={file.name}
                           style={{
                             width: "150px",
@@ -306,13 +403,6 @@ const UpdateScheduleEvents = () => {
             <div className='button-group'>
               <div className="button-edit-container">
                 <div className="button">
-                  {
-                    /* <input onClick={() => {
-                      setCount(count => count + 1)
-                      addChildComponent()
-                    }
-                    } type="submit" value="Add Batch + " /> */
-                  }
                   <input type="submit" value="Schedule Batches" />
                 </div>
               </div>

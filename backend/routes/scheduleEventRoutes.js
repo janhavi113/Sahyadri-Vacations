@@ -84,7 +84,14 @@ router.post("/schedule-event", async (req, res) => {
 			bookingTillDate,
 			bookingTillTime,
 			specialOfferEvent,
-			partialBookingAmount
+			partialBookingAmount,
+			doubleSharing,
+            doubleSharingNote,
+            tripalSharing,
+            tripalSharingNote,
+            thirdAcUpgrate,
+            thirdAcUpgrateNote,
+            note
 		} = req.body;
 
 		let scheduleRecordcount = 0;
@@ -119,6 +126,13 @@ router.post("/schedule-event", async (req, res) => {
 			eventCostPerPersonFromMumbai: eventCostPerPersonFromMumbai,
 			specialOfferEvent: specialOfferEvent,
 			partialBookingAmount: partialBookingAmount,
+			doubleSharing: doubleSharing,
+			doubleSharingNote: doubleSharingNote,
+			tripalSharing: tripalSharing,
+			tripalSharingNote: tripalSharingNote,
+			thirdAcUpgrate: thirdAcUpgrate,
+			thirdAcUpgrateNote: thirdAcUpgrateNote,
+			note: note,
 			Url: "/event-details?eventid=" +
 				(scheduleRecordcount + 1).toString() +
 				"/" +
@@ -181,7 +195,15 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			bookingTillDate,
 			bookingTillTime,
 			specialOfferEvent,
-			partialBookingAmount
+			partialBookingAmount,
+			doubleSharing,
+            doubleSharingNote,
+            tripalSharing,
+            tripalSharingNote,
+            thirdAcUpgrate,
+            thirdAcUpgrateNote,
+            note
+			
 		} = req.body;
 
 		// Update query
@@ -204,6 +226,13 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			partialBookingAmount: partialBookingAmount,
 			eventType: eventType,
 			scheduleEventId: scheduleEventId,
+			doubleSharing: doubleSharing,
+			doubleSharingNote: doubleSharingNote,
+			tripalSharing: tripalSharing,
+			tripalSharingNote: tripalSharingNote,
+			thirdAcUpgrate: thirdAcUpgrate,
+			thirdAcUpgrateNote: thirdAcUpgrateNote,
+			note: note,
 			Url: "/event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase(),
 			eventApi: eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase()
 		};

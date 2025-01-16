@@ -16,6 +16,7 @@ import distance from '../../Images/distance.svg'
 import endurance from '../../Images/endurance.svg'
 import locationicon from '../../Images/location.svg'
 import MinimalCoupons from './MinimalCoupons';
+import CircularLoading from '../Loading/CircularLoading';
 import "../../Modal.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
@@ -34,58 +35,38 @@ const ShowEventDetails = () => {
   const [params, setParams] = useState(type.split('/'));
   const [isSuccess, setSuccess] = useState(false);
   const [inquery, setInquery] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [buttonClick, setButtonClick] = useState(null);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [eventDetails, setEventDetails] = useState();
   const [pickupPoints, setPickupPoints] = useState([]);
   const [pickupPointsfromMumbai, setPickupPointsfromMumbai] = useState([]);
   const [b2bLocation, setB2bLocation] = useState();
-  const [finalPrice, setFinalPrice] = useState(0);
-  const [actualPrice, setActualPrice] = useState(0);
-  const [convenienceFee, setConvenienceFee] = useState(0);
-  const [scheduleBatch, setScheduleBatch] = useState();
-  const [availableBatches, setAvailableBatches] = useState();
   const [price, setPrice] = useState(0);
   const [batchDate, setBatchDate] = useState();
-  const [maxBooking, setMaxBooking] = useState();
-  const [bookedSlot, setBookedSlot] = useState();
-  const [bookingPhone, setBookingPhone] = useState();
   const [eventType, setEventType] = useState();
   const [currentEventId, setCurrentEventId] = useState();
   const [selectDate, setSelectDate] = useState();
+  const [bookingPhone , setBookingPhone]  = useState();
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
-  const [modal, setModal] = useState(false);
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
-  const [selectedBatch, setSelectedbatch] = useState(null);
-  const [bookingId, setBookingId] = useState(null);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [coupons, setCoupons] = useState([]);
-  const [discount, setDiscount] = useState(-1);
   const [discountAvailable, setDiscountAvailable] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [finalBatchesList, setFinalBatchesList] = useState();
-  const [errorMessageforNext, setErrorMessageforNext] = useState(false);
-  const [isLoadingMSG, setIsLoadingMSG] = useState(false);
   const [showLocations, setShowLocations] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const handleSelectDate = (option) => {
     setSelectDate(option.target.value);
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == option.target.value);
     setSelectedStartDate(foundRecord.eventStartDate);
     setSelectedEndDate(foundRecord.eventEndDate);
-    setSelectedbatch(foundRecord);
-
   }
-
-  const handleToggleBreakup = () => {
-    setShowBreakup((prev) => !prev);
-  };
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -97,73 +78,51 @@ const ShowEventDetails = () => {
     return isWeekendDay(date);
   }
 
-  
-  if (modal) {
-    document.body.classList.add('active-modal')
-  } else {
-    document.body.classList.remove('active-modal')
-  }
-
   const {
     register,
     handleSubmit,
-    setError,
-    clearErrors,
-    setValue,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm();
 
 
   const onSubmit = async (data) => {
 
-    setIsLoading(true); // Set loading to true before starting the request
     try {
-    
-        const formData = new FormData();
-        setBookingPhone(data.whatsappNumber);
-        formData.append("fullName", data.fullName);
-        formData.append("email", data.emailId);
-        formData.append("mobileNumber", data.whatsappNumber);
-        formData.append("batch", selectDate);
-        formData.append("eventId", eventDetails.eventId);
-        formData.append("eventName", eventDetails.name);
-        const today = new Date();
-        formData.append("bookingDate", today);
-        formData.append("eventPrice", price);
-        if (selectedStartDate) {
-          formData.append("eventStartDate", selectedStartDate);
-        }
-        if (selectedEndDate) {
-          formData.append("eventEndDate", selectedEndDate);
-        }
-        let r = await fetch(`${apiUrl}booking`, {
-          method: "POST",
-          body: formData,
-        });
+      setBookingPhone(data.whatsappNumber);
+      const formData = new FormData();
+      formData.append("fullName", data.fullName);
+      formData.append("email", data.emailId);
+      formData.append("mobileNumber", data.whatsappNumber);
+      formData.append("batch", selectDate);
+      formData.append("eventId", eventDetails.eventId);
+      formData.append("eventName", eventDetails.name);
+      const today = new Date();
+      formData.append("bookingDate", today);
+      formData.append("eventPrice", price);
+      if (selectedStartDate) {
+        formData.append("eventStartDate", selectedStartDate);
+      }
+      if (selectedEndDate) {
+        formData.append("eventEndDate", selectedEndDate);
+      }
+      let r = await fetch(`${apiUrl}booking`, {
+        method: "POST",
+        body: formData,
+      });
 
-        let res = await r.json()
+      let res = await r.json()
 
-        if (res.isSuccess == true) {
-          console.log('res.booking.bookingId',res.booking.bookingId);
-          setButtonClick('confirm-details');
-          //setButtonClick('pay-now');
-          setBookingId(res.booking.bookingId);
-          handleNavigate(res.booking.bookingId);
-        }
-      
+      if (res.isSuccess == true) {
+        console.log('res.booking.bookingId', res.booking.bookingId);
+        setButtonClick('confirm-details');
+        handleNavigate(res.booking.bookingId);
+      }
+
     } catch (error) {
       console.error('Error during booking:', error);
       // Optionally, show an error message to the user
-    } finally {
-      setIsLoading(false); // Reset loading to false after the request is complete
-    }
+    } 
   }
-  
-  const onAutoplayTimeLeft = (s, time, progress) => {
-    // progressCircle.current.style.setProperty('--progress', 1 - progress);
-    // progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
-  };
 
   const displayList = (data) => {
     var splitedList;
@@ -178,9 +137,6 @@ const ShowEventDetails = () => {
   }
 
   const getNextBatchDate = async (event) => {
-
-    
-    setIsLoadingMSG(true); // Start loading
     let batchdate;
     let batchSize = -1;
     let bookedSize = 0;
@@ -250,7 +206,7 @@ const ShowEventDetails = () => {
         thirdAcUpgrate = 0;
         thirdAcUpgrateNote = '';
         note = '';
-      
+
         if (new Date(event[index].eventStartDate) - Q >= 0 && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
           batchdate = new Date(event[index].eventStartDate).getDate() + ' ' + months[new Date(event[index].eventStartDate).getMonth()] + ' - ' + new Date(event[index].eventEndDate).getDate() + ' ' + months[new Date(event[index].eventEndDate).getMonth()] + ' ' + new Date(event[index].eventStartDate).getFullYear();
           eventCostPerPerson = event[index]?.eventCostPerPerson;
@@ -272,7 +228,7 @@ const ShowEventDetails = () => {
 
         } else if (event[index].everyWeekend == true && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
           batchdate = 'Available On All Weekends';
-          console.log('---event['+index+']---',event[index]);
+          console.log('---event[' + index + ']---', event[index]);
           eventCostPerPerson = event[index]?.eventCostPerPerson;
           eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
           b2bPrice = event[index]?.b2bPrice;
@@ -289,7 +245,7 @@ const ShowEventDetails = () => {
           setEveryWeekend(true);
         } else if (event[index].notScheduleYet == true) {
           batchdate = 'On Demand';
-          console.log('---event['+index+']---',event[index]);
+          console.log('---event[' + index + ']---', event[index]);
           setInquery(true);
           eventCostPerPerson = event[index]?.eventCostPerPerson;
           eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
@@ -305,7 +261,7 @@ const ShowEventDetails = () => {
           thirdAcUpgrateNote = event[index]?.thirdAcUpgrateNote;
           note = event[index]?.note;
         }
-        console.log('--batchSize---',batchSize);
+        console.log('--batchSize---', batchSize);
         if (batchSize > 0 && eventCostPerPerson > 0 && batchdate != '') {
 
           batchesList.push({
@@ -349,44 +305,23 @@ const ShowEventDetails = () => {
     console.log('batchesList--', batchesList);
     let currentbatch = batchesList.find(batch => batch['eventId'] == currentEventId);
     if (currentbatch) {
-      let convenienceFeePerPerson = currentbatch.eventCostPerPerson * 0.015;
-      convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
-      //console.log('here', currentbatch);
       if (batchDates.length > 0 && currentbatch.batchdate != 'Available On All Weekends') {
         setSelectedDate(currentbatch.batchdate);
-        setSelectedbatch(currentbatch);
       }
-      setAvailableBatches(batchDates);
       setBatchDate(currentbatch.batchdate);
-      setMaxBooking(currentbatch.batchSize);
-      setBookedSlot(currentbatch.bookedSize);
-      setFinalPrice(Number(currentbatch.eventCostPerPerson));
-      setConvenienceFee(convenienceFeePerPerson);
-      setActualPrice(Number(currentbatch.eventCostPerPerson));
       setPrice(currentbatch.eventCostPerPerson);
-      setErrorMessageforNext(false);
     } else if (batchesList.length > 0) {
-      let convenienceFeePerPerson = batchesList[0].eventCostPerPerson * 0.015;
-      convenienceFeePerPerson = convenienceFeePerPerson.toFixed(2);
+      
       if (batchDates.length > 0 && batchesList[0].batchdate != 'Available On All Weekends') {
         setSelectedDate(batchesList[0].batchdate);
       }
-      setAvailableBatches(batchDates);
       setBatchDate(batchesList[0].batchdate);
-      setMaxBooking(batchesList[0].batchSize);
-      setBookedSlot(batchesList[0].bookedSize);
-      setFinalPrice(Number(batchesList[0].eventCostPerPerson));
-      setConvenienceFee(convenienceFeePerPerson);
-      setActualPrice(Number(batchesList[0].eventCostPerPerson));
       setPrice(batchesList[0].eventCostPerPerson);
-      setErrorMessageforNext(true);
       setButtonDisabled(false);
       setSelectDate(batchesList[0].batchdate);
       setSelectedStartDate(batchesList[0].eventStartDate);
       setSelectedEndDate(batchesList[0].eventEndDate);
-      setSelectedbatch(batchesList[0]);
     }
-    setIsLoadingMSG(false); // Start loading
   }
 
   useEffect(() => {
@@ -413,6 +348,7 @@ const ShowEventDetails = () => {
   }
 
   const getAllRecord = async () => {
+    setLoading(true);
     let r = await fetch(`${apiUrl}event-details/eventid/${params[0]}/${params[1]}`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
@@ -421,9 +357,9 @@ const ShowEventDetails = () => {
     setCurrentEventId(params[0]);
     let res = await r.json()
     if (res.isSuccess == true) {
+      setLoading(false);
       setSuccess(true);
       setEventDetails(res.events);
-      setScheduleBatch(res.ScheduleBatchesRecords);
       getNextBatchDate(res.ScheduleBatchesRecords);
       if (res.ScheduleBatchesRecords.alreadyBoockedCount >= res.ScheduleBatchesRecords.eventBatchCount) {
         setButtonDisabled(true);
@@ -471,6 +407,7 @@ const ShowEventDetails = () => {
         pickupPointsfromMumbai: pickupPointsfromMumbai,
         selectedDate: selectedDate,
         isSuccess: true,
+        bookingPhone:bookingPhone,
         bookingId: bookingIdVar,
         discountAvailable: discountAvailable,
         coupons: coupons
@@ -523,7 +460,6 @@ const ShowEventDetails = () => {
           }}
 
           modules={[Autoplay, Pagination, Navigation]}
-          onAutoplayTimeLeft={onAutoplayTimeLeft}
         >
           {isSuccess && eventDetails.images.map((event, index) => (
 
@@ -536,485 +472,489 @@ const ShowEventDetails = () => {
 
         </Swiper>
       </div>
-
-      {isSuccess &&
-        <div>
-          <div className="content-row row2">
-            <div>
-              <nav id="navbar-example2" className="nav-color d-none d-md-none d-lg-block panel-heading tab-bg-info px-2 ">
-                <ul className="nav nav-tabs">
-                  <li >
-                    <a className="nav-link" href="#scrollspyHeading1"> OVERVIEW </a>
-                  </li>
-                  <li >
-                    <a className="nav-link" href="#scrollspyHeading2"> ITINERARY </a>
-                  </li>
-                  <li >
-                    <a className="nav-link" href="#scrollspyHeading3"> HIGHLIGHTS </a>
-                  </li>
-                  <li >
-                    <a className="nav-link" href="#scrollspyHeading4"> COST INCLUDES </a>
-                  </li>
-                  {eventType != 'CampingEvent' && <li >
-                    <a className="nav-link" href="#scrollspyHeading6"> PICKUP POINTS </a>
-                  </li>
-                  }
-                </ul>
-              </nav>
-              <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example  p-3 rounded-2" tabindex="0">
-                <div id="scrollspyHeading1" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Overview</h2>
-                  <p>{eventDetails.eventDetails}</p>
-                  <br />
-                  <table className="event-details-table">
-                    <tbody>
-                      {/* Upcoming Batches */}
-                      <tr >
-                        <td className="tag-flex">
-                          <FontAwesomeIcon
-                            icon={faCalendarDays}
-                            size="lg"
-                            style={{ color: 'orange' }}
-                          />
-                          <span className="section-details-tag" style={{ marginTop: '-1px' }}>
-                            Upcoming Batch:
-                          </span>
-                        </td>
-                      </tr> <tr>
-                        <td >
-                          <div className="section-details">
-                            <ul className="display-bulletin">
-                              {finalBatchesList && finalBatchesList.map((event, index) => (
-                                <li key={index}><b>{event.batchdate}</b></li>
-                              ))}
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-
-                      {/* Total Distance From */}
-                      {eventDetails.totalDistance && (
-                        <tr>
+      {loading ? (
+        <CircularLoading />
+      ) : (<>
+        {isSuccess &&
+          <div>
+            <div className="content-row row2">
+              <div>
+                <nav id="navbar-example2" className="nav-color d-none d-md-none d-lg-block panel-heading tab-bg-info px-2 ">
+                  <ul className="nav nav-tabs">
+                    <li >
+                      <a className="nav-link" href="#scrollspyHeading1"> OVERVIEW </a>
+                    </li>
+                    <li >
+                      <a className="nav-link" href="#scrollspyHeading2"> ITINERARY </a>
+                    </li>
+                    <li >
+                      <a className="nav-link" href="#scrollspyHeading3"> HIGHLIGHTS </a>
+                    </li>
+                    <li >
+                      <a className="nav-link" href="#scrollspyHeading4"> COST INCLUDES </a>
+                    </li>
+                    {eventType != 'CampingEvent' && <li >
+                      <a className="nav-link" href="#scrollspyHeading6"> PICKUP POINTS </a>
+                    </li>
+                    }
+                  </ul>
+                </nav>
+                <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example  p-3 rounded-2" tabindex="0">
+                  <div id="scrollspyHeading1" className='pt-4 pb-1 px-2'>
+                    <h2 className="h3"> Overview</h2>
+                    <p>{eventDetails.eventDetails}</p>
+                    <br />
+                    <table className="event-details-table">
+                      <tbody>
+                        {/* Upcoming Batches */}
+                        <tr >
                           <td className="tag-flex">
                             <FontAwesomeIcon
-                              icon={faLocationDot}
+                              icon={faCalendarDays}
                               size="lg"
                               style={{ color: 'orange' }}
                             />
                             <span className="section-details-tag" style={{ marginTop: '-1px' }}>
-                              Total Distance:
+                              Upcoming Batch:
                             </span>
                           </td>
-                          <td className="section-details">
-                            <p>{eventDetails.totalDistance}</p>
+                        </tr> <tr>
+                          <td >
+                            <div className="section-details">
+                              <ul className="display-bulletin">
+                                {finalBatchesList && finalBatchesList.map((event, index) => (
+                                  <li key={index}><b>{event.batchdate}</b></li>
+                                ))}
+                              </ul>
+                            </div>
                           </td>
                         </tr>
-                      )}
-                    </tbody>
-                  </table>
 
-                  <br />
-                  <h2 className="h3"> About {eventDetails.name}</h2>
-                  <div>
-                    <table className="event-details-table">
-                      <tbody>
-                        {eventDetails.location && (
-                          <tr >
-                            <td className="tag-flex">
-                              <img
-                                src={locationicon}
-                                alt="Location icon"
-                                crossOrigin="anonymous"
-                              />
-                              <span className="section-details-tag"> Location :</span>
-                            </td>
-                            <td className="section-details">
-                              <p>{eventDetails.location}</p>
-                            </td>
-                          </tr>
-                        )}
-                        {eventDetails.type && (
-                          <tr >
-                            <td className="tag-flex">
-                              <img src={tripType} alt="Type icon" crossOrigin="anonymous" />
-                              <span className="section-details-tag"> Type :</span>
-                            </td>
-                            <td className="section-details">
-                              <p>{eventDetails.type}</p>
-                            </td>
-                          </tr>
-                        )}
-                        {eventDetails.elevation && (
-                          <tr >
+                        {/* Total Distance From */}
+                        {eventDetails.totalDistance && (
+                          <tr>
                             <td className="tag-flex">
                               <FontAwesomeIcon
-                                icon={faMountainSun}
+                                icon={faLocationDot}
                                 size="lg"
-                                style={{ color: "orange" }}
+                                style={{ color: 'orange' }}
                               />
-                              <span className="section-details-tag"> Elevation :</span>
+                              <span className="section-details-tag" style={{ marginTop: '-1px' }}>
+                                Total Distance:
+                              </span>
                             </td>
                             <td className="section-details">
-                              <p>{eventDetails.elevation}</p>
-                            </td>
-                          </tr>
-                        )}
-                        {eventDetails.difficulty && (
-                          <tr >
-                            <td className="tag-flex">
-                              <img src={endurance} alt="Difficulty icon" crossOrigin="anonymous" />
-                              <span className="section-details-tag"> Difficulty :</span>
-                            </td>
-                            <td className="section-details">
-                              <p>{eventDetails.difficulty}</p>
-                            </td>
-                          </tr>
-                        )}
-                        {eventDetails.duration && (
-                          <tr >
-                            <td className="tag-flex">
-                              <img src={duration} alt="Duration icon" crossOrigin="anonymous" />
-                              <span className="section-details-tag"> Duration :</span>
-                            </td>
-                            <td className="section-details">
-                              <p>{eventDetails.duration}</p>
-                            </td>
-                          </tr>
-                        )}
-                        {eventDetails.trekDistance && (
-                          <tr >
-                            <td className="tag-flex">
-                              <img
-                                src={distance}
-                                alt="Distance icon"
-                                crossOrigin="anonymous"
-                              />
-                              <span className="section-details-tag">Trek Distance :</span>
-                            </td>
-                            <td className="section-details">
-                              <p>{eventDetails.trekDistance}</p>
+                              <p>{eventDetails.totalDistance}</p>
                             </td>
                           </tr>
                         )}
                       </tbody>
                     </table>
+
+                    <br />
+                    <h2 className="h3"> About {eventDetails.name}</h2>
+                    <div>
+                      <table className="event-details-table">
+                        <tbody>
+                          {eventDetails.location && (
+                            <tr >
+                              <td className="tag-flex">
+                                <img
+                                  src={locationicon}
+                                  alt="Location icon"
+                                  crossOrigin="anonymous"
+                                />
+                                <span className="section-details-tag"> Location :</span>
+                              </td>
+                              <td className="section-details">
+                                <p>{eventDetails.location}</p>
+                              </td>
+                            </tr>
+                          )}
+                          {eventDetails.type && (
+                            <tr >
+                              <td className="tag-flex">
+                                <img src={tripType} alt="Type icon" crossOrigin="anonymous" />
+                                <span className="section-details-tag"> Type :</span>
+                              </td>
+                              <td className="section-details">
+                                <p>{eventDetails.type}</p>
+                              </td>
+                            </tr>
+                          )}
+                          {eventDetails.elevation && (
+                            <tr >
+                              <td className="tag-flex">
+                                <FontAwesomeIcon
+                                  icon={faMountainSun}
+                                  size="lg"
+                                  style={{ color: "orange" }}
+                                />
+                                <span className="section-details-tag"> Elevation :</span>
+                              </td>
+                              <td className="section-details">
+                                <p>{eventDetails.elevation}</p>
+                              </td>
+                            </tr>
+                          )}
+                          {eventDetails.difficulty && (
+                            <tr >
+                              <td className="tag-flex">
+                                <img src={endurance} alt="Difficulty icon" crossOrigin="anonymous" />
+                                <span className="section-details-tag"> Difficulty :</span>
+                              </td>
+                              <td className="section-details">
+                                <p>{eventDetails.difficulty}</p>
+                              </td>
+                            </tr>
+                          )}
+                          {eventDetails.duration && (
+                            <tr >
+                              <td className="tag-flex">
+                                <img src={duration} alt="Duration icon" crossOrigin="anonymous" />
+                                <span className="section-details-tag"> Duration :</span>
+                              </td>
+                              <td className="section-details">
+                                <p>{eventDetails.duration}</p>
+                              </td>
+                            </tr>
+                          )}
+                          {eventDetails.trekDistance && (
+                            <tr >
+                              <td className="tag-flex">
+                                <img
+                                  src={distance}
+                                  alt="Distance icon"
+                                  crossOrigin="anonymous"
+                                />
+                                <span className="section-details-tag">Trek Distance :</span>
+                              </td>
+                              <td className="section-details">
+                                <p>{eventDetails.trekDistance}</p>
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-                <hr />
-                <div id="scrollspyHeading2" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Itinerary</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.itinerary) }} />
-                </div>
-                <hr />
-                {eventDetails.highlights != '' && eventDetails.highlights != 'undefined' &&
-                  <div id="scrollspyHeading3" className='pt-4 pb-1 px-2'>
-                    <h2 className="h3"> Highlights</h2>
-                    <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.highlights) }} />
+                  <hr />
+                  <div id="scrollspyHeading2" className='pt-4 pb-1 px-2'>
+                    <h2 className="h3"> Itinerary</h2>
+                    <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.itinerary) }} />
                   </div>
-                }
-                <hr />
-                <div id="scrollspyHeading4" className='pt-4 pb-1 px-2'>
-                  <h2 className="h3"> Cost Includes</h2>
-                  <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.costIncludes) }} />
-                </div>
-                <hr />
-                <div id="scrollspyHeading4" className="pt-4 pb-1 px-2">
-                  <h2 className="h3">Cost Excludes </h2>
-                  {eventDetails.costExcludes &&
-                    <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.costExcludes) }} />}
-                  {!eventDetails.costExcludes &&
-                    <div className="section-details">
-                      <ul className="display-bulletin">
-                        <li>Anything not mentioned above</li>
-                        <li>Mineral water/lime water/purchased for personal consumption</li>
-                        <li>All expenses incurred due to unforeseen and unavailable circumstances like roadblocks, bad weather</li>
-                        <li>Any medical/ Emergency evacuations if required</li>
-                      </ul>
+                  <hr />
+                  {eventDetails.highlights != '' && eventDetails.highlights != 'undefined' &&
+                    <div id="scrollspyHeading3" className='pt-4 pb-1 px-2'>
+                      <h2 className="h3"> Highlights</h2>
+                      <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.highlights) }} />
                     </div>
                   }
-                </div><hr />
-                {eventType != 'CampingEvent' &&
-                  <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
-                    <h2 className="h3"> Pickup Points : </h2>
-                    <div className='margin-location'>
-                      {b2bLocation &&
-                        <div className="section-details" >
-                          <h2 > <b>Base to Base : </b></h2>
-                          <ul className="display-bulletin"><li>{b2bLocation} </li>
-                          </ul>
-                        </div>
-                      }
-                      <br />
-                      <h2 > <b>Pickup Points from Pune :</b> </h2>
-                      <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
-                      <br />
-                      {eventDetails.pickupPointsfromMumbai &&
-                        <div>
-                          <h2 > <b>Pickup Points from Mumbai :</b> </h2>
-                          <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPointsfromMumbai) }} />
-                        </div>
-                      }
-                    </div>
+                  <hr />
+                  <div id="scrollspyHeading4" className='pt-4 pb-1 px-2'>
+                    <h2 className="h3"> Cost Includes</h2>
+                    <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.costIncludes) }} />
                   </div>
-                }
-                <hr />
-                {discountAvailable && <div>
-
-                  <MinimalCoupons coupons={coupons} />
-                </div>
-                }
-                <div>
-                  <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
-                    <h2 className="h3">THINGS TO KNOW</h2>
-                  </div>
-                  <CollapsibleSection title="THINGS TO CARRY">
-                    {eventDetails.thingsToCarry &&
-                      <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.thingsToCarry) }} />}
-                    {!eventDetails.thingsToCarry && <ul className="display-bulletin-collaps">
-                      <li>Torch (optional)</li>
-                      <li>Please wear full pants and full sleeves t-shirts to protect from tanning, thorns, insects during the trek</li>
-                      <li>Snacks (Energy bars, Chikki, Biscuits, Sprouts, Chips, Dry fruits)</li>
-                      <li>Glucon D/Protein shakes/ORS</li>
-                      <li>Extra pair of clothes</li>
-                      <li>2/3 litres of water (Mandatory)</li>
-                      <li>Any personal medicines</li>
-                      <li>Good grip trekking shoes</li>
-                      <li>Suncap & Sunscreen</li>
-                      <li>Rain are expected so please carry a raincover / Jacket & cover your phones also in a plastic cover</li>
-                    </ul>
+                  <hr />
+                  <div id="scrollspyHeading4" className="pt-4 pb-1 px-2">
+                    <h2 className="h3">Cost Excludes </h2>
+                    {eventDetails.costExcludes &&
+                      <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.costExcludes) }} />}
+                    {!eventDetails.costExcludes &&
+                      <div className="section-details">
+                        <ul className="display-bulletin">
+                          <li>Anything not mentioned above</li>
+                          <li>Mineral water/lime water/purchased for personal consumption</li>
+                          <li>All expenses incurred due to unforeseen and unavailable circumstances like roadblocks, bad weather</li>
+                          <li>Any medical/ Emergency evacuations if required</li>
+                        </ul>
+                      </div>
                     }
-                  </CollapsibleSection>
-
-                  <CollapsibleSection title="TERMS AND CONDITIONS">
-
-                    <ul className="display-bulletin-collaps">
-                      <li>You will have to pay full amount of that event before departure, without it your booking will not be confirmed.</li>
-                      <li>The advance amount paid would not be refunded in any case, except if the trek/tour departure is cancelled by our side.</li>
-                      <li>Please confirm seats availability on call before paying any amount.</li>
-                      <li>Make sure you are added in the WhatsApp group 6-8 hours prior to the trip for all the details.</li>
-                      <li>Food and Stay arrangements are as per the availability of that locations.Kindly don't expect it too luxurious.</li>
-                      <li>Backpacking treks/trips are are arranged for the people who are looking for pocket friendly trips,They are more about chasing experiences.</li>
-                      <li>We need at least 12-14 travelers to run that particular event, if batch size is not enough then Organisors have all right to Collabe with other Travel companies,Postpone or Cancel the event.; .</li>
-                      <li>A waiver/consent form must be filled before departure.</li>
-                      <li>Your payment implies that you have read and accept our terms and conditions.</li>
-                    </ul>
-
-                  </CollapsibleSection>
-
-                  <CollapsibleSection title="CANCELLATION POLICY">
-
-                    <ul className="display-bulletin-collaps">
-                      <li>75% refund if notified 8 or more days before the event.</li>
-                      <li>50% refund if notified 4 to 7 days before the event.</li>
-                      <li>No refund if less than 3 days before the event.</li>
-                      <li>No-show results in no refund.</li>
-                      <li>Event tickets cannot be transferred to another date.</li>
-                      <li>Tickets can be transferred to another person for the same event only.</li>
-                      <li>If the trek is cancelled, only the trek amount will be refunded.</li>
-                    </ul>
-                  </CollapsibleSection>
-
-                  <CollapsibleSection title="FAQ's">
-                    {eventDetails.FAQ &&
-                      <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.FAQ) }} />}
-                    {!eventDetails.FAQ && (
-                      <ol className="display-bulletin-collaps">
-                        <li><b>What type of bus is provided?</b> <br></br> A NON-AC Tempo Traveller/ 32 seater bus are used with descent seating comfort.</li>
-                        <li><b>Can I cancel my booking?</b> <br></br> Please refer the cancellation policy.</li>
-                        <li><b>How many trek leaders will be available?</b><br></br> There will be 1 trek leader for every 8-10 people.</li>
-                        <li><b>How do I get in touch with trek leaders?</b><br></br>  We add participants to a WhatsApp group 5-6 hours prior to the event to provide further details.</li>
-                        <li><b>What is prohibited on this trek?</b> <br></br> Smoking, drinking, and loud music are prohibited.</li>
-                        <li><b>Are changing rooms provided?</b> <br></br> Separate changing rooms are there as per availability on that location.</li>
-                        <li><b>Are washrooms available?</b><br></br>  Washrooms are available at the base village only.</li>
-                        <li><b>Is the trek safe for girls?</b><br></br>  Yes,This trek is absolutely safe for girls.We have seprate female volunteer to take care of them</li>
-                        <li><b>Is there a way to charge my phone ?</b> <br></br> There is no electricity,You can bring a power bank with you.</li>
-                        <li><b>Can I come alone ?</b> <br></br> Yes,You can join as a Solo Traveller.</li>
-                        <li><b>Waht about extra baggage ?</b> <br></br> You can safely keep your bags in bus.</li>
-                        <li><b>Can I join this trek if I have no prior trekking experience ?</b> <br></br> You can contact us before booking ,Our team will assist you regarding difficulty level.</li>
-                      </ol>
-                    )}
-
-                  </CollapsibleSection>
-                </div>
-              </div>
-            </div>
-            <div className="content-right-side col-sm-12 col-md-4  col-lg-4 col-xl-4 ">
-              <div className="container sticky-top" >
-                <div className="justify-content-md-center">
-                  <div className="col-lg-12 d-none d-md-none d-lg-block">
-                    <div className="booking-card mb-3 " >
-                      <div className="card-body text-dark">
-                        <h4 className="card-title"><center>
-                          <b className='event-price'>₹{price} /- </b>
-                          <sub >Per Person</sub>
-                        </center>
-                        </h4>
-                        {buttonDisabled &&
-                          <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
-                        }
-                        {!inquery && !buttonDisabled && <> <div>
-                          <center> {batchDate} </center></div>
-
-                          <div className="button-margin button">
-                            <input disabled={buttonDisabled} onClick={handleShow} type="submit" value="BOOK NOW" />
-                          </div></>
-                        }
-
-                        {buttonDisabled &&
-                          <div className="button-margin button">
-                            <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
-                          </div>
-                        }
-                        {inquery &&
-                          <div>
-                            {/* <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website , please contact us directly.</p> */}
-
-                            <div className="button-margin button">
-                              <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
-                            </div>
+                  </div><hr />
+                  {eventType != 'CampingEvent' &&
+                    <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
+                      <h2 className="h3"> Pickup Points : </h2>
+                      <div className='margin-location'>
+                        {b2bLocation &&
+                          <div className="section-details" >
+                            <h2 > <b>Base to Base : </b></h2>
+                            <ul className="display-bulletin"><li>{b2bLocation} </li>
+                            </ul>
                           </div>
                         }
                         <br />
-                        <div className='card-info'><FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Best Price Guaranteed <br /> <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Secure & Easy Booking
-                          <br />
-                          <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> 8000+ Happy Customers</div>
+                        <h2 > <b>Pickup Points from Pune :</b> </h2>
+                        <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
+                        <br />
+                        {eventDetails.pickupPointsfromMumbai &&
+                          <div>
+                            <h2 > <b>Pickup Points from Mumbai :</b> </h2>
+                            <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPointsfromMumbai) }} />
+                          </div>
+                        }
                       </div>
                     </div>
+                  }
+                  <hr />
+                  {discountAvailable && <div>
+
+                    <MinimalCoupons coupons={coupons} />
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="d-sm-block d-md-none d-lg-none fixed-bottom">
-            <div className="booking-card-mb mb-0 " style={{ "width": "100%;" }}>
-              <div className="card-body text-dark">
-                <div className="booking-section d-flex justify-content-between align-items-center">
-                  <h4 className="card-title"><center>
-                    <b className='event-price'>₹{price} /- </b>
-                    <sub >Per Person</sub>
-                  </center>
-                  </h4>
+                  }
                   <div>
-                    <center> {batchDate} </center>
+                    <div id="scrollspyHeading6" className='pt-4 pb-1 px-2'>
+                      <h2 className="h3">THINGS TO KNOW</h2>
+                    </div>
+                    <CollapsibleSection title="THINGS TO CARRY">
+                      {eventDetails.thingsToCarry &&
+                        <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.thingsToCarry) }} />}
+                      {!eventDetails.thingsToCarry && <ul className="display-bulletin-collaps">
+                        <li>Torch (optional)</li>
+                        <li>Please wear full pants and full sleeves t-shirts to protect from tanning, thorns, insects during the trek</li>
+                        <li>Snacks (Energy bars, Chikki, Biscuits, Sprouts, Chips, Dry fruits)</li>
+                        <li>Glucon D/Protein shakes/ORS</li>
+                        <li>Extra pair of clothes</li>
+                        <li>2/3 litres of water (Mandatory)</li>
+                        <li>Any personal medicines</li>
+                        <li>Good grip trekking shoes</li>
+                        <li>Suncap & Sunscreen</li>
+                        <li>Rain are expected so please carry a raincover / Jacket & cover your phones also in a plastic cover</li>
+                      </ul>
+                      }
+                    </CollapsibleSection>
+
+                    <CollapsibleSection title="TERMS AND CONDITIONS">
+
+                      <ul className="display-bulletin-collaps">
+                        <li>You will have to pay full amount of that event before departure, without it your booking will not be confirmed.</li>
+                        <li>The advance amount paid would not be refunded in any case, except if the trek/tour departure is cancelled by our side.</li>
+                        <li>Please confirm seats availability on call before paying any amount.</li>
+                        <li>Make sure you are added in the WhatsApp group 6-8 hours prior to the trip for all the details.</li>
+                        <li>Food and Stay arrangements are as per the availability of that locations.Kindly don't expect it too luxurious.</li>
+                        <li>Backpacking treks/trips are are arranged for the people who are looking for pocket friendly trips,They are more about chasing experiences.</li>
+                        <li>We need at least 12-14 travelers to run that particular event, if batch size is not enough then Organisors have all right to Collabe with other Travel companies,Postpone or Cancel the event.; .</li>
+                        <li>A waiver/consent form must be filled before departure.</li>
+                        <li>Your payment implies that you have read and accept our terms and conditions.</li>
+                      </ul>
+
+                    </CollapsibleSection>
+
+                    <CollapsibleSection title="CANCELLATION POLICY">
+
+                      <ul className="display-bulletin-collaps">
+                        <li>75% refund if notified 8 or more days before the event.</li>
+                        <li>50% refund if notified 4 to 7 days before the event.</li>
+                        <li>No refund if less than 3 days before the event.</li>
+                        <li>No-show results in no refund.</li>
+                        <li>Event tickets cannot be transferred to another date.</li>
+                        <li>Tickets can be transferred to another person for the same event only.</li>
+                        <li>If the trek is cancelled, only the trek amount will be refunded.</li>
+                      </ul>
+                    </CollapsibleSection>
+
+                    <CollapsibleSection title="FAQ's">
+                      {eventDetails.FAQ &&
+                        <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.FAQ) }} />}
+                      {!eventDetails.FAQ && (
+                        <ol className="display-bulletin-collaps">
+                          <li><b>What type of bus is provided?</b> <br></br> A NON-AC Tempo Traveller/ 32 seater bus are used with descent seating comfort.</li>
+                          <li><b>Can I cancel my booking?</b> <br></br> Please refer the cancellation policy.</li>
+                          <li><b>How many trek leaders will be available?</b><br></br> There will be 1 trek leader for every 8-10 people.</li>
+                          <li><b>How do I get in touch with trek leaders?</b><br></br>  We add participants to a WhatsApp group 5-6 hours prior to the event to provide further details.</li>
+                          <li><b>What is prohibited on this trek?</b> <br></br> Smoking, drinking, and loud music are prohibited.</li>
+                          <li><b>Are changing rooms provided?</b> <br></br> Separate changing rooms are there as per availability on that location.</li>
+                          <li><b>Are washrooms available?</b><br></br>  Washrooms are available at the base village only.</li>
+                          <li><b>Is the trek safe for girls?</b><br></br>  Yes,This trek is absolutely safe for girls.We have seprate female volunteer to take care of them</li>
+                          <li><b>Is there a way to charge my phone ?</b> <br></br> There is no electricity,You can bring a power bank with you.</li>
+                          <li><b>Can I come alone ?</b> <br></br> Yes,You can join as a Solo Traveller.</li>
+                          <li><b>Waht about extra baggage ?</b> <br></br> You can safely keep your bags in bus.</li>
+                          <li><b>Can I join this trek if I have no prior trekking experience ?</b> <br></br> You can contact us before booking ,Our team will assist you regarding difficulty level.</li>
+                        </ol>
+                      )}
+
+                    </CollapsibleSection>
                   </div>
                 </div>
-                {buttonDisabled &&
-                  <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
-                }
-                {inquery && <div>
-                  <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website, please contact us directly.</p>
-                </div>
-                }
-                <div className="button-edit-container">
-                  <div className="button button-margin ">
-                    {!inquery && !buttonDisabled &&
-                      <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
-                    }
+              </div>
+              <div className="content-right-side col-sm-12 col-md-4  col-lg-4 col-xl-4 ">
+                <div className="container sticky-top" >
+                  <div className="justify-content-md-center">
+                    <div className="col-lg-12 d-none d-md-none d-lg-block">
+                      <div className="booking-card mb-3 " >
+                        <div className="card-body text-dark">
+                          <h4 className="card-title"><center>
+                            <b className='event-price'>₹{price} /- </b>
+                            <sub >Per Person</sub>
+                          </center>
+                          </h4>
+                          {buttonDisabled &&
+                            <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
+                          }
+                          {!inquery && !buttonDisabled && <> <div>
+                            <center> {batchDate} </center></div>
 
-                    {inquery &&
-                      <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
-                    }
-                    <button type="button"><a href="tel:07028740961"> <strong>&nbsp;CALL NOW </strong></a> </button>
+                            <div className="button-margin button">
+                              <input disabled={buttonDisabled} onClick={handleShow} type="submit" value="BOOK NOW" />
+                            </div></>
+                          }
+
+                          {buttonDisabled &&
+                            <div className="button-margin button">
+                              <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                            </div>
+                          }
+                          {inquery &&
+                            <div>
+                              {/* <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website , please contact us directly.</p> */}
+
+                              <div className="button-margin button">
+                                <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                              </div>
+                            </div>
+                          }
+                          <br />
+                          <div className='card-info'><FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Best Price Guaranteed <br /> <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> Secure & Easy Booking
+                            <br />
+                            <FontAwesomeIcon icon={faSun} size="xs" style={{ color: "gray", }} /> 8000+ Happy Customers</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="d-sm-block d-md-none d-lg-none fixed-bottom">
+              <div className="booking-card-mb mb-0 " style={{ "width": "100%;" }}>
+                <div className="card-body text-dark">
+                  <div className="booking-section d-flex justify-content-between align-items-center">
+                    <h4 className="card-title"><center>
+                      <b className='event-price'>₹{price} /- </b>
+                      <sub >Per Person</sub>
+                    </center>
+                    </h4>
+                    <div>
+                      <center> {batchDate} </center>
+                    </div>
+                  </div>
+                  {buttonDisabled &&
+                    <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
+                  }
+                  {inquery && <div>
+                    <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website, please contact us directly.</p>
+                  </div>
+                  }
+                  <div className="button-edit-container">
+                    <div className="button button-margin ">
+                      {!inquery && !buttonDisabled &&
+                        <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
+                      }
+
+                      {inquery &&
+                        <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
+                      }
+                      <button type="button"><a href="tel:07028740961"> <strong>&nbsp;CALL NOW </strong></a> </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      }
-      <div>
-        {isSuccess &&
-          <div className='add-Scroller'>
-            <Modal show={show} onHide={handleClose}>
-              <form action="" onSubmit={handleSubmit(onSubmit)}>
-                <div className="container">
-                  <Modal.Header closeButton>
-                    <div className="show-title-header"> <br />
-                      <div className='booking-header'>
-                        <h2>BOOKING</h2>
-                        <p>{eventDetails.name}</p>
-
-                      </div>
-                    </div>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <div className="content">
-                      {buttonClick != 'pay-now' && buttonClick != 'confirm-details' &&
-                        <div className="user-details">
-                          <div className="input-box ">
-                            <span className="details">Full Name<span style={{ 'color': 'red' }}> *</span></span>
-                            <input {...register("fullName", { required: { value: true, message: "This field is required" }, })} type="text" required />
-                          </div>
-                          <div className="input-box ">
-                            <span className="details">Email ID<span style={{ 'color': 'red' }}> *</span></span>
-                            <input
-                              {...register("emailId", {
-                                required: {
-                                  value: true,
-                                  message: "This field is required",
-                                },
-                                pattern: {
-                                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                  message: "Enter a valid email address (e.g., example@example.com)",
-                                },
-                              })}
-                              type="email"
-                            />
-                            {errors.emailId && (
-                              <span style={{ color: "red" }}>{errors.emailId.message}</span>
-                            )}
-                          </div>
-                          <div className="input-box">
-                            <span className="details">WhatsApp Mobile Number<span style={{ 'color': 'red' }}> *</span></span>
-                            <input
-                              placeholder="+91"
-                              {...register("whatsappNumber", {
-                                required: {
-                                  value: true,
-                                  message: "This field is required",
-                                },
-                                pattern: {
-                                  value: /^[0-9]{10}$/, // Regex for exactly 10 digits (numbers only)
-                                  message: "Enter a valid 10-digit mobile number (e.g., 987xxxxxxx)",
-                                },
-                              })}
-                              type="tel"
-                            />
-                            {errors.whatsappNumber && (
-                              <span style={{ color: "red" }}>{errors.whatsappNumber.message}</span>
-                            )}
-                          </div>
-                          {!everyWeekend && <div className="input-box">
-                            <span className="details">Select Batch<span style={{ 'color': 'red' }}> *</span></span>
-                            <select onClick={(e) => handleSelectDate(e)} required>
-                              {finalBatchesList && finalBatchesList.map((event, index) => (
-                                <option key={index} value={event.batchdate} >{event.batchdate}</option>
-                              ))}
-                            </select>
-                          </div>}
-                          {everyWeekend && <div className="input-box">
-                            <span className="details">Select Batch</span>
-                            <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
-                          </div>}
-                        </div>}
-
-                    </div>
-                    {buttonClick != 'pay-now' && buttonClick != 'confirm-details' &&
-                      <div className="button">
-                        <input type="submit" value="Next >>" />
-                      </div>
-                    }
-
-                  </Modal.Body>
-                </div>
-              </form>
-            </Modal>
-          </div >
         }
-      </div >
-      {show == false && <ContactSection />}
+        <div>
+          {isSuccess &&
+            <div className='add-Scroller'>
+              <Modal show={show} onHide={handleClose}>
+                <form action="" onSubmit={handleSubmit(onSubmit)}>
+                  <div className="container">
+                    <Modal.Header closeButton>
+                      <div className="show-title-header"> <br />
+                        <div className='booking-header'>
+                          <h2>BOOKING</h2>
+                          <p>{eventDetails.name}</p>
 
-      <Footer />
+                        </div>
+                      </div>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <div className="content">
+                        {buttonClick != 'pay-now' && buttonClick != 'confirm-details' &&
+                          <div className="user-details">
+                            <div className="input-box ">
+                              <span className="details">Full Name<span style={{ 'color': 'red' }}> *</span></span>
+                              <input {...register("fullName", { required: { value: true, message: "This field is required" }, })} type="text" required />
+                            </div>
+                            <div className="input-box ">
+                              <span className="details">Email ID<span style={{ 'color': 'red' }}> *</span></span>
+                              <input
+                                {...register("emailId", {
+                                  required: {
+                                    value: true,
+                                    message: "This field is required",
+                                  },
+                                  pattern: {
+                                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                                    message: "Enter a valid email address (e.g., example@example.com)",
+                                  },
+                                })}
+                                type="email"
+                              />
+                              {errors.emailId && (
+                                <span style={{ color: "red" }}>{errors.emailId.message}</span>
+                              )}
+                            </div>
+                            <div className="input-box">
+                              <span className="details">WhatsApp Mobile Number<span style={{ 'color': 'red' }}> *</span></span>
+                              <input
+                                placeholder="+91"
+                                {...register("whatsappNumber", {
+                                  required: {
+                                    value: true,
+                                    message: "This field is required",
+                                  },
+                                  pattern: {
+                                    value: /^[0-9]{10}$/, // Regex for exactly 10 digits (numbers only)
+                                    message: "Enter a valid 10-digit mobile number (e.g., 987xxxxxxx)",
+                                  },
+                                })}
+                                type="tel"
+                              />
+                              {errors.whatsappNumber && (
+                                <span style={{ color: "red" }}>{errors.whatsappNumber.message}</span>
+                              )}
+                            </div>
+                            {!everyWeekend && <div className="input-box">
+                              <span className="details">Select Batch<span style={{ 'color': 'red' }}> *</span></span>
+                              <select onClick={(e) => handleSelectDate(e)} required>
+                                {finalBatchesList && finalBatchesList.map((event, index) => (
+                                  <option key={index} value={event.batchdate} >{event.batchdate}</option>
+                                ))}
+                              </select>
+                            </div>}
+                            {everyWeekend && <div className="input-box">
+                              <span className="details">Select Batch</span>
+                              <DatePicker placeholder="Select Date" selected={selectedDate} filterDate={filterWeekends} onChange={handleDateChange} />
+                            </div>}
+                          </div>}
+
+                      </div>
+                      {buttonClick != 'pay-now' && buttonClick != 'confirm-details' &&
+                        <div className="button">
+                          <input type="submit" value="Next >>" />
+                        </div>
+                      }
+
+                    </Modal.Body>
+                  </div>
+                </form>
+              </Modal>
+            </div >
+          }
+        </div >
+        {show == false && <ContactSection />}
+
+        <Footer />
+      </>
+      )}
     </div >
   )
 }

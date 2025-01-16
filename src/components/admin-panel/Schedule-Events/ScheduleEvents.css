@@ -28,7 +28,7 @@
     font-weight: 900;
   }
  
-.input-box-column input{ 
+.input-box-column input, .input-box-column textarea{ 
     height: 65px;
     width: 100%;
     outline: none;
