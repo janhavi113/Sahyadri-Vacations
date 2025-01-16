@@ -35,6 +35,7 @@ const bookingsSchema = new mongoose.Schema({
     doubleSharing: { type: Number, default: 0 },
     tripalSharing: { type: Number, default: 0 },
     thirdAcUpgrate: { type: Number, default: 0 },
+    specialNote: { type: String },
     otherParticipants: [otherParticipantsSchema
     ]
 }, { strict: false });

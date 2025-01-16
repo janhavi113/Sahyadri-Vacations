@@ -112,7 +112,8 @@ router.put("/confirmed-booking", async (req, res) => {
             remainingAmount,
             doubleSharing,
             tripalSharing,
-            thirdAcUpgrate
+            thirdAcUpgrate,
+            specialNote
         } = req.body;
 
 
@@ -137,6 +138,7 @@ router.put("/confirmed-booking", async (req, res) => {
                     doubleSharing:doubleSharing,
                     tripalSharing:tripalSharing,
                     thirdAcUpgrate:thirdAcUpgrate,
+                    specialNote:specialNote,
                 }
             },
             { new: true } // Return the updated document

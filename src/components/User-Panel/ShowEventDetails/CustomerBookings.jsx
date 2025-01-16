@@ -36,7 +36,7 @@ const CustomerBookings = () => {
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
   const [participants, setParticipants] = useState([]);
-  const [modal, setModal] = useState(false);
+  const [specialNote, setSpecialNote] = useState('');
   const [show, setShow] = useState(false);
   const [selectedBatch, setSelectedbatch] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -212,6 +212,7 @@ const CustomerBookings = () => {
         formData.append("doubleSharing", doubleSharingCount);
         formData.append("tripalSharing", tripalSharingCount);
         formData.append("thirdAcUpgrate", thirdAcUpgrateCount);
+        formData.append("specialNote",specialNote);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
           body: formData,
@@ -620,7 +621,18 @@ const CustomerBookings = () => {
                           </tr> : ''}
                         </table>
                         <br></br>
-                        <br></br></div>
+                        <br></br>
+                        
+                  {/* General Note */}
+                  <div className="input-box-column">
+                    <span className="details">Custom Message (if Any)</span>
+                    <textarea
+                      value={specialNote}
+                      onChange={(e) => setSpecialNote(e.target.value)}
+                    />
+                  </div>
+
+                        </div>
                     }
                     {
                       buttonClick == 'pay-now' && showBreakup && paymentOption == 'partial' &&
