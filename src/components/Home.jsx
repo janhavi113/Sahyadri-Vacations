@@ -3,12 +3,8 @@ import Footer from "./footer";
 import Navbar from "./Navbar";
 import Contact_Us from "./User-Panel/Contact_Us/Contact_Us";
 import FunFact from "./User-Panel/FunFact/FunFact";
+import WhyChooseUs from "./User-Panel/WhyChooseUs/WhyChooseUs";
 import Rating from "./User-Panel/Rating/RatingSection";
-import SpecialOfferSection from "./User-Panel/SpecialOfferService/SpecialOfferSection";
-import slide1 from './Images/Screen_2.jpg';
-import slide2 from './Images/Screen_3.webp';
-import slide3 from './Images/Screen_4.webp';
-import slide4 from './Images/Screen_1.jpg';
 import Card from "./card"
 import Whatsapp from './Images/whatsapp.svg';
 import ViewAll from './Images/viewAll.svg'
@@ -18,57 +14,34 @@ import Backpacking from './Images/Backpacking.svg'
 import './User-Panel/Gallery/Gallery.css'
 import Sidebar from "./Home_Header/Sidebar"
 import './home.css'
+
+// Import Swiper styles
 import "react-multi-carousel/lib/styles.css";
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css/bundle';
 // import required modules
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-    slidesToSlide: 3 // optional, default to 1.
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-    slidesToSlide: 2 // optional, default to 1.
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-    slidesToSlide: 1 // optional, default to 1.
-  }
-};
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+
 const Home = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const images = [
-    slide1,
-    slide2,
-    slide3,
-    slide4
-  ];
-
   const [show, setShow] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [events, setEvent] = useState();
   const [backPackingEvents, setBackPackingEvents] = useState();
   const [campingEvents, setCampingEvents] = useState();
   const [trekkingEvents, setTrekkingEvents] = useState();
-  const [specialOffer , setSpecialOffer]= useState();
+  const [specialOffer, setSpecialOffer] = useState();
   useEffect(() => {
-    // //console.log('isSuccess--'+isSuccess);
-   
     if (isSuccess == false) {
       getAllRecord();
       getSpecialOfferEvent();
     }
 
   })
-   
-  const getSpecialOfferEvent =  async() =>{
-   //console.log('record found');
+
+  const getSpecialOfferEvent = async () => {
+    //console.log('record found');
     let r = await fetch(`${apiUrl}getSpecialOfferEvent`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
@@ -81,7 +54,7 @@ const Home = () => {
       //console.log('record found',res.offer);
     }
   }
- 
+
   const getNextBatchDate = (event) => {
     var liveEvent = '';
     let batchdate;
@@ -92,7 +65,7 @@ const Home = () => {
     if (event.batches) {
       for (let i = 0; i < event.batches.length; i++) {
         if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
-          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()]+ ' ' + months[new Date(event.batches[i].eventEndDate).getFullYear()];
+          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + months[new Date(event.batches[i].eventEndDate).getFullYear()];
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           sortdate = new Date(event.batches[i].eventStartDate);
 
@@ -108,7 +81,7 @@ const Home = () => {
       }
     } else {
       if (new Date(event.eventStartDate) - Q >= 0) {
-        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()]+ ' ' + new Date(event.eventEndDate).getFullYear();
+        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventEndDate).getFullYear();
         eventCostPerPerson = event.eventCostPerPerson;
         sortdate = new Date(event.eventStartDate);
 
@@ -145,7 +118,7 @@ const Home = () => {
     }
     return liveEvent;
   }
-  
+
   const getAllRecord = async () => {
     ////console.log('getAllRecord--');
     let liveEvents = [];
@@ -174,6 +147,7 @@ const Home = () => {
         }
 
         if (!tempEvent.inactive && (res.events[i].eventType == 'TrekEvent' || res.events[i].eventType == 'AdventureActivity')) {
+          console.log('tempEvent----', tempEvent);
           trekkingEvents.push(tempEvent);
         } else if (!tempEvent.inactive && res.events[i].eventType == 'CampingEvent') {
           campingEvents.push(tempEvent);
@@ -182,16 +156,16 @@ const Home = () => {
         }
       }
       liveEvents.sort((a, b) => a.sort - b.sort);
-      console.log('liveEvents----',liveEvents);
       setEvent(liveEvents);
       trekkingEvents.sort((a, b) => a.sort - b.sort);
+      console.log('trekkingEvents----', trekkingEvents);
       setTrekkingEvents(trekkingEvents);
       setCampingEvents(sortEventsBySortDate(campingEvents));
       setBackPackingEvents(sortEventsBySortDate(backPackingEvents));
     }
-   
+
   }
-  
+
   const sortEventsBySortDate = (events) => {
     return events.sort((a, b) => {
       // Check if sortDate is 'Available On All Weekends' or 'On Public Demand'
@@ -212,6 +186,7 @@ const Home = () => {
   const showDropdown = () => {
     setShow(!show);
   }
+  
   return (
     <div >
       <Navbar />
@@ -246,262 +221,273 @@ const Home = () => {
               </li>
             </ul>}
         </div>
+        {/* Upcoming Event */}
         <div>
-          <div className='section-header px-heading'>
+          <div className="section-header px-heading">
             <div className="col-7 row">
               <div className="col-lg-1 col-3">
-                <img className='section-header-img' loading="lazy" src={upcomingEvent} />
+                <img
+                  className="section-header-img"
+                  loading="lazy"
+                  src={upcomingEvent}
+                  alt="Upcoming Events Icon"
+                />
               </div>
               <div className="col-lg-11 col-9">
-                <h3 className='home-thicker home-header-text' >Upcoming Events</h3>
+                <h3 className="home-thicker home-header-text">Upcoming Events</h3>
               </div>
             </div>
             <div className="text-end">
-              <a className="btn home-header-text-viewall" href="/events" role="button" >
-                <div className='section-header-btn'><span>View All</span>
-                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
+              <a
+                className="btn home-header-text-viewall"
+                href="/events"
+                role="button"
+              >
+                <div className="section-header-btn">
+                  <span>View All</span>
+                  <img
+                    style={{ margin: '4px' }}
+                    loading="lazy"
+                    src={ViewAll}
+                    alt="View All"
+                  />
                 </div>
               </a>
             </div>
           </div>
-          <Swiper
-            breakpoints={{
-              0: {
-                slidesPerView: 1.5,
-              },
-              400: {
-                slidesPerView: 1.5,
-              },
-              639: {
-                slidesPerView: 2,
-              },
-              865: {
-                slidesPerView: 3
-              },
-              1000: {
-                slidesPerView: 3
-              },
-              1500: {
-                slidesPerView: 3
-              },
-              1700: {
-                slidesPerView: 3
-              }
-            }}
-            spaceBetween={50}
-            slidesPerView={3}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            modules={[Autoplay, Navigation]}
-            className='rating-section'
-          >
-            {isSuccess && events.map((event, index) => (
-              <SwiperSlide key={index}>
-                <Card key={index} event={event} />
-              </SwiperSlide>
-            ))}
-
-          </Swiper>
-
+          {isSuccess && (
+            <Swiper
+              breakpoints={{
+                0: { slidesPerView: 1.5 },
+                400: { slidesPerView: 1.5 },
+                639: { slidesPerView: 2 },
+                865: { slidesPerView: 2 },
+                1000: { slidesPerView: 3 },
+                1500: { slidesPerView: 3 },
+                1700: { slidesPerView: 3 },
+              }}
+              spaceBetween={50}
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
+              loop={true}
+              navigation
+              pagination={{ clickable: true }}
+              modules={[Autoplay, Navigation]}
+              className="rating-section"
+            >
+              {events.map((event, index) => (
+                <SwiperSlide key={index}>
+                  <Card key={index} event={event} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
         </div>
+        {/* Trek Event */}
         <div>
-          <div className='section-header px-heading'>
+          <div className="section-header px-heading">
             <div className="col-7 row">
               <div className="col-lg-1 col-3">
-                <img className='section-header-img' loading="lazy" src={upcomingEvent} />
+                <img
+                  className="section-header-img"
+                  loading="lazy"
+                  src={upcomingEvent}
+                  alt="Trek Events Icon"
+                />
               </div>
               <div className="col-lg-11 col-9">
-                <h3 className='home-thicker home-header-text' >Trek Events</h3>
+                <h3 className="home-thicker home-header-text">Trek Events</h3>
               </div>
             </div>
             <div className="text-end">
-              <a className="btn home-header-text-viewall" href="/treking-events" role="button" >
-                <div className='section-header-btn'><span>View All</span>
-                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
+              <a
+                className="btn home-header-text-viewall"
+                href="/treking-events"
+                role="button"
+              >
+                <div className="section-header-btn">
+                  <span>View All</span>
+                  <img
+                    style={{ margin: '4px' }}
+                    loading="lazy"
+                    src={ViewAll}
+                    alt="View All"
+                  />
                 </div>
               </a>
             </div>
           </div>
-          <Swiper
-            breakpoints={{
-              0: {
-                slidesPerView: 1.5,
-              },
-              400: {
-                slidesPerView: 1.5,
-              },
-              639: {
-                slidesPerView: 2,
-              },
-              865: {
-                slidesPerView: 3
-              },
-              1000: {
-                slidesPerView: 3
-              },
-              1500: {
-                slidesPerView: 3
-              },
-              1700: {
-                slidesPerView: 3
-              }
-            }}
-            spaceBetween={50}
-            slidesPerView={3}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            modules={[Autoplay, Navigation]}
-            className='rating-section'
-          >
-            {isSuccess && trekkingEvents.map((event, index) => (
-              <SwiperSlide key={index}>
-                <Card key={index} event={event} />
-              </SwiperSlide>
-            ))}
-
-          </Swiper>
-
+          {isSuccess && (
+            <Swiper
+              breakpoints={{
+                0: { slidesPerView: 1.5 },
+                400: { slidesPerView: 1.5 },
+                639: { slidesPerView: 2 },
+                865: { slidesPerView: 2 },
+                1000: { slidesPerView: 3 },
+                1500: { slidesPerView: 3 },
+                1700: { slidesPerView: 3 },
+              }}
+              spaceBetween={50}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              loop={true}
+              navigation
+              pagination={{ clickable: true }}
+              modules={[Autoplay, Navigation]}
+              className="rating-section"
+            >
+              {trekkingEvents.map((event, index) => (
+                <SwiperSlide key={index}>
+                  <Card key={index} event={event} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
         </div>
+        {/* BackPacking Event */}
         <div>
-          <div className='section-header'>
+          <div className="section-header">
             <div className="col-7 row">
               <div className="col-lg-1 col-3">
-                <img className='section-header-img' loading="lazy" src={Backpacking} />
+                <img
+                  className="section-header-img"
+                  loading="lazy"
+                  src={Backpacking}
+                  alt="Backpacking Events Icon"
+                />
               </div>
               <div className="col-lg-11 col-9">
-                <h3 className='home-thicker home-header-backpacking ' >BackPacking Events</h3>
+                <h3 className="home-thicker home-header-backpacking">
+                  Backpacking Events
+                </h3>
               </div>
             </div>
             <div className="text-end">
-              <a className="btn home-header-text-viewall" href="/backpacking-events" role="button" >
-                <div className='section-header-btn'><span>View All</span>
-                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
+              <a
+                className="btn home-header-text-viewall"
+                href="/backpacking-events"
+                role="button"
+              >
+                <div className="section-header-btn">
+                  <span>View All</span>
+                  <img
+                    style={{ margin: '4px' }}
+                    loading="lazy"
+                    src={ViewAll}
+                    alt="View All"
+                  />
                 </div>
               </a>
             </div>
           </div>
-
-          <Swiper
-            breakpoints={{
-              0: {
-                slidesPerView: 1.5,
-              },
-              400: {
-                slidesPerView: 1.5,
-              },
-              639: {
-                slidesPerView: 2,
-              },
-              865: {
-                slidesPerView: 2
-              },
-              1000: {
-                slidesPerView: 3
-              },
-              1500: {
-                slidesPerView: 3
-              },
-              1700: {
-                slidesPerView: 3
-              }
-            }}
-            spaceBetween={50}
-            slidesPerView={3}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            modules={[Autoplay, Navigation]}
-            className='rating-section'
-          >
-            {isSuccess && backPackingEvents.map((event, index) => (
-              <SwiperSlide key={index}>
-                <Card key={index} event={event} />
-              </SwiperSlide>
-            ))}
-
-          </Swiper>
+          {isSuccess && (
+            <Swiper
+              breakpoints={{
+                0: { slidesPerView: 1.5 },
+                400: { slidesPerView: 1.5 },
+                639: { slidesPerView: 2 },
+                865: { slidesPerView: 2 },
+                1000: { slidesPerView: 3 },
+                1500: { slidesPerView: 3 },
+                1700: { slidesPerView: 3 },
+              }}
+              spaceBetween={50}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              loop={true}
+              navigation
+              pagination={{ clickable: true }}
+              modules={[Autoplay, Navigation]}
+              className="rating-section"
+            >
+              {backPackingEvents.map((event, index) => (
+                <SwiperSlide key={index}>
+                  <Card key={index} event={event} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
         </div>
+        {/* Camping Event */}
         <div>
-          <div className='section-header'>
+          <div className="section-header">
             <div className="col-7 row">
               <div className="col-lg-1 col-3">
-                <img loading="lazy" src={Camping} />
+                <img
+                  className="section-header-img"
+                  loading="lazy"
+                  src={Camping}
+                  alt="Camping & Resorts Icon"
+                />
               </div>
               <div className="col-lg-11 col-9">
-                <h3 className='home-thicker home-header-text ' >Camping & Resorts</h3>
+                <h3 className="home-thicker home-header-text">
+                  Camping & Resorts
+                </h3>
               </div>
             </div>
             <div className="text-end">
-              <a className="btn home-header-text-viewall" href="/camping-events" role="button" >
-                <div className='section-header-btn'><span>View All</span>
-                  <img style={{ 'margin': '4px' }} loading="lazy" src={ViewAll} />
+              <a
+                className="btn home-header-text-viewall"
+                href="/camping-events"
+                role="button"
+              >
+                <div className="section-header-btn">
+                  <span>View All</span>
+                  <img
+                    style={{ margin: '4px' }}
+                    loading="lazy"
+                    src={ViewAll}
+                    alt="View All"
+                  />
                 </div>
               </a>
             </div>
           </div>
-
-          <Swiper
-            breakpoints={{
-              0: {
-                slidesPerView: 1.5,
-              },
-              400: {
-                slidesPerView: 1.5,
-              },
-              639: {
-                slidesPerView: 2,
-              },
-              865: {
-                slidesPerView: 2
-              },
-              1000: {
-                slidesPerView: 3
-              },
-              1500: {
-                slidesPerView: 3
-              },
-              1700: {
-                slidesPerView: 3
-              }
-            }}
-            spaceBetween={50}
-            slidesPerView={3}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            navigation
-            pagination={{ clickable: true }}
-            modules={[Autoplay, Navigation]}
-            className='rating-section'
-          >
-            {isSuccess && campingEvents.map((event, index) => (
-              <SwiperSlide key={index}>
-                <Card key={index} event={event} />
-              </SwiperSlide>
-            ))}
-
-          </Swiper>
+          {isSuccess && (
+            <Swiper
+              breakpoints={{
+                0: { slidesPerView: 1.5 },
+                400: { slidesPerView: 1.5 },
+                639: { slidesPerView: 2 },
+                865: { slidesPerView: 2 },
+                1000: { slidesPerView: 3 },
+                1500: { slidesPerView: 3 },
+                1700: { slidesPerView: 3 },
+              }}
+              spaceBetween={50}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              loop={true}
+              navigation
+              pagination={{ clickable: true }}
+              modules={[Autoplay, Navigation]}
+              className="rating-section"
+            >
+              {campingEvents.map((event, index) => (
+                <SwiperSlide key={index}>
+                  <Card key={index} event={event} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
         </div>
       </div>
       {/* {specialOffer && 
       <SpecialOfferSection  specialOffer={specialOffer} /> 
-      } */}
+      }
+       <WhyChooseUs />
+      */}
+     
       <Rating />
       <div>
         <FunFact />

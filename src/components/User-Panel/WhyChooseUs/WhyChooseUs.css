@@ -1,0 +1,92 @@
+.why-choose-us {
+  text-align: center;
+  padding: 50px;
+  background-color: #00506b63;
+  position: relative;
+  overflow: hidden;
+}
+
+  
+  .why-choose-us h2 {
+    font-size: 2.5rem;
+    color: #1d2935;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 10px;
+    margin: 20px 0;
+  }
+  
+  .scroll-container::-webkit-scrollbar {
+    display: none; /* Hide scrollbar */
+  }
+  .why-choose-us .swiper-button-prev, .why-choose-us .swiper-button-next {
+    display: none !important;
+  }
+  
+  .feature {
+    min-width: 250px; /* Width of each feature card */
+    flex: 0 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    text-align: center;
+    height: 300px;
+    margin: auto;
+  display: flex;
+  flex-direction: column;
+    justify-content: center; /* Vertically center the content */
+  align-items: center; /* Horizontally center the content */
+  }
+  
+  .feature img {
+    max-width: 30%;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 50%;
+  }
+  
+ 
+  .feature h3 {
+    font-size: 1.5rem;
+    color: #34495e;
+    margin-bottom: 10px;
+  }
+  
+  .feature p {
+    font-size: 1rem;
+    color: #7f8c8d;
+  }
+  
+  .cta-button {
+    margin-top: 30px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #e67e22;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .cta-button:hover {
+    background-color: #d35400;
+  }
+  .experience-paragraph {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-align: center;
+    font-size: 1.5rem;
+    color: light;
+    line-height: 1.6;
+  }
+  
