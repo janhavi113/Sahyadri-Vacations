@@ -484,9 +484,9 @@ const Home = () => {
       </div>
       {/* {specialOffer && 
       <SpecialOfferSection  specialOffer={specialOffer} /> 
-      }
+      }      */}
        <WhyChooseUs />
-      */}
+
      
       <Rating />
       <div>
