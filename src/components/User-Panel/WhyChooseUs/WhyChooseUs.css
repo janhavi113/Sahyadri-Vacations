@@ -119,41 +119,29 @@
 }
 /* CSS for Phone Mode */
 @media screen and (max-width: 768px) {
-  .why-choose-us {
-    padding: 30px;
-  }
+ 
+  .feature .feature-affordable {
+    all: unset;
+    margin-bottom: 14px !important;
+    height: 40px;
+   }
+}
 
-  .why-choose-us h2 {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
-  }
-
+/* For Small Screens (Two Columns) */
+@media screen and (max-width: 768px) {
   .feature-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px; /* Spacing between items */
+    padding: 0 10px;
   }
 
   .feature {
-    width: 100%;
-    max-width: 300px;
-    padding: 20px;
+    width: 100%; /* Ensure it fits within the grid cell */
     height: auto;
     text-align: center;
     justify-content: center;
-    border-right: none;
-    border-bottom: 1px dashed #FFD6A5;
-    margin-right: 0;
-  }
-
-  .feature-partician {
-    border-bottom: 1px dashed #FFD6A5;
-    border-right: none;
-    margin-bottom: 16px;
-  }
-
-  .feature:last-child {
-    border-bottom: none;
+    border: none; /* Remove borders for cleaner look */
   }
 
   .feature img {
@@ -170,22 +158,37 @@
   .feature p {
     font-size: 0.9rem;
   }
+}
 
-  .cta-button {
-    margin-top: 20px;
-    padding: 8px 16px;
+/* For Medium Screens (Three Columns) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .feature-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px; /* Spacing between items */
+    padding: 0 20px;
+  }
+
+  .feature {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    justify-content: center;
+    border: none;
+  }
+
+  .feature img {
+    max-width: 80px; /* Adjust icon size */
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  .feature h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+
+  .feature p {
     font-size: 1rem;
   }
-
-  .experience-paragraph {
-    font-size: 1.2rem;
-    margin: 15px 0;
-    line-height: 1.4;
-  }
-
-  .feature .feature-affordable {
-    all: unset;
-    margin-bottom: 14px !important;
-    height: 40px;
-   }
 }
