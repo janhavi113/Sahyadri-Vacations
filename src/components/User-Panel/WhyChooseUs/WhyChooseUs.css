@@ -158,10 +158,14 @@
   .feature p {
     font-size: 0.9rem;
   }
+  .why-choose-us{
+    padding: 30px 8px 0 8px
+  }
 }
 
 /* For Medium Screens (Three Columns) */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
+
   .feature-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -176,7 +180,10 @@
     justify-content: center;
     border: none;
   }
-
+  .why-choose-us{
+    padding: 30px 8px 0 8px
+  }
+  
   .feature img {
     max-width: 80px; /* Adjust icon size */
     height: auto;
