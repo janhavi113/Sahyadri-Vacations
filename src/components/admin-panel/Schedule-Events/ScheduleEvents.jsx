@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import AdminNavbar from "../../AdminNavbar";
 import "./ScheduleEvents.css"
 import "../CreateEvent/CreateEvents.css"
-// import DatePicker from "./EventDatePicker";
-//import card from "./card"
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form"
 import Dropzone from "react-dropzone";
@@ -12,16 +10,17 @@ import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDropzone } from "react-dropzone";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Select from 'react-select';
 function ScheduleEvents() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [isSuccess, setSuccess] = useState(false);
   const [events, setEvent] = useState();
   const [activeError, setActiveError] = useState({ disply: false });
-  const [count, setCount] = useState(1);
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
   const [search, setSearch] = useState();
   const [eventType, setEventType] = useState();
+  const [eventOptionsList, setEventOptionsList] = useState([]);
   const [doubleSharing, setDoubleSharing] = useState(0);
   const [doubleSharingNote, setDoubleSharingNote] = useState('');
   const [tripalSharing, setTripalSharing] = useState(0);
@@ -35,7 +34,7 @@ function ScheduleEvents() {
     handleSubmit,
     setError,
     clearErrors,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm();
 
   useEffect(() => {
@@ -46,37 +45,26 @@ function ScheduleEvents() {
     }
     getCurrentrecord();
   }, [navigate]);
-  const [file, setFiles] = useState(null);
-  const [currentImages, setcurrentImages] = useState();
-  const addUploadedInages = () => {
-    //console.log('file', file);
-    var allFiles = [];
-    if (file) {
-      for (let index = 0; index < file.length; index++) {
-        const url = URL.createObjectURL(file[index])
-        //console.log(url)
-        allFiles.push(url);
-      }
-      //console.log('allFiles', allFiles);
-    }
-    setcurrentImages(allFiles);
-  }
+  
   const getCurrentrecord = async () => {
-
-    // alert("ok"); 
     let r = await fetch(`${apiUrl}schedule-event`, {
       method: "GET", headers: {
         "Content-Type": "application/json",
       }
     })
-    let res = await r.json()
-    //console.log('res ===', JSON.stringify(res.events[0]));
+    let res = await r.json();
     if (res.isSuccess == true) {
       setSuccess(res.isSuccess);
       setEvent(res.events);
+
+      const eventOptions = res.events.map(event => ({
+        value: event.eventId,
+        label: event.name,
+      }));
+      setEventOptionsList(eventOptions);
     }
-    //console.log('events', events);
   }
+
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.map((file) =>
       Object.assign(file, {
@@ -86,14 +74,15 @@ function ScheduleEvents() {
     setUploadedFiles((prev) => [...prev, ...newFiles]); // Add new files to the uploaded files state
     clearErrors("dropzone");
   };
+
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const removeFile = (file) => {
     setUploadedFiles((prev) => prev.filter((f) => f !== file)); // Remove the file from the state
   };
+
   const onSubmit = async (data) => {
     const formData = new FormData();
-    //console.log('data---', data);
     if (uploadedFiles.length === 0) {
       setError("dropzone", {
         type: "manual",
@@ -112,8 +101,6 @@ function ScheduleEvents() {
       setActiveError({ disply: false });
 
       formData.append("active", active);
-      //formData.append("eventId", data.Event);
-
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
       formData.append('scheduleEventId', search[0].eventId);
@@ -148,7 +135,6 @@ function ScheduleEvents() {
         body: formData,
       })
       let res = await r.json()
-      //console.log('res ===', JSON.stringify(res));
       if (res.isSuccess == true) {
         navigate('/scheduled-events')
       }
@@ -157,15 +143,18 @@ function ScheduleEvents() {
 
   const handleSelectEvent = async (eventId) => {
     const search = events.filter(function (item) {
-      //console.log('item', item.eventId == data.Event)
       return item.eventId == eventId;
     });
     if (search) {
       setEventType(search[0].eventType);
       setSearch(search);
     }
-    //console.log('search--', search);
   }
+  const handleEventChange = (selectedOption) => {
+    if (selectedOption) {
+      handleSelectEvent(selectedOption.value);
+    }
+  };
 
   return (
     <div>
@@ -178,16 +167,17 @@ function ScheduleEvents() {
             <div className="content">
               {isSuccess &&
                 <div className="user-details">
-                  <div className="input-box ">
-                    <span className="details">Event Name<span style={{ 'color': 'red' }}>*</span></span>
-                    <select onChange={(e) => handleSelectEvent(e.target.value)}>
-                      <option>---Select----</option>
-                      {events.map(event => (
-                        <option value={event.eventId} key={event.eventId}>{event.name}</option>
-                      ))}
-                    </select>
+                  <div className="input-box">
+                    <span className="details">
+                      Event Name<span style={{ color: 'red' }}>*</span>
+                    </span>
+                    <Select
+                      options={eventOptionsList}
+                      onChange={handleEventChange}
+                      placeholder="---Select---"
+                      isSearchable
+                    />
                   </div>
-
                   <div className="input-box-column ">
                     <span className="details">Start Date </span>
                     <input type="date" {...register("eventStartDate")} />
@@ -219,16 +209,16 @@ function ScheduleEvents() {
 
                   <div className="input-box-column ">
                     <span className="details">B2B Per Person </span>
-                    <input  {...register("b2bPrice")} type="number"  defaultValue={0} />
+                    <input  {...register("b2bPrice")} type="number" defaultValue={0} />
                   </div>
 
                   <div className="input-box-column">
                     <span className="details">Cost Per Person from Pune<span style={{ 'color': 'red' }}>*</span></span>
-                    <input   defaultValue={0}  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="number" required />
+                    <input defaultValue={0}  {...register("eventCostPerPerson", { required: { value: true, message: "This field is required" }, })} type="number" required />
                   </div>
                   <div className="input-box-column">
                     <span className="details">Cost Per Person from Mumbai<span style={{ 'color': 'red' }}>*</span></span>
-                    <input   defaultValue={0}  {...register("eventCostPerPersonFromMumbai")} type="number"/>
+                    <input defaultValue={0}  {...register("eventCostPerPersonFromMumbai")} type="number" />
                   </div>
 
                   {eventType == 'BackPackingTrip' &&
@@ -237,7 +227,7 @@ function ScheduleEvents() {
                       <input  {...register("partialBookingAmount")} type="number" />
                     </div>
                   }
-                   <div className="input-box-column ">
+                  <div className="input-box-column ">
                     <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
                     <input defaultValue={0} {...register("eventBatchCount", { required: { value: true, message: "This field is required" }, })} min="1" type="number" required />
                   </div>
@@ -309,7 +299,7 @@ function ScheduleEvents() {
                       onChange={(e) => setNote(e.target.value)}
                     />
                   </div>
-                 
+
                   <div className="input-box-column ">
                     <span className="details">Active</span>
                     <input  {...register("Active")} type="checkbox" id="active" name="Active" value={true} />
@@ -371,13 +361,6 @@ function ScheduleEvents() {
             <div className='button-group'>
               <div className="button-edit-container">
                 <div className="button">
-                  {
-                    /* <input onClick={() => {
-                      setCount(count => count + 1)
-                      addChildComponent()
-                    }
-                    } type="submit" value="Add Batch + " /> */
-                  }
                   <input type="submit" value="Schedule Batches" />
                 </div>
               </div>
