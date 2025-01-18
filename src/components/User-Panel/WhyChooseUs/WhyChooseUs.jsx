@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './WhyChooseUs.css';
 import solo from '../../Images/whyus/solo.svg';
 import safety from '../../Images/whyus/safety.svg';
@@ -10,11 +10,18 @@ import "react-multi-carousel/lib/styles.css";
 // Import Swiper styles
 import 'swiper/css/bundle';
 const WhyChooseUs = () => {
+  const scrollContainer = useRef(null);
+  useEffect(() => {
+    const isMobileOrTablet = window.innerWidth <= 1024; // Adjust for tablets and mobile
+    if (isMobileOrTablet && scrollContainer.current) {
+      scrollContainer.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  }, []);
   return (
     <section className="why-choose-us">
       <h2> Why Sahyadri Vacations </h2>
 
-      <div className="feature-container">
+      <div className="feature-container"  ref={scrollContainer}>
           <div className="feature feature-partician">
             <img src={expertTeam} alt="Expert Team" />
             <h3>Expert Team</h3>
