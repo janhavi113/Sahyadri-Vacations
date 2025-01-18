@@ -127,21 +127,50 @@
    }
 }
 
-/* For Small Screens (Two Columns) */
-@media screen and (max-width: 768px) {
+/* Default Layout for Larger Screens (No Scrolling) */
+.feature-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Horizontal Scroller for Phones and Tablets */
+@media screen and (max-width: 1024px) {
   .feature-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px; /* Spacing between items */
-    padding: 0 10px;
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    flex-wrap: nowrap; /* Prevent wrapping of features */
+    gap: 16px;
+    padding: 10px;
+    scroll-behavior: smooth; /* Smooth scrolling for better experience */
+  }
+
+  .feature-container::-webkit-scrollbar {
+    height: 8px; /* Height of the scrollbar */
+  }
+
+  .feature-container::-webkit-scrollbar-thumb {
+    background-color: #d1d1d1; /* Scrollbar thumb color */
+    border-radius: 4px;
+  }
+
+  .feature-container::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Scrollbar track color */
   }
 
   .feature {
-    width: 100%; /* Ensure it fits within the grid cell */
+    flex: 0 0 auto; /* Prevent shrinking and ensure inline scrolling */
+    width: 80%; /* Adjust width for better visibility */
+    max-width: 300px; /* Optional: Limit maximum width */
     height: auto;
     text-align: center;
     justify-content: center;
-    border: none; /* Remove borders for cleaner look */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(240, 115, 61, 0.203);
+    background-color: #fff;
+    padding: 16px;
   }
 
   .feature img {
@@ -157,45 +186,5 @@
 
   .feature p {
     font-size: 0.9rem;
-  }
-  .why-choose-us{
-    padding: 30px 8px 0 8px
-  }
-}
-
-/* For Medium Screens (Three Columns) */
-@media screen and (min-width: 769px) and (max-width: 1024px) {
-
-  .feature-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px; /* Spacing between items */
-    padding: 0 20px;
-  }
-
-  .feature {
-    width: 100%;
-    height: auto;
-    text-align: center;
-    justify-content: center;
-    border: none;
-  }
-  .why-choose-us{
-    padding: 30px 8px 0 8px
-  }
-  
-  .feature img {
-    max-width: 80px; /* Adjust icon size */
-    height: auto;
-    margin-bottom: 10px;
-  }
-
-  .feature h3 {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
-  }
-
-  .feature p {
-    font-size: 1rem;
   }
 }
