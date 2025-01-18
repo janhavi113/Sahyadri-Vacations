@@ -12,9 +12,16 @@ import 'swiper/css/bundle';
 const WhyChooseUs = () => {
   const scrollContainer = useRef(null);
   useEffect(() => {
-    const isMobileOrTablet = window.innerWidth <= 1024; // Adjust for tablets and mobile
+    const isMobileOrTablet = window.innerWidth <= 1024; // Mobile or tablet check
     if (isMobileOrTablet && scrollContainer.current) {
-      scrollContainer.current.scrollTo({ left: 0, behavior: 'smooth' });
+      const firstFeature = scrollContainer.current.children[0];
+      console.log("firstFeature----",firstFeature);
+      if (firstFeature) {
+        console.log("Auto-scrolling to the first feature");
+        setTimeout(() => {
+          firstFeature.scrollIntoView({ behavior: 'smooth', inline: 'start' });
+        }, 100); // Delay to ensure rendering
+      }
     }
   }, []);
   return (
