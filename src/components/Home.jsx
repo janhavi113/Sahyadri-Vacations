@@ -186,7 +186,7 @@ const Home = () => {
   const showDropdown = () => {
     setShow(!show);
   }
-  
+
   return (
     <div >
       <Navbar />
@@ -332,7 +332,7 @@ const Home = () => {
               }}
               spaceBetween={50}
               autoplay={{
-                delay: 3000,
+                delay: 2000,
                 disableOnInteraction: false,
               }}
               loop={true}
@@ -398,7 +398,7 @@ const Home = () => {
               }}
               spaceBetween={50}
               autoplay={{
-                delay: 3000,
+                delay: 2000,
                 disableOnInteraction: false,
               }}
               loop={true}
@@ -464,7 +464,7 @@ const Home = () => {
               }}
               spaceBetween={50}
               autoplay={{
-                delay: 3000,
+                delay: 2000,
                 disableOnInteraction: false,
               }}
               loop={true}
@@ -485,9 +485,9 @@ const Home = () => {
       {/* {specialOffer && 
       <SpecialOfferSection  specialOffer={specialOffer} /> 
       }      */}
-       <WhyChooseUs />
+      <WhyChooseUs />
 
-     
+
       <Rating />
       <div>
         <FunFact />
