@@ -268,7 +268,7 @@ const Home = () => {
               }}
               spaceBetween={50}
               autoplay={{
-                delay: 2000,
+                delay: 3000,
                 disableOnInteraction: false,
               }}
               loop={true}
@@ -332,7 +332,7 @@ const Home = () => {
               }}
               spaceBetween={50}
               autoplay={{
-                delay: 2000,
+                delay: 3000,
                 disableOnInteraction: false,
               }}
               loop={true}
@@ -398,7 +398,7 @@ const Home = () => {
               }}
               spaceBetween={50}
               autoplay={{
-                delay: 2000,
+                delay: 3000,
                 disableOnInteraction: false,
               }}
               loop={true}
@@ -464,7 +464,7 @@ const Home = () => {
               }}
               spaceBetween={50}
               autoplay={{
-                delay: 2000,
+                delay: 3000,
                 disableOnInteraction: false,
               }}
               loop={true}
