@@ -338,7 +338,7 @@ const Home = () => {
               loop={true}
               navigation
               pagination={{ clickable: true }}
-              modules={[Autoplay, Navigation]}
+              modules={[Navigation]}
               className="rating-section"
             >
               {trekkingEvents.map((event, index) => (
@@ -404,7 +404,7 @@ const Home = () => {
               loop={true}
               navigation
               pagination={{ clickable: true }}
-              modules={[Autoplay, Navigation]}
+              modules={[ Navigation]}
               className="rating-section"
             >
               {backPackingEvents.map((event, index) => (
@@ -470,7 +470,7 @@ const Home = () => {
               loop={true}
               navigation
               pagination={{ clickable: true }}
-              modules={[Autoplay, Navigation]}
+              modules={[ Navigation]}
               className="rating-section"
             >
               {campingEvents.map((event, index) => (
