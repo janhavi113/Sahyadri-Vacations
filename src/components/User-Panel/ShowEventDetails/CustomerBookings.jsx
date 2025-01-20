@@ -79,11 +79,8 @@ const CustomerBookings = () => {
   }
 
   const handleBookingSlot = () => {
-    console.log('finalBatchesList----   ', finalBatchesList);
     const foundRecord = finalBatchesList.find(batchSearch => batchSearch['batchdate'] == batch);
-    console.log('foundRecord----   ', foundRecord);
     setSelectedbatch(foundRecord);
-   // console.log('finalPrice----   ', finalPrice);
     setMaxBooking(foundRecord.batchSize);
     setBookedSlot(foundRecord.bookedSize);
     if (finalPrice <= 0) {
@@ -92,7 +89,6 @@ const CustomerBookings = () => {
       setActualPrice(Number(price));
       let convenience_Fee = (Number(price) * 0.015).toFixed(2);
       setConvenienceFee(convenience_Fee);
-//setPrice(price);
     }
     return foundRecord;
   }
