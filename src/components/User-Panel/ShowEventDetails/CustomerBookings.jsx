@@ -79,9 +79,11 @@ const CustomerBookings = () => {
   }
 
   const handleBookingSlot = () => {
-    const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == selectedDate);
+    console.log('finalBatchesList----   ', finalBatchesList);
+    const foundRecord = finalBatchesList.find(batchSearch => batchSearch['batchdate'] == batch);
+    console.log('foundRecord----   ', foundRecord);
     setSelectedbatch(foundRecord);
-    console.log('finalPrice----   ', finalPrice);
+   // console.log('finalPrice----   ', finalPrice);
     setMaxBooking(foundRecord.batchSize);
     setBookedSlot(foundRecord.bookedSize);
     if (finalPrice <= 0) {
