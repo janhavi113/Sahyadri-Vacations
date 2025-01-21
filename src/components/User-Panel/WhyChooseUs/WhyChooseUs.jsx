@@ -15,7 +15,7 @@ const WhyChooseUs = () => {
     const isMobileOrTablet = window.innerWidth <= 1024; // Mobile or tablet check
     if (isMobileOrTablet && scrollContainer.current) {
       const firstFeature = scrollContainer.current.children[0];
-      console.log("firstFeature----",firstFeature);
+      console.log("firstFeature----", firstFeature);
       if (firstFeature) {
         console.log("Auto-scrolling to the first feature");
         setTimeout(() => {
@@ -26,32 +26,33 @@ const WhyChooseUs = () => {
   }, []);
   return (
     <section className="why-choose-us">
-      <h2> Why Sahyadri Vacations </h2>
+      <div className='add-padding'> 
+        <h2> Why Sahyadri Vacations </h2>
 
-      <div className="feature-container"  ref={scrollContainer}>
+        <div className="feature-container" ref={scrollContainer}>
           <div className="feature feature-partician">
             <img src={expertTeam} alt="Expert Team" />
             <h3>Expert Team</h3>
             <p>Our team of professionals ensures you have the best adventure experience.</p>
           </div>
-       
+
           <div className="feature feature-partician">
             <img src={batch} alt="Limited Batch Size" />
             <h3>Limited Batch Size</h3>
             <p>We ensure personalized attention with small and manageable group sizes.</p>
           </div>
-       
+
           <div className="feature feature-partician">
             <img className="feature-affordable" src={affodable} alt="Affordable Pricing" />
             <h3>Affordable Pricing</h3>
             <p>Enjoy your adventure without burning a hole in your pocket.</p>
-          </div>       
+          </div>
           <div className="feature feature-partician">
-            <img  src={safety} alt="Safety First" />
+            <img src={safety} alt="Safety First" />
             <h3>Safety First</h3>
             <p>We prioritize your safety with experienced guides and proper equipment.</p>
           </div>
-       
+
           <div className="feature">
             <img src={solo} alt="Recommended for Solo Travelers" />
             <h3>Recommended for Solo Travelers</h3>
@@ -59,7 +60,8 @@ const WhyChooseUs = () => {
           </div>
         </div>
 
-      <button className="cta-button"><a href="/events" role="button">Book Your Adventure Now</a></button>
+        <button className="cta-button"><a href="/events" role="button">Book Your Adventure Now</a></button>
+      </div>
     </section>
   );
 };

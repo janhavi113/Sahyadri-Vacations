@@ -1,11 +1,11 @@
 .why-choose-us {
   text-align: center;
-  padding: 50px;
-  /* background-color: #00506b63; */
   position: relative;
   overflow: hidden;
 }
-
+.why-choose-us .add-padding{
+  padding: 50px;
+}
 
 .why-choose-us h2 {
   font-size: 2rem;
