@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form"
 import { redirect,useNavigate } from "react-router-dom";
-import './AdminLogin.css'
+import './AdminLogin.css';
 const AdminLogin = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [username, setUsername] = useState('');

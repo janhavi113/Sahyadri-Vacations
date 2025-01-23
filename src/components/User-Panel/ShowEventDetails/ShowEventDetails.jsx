@@ -115,7 +115,7 @@ const ShowEventDetails = () => {
       if (res.isSuccess == true) {
         console.log('res.booking.bookingId', res.booking.bookingId);
         setButtonClick('confirm-details');
-        handleNavigate(res.booking.bookingId , data.whatsappNumber);
+        handleNavigate(res.booking);
       }
 
     } catch (error) {
@@ -396,19 +396,20 @@ const ShowEventDetails = () => {
     setShowLocations(tempLocations);
   }
 
-  const handleNavigate = (bookingIdVar , bookingPhoneVar) => {
+  const handleNavigate = (bookingIdVar ) => {
+    console.log('.bookingId',bookingIdVar);
     navigate("/customerPayNowScreen", {
       state: {
         eventDetails: eventDetails,
-        batch: selectDate,
+        batch: bookingIdVar.batch,
         showLocations: showLocations,
         finalBatchesList: finalBatchesList,
         pickupPoints: pickupPoints,
         pickupPointsfromMumbai: pickupPointsfromMumbai,
         selectedDate: selectedDate,
         isSuccess: true,
-        bookingPhone:bookingPhoneVar,
-        bookingId: bookingIdVar,
+        bookingPhone: bookingIdVar.mobileNumber,
+        bookingId: bookingIdVar.bookingId,
         discountAvailable: discountAvailable,
         coupons: coupons
       },
