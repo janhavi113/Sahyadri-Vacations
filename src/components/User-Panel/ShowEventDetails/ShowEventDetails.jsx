@@ -397,7 +397,7 @@ const ShowEventDetails = () => {
   }
 
   const handleNavigate = (bookingIdVar ) => {
-    console.log('.bookingId',bookingIdVar);
+    console.log('.bookingId--',bookingIdVar);
     navigate("/customerPayNowScreen", {
       state: {
         eventDetails: eventDetails,
