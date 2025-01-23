@@ -390,10 +390,12 @@ const CustomerBookings = () => {
         <CircularLoading />
       ) : (
         <div>
-          <div className="h3"> <center>
+         {eventDetails && 
+         <div className="h3"> <center>
             <h2>{eventDetails.name}</h2>
             <p>Batch: {batch}</p></center>
           </div>
+         }
           {isSuccess && eventDetails &&
             <div >
               <form action="" onSubmit={handleSubmit(onSubmit)}>
