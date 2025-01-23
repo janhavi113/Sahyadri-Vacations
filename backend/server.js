@@ -293,7 +293,8 @@ app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	let event_Id = events.eventId.toString();
 	console.log('event_Id---',typeof event_Id);
 	let ScheduleBatchesRecords = await ScheduleBatches.find({
-		scheduleEventId: event_Id
+		scheduleEventId: event_Id,
+		active: true
 	});
 	console.log('ScheduleBatchesRecords---',ScheduleBatchesRecords);
 	if (events && ScheduleBatchesRecords) {
