@@ -925,7 +925,7 @@ const ShowEventDetails = () => {
                             </div>
                             {!everyWeekend && <div className="input-box">
                               <span className="details">Select Batch<span style={{ 'color': 'red' }}> *</span></span>
-                              <select onClick={(e) => handleSelectDate(e)} required>
+                              <select onClick={(e) => handleSelectDate(e)} onBlur={(e) => handleSelectDate(e)} required>
                                 {finalBatchesList && finalBatchesList.map((event, index) => (
                                   <option key={index} value={event.batchdate} >{event.batchdate}</option>
                                 ))}
