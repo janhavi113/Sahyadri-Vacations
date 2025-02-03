@@ -214,10 +214,10 @@ function convertDateToCustomFormat(dateString) {
     const [month, day, year] = dateString.split("/");
 
     // Get the last two digits of the year
-    const yearLastTwoDigits = year.slice(-2);
+    const yearLastTwoDigits = year;
 
     // Format the output as YYDDMM
-    const customFormattedDate = `${yearLastTwoDigits}${day}${month}`;
+    const customFormattedDate = `${yearLastTwoDigits}${parseInt(day) < 9 ? '0'+ day : day}${parseInt(month) < 9 ? '0'+ month : month}`;
 
     return customFormattedDate;
 }

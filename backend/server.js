@@ -311,6 +311,26 @@ app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	}
 });
 
+app.get("/get-selected-batch/:eventId/:startDate/:endDate", async (req, res) => {
+	let ScheduleBatchesRecords = await ScheduleBatches.find({
+		scheduleEventId: req.params.eventId,
+		eventStartDate:new Date(req.params.startDate),
+		eventEndDate: new Date(req.params.endDate),
+		active: true
+	});
+	console.log('ScheduleBatchesRecords---',ScheduleBatchesRecords);
+	if (ScheduleBatchesRecords) {		
+		res.send({
+			isSuccess: true,
+			ScheduleBatchesRecords: ScheduleBatchesRecords
+		});
+	} else {
+		res.send({
+			isSuccess: false
+		});
+	}
+});
+
 // Login to System
 app.post("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	try {
