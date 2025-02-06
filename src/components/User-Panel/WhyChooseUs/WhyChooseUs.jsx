@@ -29,7 +29,7 @@ const WhyChooseUs = () => {
       <div className='add-padding'> 
         <h2> Why Sahyadri Vacations </h2>
 
-        <div className="feature-container" ref={scrollContainer}>
+        <div className="rating-section feature-container" ref={scrollContainer}>
           <div className="feature feature-partician">
             <img src={expertTeam} alt="Expert Team" />
             <h3>Expert Team</h3>
