@@ -39,14 +39,9 @@ router.post("/booking", async (req, res) => {
             eventStartDate,
             eventEndDate,
         } = req.body;
-        let bookingIdVar;
+        let bookingIdVar = await generateBookingId(req.body.bookingDate);
 
-        let confirmedBookings = await Bookings.findOne().sort({ _id: -1 });//.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
-        if (isBookingDateToday(confirmedBookings.bookingDate)) {
-            bookingIdVar = Number(confirmedBookings.bookingId) + 1;
-        } else {
-            bookingIdVar = convertDateToCustomFormat(new Date(req.body.bookingDate).toLocaleDateString()) + 1;
-        }
+      
         console.log('bookingIdVar---', bookingIdVar);
 
         const booking = new Bookings({
@@ -209,18 +204,30 @@ router.put("/payment-confirmed", async (req, res) => {
     }
 });
 
+// Function to generate a unique Booking ID
+const generateBookingId = async (bookingDate) => {
+    const formattedDate = convertDateToCustomFormat(new Date(bookingDate).toLocaleDateString());
+
+    // Find and update the latest booking with an atomic increment
+    const updatedBooking = await Bookings.findOneAndUpdate(
+        { bookingDate: new Date(bookingDate).toLocaleDateString() }, // Match today's date
+        { $inc: { bookingCounter: 1 } }, // Atomic increment to avoid duplicates
+        { new: true, upsert: true } // Create a new record if none exists
+    );
+
+    if (updatedBooking) {
+        return formattedDate + String(updatedBooking.bookingCounter).padStart(3, '0'); // Ensure at least 2 digits
+    }
+
+    return formattedDate + "01"; // Start with 01 if no previous bookings exist
+};
+
+// Function to convert date to custom format (YYDDMM)
 function convertDateToCustomFormat(dateString) {
-    // Split the date string (MM/DD/YYYY) into parts
     const [month, day, year] = dateString.split("/");
-
-    // Get the last two digits of the year
-    const yearLastTwoDigits = year;
-
-    // Format the output as YYDDMM
-    const customFormattedDate = `${yearLastTwoDigits}${parseInt(day) < 9 ? '0'+ day : day}${parseInt(month) < 9 ? '0'+ month : month}`;
-
-    return customFormattedDate;
+    return `${parseInt(day) < 10 ? '0' + day : day}${parseInt(month) < 10 ? '0' + month : month}${year}`;
 }
+
 
 router.post("/sendInvoice", async (req, res) => {
     const bookingDetails = req.body;
