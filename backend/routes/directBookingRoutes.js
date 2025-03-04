@@ -101,19 +101,6 @@ router.post('/direct-booking', async (req, res) => {
     }
 });
 
-function convertDateToCustomFormat(dateString) {
-    // Split the date string (MM/DD/YYYY) into parts
-    const [month, day, year] = dateString.split("/");
-
-    // Get the last two digits of the year
-    const yearLastTwoDigits = year;
-
-    // Format the output as YYDDMM
-    const customFormattedDate = `${yearLastTwoDigits}${parseInt(day) < 9 ? '0'+ day : day}${parseInt(month) < 9 ? '0'+ month : month}`;
-
-    return customFormattedDate;
-}
-
 // Function to check if the date is today
 function isBookingDateToday(dateString) {
     const [month, day, year] = dateString.split("/").map(Number);
@@ -126,21 +113,43 @@ function isBookingDateToday(dateString) {
         booking.getFullYear() === today.getFullYear()
     );
 }
+
+// Function to generate a unique Booking ID
+const generateBookingId = async (bookingDate) => {
+    const formattedDate = convertDateToCustomFormat(new Date(bookingDate).toLocaleDateString());
+
+    // Find and update the latest booking with an atomic increment
+    const updatedBooking = await Bookings.findOneAndUpdate(
+        { bookingDate: new Date(bookingDate).toLocaleDateString() }, // Match today's date
+        { $inc: { bookingCounter: 1 } }, // Atomic increment to avoid duplicates
+        { new: true, upsert: true } // Create a new record if none exists
+    );
+
+    if (updatedBooking) {
+        return formattedDate + String(updatedBooking.bookingCounter).padStart(2, '0'); // Ensure at least 2 digits
+    }
+
+    return formattedDate + "01"; // Start with 01 if no previous bookings exist
+};
+
+// Function to convert date to custom format (YYDDMM)
+function convertDateToCustomFormat(dateString) {
+    const [month, day, year] = dateString.split("/");
+    return `${parseInt(day) < 10 ? '0' + day : day}${parseInt(month) < 10 ? '0' + month : month}${year}`;
+}
+
+
+
 router.post('/confirm-booking/:id', async (req, res) => {
     const { id } = req.params;
   
     try {
       // Find the booking in DirectBookings
       const directBooking = await DirectBookings.findById(id);
-
-      let bookingIdVar ;
+      
        let confirmedBookings = await Bookings.findOne({bookingDate: directBooking.bookingDate}).sort({ _id: -1 });//.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
       console.log('confirmedBookings--',confirmedBookings.bookingId);
-       if(isBookingDateToday(confirmedBookings.bookingDate)){
-            bookingIdVar = Number(confirmedBookings.bookingId) + 1;
-        }else{
-            bookingIdVar = convertDateToCustomFormat(new Date(directBooking.bookingDate).toLocaleDateString()) + 1;
-        }
+      let bookingIdVar = await generateBookingId(confirmedBookings.bookingDate);
         console.log('bookingIdVar--',bookingIdVar);
       if (!directBooking) {
         return res.status(404).json({ message: "Booking not found." });

@@ -216,7 +216,7 @@ const generateBookingId = async (bookingDate) => {
     );
 
     if (updatedBooking) {
-        return formattedDate + String(updatedBooking.bookingCounter).padStart(3, '0'); // Ensure at least 2 digits
+        return formattedDate + String(updatedBooking.bookingCounter).padStart(2, '0'); // Ensure at least 2 digits
     }
 
     return formattedDate + "01"; // Start with 01 if no previous bookings exist
