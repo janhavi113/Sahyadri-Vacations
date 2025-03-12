@@ -46,7 +46,7 @@ const ShowEventDetails = () => {
   const [eventType, setEventType] = useState();
   const [currentEventId, setCurrentEventId] = useState();
   const [selectDate, setSelectDate] = useState();
-  const [bookingPhone , setBookingPhone]  = useState();
+  const [bookingPhone, setBookingPhone] = useState();
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
   const [show, setShow] = useState(false);
@@ -121,7 +121,7 @@ const ShowEventDetails = () => {
     } catch (error) {
       console.error('Error during booking:', error);
       // Optionally, show an error message to the user
-    } 
+    }
   }
 
   const displayList = (data) => {
@@ -302,26 +302,33 @@ const ShowEventDetails = () => {
       setButtonDisabled(false);
       setFinalBatchesList(batchesList);
     }
-    console.log('batchesList--', batchesList);
+    let eventCostPerPersonTemp;
+    let eventCostPerPersonFromMumbaiTemp;
+    let b2bPriceTemp;
     let currentbatch = batchesList.find(batch => batch['eventId'] == currentEventId);
     if (currentbatch) {
       if (batchDates.length > 0 && currentbatch.batchdate != 'Available On All Weekends') {
         setSelectedDate(currentbatch.batchdate);
       }
       setBatchDate(currentbatch.batchdate);
-      setPrice(currentbatch.eventCostPerPerson);
+      eventCostPerPersonTemp = currentbatch.eventCostPerPerson;
+      eventCostPerPersonFromMumbaiTemp = currentbatch.eventCostPerPersonFromMumbai;
+      b2bPriceTemp = currentbatch.b2bPrice;
     } else if (batchesList.length > 0) {
-      
       if (batchDates.length > 0 && batchesList[0].batchdate != 'Available On All Weekends') {
         setSelectedDate(batchesList[0].batchdate);
       }
       setBatchDate(batchesList[0].batchdate);
-      setPrice(batchesList[0].eventCostPerPerson);
+      eventCostPerPersonTemp = batchesList[0].eventCostPerPerson;
+      eventCostPerPersonFromMumbaiTemp = batchesList[0].eventCostPerPersonFromMumbai;
+      b2bPriceTemp = batchesList[0].b2bPrice;
       setButtonDisabled(false);
       setSelectDate(batchesList[0].batchdate);
       setSelectedStartDate(batchesList[0].eventStartDate);
       setSelectedEndDate(batchesList[0].eventEndDate);
     }
+    let tempPrice = Math.min(...[eventCostPerPersonTemp, eventCostPerPersonFromMumbaiTemp, b2bPriceTemp].filter(price => price > 0));
+    setPrice(tempPrice);
   }
 
   useEffect(() => {
@@ -396,8 +403,8 @@ const ShowEventDetails = () => {
     setShowLocations(tempLocations);
   }
 
-  const handleNavigate = (bookingIdVar ) => {
-    console.log('.bookingId--',bookingIdVar);
+  const handleNavigate = (bookingIdVar) => {
+    console.log('.bookingId--', bookingIdVar);
     navigate("/customerPayNowScreen", {
       state: {
         eventDetails: eventDetails,
@@ -677,10 +684,12 @@ const ShowEventDetails = () => {
                       <h2 className="h3"> Pickup Points : </h2>
                       <div className='margin-location'>
                         {b2bLocation &&
-                          <div className="section-details" >
+                          <div>
                             <h2 > <b>Base to Base : </b></h2>
-                            <ul className="display-bulletin"><li>{b2bLocation} </li>
-                            </ul>
+                            <div className="section-details" >
+                              <ul className="display-bulletin"><li>{b2bLocation} </li>
+                              </ul>
+                            </div>
                           </div>
                         }
                         <br />
@@ -783,9 +792,10 @@ const ShowEventDetails = () => {
                     <div className="col-lg-12 d-none d-md-none d-lg-block">
                       <div className="booking-card mb-3 " >
                         <div className="card-body text-dark">
-                          <h4 className="card-title"><center>
-                            <b className='event-price'>₹{price} /- </b>
-                            <sub >Per Person</sub>
+                          <h4 className="details-card-title"><center>
+                            <span><b>Starts@ </b></span>
+                            <b className='event-price'>₹ {price} /</b>
+                            <sub > Person</sub>
                           </center>
                           </h4>
                           {buttonDisabled &&
@@ -829,7 +839,8 @@ const ShowEventDetails = () => {
                 <div className="card-body text-dark">
                   <div className="booking-section d-flex justify-content-between align-items-center">
                     <h4 className="card-title"><center>
-                      <b className='event-price'>₹{price} /- </b>
+                      <span>Starts@ </span>
+                      <b className='event-price'>₹{price} / </b>
                       <sub >Per Person</sub>
                     </center>
                     </h4>
@@ -839,10 +850,6 @@ const ShowEventDetails = () => {
                   </div>
                   {buttonDisabled &&
                     <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
-                  }
-                  {inquery && <div>
-                    <p className="bookingClosed" >**Due to some technical issue  we are unable to take your booking from website, please contact us directly.</p>
-                  </div>
                   }
                   <div className="button-edit-container">
                     <div className="button button-margin ">

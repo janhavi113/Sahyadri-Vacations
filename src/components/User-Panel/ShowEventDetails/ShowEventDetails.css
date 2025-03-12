@@ -8,7 +8,10 @@
     color: blue;
     text-decoration: underline;
 }
-
+.details-card-title{
+    font-size: 1.25rem;
+    color: #028c06;
+}
 .paynow-button {
     background-color: #4caf50 !important;
     color: white !important;
@@ -290,7 +293,7 @@ h3 {
 .event-price {
     font-weight: 700 !important;
     font-size: 25px;
-    color: orange;
+    color: #028c06;
 }
 
 .booking-header p {
