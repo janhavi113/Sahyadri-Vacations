@@ -39,8 +39,10 @@
     position: relative;
     cursor: pointer;
     transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 /* 3D pop effect on hover */
 .category-card-container:hover {
     transform: scale(1.05) translateY(-5px);
@@ -81,7 +83,7 @@
 }
 
 /* Image styling */
-.card-image {
+.category-card-image {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     display: block;
     height: 95%;
@@ -96,7 +98,7 @@
 }
 
 /* Lift the image slightly on hover */
-.category-card-container:hover .card-image {
+.category-card-container:hover .category-card-image {
     transform: translate(-50%, -50%) scale(1.0);
     filter: brightness(85%);
 }
@@ -185,7 +187,7 @@
         width: 100%;
     }
 
-    .card-image {
+    .category-card-image {
         height: 275px;
         width: 100%;
     }
