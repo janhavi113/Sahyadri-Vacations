@@ -8,10 +8,8 @@ const MainCategoriesSection = () => {
   const navigate = useNavigate();
   const [isSuccess, setSuccess] = useState(false);
   useEffect(() => {
-    if (isSuccess == false) {
-
+   
       getMainCategoriesEvent();
-    }
 
   })
 
