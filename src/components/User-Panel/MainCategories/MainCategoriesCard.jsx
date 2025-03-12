@@ -22,7 +22,7 @@ const MainCategoriesCard = ({ mainCategory }) => {
                     <div className="category-background-image"></div>
                     <div className="top-right"><img src={logo} /></div>
                     <img
-                        src={mainCategory.imagePath}
+                        src={apiUrl+'/'+mainCategory.imagePath}
                         alt="Card Background" className="card-image " />
                     <div className="centered">{mainCategory.title}</div>
                     {isHovered && mainCategory.startingPrice &&
