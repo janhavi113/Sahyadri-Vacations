@@ -190,6 +190,7 @@
     .category-card-image {
         height: 275px;
         width: 100%;
+        top: 0% !important
     }
 
     .centered {
