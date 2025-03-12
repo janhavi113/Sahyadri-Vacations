@@ -838,7 +838,7 @@ const ShowEventDetails = () => {
               <div className="booking-card-mb mb-0 " style={{ "width": "100%;" }}>
                 <div className="card-body text-dark">
                   <div className="booking-section d-flex justify-content-between align-items-center">
-                    <h4 className="card-title"><center>
+                    <h4 className="details-card-title"><center>
                       <span>Starts@ </span>
                       <b className='event-price'>₹{price} / </b>
                       <sub >Per Person</sub>
