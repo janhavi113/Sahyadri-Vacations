@@ -8,8 +8,10 @@ const MainCategoriesSection = () => {
   const navigate = useNavigate();
   const [isSuccess, setSuccess] = useState(false);
   useEffect(() => {
-   
+    if (isSuccess == false) {
+
       getMainCategoriesEvent();
+    }
 
   })
 
@@ -31,7 +33,7 @@ const MainCategoriesSection = () => {
 
   return (
     <>
-     {isSuccess && mainCategoriesRec &&
+     
         <div className="section-header px-heading">
           <div className="col-7 row">
             <div className="col-lg-1 col-3">
@@ -48,15 +50,15 @@ const MainCategoriesSection = () => {
           </div>
           <div className="mainSectionsCategories" >
           <div className="row">
-            { 
+            {isSuccess && mainCategoriesRec && (
               mainCategoriesRec.map((event, index) => (
                 <MainCategoriesCard key={index} mainCategory={event} />
               ))
-           
+            )
             }
           </div>
         </div>
-        </div>}
+        </div>
     </>
   )
 }
