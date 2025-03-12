@@ -41,6 +41,7 @@ import paymentCallbackRoutes from './routes/paymentCallbackRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import customisedTourRoutes from './routes/customisedTourRoutes.js'
 import specialOfferRoutes from './routes/specialOfferRoutes.js'
+import categoryEventsRoutes from './routes/categoryRoutes.js';
 import './cron/specialOfferCleanup.js';
  
 dotenv.config();
@@ -289,7 +290,7 @@ app.get("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 	var events = await Events.findOne({
 		apiname: apiname
 	});
-   
+	console.log('events---',events);
 	let event_Id = events.eventId.toString();
 	console.log('event_Id---',typeof event_Id);
 	let ScheduleBatchesRecords = await ScheduleBatches.find({
@@ -387,7 +388,7 @@ app.get("/all-events", async (req, res) => {
 	}
 });
 
-
+app.use(categoryEventsRoutes);
 app.use(createEventRoutes);
 app.use(bookingRoutes);
 app.use(scheduleEventRoutes);

@@ -5,10 +5,15 @@ import safety from '../../Images/whyus/safety.svg';
 import affodable from '../../Images/whyus/affodable.svg';
 import batch from '../../Images/whyus/batch.svg';
 import expertTeam from '../../Images/whyus/experTeam.svg';
+
 // Import Swiper styles
 import "react-multi-carousel/lib/styles.css";
+import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css/bundle';
+// import required modules
+import { Navigation } from 'swiper/modules';
+
 const WhyChooseUs = () => {
   const scrollContainer = useRef(null);
   useEffect(() => {
@@ -26,39 +31,59 @@ const WhyChooseUs = () => {
   }, []);
   return (
     <section className="why-choose-us">
-      <div className='add-padding'> 
+      <div className='add-padding'>
         <h2> Why Sahyadri Vacations </h2>
-
-        <div className="rating-section feature-container" ref={scrollContainer}>
-          <div className="feature feature-partician">
-            <img src={expertTeam} alt="Expert Team" />
-            <h3>Expert Team</h3>
-            <p>Our team of professionals ensures you have the best adventure experience.</p>
-          </div>
-
-          <div className="feature feature-partician">
-            <img src={batch} alt="Limited Batch Size" />
-            <h3>Limited Batch Size</h3>
-            <p>We ensure personalized attention with small and manageable group sizes.</p>
-          </div>
-
-          <div className="feature feature-partician">
-            <img className="feature-affordable" src={affodable} alt="Affordable Pricing" />
-            <h3>Affordable Pricing</h3>
-            <p>Enjoy your adventure without burning a hole in your pocket.</p>
-          </div>
-          <div className="feature feature-partician">
-            <img src={safety} alt="Safety First" />
-            <h3>Safety First</h3>
-            <p>We prioritize your safety with experienced guides and proper equipment.</p>
-          </div>
-
-          <div className="feature">
-            <img src={solo} alt="Recommended for Solo Travelers" />
-            <h3>Recommended for Solo Travelers</h3>
-            <p>Our trips are perfect for solo adventurers looking to connect with like-minded travelers.</p>
-          </div>
-        </div>
+        <Swiper
+          breakpoints={{
+            0: { slidesPerView: 1.5 },
+            400: { slidesPerView: 1.5 },
+            639: { slidesPerView: 2 },
+            865: { slidesPerView: 2 },
+            1000: { slidesPerView: 3 },
+            1500: { slidesPerView: 3 },
+            1700: { slidesPerView: 3 },
+          }}
+          spaceBetween={50}
+          navigation
+          modules={[Navigation]}
+          className="rating-section"
+        >
+          <SwiperSlide key={1}>
+            <div className="feature feature-partician">
+              <img src={expertTeam} alt="Expert Team" />
+              <h3>Expert Team</h3>
+              <p>Our team of professionals ensures you have the best adventure experience.</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide key={2}>
+            <div className="feature feature-partician">
+              <img src={batch} alt="Limited Batch Size" />
+              <h3>Limited Batch Size</h3>
+              <p>We ensure personalized attention with small and manageable group sizes.</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide key={3}>
+            <div className="feature feature-partician">
+              <img className="feature-affordable" src={affodable} alt="Affordable Pricing" />
+              <h3>Affordable Pricing</h3>
+              <p>Enjoy your adventure without burning a hole in your pocket.</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide key={4}>
+            <div className="feature feature-partician">
+              <img src={safety} alt="Safety First" />
+              <h3>Safety First</h3>
+              <p>We prioritize your safety with experienced guides and proper equipment.</p>
+            </div>
+          </SwiperSlide>
+          <SwiperSlide key={5}>
+            <div className="feature">
+              <img src={solo} alt="Recommended for Solo Travelers" />
+              <h3>Recommended for Solo Travelers</h3>
+              <p>Our trips are perfect for solo adventurers looking to connect with like-minded travelers.</p>
+            </div>
+          </SwiperSlide>
+        </Swiper>
 
         <button className="cta-button"><a href="/events" role="button">Book Your Adventure Now</a></button>
       </div>

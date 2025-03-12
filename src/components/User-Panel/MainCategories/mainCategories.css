@@ -1,0 +1,170 @@
+.mainSectionsCategories {
+    height: 100%;
+    padding: 31px 2%;
+}
+
+.mainSections,
+.mainSectionsCategories {
+    display: "";
+    position: relative;
+    width: 100%;
+}
+
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.mainSectionsTitle {
+    color: #36b54a;
+    display: block;
+    font-family: Montserrat;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.category-card-container {
+    height: 360px;
+    width: 95%;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+
+/* 3D pop effect on hover */
+.category-card-container:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0px 10px 25px rgba(0, 255, 255, 0.4);
+}
+
+/* Background with neon ripple effect */
+.category-background-image {
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.4) 20%, transparent 70%);
+    border-radius: 15px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+}
+
+/* Neon glow effect on hover */
+.category-card-container:hover .category-background-image {
+    opacity: 1;
+    transform: scale(1.2);
+    animation: rippleAnimation 1s infinite alternate;
+}
+
+/* Ripple effect animation */
+@keyframes rippleAnimation {
+    0% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1.4);
+        opacity: 0.4;
+    }
+}
+
+/* Image styling */
+.card-image {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    display: block;
+    height: 95%;
+    left: 50%;
+    position: relative;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.5s ease-in-out, filter 0.3s ease-in-out;
+    width: 94%;
+    z-index: 10;
+    border-radius: 15px;
+}
+
+/* Lift the image slightly on hover */
+.category-card-container:hover .card-image {
+    transform: translate(-50%, -50%) scale(1.0);
+    filter: brightness(85%);
+}
+
+/* Centered title */
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: xx-large;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    color: white;
+    text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Price text with fade-in animation */
+.bottom-left {
+    position: absolute;
+    bottom: 20px;
+    left: 40px;
+    z-index: 100;
+    color: white;
+    font-weight: 600;
+    text-shadow: 2px 2px 8px black;
+    font-size: large;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+    transform: translateY(10px);
+}
+
+/* Top right text */
+.top-right {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 100;
+    width: 7%;
+  }
+/* Show price smoothly on hover */
+.category-card-container:hover .bottom-left {
+    opacity: 1;
+    transform: translateY(0);
+}
+.col-6 {
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+@media (min-width: 988px) {
+    .col-lg-3 {
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+
+@media (min-width: 768px) {
+    .col-md-4 {
+        -ms-flex: 0 0 33.333333%;
+        flex: 0 0 33.333333%;
+    }
+}
+@media only screen and (max-width: 600px) {
+    .category-card-container {
+        height: 380px;
+        overflow: hidden;
+        position: relative;
+    }
+}

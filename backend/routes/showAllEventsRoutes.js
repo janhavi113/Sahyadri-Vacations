@@ -5,8 +5,8 @@ import {
 	ScheduleBatches
 } from '../models/ScheduleBatches.js';
 import {
-	Events
-} from '../models/Event.js';
+	MainCategoriesSection
+} from '../models/MainCategoriesSection.js';
 import { fileURLToPath } from 'url';
 const router = express.Router();
 
@@ -34,17 +34,26 @@ router.get("/show-all-events", async (req, res) => {
 		});
 	}
 });
-
+router.get('/getMainCategoriesEvent', async (req, res) => {
+	console.log('I am here ');
+	try {
+		const mainCategories = await MainCategoriesSection.find({ active: true });
+		console.log('mainCategories ', mainCategories);
+		res.status(200).json({ message: 'Special offer record found', mainCategories: mainCategories });
+	} catch (err) {
+		res.status(500).json({ message: err.message });
+	}
+});
 router.get("/show-events/:eventType", async (req, res) => {
-	
+
 	try {
 		let eventType = req.params.eventType;
-		console.log("eventType---",eventType);
+		console.log("eventType---", eventType);
 		let ScheduleBatchesRecords = await ScheduleBatches.find({
 			active: true,
 			eventType: eventType
 		});
-		console.log("ScheduleBatchesRecords---",ScheduleBatchesRecords);
+		//console.log("ScheduleBatchesRecords---", ScheduleBatchesRecords);
 		res.send({
 			isSuccess: true,
 			events: ScheduleBatchesRecords

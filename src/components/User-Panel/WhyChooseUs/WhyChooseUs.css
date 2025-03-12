@@ -2,6 +2,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  margin-bottom: 4%;
 }
 
 
@@ -30,37 +31,40 @@
 .why-choose-us .swiper-button-next {
   display: none !important;
 }
-.feature-container{
+
+.feature-container {
   display: flex;
   margin: auto;
 }
+
 .feature {
-  width: 20%;
   padding: 10px;
   height: 200px;
   align-items: center;
   text-align: center;
   justify-content: center;
-}
-.feature-partician{
-  border-right: 1px dashed #FFD6A5;
-  margin-right: 16px;
+  border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(240, 115, 61, 0.203);
+    background-color: #fff;
 }
 
-  .feature img {
-    max-width: 18%;
-    height: auto;
-    margin-bottom: 10px;
-    margin-left: 40%;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-  }
-  .feature .feature-affordable {
-    all: unset;
-    margin-bottom: 14px !important;
-  }
- 
+.feature img {
+  max-width: 18%;
+  height: auto;
+  margin-bottom: 10px;
+  margin-left: 40%;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.feature .feature-affordable {
+  all: unset;
+  width: 64px;
+  margin-bottom: 14px !important;
+}
+
 
 .feature h3 {
   font-size: 1.5rem;
@@ -71,9 +75,12 @@
 .feature p {
   font-size: 1rem;
   color: #7f8c8d;
-  word-wrap: break-word; /* Ensures long words break */
-  overflow-wrap: break-word; /* Modern equivalent */
-  white-space: normal; /* Allows text wrapping */
+  word-wrap: break-word;
+  /* Ensures long words break */
+  overflow-wrap: break-word;
+  /* Modern equivalent */
+  white-space: normal;
+  /* Allows text wrapping */
 }
 
 
@@ -102,14 +109,21 @@
   color: light;
   line-height: 1.6;
 }
+
 /* CSS for Phone Mode */
 @media screen and (max-width: 768px) {
- 
+
   .feature .feature-affordable {
     all: unset;
     margin-bottom: 14px !important;
     height: 40px;
-   }
+  }
+  .why-choose-us h2 {
+    font-size: 1.6rem;
+    color: #1d2935;
+    font-weight: bold;
+    margin-bottom: 50px;
+  }
 }
 
 /* Default Layout for Larger Screens (No Scrolling) */
@@ -122,44 +136,38 @@
 
 /* Horizontal Scroller for Phones and Tablets */
 @media screen and (max-width: 1024px) {
+  
   .feature-container {
     display: flex;
-    overflow-x: auto; /* Enable horizontal scrolling */
-    flex-wrap: nowrap; /* Prevent wrapping of features */
+    overflow-x: auto;
+    /* Enable horizontal scrolling */
+    flex-wrap: nowrap;
+    /* Prevent wrapping of features */
     gap: 16px;
     padding: 10px;
-    scroll-behavior: smooth; /* Smooth scrolling for better experience */
+    scroll-behavior: smooth;
+    /* Smooth scrolling for better experience */
   }
 
   .feature-container::-webkit-scrollbar {
-    height: 8px; /* Height of the scrollbar */
+    height: 8px;
+    /* Height of the scrollbar */
   }
 
   .feature-container::-webkit-scrollbar-thumb {
-    background-color: #d1d1d1; /* Scrollbar thumb color */
+    background-color: #d1d1d1;
+    /* Scrollbar thumb color */
     border-radius: 4px;
   }
 
   .feature-container::-webkit-scrollbar-track {
-    background-color: #f1f1f1; /* Scrollbar track color */
-  }
-
-  .feature {
-    flex: 0 0 auto; /* Prevent shrinking and ensure inline scrolling */
-    width: 80%; /* Adjust width for better visibility */
-    max-width: 300px; /* Optional: Limit maximum width */
-    height: auto;
-    text-align: center;
-    justify-content: center;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(240, 115, 61, 0.203);
-    background-color: #fff;
-    padding: 16px;
+    background-color: #f1f1f1;
+    /* Scrollbar track color */
   }
 
   .feature img {
-    max-width: 60px; /* Adjust icon size */
+    max-width: 60px;
+    /* Adjust icon size */
     height: auto;
     margin-bottom: 10px;
   }

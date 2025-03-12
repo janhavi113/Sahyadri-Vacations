@@ -25,12 +25,14 @@ import PrivacyPolicy from "./components/User-Panel/UserAgreement/PrivacyPolicy";
 import Gallery from "./components/User-Panel/Gallery/PhotoGallery" ;
 import ContactUs from "./components/User-Panel/Contact_Us/ContactUs" ;
 import Register from './components/Register/Register';
+import CategoryEvents from './components/User-Panel/MainCategories/categoryEvents'
 import CustomerBookings from "./components/User-Panel/ShowEventDetails/CustomerBookings";
 import DirectBookingDashboard from "./components/admin-panel/DirectBookings/DirectBookingDashboard" ;
 import DirectBookings from "./components/admin-panel/DirectBookings/ConfirmDirectBooking" ;
 import AddSpecialOfferEvents from "./components/admin-panel/SpecialOfferEvents/AddSpecialOfferEvents" ;
 import DirectBookingConfirmationPannel from "./components/admin-panel/DirectBookings/DirectBookingConfirmationPannel" ;
 import Confirmation from "./components/User-Panel/Confirmation/Confirmation";
+import Categories from "./components/admin-panel/Categories/Categories"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 function App() {
   console.log("inapp", import.meta.env.VITE_SOME_KEY);
@@ -42,11 +44,19 @@ function App() {
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/category",
+      element: <CategoryEvents />,
     }, 
     {
       path: "/sort-schedule-batches",
       element: <SortScheduleBatches/>,
     }, 
+    {
+      path: "/categories",
+      element: <Categories/>,
+    },
     {
       path: "/search-event",
       element: <SearchEvent />,

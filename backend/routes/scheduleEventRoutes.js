@@ -7,6 +7,10 @@ import {
 import {
 	Events
 } from '../models/Event.js';
+import {
+	MainCategoriesSection
+} from '../models/MainCategoriesSection.js';
+
 import { fileURLToPath } from 'url';
 
 const router = express.Router();
@@ -91,7 +95,8 @@ router.post("/schedule-event", async (req, res) => {
             tripalSharingNote,
             thirdAcUpgrate,
             thirdAcUpgrateNote,
-            note
+            note,
+			duration
 		} = req.body;
 
 		let scheduleRecordcount = 0;
@@ -133,22 +138,69 @@ router.post("/schedule-event", async (req, res) => {
 			thirdAcUpgrate: thirdAcUpgrate,
 			thirdAcUpgrateNote: thirdAcUpgrateNote,
 			note: note,
+			duration: duration,
 			Url: "/event-details?eventid=" +
 				(scheduleRecordcount + 1).toString() +
 				"/" +
 				eventname.toString()
 					.replace(/\s/g, "-") // Replace spaces with hyphens
-					.replace(/-+/g, "-") // Replace multiple consecutive hyphens with a single one
+					.replace(/-+/g, "-")
+					.replace("&", "") // Replace multiple consecutive hyphens with a single one
 					.toLowerCase(),
 			eventType: eventType,
 			eventApi: eventname.toString()
 				.replace(/\s/g, "-") // Replace spaces with hyphens
-				.replace(/-+/g, "-") // Replace multiple consecutive hyphens with a single one
+				.replace(/-+/g, "-")
+				.replace("&", "") // Replace multiple consecutive hyphens with a single one
 				.toLowerCase(),
 		});
 		scheduleBatches.sort = latest ? latest.sort + 1 : 1;
 		scheduleBatches.save();
 		if (scheduleBatches._id) {
+			res.send({
+				isSuccess: true
+			});
+		}
+	} catch (error) {
+		console.error(error);
+		res.send({
+			isSuccess: false,
+			error: error
+		});
+	}
+});
+
+router.post("/create-categories", async (req, res) => {
+	try {
+
+		var currUrl = "";
+		let sampleFile = req.files.file;
+		let uploadPath = path.join(__dirname, '../../public/Images', sampleFile.name);
+		currUrl = 'public/Images/' + sampleFile.name;
+		sampleFile.mv(uploadPath, (err) => {
+			if (err) {
+				return res.status(500).send(err);
+			}
+		});
+
+		const {
+			active,
+			title,
+			events,
+			startingPrice
+		} = req.body;
+
+		
+		const MainCategories = new MainCategoriesSection({
+			active: active,
+			title: title,
+			events:events,
+			imagePath:currUrl,
+			startingPrice:startingPrice
+		});
+		
+		MainCategories.save();
+		if (MainCategories._id) {
 			res.send({
 				isSuccess: true
 			});
@@ -202,7 +254,8 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
             tripalSharingNote,
             thirdAcUpgrate,
             thirdAcUpgrateNote,
-            note
+            note,
+			duration
 			
 		} = req.body;
 
@@ -233,6 +286,7 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			thirdAcUpgrate: thirdAcUpgrate,
 			thirdAcUpgrateNote: thirdAcUpgrateNote,
 			note: note,
+			duration: duration,
 			Url: "/event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase(),
 			eventApi: eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase()
 		};

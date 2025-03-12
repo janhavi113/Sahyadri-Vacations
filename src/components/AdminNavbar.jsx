@@ -54,9 +54,9 @@ const AdminNavbar = ({ children }) => {
             <FontAwesomeIcon icon={faTag} className="nav-icon" />
             {isExpanded && <span className="nav-text">Sort Schedule Batches</span>}
           </NavLink>
-          <NavLink to="/add-special-offer-events" className="nav-item">
+          <NavLink to="/categories" className="nav-item">
             <FontAwesomeIcon icon={faFire} className="nav-icon" />
-            {isExpanded && <span className="nav-text">Special Offers</span>}
+            {isExpanded && <span className="nav-text">Honey Moon Categories</span>}
           </NavLink>
         </nav>
       </div>

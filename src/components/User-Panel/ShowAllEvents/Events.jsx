@@ -86,7 +86,7 @@ const Events = () => {
             <EventHeader name='Upcoming Events' />
             <div className="all-event-contentbody">
                 <div className="team justify-content-center">
-                    <div className="row justify-content-around">
+                    <div className="row">
                         {isSuccess && events.map((event, index) => (
                             <div key={index} className="mt-2 col-lg-3 col-md-3 col-sm-3">
                                 <div className="event-card card all-events-card">

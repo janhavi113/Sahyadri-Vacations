@@ -28,6 +28,7 @@ function ScheduleEvents() {
   const [thirdAcUpgrate, setThirdAcUpgrate] = useState(0);
   const [thirdAcUpgrateNote, setThirdAcUpgrateNote] = useState('');
   const [note, setNote] = useState('');
+  const[duration , setDuration] = useState('');
   const navigate = useNavigate();
   const {
     register,
@@ -126,6 +127,7 @@ function ScheduleEvents() {
       formData.append('tripalSharingNote', tripalSharingNote);
       formData.append('thirdAcUpgrate', thirdAcUpgrate);
       formData.append('thirdAcUpgrateNote', thirdAcUpgrateNote);
+      formData.append('duration', duration);
       if (data.partialBookingAmount) {
         formData.append('partialBookingAmount', data.partialBookingAmount);
       }
@@ -299,7 +301,18 @@ function ScheduleEvents() {
                       onChange={(e) => setNote(e.target.value)}
                     />
                   </div>
-
+                  {/* Duration*/} 
+                  <div className="input-box-column">
+                    <span className="details">
+                      Duration <span style={{ color: 'red' }}>*</span>
+                    </span>
+                    <input
+                      type="text"
+                      value={duration}
+                      onChange={(e) => setDuration(e.target.value)}
+                      required
+                    />
+                  </div> 
                   <div className="input-box-column ">
                     <span className="details">Active</span>
                     <input  {...register("Active")} type="checkbox" id="active" name="Active" value={true} />

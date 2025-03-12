@@ -1,40 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import Footer from "../../footer";
 import Navbar from "../../Navbar";
-import EventHeader from './EventHeader'
+import EventHeader from '../ShowAllEvents/EventHeader'
 import { useNavigate } from "react-router-dom";
 import "../../card.css"
 import '../../home.css'
-import './Events.css'
+import '../ShowAllEvents/Events.css'
 import "react-multi-carousel/lib/styles.css";
-import './Camping_Event.css';
-const Treking_Events = () => {
+import '../ShowAllEvents/Camping_Event.css';
+import { useSearchParams } from "react-router-dom";
+const CategoryEvents = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
+    const queryParameters = new URLSearchParams(window.location.search);
+      const [type, setType] = useState(queryParameters.get("eventname"));
+      const [params, setParams] = useState(type.split('/'));
     const [isSuccess, setSuccess] = useState(false);
-    const [trekkingEvents, setTrekkingEvents] = useState();
+    const [events, setEvent] = useState();
+    const[categoryName , setCategoryName] = useState();
     useEffect(() => {
-
         if (isSuccess == false) {
             getAllRecord();
         }
     })
+
     const getAllRecord = async () => {
-        let trekkingEvents = [];
-        let r = await fetch(`${apiUrl}show-all-events`, {
+        console.log('param ---',params[1]);
+        
+        let liveEvents = [];
+        let r = await fetch(`${apiUrl}show-all-category-events/${params[1]}`, {
             method: "GET", headers: {
                 "Content-Type": "application/json",
             }
         })
 
         let res = await r.json();
+        console.log('--res---',res);
+        
         if (res.isSuccess == true) {
             setSuccess(true);
+            setCategoryName(res.category.title);
+            if(res.events.length <= 0){
+                navigate('/events')
+            }
             for (let i = 0; i < res.events.length; i++) {
-                if (res.events[i].eventType == 'TrekEvent' || res.events[i].eventType == 'AdventureActivity') {
-                    trekkingEvents.push(getNextBatchDate(res.events[i]));
+                if (getNextBatchDate(res.events[i]) != '') {
+                    liveEvents.push(getNextBatchDate(res.events[i]));
                 }
             }
-            setTrekkingEvents(trekkingEvents);
+            setEvent(liveEvents);
         }
 
     }
@@ -51,6 +64,8 @@ const Treking_Events = () => {
                 if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
                     batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventEndDate).getFullYear();
                     eventCostPerPerson = event.batches[i].eventCostPerPerson;
+                    b2bPrice = event.batches[i].b2bPrice;
+                    eventCostPerPersonFromMumbai = event.batches[i].eventCostPerPersonFromMumbai;
                 }
             }
         } else {
@@ -80,11 +95,11 @@ const Treking_Events = () => {
     return (
         <div >
             <Navbar />
-            <EventHeader name='Trek Events' />
+            <EventHeader name={categoryName} />
             <div className="all-event-contentbody">
                 <div className="team justify-content-center">
-                    <div className="row">
-                        {isSuccess && trekkingEvents.map((event, index) => (
+                    <div className="row ">
+                        {isSuccess && events.map((event, index) => (
                             <div key={index} className="mt-2 col-lg-3 col-md-3 col-sm-3">
                                 <div className="event-card card all-events-card">
                                     <a onClick={() => navigate(event.url)}>
@@ -93,7 +108,7 @@ const Treking_Events = () => {
                                             <h2 className='all-event-header event-card-header bg-transparent'><b>{event.eventname}</b></h2>
                                             <div className='all-event-card-footer event-card-footer'>
                                                 <div >{event.batchdate}</div>
-                                                <div ><strong className='price'>₹{Math.min(...[event.eventCostPerPerson, event.eventCostPerPersonFromMumbai, event.b2bPrice].filter(price => price > 0))}</strong><i>per person</i></div>
+                                                <div ><strong className='price'>₹{Math.min(...[event.eventCostPerPerson, event.eventCostPerPersonFromMumbai, event.b2bPrice].filter(price => price > 0))} </strong><i>per person</i></div>
                                             </div>
                                         </div>
                                     </a>
@@ -103,9 +118,9 @@ const Treking_Events = () => {
                     </div>
                 </div>
             </div>
-
             <Footer />
         </div>
     )
 }
-export default Treking_Events
+
+export default CategoryEvents

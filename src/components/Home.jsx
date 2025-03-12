@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Contact_Us from "./User-Panel/Contact_Us/Contact_Us";
 import FunFact from "./User-Panel/FunFact/FunFact";
 import WhyChooseUs from "./User-Panel/WhyChooseUs/WhyChooseUs";
+import MainCategories from "./User-Panel/MainCategories/MainCategoriesSection";
 import Rating from "./User-Panel/Rating/RatingSection";
 import Card from "./card"
 import Whatsapp from './Images/whatsapp.svg';
@@ -32,6 +33,7 @@ const Home = () => {
   const [campingEvents, setCampingEvents] = useState();
   const [trekkingEvents, setTrekkingEvents] = useState();
   const [specialOffer, setSpecialOffer] = useState();
+
   useEffect(() => {
     if (isSuccess == false) {
       getAllRecord();
@@ -55,11 +57,15 @@ const Home = () => {
     }
   }
 
+ 
+
   const getNextBatchDate = (event) => {
     var liveEvent = '';
     let batchdate;
     let sortdate;
     let eventCostPerPerson;
+    let eventCostPerPersonFromMumbai;
+    let b2bPrice;
     const Q = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     if (event.batches) {
@@ -67,15 +73,21 @@ const Home = () => {
         if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
           batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + months[new Date(event.batches[i].eventEndDate).getFullYear()];
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          b2bPrice = event.batches[i].b2bPrice;
+          eventCostPerPersonFromMumbai = event.batches[i].eventCostPerPersonFromMumbai;
           sortdate = new Date(event.batches[i].eventStartDate);
 
         } else if (event.batches[i].everyWeekend == true) {
           batchdate = 'Available On All Weekends';
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          b2bPrice = event.batches[i].b2bPrice;
+          eventCostPerPersonFromMumbai = event.batches[i].eventCostPerPersonFromMumbai;
           sortdate = 'Available On All Weekends';
         } else if (event.batches[i].notScheduleYet == true) {
           batchdate = 'On Public Demand';
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          b2bPrice = event.batches[i].b2bPrice;
+          eventCostPerPersonFromMumbai = event.batches[i].eventCostPerPersonFromMumbai;
           sortdate = 'On Public Demand';
         }
       }
@@ -83,15 +95,21 @@ const Home = () => {
       if (new Date(event.eventStartDate) - Q >= 0) {
         batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventEndDate).getFullYear();
         eventCostPerPerson = event.eventCostPerPerson;
+        b2bPrice = event.b2bPrice;
+        eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
         sortdate = new Date(event.eventStartDate);
 
       } else if (event.everyWeekend == true) {
         batchdate = 'Available On All Weekends';
         eventCostPerPerson = event.eventCostPerPerson;
+        b2bPrice = event.b2bPrice;
+        eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
         sortdate = 'Available On All Weekends';
       } else if (event.notScheduleYet == true) {
         batchdate = 'On Public Demand';
         eventCostPerPerson = event.eventCostPerPerson;
+        b2bPrice = event.b2bPrice;
+        eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
         sortdate = 'On Public Demand';
       }
     }
@@ -106,6 +124,8 @@ const Home = () => {
         images: `${apiUrl}` + event.images,
         batchdate: batchdate,
         eventCostPerPerson: eventCostPerPerson,
+        eventCostPerPersonFromMumbai:eventCostPerPersonFromMumbai,
+        b2bPrice:b2bPrice,
         sortDate: sortdate,
         inactive: false,
         sort: event.sort,
@@ -135,19 +155,20 @@ const Home = () => {
     })
 
     let res = await r.json()
-    //console.log('res',res);
+
     if (res.isSuccess == true) {
       setSuccess(true);
+     
       for (let i = 0; i < res.events.length; i++) {
         let tempEvent = [];
 
         tempEvent = getNextBatchDate(res.events[i]);
         if (!tempEvent.inactive && tempEvent != '' && tempEvent.batchdate != 'On Public Demand' && res.events[i].eventType != 'CampingEvent') {
-          liveEvents.push(getNextBatchDate(res.events[i]));
+          liveEvents.push(tempEvent);
         }
 
         if (!tempEvent.inactive && (res.events[i].eventType == 'TrekEvent' || res.events[i].eventType == 'AdventureActivity')) {
-          console.log('tempEvent----', tempEvent);
+        //  console.log('tempEvent----', tempEvent);
           trekkingEvents.push(tempEvent);
         } else if (!tempEvent.inactive && res.events[i].eventType == 'CampingEvent') {
           campingEvents.push(tempEvent);
@@ -158,7 +179,7 @@ const Home = () => {
       liveEvents.sort((a, b) => a.sort - b.sort);
       setEvent(liveEvents);
       trekkingEvents.sort((a, b) => a.sort - b.sort);
-      console.log('trekkingEvents----', trekkingEvents);
+    //  console.log('trekkingEvents----', trekkingEvents);
       setTrekkingEvents(trekkingEvents);
       setCampingEvents(sortEventsBySortDate(campingEvents));
       setBackPackingEvents(sortEventsBySortDate(backPackingEvents));
@@ -485,6 +506,10 @@ const Home = () => {
       {/* {specialOffer && 
       <SpecialOfferSection  specialOffer={specialOffer} /> 
       }      */}
+      
+      <MainCategories />
+         
+      
       <WhyChooseUs />
 
 
