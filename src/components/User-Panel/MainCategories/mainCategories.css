@@ -160,15 +160,47 @@
         -ms-flex: 0 0 33.333333%;
         flex: 0 0 33.333333%;
     }
+}/* Tablet Layout */
+@media (min-width: 768px) {
+    .col-md-4 {
+        flex: 0 0 33.333%;
+    }
+    .top-right {
+        width: 7%;
+    }
 }
+
+/* Desktop Layout */
+@media (min-width: 988px) {
+    .col-lg-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+
+/* Mobile adjustments */
 @media only screen and (max-width: 600px) {
     .category-card-container {
-        height: 300px;
-        overflow: hidden;
-        position: relative;
+        height: 280px;
+        width: 100%;
     }
 
     .card-image {
-        height: 295px !important;
+        height: 95%;
+        width: 100%;
+    }
+
+    .centered {
+        font-size: 1.2rem;
+    }
+
+    .bottom-left {
+        font-size: medium;
+        bottom: 15px;
+        left: 15px;
+    }
+
+    .top-right {
+        width: 12%;
     }
 }
