@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./card.css"
-
 function card(props) {
     const eventLabels = {
         TrekEvent: 'Trekking Event',
@@ -9,6 +8,8 @@ function card(props) {
         BackPackingTrip: 'BackPacking Trip'
     };
     const navigate = useNavigate();
+    const validPrices = [props.event.eventCostPerPerson,props.event.eventCostPerPersonFromMumbai,props.event.b2bPrice].filter(price => price > 0);
+    const lowestPrice = validPrices.length > 0 ? Math.min(...validPrices) : null; // Get the lowest non-zero price
     return (
         <>
             <div className="event-card">
@@ -21,7 +22,7 @@ function card(props) {
                         </div>
                         <div className='event-card-footer'>
                             <div><b>{props.event.batchdate}</b></div>
-                            <div ><strong className='price'>₹{props.event.eventCostPerPerson} </strong><i>per person</i></div>
+                            <div ><strong className='price'>₹{lowestPrice} </strong><i>per person</i></div>
                         </div>
                     </div>
                 </a>
