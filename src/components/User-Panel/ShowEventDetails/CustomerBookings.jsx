@@ -57,9 +57,11 @@ const CustomerBookings = () => {
   const [tripalSharingCount, setTripalSharingCount] = useState(0);
   const [thirdAcUpgrateCount, setThirdAcUpgrateCount] = useState(0);
   const [addOn, setAddOn] = useState(0);
-  const handleSelect = (option) => {
+  const handleSelect = async (option) => {
     setSelected(option);
-    const foundRecord = handleBookingSlot();
+    const foundRecord = await handleBookingSlot();
+    console.log('option--',option);
+    
     let price = 0;
     if (option == 'Pune to Pune') {
       price = foundRecord.eventCostPerPerson;
@@ -80,6 +82,7 @@ const CustomerBookings = () => {
 
   const handleBookingSlot = async () => {
     const { startDate, endDate } = parseDateRange(batch);
+    
     let foundRecord = finalBatchesList.find(batchSearch => batchSearch['batchdate'] == batch);
     if (foundRecord) {
       setSelectedbatch(foundRecord);
