@@ -163,8 +163,12 @@
 }
 @media only screen and (max-width: 600px) {
     .category-card-container {
-        height: 380px;
+        height: 300px;
         overflow: hidden;
         position: relative;
+    }
+
+    .card-image {
+        height: 295px !important;
     }
 }
