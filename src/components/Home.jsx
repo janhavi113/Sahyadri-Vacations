@@ -37,7 +37,6 @@ const Home = () => {
   useEffect(() => {
     if (isSuccess == false) {
       getAllRecord();
-      getSpecialOfferEvent();
     }
 
   })
@@ -140,13 +139,12 @@ const Home = () => {
   }
 
   const getAllRecord = async () => {
-    ////console.log('getAllRecord--');
+    console.log('getAllRecord--');
     let liveEvents = [];
     let trekkingEvents = [];
     let campingEvents = [];
     let backPackingEvents = [];
     let inactivateEvent = [];
-    ////console.log('show-all-events');
     // //console.log(`${apiUrl}show-all-events`);
     let r = await fetch(`${apiUrl}show-all-events`, {
       method: "GET", headers: {
