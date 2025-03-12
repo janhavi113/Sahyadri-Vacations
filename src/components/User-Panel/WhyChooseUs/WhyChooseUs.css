@@ -5,7 +5,20 @@
   margin-bottom: 4%;
 }
 
+.custom-scrollbar {
+  width: 90%; /* Set width to 90% */
+  height: 6px;
+  background: rgba(0, 0, 0, 0.1); /* Light gray background */
+  border-radius: 10px;
+  margin: 15px auto 0; /* Auto centers it horizontally */
+  position: relative;
+}
 
+.swiper-scrollbar-drag {
+  background: #ff6600 !important; /* Orange scrollbar handle */
+  border-radius: 10px;
+  height: 6px;
+}
 .why-choose-us h2 {
   font-size: 2rem;
   color: #1d2935;

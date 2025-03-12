@@ -12,7 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css/bundle';
 // import required modules
-import { Navigation } from 'swiper/modules';
+import { Navigation , Scrollbar } from 'swiper/modules';
 
 const WhyChooseUs = () => {
   const scrollContainer = useRef(null);
@@ -45,7 +45,8 @@ const WhyChooseUs = () => {
           }}
           spaceBetween={50}
           navigation
-          modules={[Navigation]}
+          scrollbar={{ draggable: true, el: '.custom-scrollbar' }} // Enable custom scrollbar
+          modules={[Navigation, Scrollbar]}
           className="rating-section"
         >
           <SwiperSlide key={1}>
@@ -85,6 +86,8 @@ const WhyChooseUs = () => {
           </SwiperSlide>
         </Swiper>
 
+        {/* Custom Scrollbar Below Swiper */}
+        <div className="custom-scrollbar"></div>
         <button className="cta-button"><a href="/events" role="button">Book Your Adventure Now</a></button>
       </div>
     </section>
