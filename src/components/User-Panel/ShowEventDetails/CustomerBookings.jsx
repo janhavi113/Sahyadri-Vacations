@@ -59,6 +59,7 @@ const CustomerBookings = () => {
   const [mumbaiPrice, setMumbaiPrice] = useState('');
   const [basetobasePrice, setBasetoBasePrice] = useState('');
   const [addOn, setAddOn] = useState(0);
+  const [addOnMap, setAddOnMap] = useState();
   const handleSelect = async (option) => {
     setSelected(option);
     const foundRecord = await handleBookingSlot();
@@ -394,6 +395,10 @@ const CustomerBookings = () => {
   };
 
   const handleAddOnChange = (e) => {
+    let myMap = new Map();
+    if(addOnMap){
+      myMap = addOnMap;
+    }
     const value = parseInt(e.target.value, 20);
     let addOnFee = 0;
     if (e.target.id == "double-sharing-picklist") {
@@ -406,10 +411,17 @@ const CustomerBookings = () => {
       setThirdAcUpgrateCount(value);
       addOnFee = selectedBatch?.thirdAcUpgrate;
     }
+    myMap.set(e.target.id , {'addOnFee':addOnFee ,'value': value});
+    setAddOnMap(myMap);
     let final_price = Number(actualPrice);
-    final_price = final_price + (addOnFee * value);
+    let addOnTemp = 0;
+    myMap.forEach((addon, key) => {
+      final_price = final_price + Number(addon.addOnFee )* Number(addon.value );
+      addOnTemp =addOnTemp+ Number(addon.addOnFee ) * Number(addon.value );
+    });
+
     setFinalPrice(Number(final_price));
-    setAddOn(Number(addOnFee * value))
+    setAddOn(Number(addOnTemp))
   };
 
   const generateOptions = () => {
