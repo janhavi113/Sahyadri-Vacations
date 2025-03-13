@@ -12,7 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css/bundle';
 // import required modules
-import { Navigation , Scrollbar } from 'swiper/modules';
+import { Navigation, Scrollbar } from 'swiper/modules';
 
 const WhyChooseUs = () => {
   const scrollContainer = useRef(null);
@@ -37,11 +37,11 @@ const WhyChooseUs = () => {
           breakpoints={{
             0: { slidesPerView: 1.5 },
             400: { slidesPerView: 1.5 },
-            639: { slidesPerView: 2 },
-            865: { slidesPerView: 2 },
-            1000: { slidesPerView: 3 },
-            1500: { slidesPerView: 3 },
-            1700: { slidesPerView: 3 },
+            639: { slidesPerView: 3 },
+            865: { slidesPerView: 3 },
+            1000: { slidesPerView: 4 },
+            1500: { slidesPerView: 4 },
+            1700: { slidesPerView: 4 },
           }}
           spaceBetween={50}
           navigation
@@ -50,38 +50,48 @@ const WhyChooseUs = () => {
           className="rating-section"
         >
           <SwiperSlide key={1}>
-            <div className="feature feature-partician">
-              <img src={expertTeam} alt="Expert Team" />
-              <h3>Expert Team</h3>
-              <p>Our team of professionals ensures you have the best adventure experience.</p>
+            <div className="feature ">
+              <div>
+                <img src={expertTeam} alt="Expert Team" />
+                <h3>Expert Team</h3>
+                <p>Our team of professionals ensures you have the best adventure experience.</p>
+              </div>
             </div>
           </SwiperSlide>
           <SwiperSlide key={2}>
-            <div className="feature feature-partician">
-              <img src={batch} alt="Limited Batch Size" />
-              <h3>Limited Batch Size</h3>
-              <p>We ensure personalized attention with small and manageable group sizes.</p>
+            <div className="feature ">
+              <div>
+                <img src={batch} alt="Limited Batch Size" />
+                <h3>Limited Batch Size</h3>
+                <p>We ensure personalized attention with small and manageable group sizes.</p>
+              </div>
             </div>
           </SwiperSlide>
           <SwiperSlide key={3}>
-            <div className="feature feature-partician">
-              <img className="feature-affordable" src={affodable} alt="Affordable Pricing" />
-              <h3>Affordable Pricing</h3>
-              <p>Enjoy your adventure without burning a hole in your pocket.</p>
+            <div className="feature ">
+              <div>
+                <img className="feature-affordable" src={affodable} alt="Affordable Pricing" />
+                <h3>Affordable Pricing</h3>
+                <p>Enjoy your adventure without burning a hole in your pocket.</p>
+              </div>
             </div>
           </SwiperSlide>
           <SwiperSlide key={4}>
-            <div className="feature feature-partician">
-              <img src={safety} alt="Safety First" />
-              <h3>Safety First</h3>
-              <p>We prioritize your safety with experienced guides and proper equipment.</p>
+            <div className="feature ">
+              <div>
+                <img src={safety} alt="Safety First" />
+                <h3>Safety First</h3>
+                <p>We prioritize your safety with experienced guides and proper equipment.</p>
+              </div>
             </div>
           </SwiperSlide>
           <SwiperSlide key={5}>
             <div className="feature">
-              <img src={solo} alt="Recommended for Solo Travelers" />
-              <h3>Recommended for Solo Travelers</h3>
-              <p>Our trips are perfect for solo adventurers looking to connect with like-minded travelers.</p>
+              <div>
+                <img src={solo} alt="Recommended for Solo Travelers" />
+                <h3>Recommended for Solo Travelers</h3>
+                <p>Our trips are perfect for solo adventurers looking to connect with like-minded travelers.</p>
+              </div>
             </div>
           </SwiperSlide>
         </Swiper>
