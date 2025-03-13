@@ -43,6 +43,7 @@
     align-items: center;
     justify-content: center;
 }
+
 /* 3D pop effect on hover */
 .category-card-container:hover {
     transform: scale(1.05) translateY(-5px);
@@ -76,6 +77,7 @@
         transform: scale(1.2);
         opacity: 0.7;
     }
+
     100% {
         transform: scale(1.4);
         opacity: 0.4;
@@ -138,17 +140,20 @@
     right: 20px;
     z-index: 100;
     width: 7%;
-  }
+}
+
 /* Show price smoothly on hover */
 .category-card-container:hover .bottom-left {
     opacity: 1;
     transform: translateY(0);
 }
+
 .col-6 {
     -ms-flex: 0 0 50%;
     flex: 0 0 50%;
     max-width: 50%;
 }
+
 @media (min-width: 988px) {
     .col-lg-3 {
         -ms-flex: 0 0 25%;
@@ -162,11 +167,14 @@
         -ms-flex: 0 0 33.333333%;
         flex: 0 0 33.333333%;
     }
-}/* Tablet Layout */
+}
+
+/* Tablet Layout */
 @media (min-width: 768px) {
     .col-md-4 {
         flex: 0 0 33.333%;
     }
+
     .top-right {
         width: 7%;
     }
@@ -188,9 +196,10 @@
     }
 
     .category-card-image {
-        height: 275px;
-        width: 100%;
-        top: 0% !important
+        transition: none !important;
+        height: 270px;
+        width: 50vh;
+        transform: translate(-50%, 0%)!important;
     }
 
     .centered {
