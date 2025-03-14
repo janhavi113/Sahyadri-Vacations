@@ -168,17 +168,19 @@
         flex: 0 0 33.333333%;
     }
 }
-@media (max-width: 768px){
+
+@media (max-width: 768px) {
     .category-card-image {
         transition: none !important;
         height: 350px;
         width: 50vh;
-        transform: translate(-50%, 0%)!important;
+        transform: translate(-50%, 0%) !important;
     }
 }
-@media (max-width: 988px){
+
+@media (max-width: 988px) {
     .category-card-image {
-        height: 380px;       
+        height: 380px;
     }
 }
 
@@ -196,7 +198,7 @@
         transition: none !important;
         height: 350px;
         width: 50vh;
-        transform: translate(-50%, 0%)!important;
+        transform: translate(-50%, 0%) !important;
     }
 }
 
@@ -216,10 +218,9 @@
     }
 
     .category-card-image {
-        transition: none !important;
         height: 270px;
         width: 50vh;
-        transform: translate(-50%, 0%)!important;
+        transform: translate(-50%, 0%) !important;
     }
 
     .centered {
@@ -227,12 +228,26 @@
     }
 
     .bottom-left {
-        font-size: medium;
-        bottom: 15px;
-        left: 15px;
+        display: none !important;
+    }
+
+    /* Show price smoothly on hover */
+    .category-card-container:hover .bottom-left {
+        opacity: 1;
+        transform: translateY(0);
+        display: block !important;
     }
 
     .top-right {
         width: 12%;
+    }
+}
+
+@media (max-width: 992px) {
+    .bottom-left {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        display: block !important;
+        font-size: small;
     }
 }

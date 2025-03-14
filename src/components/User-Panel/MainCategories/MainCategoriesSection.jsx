@@ -45,7 +45,7 @@ const MainCategoriesSection = () => {
                             />
                           </div>
             <div className="col-lg-11 col-9">
-              <h3 className="home-thicker home-header-text">Honney Moon & Family Trips</h3>
+              <h3 className="home-thicker home-header-text">Honeymoon & Family Trips</h3>
             </div>
           </div>
           <div className="mainSectionsCategories" >
