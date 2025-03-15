@@ -69,14 +69,7 @@ const Home = () => {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     if (event.batches) {
       for (let i = 0; i < event.batches.length; i++) {
-        if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
-          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + months[new Date(event.batches[i].eventEndDate).getFullYear()];
-          eventCostPerPerson = event.batches[i].eventCostPerPerson;
-          b2bPrice = event.batches[i].b2bPrice;
-          eventCostPerPersonFromMumbai = event.batches[i].eventCostPerPersonFromMumbai;
-          sortdate = new Date(event.batches[i].eventStartDate);
-
-        } else if (event.batches[i].everyWeekend == true) {
+         if (event.batches[i].everyWeekend == true) {
           batchdate = 'Available On All Weekends';
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           b2bPrice = event.batches[i].b2bPrice;
@@ -88,17 +81,17 @@ const Home = () => {
           b2bPrice = event.batches[i].b2bPrice;
           eventCostPerPersonFromMumbai = event.batches[i].eventCostPerPersonFromMumbai;
           sortdate = 'On Public Demand';
+        } else {
+          batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + months[new Date(event.batches[i].eventEndDate).getFullYear()];
+          eventCostPerPerson = event.batches[i].eventCostPerPerson;
+          b2bPrice = event.batches[i].b2bPrice;
+          eventCostPerPersonFromMumbai = event.batches[i].eventCostPerPersonFromMumbai;
+          sortdate = new Date(event.batches[i].eventStartDate);
+
         }
       }
     } else {
-      if (new Date(event.eventStartDate) - Q >= 0) {
-        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventEndDate).getFullYear();
-        eventCostPerPerson = event.eventCostPerPerson;
-        b2bPrice = event.b2bPrice;
-        eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
-        sortdate = new Date(event.eventStartDate);
-
-      } else if (event.everyWeekend == true) {
+      if (event.everyWeekend == true) {
         batchdate = 'Available On All Weekends';
         eventCostPerPerson = event.eventCostPerPerson;
         b2bPrice = event.b2bPrice;
@@ -110,6 +103,13 @@ const Home = () => {
         b2bPrice = event.b2bPrice;
         eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
         sortdate = 'On Public Demand';
+      } else {
+        batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventEndDate).getFullYear();
+        eventCostPerPerson = event.eventCostPerPerson;
+        b2bPrice = event.b2bPrice;
+        eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
+        sortdate = new Date(event.eventStartDate);
+
       }
     }
 
