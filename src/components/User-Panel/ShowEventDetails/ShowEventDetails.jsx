@@ -53,7 +53,7 @@ const ShowEventDetails = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState('false');
   const [coupons, setCoupons] = useState([]);
   const [discountAvailable, setDiscountAvailable] = useState(false);
   const handleClose = () => setShow(false);
@@ -61,6 +61,7 @@ const ShowEventDetails = () => {
   const [finalBatchesList, setFinalBatchesList] = useState();
   const [showLocations, setShowLocations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const[batchFull,setBatchFull] = useState(false);
   const handleSelectDate = (option) => {
     setSelectDate(option.target.value);
     const foundRecord = finalBatchesList.find(batch => batch['batchdate'] == option.target.value);
@@ -156,8 +157,11 @@ const ShowEventDetails = () => {
     let thirdAcUpgrate = 0;
     let thirdAcUpgrateNote = '';
     let note = '';
+    let isBatchFull = false;
     setEventType(eventType);
-
+    let eventCostPerPersonTemp;
+    let eventCostPerPersonFromMumbaiTemp;
+    let b2bPriceTemp;
     const Q = new Date();
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     if (event.batches) {
@@ -206,8 +210,10 @@ const ShowEventDetails = () => {
         thirdAcUpgrate = 0;
         thirdAcUpgrateNote = '';
         note = '';
-
-        if (new Date(event[index].eventStartDate) - Q >= 0 && (Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount))) {
+        
+        console.log('event['+index+'].eventStartDate---',event[index].eventStartDate);
+        
+        if (event[index].everyWeekend == false && Number(event[index].eventBatchCount) > Number(event[index].alreadyBoockedCount)) {
           batchdate = new Date(event[index].eventStartDate).getDate() + ' ' + months[new Date(event[index].eventStartDate).getMonth()] + ' - ' + new Date(event[index].eventEndDate).getDate() + ' ' + months[new Date(event[index].eventEndDate).getMonth()] + ' ' + new Date(event[index].eventStartDate).getFullYear();
           eventCostPerPerson = event[index]?.eventCostPerPerson;
           eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
@@ -260,10 +266,13 @@ const ShowEventDetails = () => {
           thirdAcUpgrate = event[index]?.thirdAcUpgrate;
           thirdAcUpgrateNote = event[index]?.thirdAcUpgrateNote;
           note = event[index]?.note;
+        }else  if (event[index].everyWeekend == false && Number(event[index].eventBatchCount) <= Number(event[index].alreadyBoockedCount)) {
+          eventCostPerPerson = event[index]?.eventCostPerPerson;
+          eventCostPerPersonFromMumbai = event[index]?.eventCostPerPersonFromMumbai;
+          b2bPrice = event[index]?.b2bPrice;
         }
-        console.log('--batchSize---', batchSize);
+    
         if (batchSize > 0 && eventCostPerPerson > 0 && batchdate != '') {
-
           batchesList.push({
             batchSize: batchSize,
             bookedSize: bookedSize,
@@ -292,19 +301,19 @@ const ShowEventDetails = () => {
         } else if (event[index].everyWeekend == true) {
           batchDates.push('Available On All Weekends');
         }
-
       }
     }
 
-    if (batchesList.length <= 0) {
-      setButtonDisabled(true);
+    
+    if ((event.length == 1 || event.length == 0 ) && batchesList.length <= 0) {
+      setButtonDisabled('true');
+      setBatchFull(true);
+      isBatchFull = true;
     } else {
-      setButtonDisabled(false);
+      setButtonDisabled('false');
       setFinalBatchesList(batchesList);
     }
-    let eventCostPerPersonTemp;
-    let eventCostPerPersonFromMumbaiTemp;
-    let b2bPriceTemp;
+   
     let currentbatch = batchesList.find(batch => batch['eventId'] == currentEventId);
     if (currentbatch) {
       if (batchDates.length > 0 && currentbatch.batchdate != 'Available On All Weekends') {
@@ -314,7 +323,7 @@ const ShowEventDetails = () => {
       eventCostPerPersonTemp = currentbatch.eventCostPerPerson;
       eventCostPerPersonFromMumbaiTemp = currentbatch.eventCostPerPersonFromMumbai;
       b2bPriceTemp = currentbatch.b2bPrice;
-    } else if (batchesList.length > 0) {
+    } else if (batchesList.length > 0) {      
       if (batchDates.length > 0 && batchesList[0].batchdate != 'Available On All Weekends') {
         setSelectedDate(batchesList[0].batchdate);
       }
@@ -322,11 +331,19 @@ const ShowEventDetails = () => {
       eventCostPerPersonTemp = batchesList[0].eventCostPerPerson;
       eventCostPerPersonFromMumbaiTemp = batchesList[0].eventCostPerPersonFromMumbai;
       b2bPriceTemp = batchesList[0].b2bPrice;
-      setButtonDisabled(false);
+      setButtonDisabled('false');
       setSelectDate(batchesList[0].batchdate);
       setSelectedStartDate(batchesList[0].eventStartDate);
       setSelectedEndDate(batchesList[0].eventEndDate);
     }
+ 
+    if(isBatchFull == true){
+      eventCostPerPersonTemp = eventCostPerPerson;
+      eventCostPerPersonFromMumbaiTemp = eventCostPerPersonFromMumbai ;
+      b2bPriceTemp = b2bPrice;
+    }
+  console.log('buttonDisabled--',buttonDisabled);
+  
     let tempPrice = Math.min(...[eventCostPerPersonTemp, eventCostPerPersonFromMumbaiTemp, b2bPriceTemp].filter(price => price > 0));
     setPrice(tempPrice);
   }
@@ -362,17 +379,14 @@ const ShowEventDetails = () => {
       }
     })
     setCurrentEventId(params[0]);
-    let res = await r.json()
+    let res = await r.json();
+     console.log('res----',res);
     if (res.isSuccess == true) {
       setLoading(false);
       setSuccess(true);
       setEventDetails(res.events);
       getNextBatchDate(res.ScheduleBatchesRecords);
-      if (res.ScheduleBatchesRecords.alreadyBoockedCount >= res.ScheduleBatchesRecords.eventBatchCount) {
-        setButtonDisabled(true);
-      } else {
-        setButtonDisabled(false);
-      }
+  
       let currentScheduleBatch = res.ScheduleBatchesRecords.find(batch => batch['eventId'] == params[0]);
       getAvailableCoupons(currentScheduleBatch);
       handleShowLocation(res.events, currentScheduleBatch);
@@ -432,13 +446,13 @@ const ShowEventDetails = () => {
     } else {
       ScheduleBatchesRecord = ScheduleBatchesRecords;
     }
-    setDiscountAvailable(!ScheduleBatchesRecord.specialOfferEvent);
-    if (!ScheduleBatchesRecord.specialOfferEvent) {
-      let scheduleEventType = ScheduleBatchesRecord.eventType;
+    setDiscountAvailable(!ScheduleBatchesRecord?.specialOfferEvent);
+    if (!ScheduleBatchesRecord?.specialOfferEvent) {
+      let scheduleEventType = ScheduleBatchesRecord?.eventType;
       if (scheduleEventType == 'TrekEvent' || scheduleEventType == 'AdventureActivity') {
         scheduleEventType = 'TrekEvent';
       } else {
-        scheduleEventType = ScheduleBatchesRecord.eventType;
+        scheduleEventType = ScheduleBatchesRecord?.eventType;
       }
 
       const response = await fetch(`${apiUrl}get-coupons-event/${scheduleEventType}`, {
@@ -507,7 +521,7 @@ const ShowEventDetails = () => {
                     }
                   </ul>
                 </nav>
-                <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example  p-3 rounded-2" tabindex="0">
+                <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example  p-3 rounded-2" tabIndex="0">
                   <div id="scrollspyHeading1" className='pt-4 pb-1 px-2'>
                     <h2 className="h3"> Overview</h2>
                     <p>{eventDetails.eventDetails}</p>
@@ -798,18 +812,18 @@ const ShowEventDetails = () => {
                             <sub > Person</sub>
                           </center>
                           </h4>
-                          {buttonDisabled &&
+                          {buttonDisabled == 'true' &&
                             <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                           }
-                          {!inquery && !buttonDisabled && <> <div>
+                          {!inquery && buttonDisabled != 'true' && <> <div>
                             <center> {batchDate} </center></div>
 
                             <div className="button-margin button">
-                              <input disabled={buttonDisabled} onClick={handleShow} type="submit" value="BOOK NOW" />
+                              <input disabled={buttonDisabled =='false'? false : true} onClick={handleShow} type="submit" value="BOOK NOW" />
                             </div></>
                           }
 
-                          {buttonDisabled &&
+                          {buttonDisabled == 'true' &&
                             <div className="button-margin button">
                               <button type="button"><a href="https://wa.me/message/4IO4IE3JUKVHC1" target="_blank"> <strong>ENQUIRE NOW </strong></a> </button>
                             </div>
@@ -835,7 +849,7 @@ const ShowEventDetails = () => {
               </div>
             </div>
             <div className="d-sm-block d-md-none d-lg-none fixed-bottom">
-              <div className="booking-card-mb mb-0 " style={{ "width": "100%;" }}>
+              <div className="booking-card-mb mb-0 " style={{ "width": "100%" }}>
                 <div className="card-body text-dark">
                   <div className="booking-section d-flex justify-content-between align-items-center">
                     <h4 className="details-card-title"><center>
@@ -848,13 +862,13 @@ const ShowEventDetails = () => {
                       <center> {batchDate} </center>
                     </div>
                   </div>
-                  {buttonDisabled &&
+                  {buttonDisabled == 'true' &&
                     <p className="bookingClosed" >**Bookings are currently closed. To inquire about seat availability, please contact us directly.</p>
                   }
                   <div className="button-edit-container">
                     <div className="button button-margin ">
-                      {!inquery && !buttonDisabled &&
-                        <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" />
+                      {!inquery && buttonDisabled != 'true' &&
+                        <input className="button-input" disabled={buttonDisabled =='false'? false : true} type="submit" onClick={handleShow} value="BOOK NOW" />
                       }
 
                       {inquery &&
