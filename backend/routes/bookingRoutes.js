@@ -7,6 +7,7 @@ import { ScheduleBatches } from '../models/ScheduleBatches.js';
 import { fileURLToPath } from 'url';
 import { generateInvoicePdf } from '../utils/pdf-generator.js';
 import { sendInvoiceEmail } from '../utils/email-sender.js';
+import { log } from 'console';
 const router = express.Router();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -239,7 +240,8 @@ router.post("/sendInvoice", async (req, res) => {
 
     let pdfPath;
     if (process.env.NODE_ENV === 'production') {
-        pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
+         console.log('in iff');         
+        pdfPath = path.resolve(`./backend/invoices/${bookingDetails.bookingId}.pdf`);
         console.log("Attempting to save PDF at:", pdfPath);
     } else {
         pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
