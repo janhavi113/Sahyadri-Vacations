@@ -696,7 +696,7 @@ const ShowEventDetails = () => {
                         <td>{priceMumbai}</td>
                       </tr> }
                       {coupleRoom > 0 && <tr>
-                        <td> Sseparate Room for two people (AddOn) </td>
+                        <td> Separate Room for two people (AddOn) </td>
                       <td>{coupleRoom}</td>
                       </tr> 
                         }
