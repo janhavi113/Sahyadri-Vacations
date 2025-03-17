@@ -502,7 +502,7 @@ const ShowEventDetails = () => {
 
             <SwiperSlide key={index}><img className='event-section-header-img' loading="lazy" src={`${apiUrl}` + event} />
               <div className="inner-content">
-                <h3>{eventDetails.name} | Pune</h3>
+                <h3>{eventDetails.name}</h3>
               </div>
             </SwiperSlide>
           ))}
@@ -683,24 +683,24 @@ const ShowEventDetails = () => {
                         <th>Charges</th>
                         <th>Price</th> 
                       </tr>
-                      {priceBase2Base && <tr>
+                      {priceBase2Base > 0 && <tr>
                         <td>{b2bLocation} (Without Transport)</td>
                         <td>{priceBase2Base}</td>
                       </tr> }
-                      {pricePune && <tr>
+                      {pricePune > 0  && <tr>
                         <td>Pune to Pune</td>
                         <td>{pricePune}</td>
                       </tr> }                     
-                      {priceMumbai && <tr>
+                      {priceMumbai > 0  && <tr>
                         <td> Mumbai to Mumbai</td>
                         <td>{priceMumbai}</td>
                       </tr> }
-                      {coupleRoom && <tr>
+                      {coupleRoom > 0 && <tr>
                         <td> Seprate Room for two people (AddOn) </td>
                       <td>{coupleRoom}</td>
                       </tr> 
                         }
-                        {ACUpgrad && <tr>
+                        {ACUpgrad > 0 && <tr>
                         <td> 3 Tier AC Train Travel (AddOn)  </td>
                       <td>{ACUpgrad}</td>
                       </tr> }
