@@ -42,6 +42,11 @@ const ShowEventDetails = () => {
   const [pickupPointsfromMumbai, setPickupPointsfromMumbai] = useState([]);
   const [b2bLocation, setB2bLocation] = useState();
   const [price, setPrice] = useState(0);
+  const [priceMumbai, setPricePuneMumbai] = useState(0);
+  const [pricePune, setPricePune] = useState(0);
+  const [priceBase2Base, setPriceBase2Base] = useState(0);
+  const [coupleRoom, setCoupleRoom] = useState(0);
+  const [ACUpgrad, setACUpgrad] = useState(0);
   const [batchDate, setBatchDate] = useState();
   const [eventType, setEventType] = useState();
   const [currentEventId, setCurrentEventId] = useState();
@@ -313,7 +318,8 @@ const ShowEventDetails = () => {
       setButtonDisabled('false');
       setFinalBatchesList(batchesList);
     }
-   
+    let ACUpgradTemp = 0;
+    let coupleRoomTemp = 0;
     let currentbatch = batchesList.find(batch => batch['eventId'] == currentEventId);
     if (currentbatch) {
       if (batchDates.length > 0 && currentbatch.batchdate != 'Available On All Weekends') {
@@ -323,6 +329,8 @@ const ShowEventDetails = () => {
       eventCostPerPersonTemp = currentbatch.eventCostPerPerson;
       eventCostPerPersonFromMumbaiTemp = currentbatch.eventCostPerPersonFromMumbai;
       b2bPriceTemp = currentbatch.b2bPrice;
+       coupleRoomTemp= currentbatch.doubleSharing;
+       ACUpgradTemp =currentbatch.thirdAcUpgrate;
     } else if (batchesList.length > 0) {      
       if (batchDates.length > 0 && batchesList[0].batchdate != 'Available On All Weekends') {
         setSelectedDate(batchesList[0].batchdate);
@@ -335,6 +343,8 @@ const ShowEventDetails = () => {
       setSelectDate(batchesList[0].batchdate);
       setSelectedStartDate(batchesList[0].eventStartDate);
       setSelectedEndDate(batchesList[0].eventEndDate);
+      coupleRoomTemp = batchesList[0].doubleSharing;
+      ACUpgradTemp = batchesList[0].thirdAcUpgrate;
     }
  
     if(isBatchFull == true){
@@ -346,7 +356,12 @@ const ShowEventDetails = () => {
   
     let tempPrice = Math.min(...[eventCostPerPersonTemp, eventCostPerPersonFromMumbaiTemp, b2bPriceTemp].filter(price => price > 0));
     setPrice(tempPrice);
-  }
+    setPricePuneMumbai(eventCostPerPersonFromMumbaiTemp);
+    setPricePune(eventCostPerPersonTemp); 
+    setPriceBase2Base(b2bPriceTemp);
+    setCoupleRoom(coupleRoomTemp);
+    setACUpgrad(ACUpgradTemp);
+    }
 
   useEffect(() => {
     if (isSuccess == false && type && params) {
@@ -661,6 +676,36 @@ const ShowEventDetails = () => {
                     </div>
                   </div>
                   <hr />
+                  <div id="scrollspyHeading3" className='pt-4 pb-1 px-2'>
+                    <h2 className="h3"> Event Fees</h2>
+                     <table className="pricing-table">
+                     <tr>
+                        <th>Charges</th>
+                        <th>Price</th> 
+                      </tr>
+                      {priceBase2Base && <tr>
+                        <td>{b2bLocation} (Without Transport)</td>
+                        <td>{priceBase2Base}</td>
+                      </tr> }
+                      {pricePune && <tr>
+                        <td>Pune to Pune</td>
+                        <td>{pricePune}</td>
+                      </tr> }                     
+                      {priceMumbai && <tr>
+                        <td> Mumbai to Mumbai</td>
+                        <td>{priceMumbai}</td>
+                      </tr> }
+                      {coupleRoom && <tr>
+                        <td> Seprate Room for two people (AddOn) </td>
+                      <td>{coupleRoom}</td>
+                      </tr> 
+                        }
+                        {ACUpgrad && <tr>
+                        <td> 3 Tier AC Train Travel (AddOn)  </td>
+                      <td>{ACUpgrad}</td>
+                      </tr> }
+                     </table>
+                  </div>
                   <div id="scrollspyHeading2" className='pt-4 pb-1 px-2'>
                     <h2 className="h3"> Itinerary</h2>
                     <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.itinerary) }} />

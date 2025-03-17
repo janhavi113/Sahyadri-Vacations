@@ -39,19 +39,22 @@ export const sendInvoiceEmail = async (recipientEmail, bookingDetails, pdfPath) 
     }
     let remainingAmountMessage = '';
     if (bookingDetails.remainingAmount > 0) {
-        remainingAmountMessage = `<p>Please note: stating the booking is confirmed, but the remaining balance INR ${bookingDetails.remainingAmount} must be paid two days before the journey starts to retain the reservation. </p>`;
+        remainingAmountMessage = `<p><strong>Please note: stating the booking is confirmed, but the remaining balance INR ${bookingDetails.remainingAmount} must be paid two days before the journey starts to retain the reservation.</strong> </p>`;
     }
     // Email details
     const mailOptions = {
         from: `"Sahyadri Vacations" ${process.env.HOSTINGER_EMAIL_USERNAME}`,
         to: recipientEmail,
         cc: 'sahyadrivacations21@gmail.com',
-        subject: `Invoice for Booking ${bookingDetails.bookingId}`,
+        subject: `Booking Confirmation - ${bookingDetails.eventName} (booking Id ${bookingDetails.bookingId})`,
         html: `
             <p>Hello <strong>${bookingDetails.name}</strong>,</p>
             <p>Greetings from <strong>Sahyadri Vacations and Adventures</strong>!</p>
-            <p>We are thrilled to organize your <strong>${bookingDetails.eventName} (${bookingDetails.batch})</strong>.</p>
-            <p>We have received your payment of <strong>INR ${bookingDetails.amountPaid}</strong>. Your Trek to <strong>${bookingDetails.eventName} (${bookingDetails.batch})</strong> is confirmed.</p> 
+            <p>We’re excited to confirm your booking for <strong>${bookingDetails.eventName} on ${bookingDetails.batch} </strong>.</p>
+            <p><strong>Your payment of INR ${bookingDetails.amountPaid} has been successfully received.</strong>
+            <br><br>Please find your invoice attached to this email for your referance.</p> 
+            <p>For any assistance or further queries, feel free to reach out to us at 7028740961</p>
+            <p>We look forward to hosting you on an exciting and memorable adventure! 🤩!</p>
             ${remainingAmountMessage}<br><br>
             ${signature}`,
         attachments: [
