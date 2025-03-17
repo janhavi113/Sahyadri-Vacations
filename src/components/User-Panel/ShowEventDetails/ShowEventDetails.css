@@ -536,6 +536,34 @@ h3 {
     z-index: 3000;
 }
 
+.pricing-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 20px 0 !important;
+    font-size: 18px !important;
+    text-align: left !important;
+}
+
+.pricing-table th, 
+.pricing-table td {
+    padding: 12px;
+    border: 1px solid #ddd !important;
+}
+
+.pricing-table th {
+    background-color: orange!important;
+    color: white !important;
+    text-transform: uppercase !important;
+}
+
+.pricing-table tr:nth-child(even) {
+    background-color: #f2f2f2 !important;
+}
+
+.pricing-table tr:hover {
+    background-color: #ddd !important;
+    transition: 0.3s;
+}
 @media (min-width: 1200px) {
 
     .h3,
@@ -581,7 +609,7 @@ h3 {
     .sticky-top {
         display: none;
     }
-
+    
     .footer {
         color: #FFF;
         position: relative;
