@@ -755,7 +755,7 @@ const ShowEventDetails = () => {
                         <h2 > <b>Pickup Points from Pune :</b> </h2>
                         <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPoints) }} />
                         <br />
-                        {eventDetails.pickupPointsfromMumbai &&
+                        {(eventDetails.pickupPointsfromMumbai != undefined && eventDetails.pickupPointsfromMumbai != "undefined") &&
                           <div>
                             <h2 > <b>Pickup Points from Mumbai :</b> </h2>
                             <div className="section-details" dangerouslySetInnerHTML={{ __html: displayList(eventDetails.pickupPointsfromMumbai) }} />
