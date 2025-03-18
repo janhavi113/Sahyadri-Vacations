@@ -18,7 +18,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
     const logo = getImageAsBase64(path.join(__dirname, '../../public/logo.jpg')); // Adjusted path to logo
 
     const finalPrice = (bookingDetails.eventPrice * bookingDetails.numberOfPeoples ) + Number(bookingDetails.addedOn);
-    let convenienceFee = ((bookingDetails.eventPrice * bookingDetails.numberOfPeoples) + Number(bookingDetails.addedOn) ) * 0.015;
+    let convenienceFee = ((bookingDetails.eventPrice * bookingDetails.numberOfPeoples) + Number(bookingDetails.addedOn) ) * 0.0199;
     convenienceFee = convenienceFee.toFixed(2);
     const total_price = Number(finalPrice) - Number(bookingDetails.addedDiscount)
     console.log('Booking Details:', bookingDetails);

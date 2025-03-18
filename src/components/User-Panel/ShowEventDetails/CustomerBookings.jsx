@@ -77,7 +77,7 @@ const CustomerBookings = () => {
     }
     setFinalPrice(Number(price));
     setActualPrice(Number(price));
-    let convenience_Fee = (Number(price) * 0.015).toFixed(2);
+    let convenience_Fee = (Number(price) * 0.0199).toFixed(2);
     setConvenienceFee(convenience_Fee);
   }
 
@@ -93,7 +93,7 @@ const CustomerBookings = () => {
           let price = foundRecord.eventCostPerPerson;
           setFinalPrice(Number(price));
           setActualPrice(Number(price));
-          let convenience_Fee = (Number(price) * 0.015).toFixed(2);
+          let convenience_Fee = (Number(price) * 0.0199).toFixed(2);
           setConvenienceFee(convenience_Fee);
         } else {
           foundRecord = await handleFetchSelectedBatch(eventDetails.eventId, startDate, endDate);
@@ -124,7 +124,7 @@ const CustomerBookings = () => {
         let price = foundRecord.eventCostPerPerson;
         setFinalPrice(Number(price));
         setActualPrice(Number(price));
-        let convenience_Fee = (Number(price) * 0.015).toFixed(2);
+        let convenience_Fee = (Number(price) * 0.0199).toFixed(2);
         setConvenienceFee(convenience_Fee);
       }
       return foundRecord;
@@ -154,8 +154,8 @@ const CustomerBookings = () => {
     setPaymentOption(event.target.value);
     if (event.target.value == "partial") {
       let price = Number(selectedBatch.partialBookingAmount) * Number(noOfTrekkers) + Number(addOn);
-      setConvenienceFee((Number(price) * 0.015).toFixed(2));
-      // price = price ;//+ (price * 0.015);
+      setConvenienceFee((Number(price) * 0.0199).toFixed(2));
+      // price = price ;//+ (price * 0.0199);
       setPartialPayment(price);
       setFinalPrice(price);
       setDiscount(0);
@@ -204,7 +204,7 @@ const CustomerBookings = () => {
       final_Price = final_Price + price;
       setFinalPrice(final_Price - discount);
       setActualPrice(final_Price);
-      let convenience_Fee = (Number(final_Price - discount) * 0.015).toFixed(2);
+      let convenience_Fee = (Number(final_Price - discount) * 0.0199).toFixed(2);
       setConvenienceFee(convenience_Fee);
     }
     setParticipants(newParticipants);
@@ -339,7 +339,7 @@ const CustomerBookings = () => {
       let final_Price = finalPrice - lastRecord?.price;
       setFinalPrice(Number(final_Price));
       setActualPrice(final_Price);
-      let convenience_Fee = (Number(final_Price) * 0.015).toFixed(2);
+      let convenience_Fee = (Number(final_Price) * 0.0199).toFixed(2);
       setConvenienceFee(convenience_Fee);
       setParticipants(participants.slice(0, -1));
     }
