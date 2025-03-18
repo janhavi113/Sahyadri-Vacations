@@ -725,7 +725,7 @@ const CustomerBookings = () => {
                             <td className='column2 pay-td'>{Number(addOn)} /- </td>
                           </tr>
                           <tr>
-                            <td className='pay-td'>Convenience Fee (1.5 %)</td>
+                            <td className='pay-td'>Convenience Fee (1.99 %)</td>
                             <td className='column2 pay-td'>{convenienceFee} /- </td>
                           </tr>
                           <tr>
@@ -765,7 +765,7 @@ const CustomerBookings = () => {
                             <td className='column2 pay-td'>{Number(addOn)}</td>
                           </tr>
                           <tr>
-                            <td className='pay-td'>Convenience Fee (1.5 %)</td>
+                            <td className='pay-td'>Convenience Fee (1.99 %)</td>
                             <td className='column2 pay-td'>₹ {convenienceFee} /-</td>
                           </tr>
                           <tr>

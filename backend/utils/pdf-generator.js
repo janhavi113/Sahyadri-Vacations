@@ -192,7 +192,7 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
               <td style="text-align: right;">${finalPrice}</td>
             </tr>
             <tr>
-              <td>Convenience Fee (1.5 %)</td>
+              <td>Convenience Fee (1.99 %)</td>
               <td style="text-align: right;">${convenienceFee}</td>
             </tr>
            <tr>
