@@ -51,7 +51,6 @@ const UpdateScheduleEvents = () => {
   const [thirdAcUpgrate, setThirdAcUpgrate] = useState(0);
   const [thirdAcUpgrateNote, setThirdAcUpgrateNote] = useState('');
   const [note, setNote] = useState('');
-  const [duration, setDuration] = useState('');
   const navigate = useNavigate();
   const {
     register,
@@ -99,7 +98,6 @@ const UpdateScheduleEvents = () => {
       setEventIsScheduled(res.scheduleBatch[0].scheduleEventId);
       setEventId(res.scheduleBatch[0].eventId);
       setPartialBookingAmount(res.scheduleBatch[0].partialBookingAmount);
-      setDuration(res.scheduleBatch[0].duration);
       // Set new fields
       setDoubleSharing(res.scheduleBatch[0].doubleSharing);
       setDoubleSharingNote(res.scheduleBatch[0].doubleSharingNote);
@@ -183,7 +181,6 @@ const UpdateScheduleEvents = () => {
       formData.append('thirdAcUpgrate', thirdAcUpgrate);
       formData.append('thirdAcUpgrateNote', thirdAcUpgrateNote);
       formData.append('note', note);
-      formData.append('duration', duration);
       const url = `${apiUrl}update-schedule-events/${eventId}`;
       let r = await fetch(url, {
         method: "POST",
@@ -332,18 +329,7 @@ const UpdateScheduleEvents = () => {
                       onChange={(e) => setNote(e.target.value)}
                     />
                   </div>
-                  {/* Duration*/}
-                  <div className="input-box-column">
-                    <span className="details">
-                      Duration <span style={{ color: 'red' }}>*</span>
-                    </span>
-                    <input
-                      type="text"
-                      value={duration}
-                      onChange={(e) => setDuration(e.target.value)}
-                      required
-                    />
-                  </div>
+                 
                   <div className="input-box-column ">
                     <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
                     <input

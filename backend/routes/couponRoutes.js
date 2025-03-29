@@ -34,7 +34,8 @@ router.post('/create-coupon', async (req, res) => {
 });
 router.post('/api/validate-coupon', async (req, res) => {
   const { code, eventType, numberOfPeople } = req.body;
- 
+     console.log('req.body--',req.body);
+     
   try {
     const newCoupon = await Coupon.findOne({ couponName: code ,$or: [
       {eventType: eventType},

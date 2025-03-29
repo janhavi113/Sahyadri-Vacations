@@ -24,7 +24,6 @@ const CustomerBookings = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [loading, setLoading] = useState(false);
   const [buttonClick, setButtonClick] = useState('confirm-details');
-  const [participantsPickupPoints, setParticipantsPickupPoints] = useState([]);
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
   const [actualPrice, setActualPrice] = useState(0);
@@ -36,7 +35,6 @@ const CustomerBookings = () => {
   const progressContent = useRef(null);
   const [participants, setParticipants] = useState([]);
   const [specialNote, setSpecialNote] = useState('');
-  const [show, setShow] = useState(false);
   const [selectedBatch, setSelectedbatch] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showTermsAndConditions, setShowTermsAndConditions] = useState(false);
@@ -45,8 +43,6 @@ const CustomerBookings = () => {
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(-1);
   const [showDiscountStatus, setShowDiscountStatus] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [remainingAmount, setRemainingAmount] = useState(0);
   const [showBreakup, setShowBreakup] = useState(true);
   const [paymentOption, setPaymentOption] = useState("full"); // Default to full payment
@@ -55,12 +51,16 @@ const CustomerBookings = () => {
   const [doubleSharingCount, setDoubleSharingCount] = useState(0);
   const [tripalSharingCount, setTripalSharingCount] = useState(0);
   const [thirdAcUpgrateCount, setThirdAcUpgrateCount] = useState(0);
-  const [punePrice, setPunePrice] = useState('');
-  const [mumbaiPrice, setMumbaiPrice] = useState('');
-  const [basetobasePrice, setBasetoBasePrice] = useState('');
+  const [punePrice, setPunePrice] = useState(0);
+  const [bookingPrice, setBookingPrice] = useState(0);
+  const [mumbaiPrice, setMumbaiPrice] = useState(0);
+  const [basetobasePrice, setBasetoBasePrice] = useState(0);
   const [addOn, setAddOn] = useState(0);
   const [addOnMap, setAddOnMap] = useState();
+  const [additionalParticipantsList,setAdditionalParticipantsList]= useState([]);
+  // For Join Us From selection
   const handleSelect = async (option) => {
+    alert(selected)
     setSelected(option);
     const foundRecord = await handleBookingSlot();
     let price = 0;
@@ -74,11 +74,12 @@ const CustomerBookings = () => {
       setSelectedLocation(option);
       setShowTermsAndConditions(true);
       price = foundRecord.b2bPrice;
-    }
-    setFinalPrice(Number(price));
+    }   
     setActualPrice(Number(price));
+    setBookingPrice(Number(price));
     let convenience_Fee = (Number(price) * 0.0199).toFixed(2);
     setConvenienceFee(convenience_Fee);
+    setFinalPrice(Number(price)+Number(convenience_Fee));
   }
 
   const handleBookingSlot = async () => {
@@ -90,11 +91,14 @@ const CustomerBookings = () => {
       setBookedSlot(foundRecord.bookedSize);
       if (finalPrice <= 0) {
         if (foundRecord.eventCostPerPerson) {
-          let price = foundRecord.eventCostPerPerson;
-          setFinalPrice(Number(price));
+          let price = foundRecord.eventCostPerPerson;         
           setActualPrice(Number(price));
+          setBookingPrice(Number(price));
+          setBookingPrice(Number(price));
           let convenience_Fee = (Number(price) * 0.0199).toFixed(2);
           setConvenienceFee(convenience_Fee);
+          setFinalPrice(Number(price) + Number(convenience_Fee));
+
         } else {
           foundRecord = await handleFetchSelectedBatch(eventDetails.eventId, startDate, endDate);
         }
@@ -122,10 +126,11 @@ const CustomerBookings = () => {
       setBookedSlot(foundRecord.bookedSize);
       if (finalPrice <= 0) {
         let price = foundRecord.eventCostPerPerson;
-        setFinalPrice(Number(price));
+       
         setActualPrice(Number(price));
         let convenience_Fee = (Number(price) * 0.0199).toFixed(2);
         setConvenienceFee(convenience_Fee);
+        setFinalPrice(Number(price)+Number(convenience_Fee));
       }
       return foundRecord;
     } else {
@@ -149,15 +154,14 @@ const CustomerBookings = () => {
     return { startDate, endDate };
   }
 
-
   const handlePaymentChange = (event) => {
     setPaymentOption(event.target.value);
     if (event.target.value == "partial") {
       let price = Number(selectedBatch.partialBookingAmount) * Number(noOfTrekkers) + Number(addOn);
       setConvenienceFee((Number(price) * 0.0199).toFixed(2));
       // price = price ;//+ (price * 0.0199);
-      setPartialPayment(price);
-      setFinalPrice(price);
+      //setPartialPayment(price);
+      setFinalPrice(Number(price)+((Number(price) * 0.0199).toFixed(2)));
       setDiscount(0);
       setCouponCode('');
       let final_price = 0;
@@ -165,7 +169,7 @@ const CustomerBookings = () => {
         final_price = Number(participants[i].price) + Number(final_price);
       }
       final_price = final_price + Number(addOn) + Number(selectedBatch.eventCostPerPerson);
-      let remainingAmount = final_price - price;
+      let remainingAmount = ( Number(final_price)  +(Number(final_price) * 0.0199).toFixed(2)) - ( Number(price)+(Number(price) * 0.0199).toFixed(2));
       setRemainingAmount(remainingAmount);
       //  setPrice(Number(selectedBatch.partialBookingAmount));
 
@@ -175,8 +179,11 @@ const CustomerBookings = () => {
         final_price = participants[i].price + final_price;
       }
       final_price = final_price + Number(selectedBatch.eventCostPerPerson);
-      setFinalPrice(final_price + Number(addOn));
-      setActualPrice(final_price);
+      let conv =(Number(final_price) * 0.0199).toFixed(2);
+      setConvenienceFee(conv);
+
+      setFinalPrice(Number(final_price) + Number(addOn)+Number(conv));
+      setActualPrice(Number(final_price));
     }
   };
 
@@ -187,27 +194,35 @@ const CustomerBookings = () => {
   const handleParticipantChange = (index, field, value) => {
     let price = 0;
     let final_Price = Number(finalPrice);
+    let pickupLocation = [];
+    const addParticipantsList =[...additionalParticipantsList];
+   
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
     if (field == 'locationCity') {
       if (value == 'Pune to Pune') {
         price = selectedBatch.eventCostPerPerson;
-        setParticipantsPickupPoints(pickupPoints);
+        pickupLocation = pickupPoints ;
       } else if (value == 'Mumbai to Mumbai') {
         price = selectedBatch.eventCostPerPersonFromMumbai;
-        setParticipantsPickupPoints(pickupPointsfromMumbai);
+        pickupLocation = pickupPointsfromMumbai;
       } else {
         price = selectedBatch.b2bPrice;
-        setParticipantsPickupPoints([{ 'Id': 1, 'name': eventDetails.b2bLocaion }]);
+        pickupLocation = [{ 'Id': 1, 'name': eventDetails.b2bLocaion }];
       }
       newParticipants[index]['price'] = price;
       final_Price = final_Price + price;
-      setFinalPrice(final_Price - discount);
+     
+      addParticipantsList[index]['pickupLocationList']= pickupLocation; 
       setActualPrice(final_Price);
       let convenience_Fee = (Number(final_Price - discount) * 0.0199).toFixed(2);
       setConvenienceFee(convenience_Fee);
+      let fprice = (Number(final_Price) +Number(convenience_Fee)) - Number(discount);
+      setFinalPrice(Number(fprice).toFixed(2));
+     
     }
     setParticipants(newParticipants);
+    setAdditionalParticipantsList(addParticipantsList);
   };
 
   const {
@@ -323,6 +338,10 @@ const CustomerBookings = () => {
         { name: "", mobileNumber: "", pickupLocation: "" },
       ]);
 
+      setAdditionalParticipantsList([
+          ...additionalParticipantsList  ,
+        {pickupLocationList: "" },
+      ]);
     } else {
       setBatchFull(true);
       setAvailableSlot(Number(maxBooking) - Number(bookedSlot));
@@ -331,17 +350,25 @@ const CustomerBookings = () => {
 
   const decreaseCount = async () => {
     let count = 1;
+    let final_Price = 0;
     if (noOfTrekkers > 1) {
       count = noOfTrekkers;
       count--;
       setNoOfTrekkers(Number(count));
       const lastRecord = participants[participants.length - 1];
-      let final_Price = finalPrice - lastRecord?.price;
-      setFinalPrice(Number(final_Price));
-      setActualPrice(final_Price);
+    
+      if (lastRecord?.price != null && lastRecord?.price != undefined && lastRecord?.price != '') {
+        final_Price = finalPrice - lastRecord?.price;
+      } else {
+        final_Price = bookingPrice;
+      }
+      
+      setActualPrice(Number(final_Price).toFixed(2));
       let convenience_Fee = (Number(final_Price) * 0.0199).toFixed(2);
       setConvenienceFee(convenience_Fee);
+      setFinalPrice(Number(final_Price)+Number(convenience_Fee));
       setParticipants(participants.slice(0, -1));
+      setAdditionalParticipantsList(additionalParticipantsList.slice(0, -1));
     }
 
   }
@@ -356,6 +383,7 @@ const CustomerBookings = () => {
 
   const handleCouponApply = async () => {
     try {
+     
       if (couponCode && paymentOption != 'partial') {
         if (!selectedBatch.specialOfferEvent) {
           const response = await fetch(`${apiUrl}api/validate-coupon`, {
@@ -369,25 +397,31 @@ const CustomerBookings = () => {
           if (response.ok && data.isValid) {
             if (data.coupon == null) {
               calculatedDiscount = 0;
+            } else if (data.coupon.discountPrice) {
+              calculatedDiscount = data.coupon.discountPrice;
             } else if (data.coupon.discountPercent) {
               calculatedDiscount = Math.min(
                 (Number(final_price) + Number(addOn) * Number(data.coupon.discountPercent)) / 100
               );
 
-            } else if (data.coupon.discountPrice) {
-              calculatedDiscount = data.coupon.discountPrice;
             }
             setShowDiscountStatus(true);
             setDiscount(Number(calculatedDiscount));
-            setFinalPrice(Number(final_price) + Number(addOn) - Number(calculatedDiscount));
+            let fPrice = Number(final_price) + Number(addOn) ;
+            let con =  (Number(fPrice) * 0.0199).toFixed(2);
+            setConvenienceFee(con);
+            setFinalPrice(Number(fPrice)+Number(con) - Number(calculatedDiscount));
           } else {
             // setErrorMessage(data.message || 'Invalid coupon code.');
           }
         }
       } else {
         setDiscount(-1);
-        setFinalPrice(actualPrice);
+        let con =  (Number(actualPrice) * 0.0199).toFixed(2);
+        setFinalPrice(Number(actualPrice) + Number(con));
+        setConvenienceFee(Number(con));
       }
+       
     } catch (error) {
       //setErrorMessage('An error occurred while applying the coupon.');
     }
@@ -396,7 +430,7 @@ const CustomerBookings = () => {
 
   const handleAddOnChange = (e) => {
     let myMap = new Map();
-    if(addOnMap){
+    if (addOnMap) {
       myMap = addOnMap;
     }
     const value = parseInt(e.target.value, 20);
@@ -411,16 +445,17 @@ const CustomerBookings = () => {
       setThirdAcUpgrateCount(value);
       addOnFee = selectedBatch?.thirdAcUpgrate;
     }
-    myMap.set(e.target.id , {'addOnFee':addOnFee ,'value': value});
+    myMap.set(e.target.id, { 'addOnFee': addOnFee, 'value': value });
     setAddOnMap(myMap);
     let final_price = Number(actualPrice);
     let addOnTemp = 0;
     myMap.forEach((addon, key) => {
-      final_price = final_price + Number(addon.addOnFee )* Number(addon.value );
-      addOnTemp =addOnTemp+ Number(addon.addOnFee ) * Number(addon.value );
+      final_price = final_price + Number(addon.addOnFee) * Number(addon.value);
+      addOnTemp = addOnTemp + Number(addon.addOnFee) * Number(addon.value);
     });
-
-    setFinalPrice(Number(final_price));
+    let con =  (Number(final_price) * 0.0199).toFixed(2); 
+    setFinalPrice(Number(final_price) + Number(con));
+    setConvenienceFee(Number(con));
     setAddOn(Number(addOnTemp))
   };
 
@@ -591,7 +626,7 @@ const CustomerBookings = () => {
                                   required
                                 >
 
-                                  <option value="">Join Us From</option>{" "}
+                                  <option value="">Join Us From </option>{" "}
                                   {/* Optional: Placeholder option */}
                                   {showLocations.map((option) => {
                                     return (
@@ -620,10 +655,8 @@ const CustomerBookings = () => {
                                   }
                                   required
                                 >
-
-                                  <option value="">Select Pickup Location</option>{" "}
-
-                                  {participantsPickupPoints.map((pickupPoint) => {
+                                  <option value="">Select Pickup Location </option>{" "}
+                                  {additionalParticipantsList[index].pickupLocationList && additionalParticipantsList[index].pickupLocationList.map((pickupPoint) => {
                                     return (
                                       <option value={pickupPoint.name} key={pickupPoint.id}>
                                         {pickupPoint.name}
@@ -728,10 +761,10 @@ const CustomerBookings = () => {
                             <td className='pay-td'>Convenience Fee (1.99 %)</td>
                             <td className='column2 pay-td'>{convenienceFee} /- </td>
                           </tr>
-                          <tr>
+                          {/* <tr>
                             <td className='pay-td'>Discount</td>
                             <td className='column2 pay-td'>- ₹ {convenienceFee} /-</td>
-                          </tr>
+                          </tr> */}
                           <tr>
                             <td className='pay-th' style={{ color: 'green' }}><b>Remaining </b></td>
                             <td className='column2 pay-th' style={{ color: 'green' }}><b>₹ {remainingAmount} /-</b></td>
@@ -768,10 +801,10 @@ const CustomerBookings = () => {
                             <td className='pay-td'>Convenience Fee (1.99 %)</td>
                             <td className='column2 pay-td'>₹ {convenienceFee} /-</td>
                           </tr>
-                          <tr>
+                          {/* <tr>
                             <td className='pay-td'>Discount</td>
                             <td className='column2 pay-td'>- ₹ {convenienceFee} /-</td>
-                          </tr>
+                          </tr> */}
                           {discount > 0 ? <tr>
                             <td className='pay-td'>Added Discount</td>
                             <td className='column2 pay-td'>- ₹ {discount} /-</td>
@@ -803,6 +836,7 @@ const CustomerBookings = () => {
                           {showDiscountStatus && paymentOption != 'partial' && discount > 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': 'green', 'gap': '5px' }}> Discount Applied   <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.007 8.27C22.194 9.125 23 10.45 23 12c0 1.55-.806 2.876-1.993 3.73.24 1.442-.134 2.958-1.227 4.05-1.095 1.095-2.61 1.459-4.046 1.225C14.883 22.196 13.546 23 12 23c-1.55 0-2.878-.807-3.731-1.996-1.438.235-2.954-.128-4.05-1.224-1.095-1.095-1.459-2.611-1.217-4.05C1.816 14.877 1 13.551 1 12s.816-2.878 2.002-3.73c-.242-1.439.122-2.955 1.218-4.05 1.093-1.094 2.61-1.467 4.057-1.227C9.125 1.804 10.453 1 12 1c1.545 0 2.88.803 3.732 1.993 1.442-.24 2.956.135 4.048 1.227 1.093 1.092 1.468 2.608 1.227 4.05Zm-4.426-.084a1 1 0 0 1 .233 1.395l-5 7a1 1 0 0 1-1.521.126l-3-3a1 1 0 0 1 1.414-1.414l2.165 2.165 4.314-6.04a1 1 0 0 1 1.395-.232Z" fill="#009912"></path></g></svg></p>}
                           {showDiscountStatus && paymentOption != 'partial' && discount == 0 && <p style={{ 'display': 'flex', 'font-weight': 'bold', 'color': '#c70000', 'gap': '5px' }}> Please try to apply the coupon again. <svg width="24px" height="24px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#c70000" fill-rule="evenodd" d="M8,1 C11.8659932,1 15,4.13400675 15,8 C15,11.8659932 11.8659932,15 8,15 C4.13400675,15 1,11.8659932 1,8 C1,4.13400675 4.13400675,1 8,1 Z M3,8 C3,10.7614237 5.23857625,13 8,13 C9.01910722,13 9.96700318,12.6951083 10.7574478,12.1715651 L3.8284349,5.24255219 C3.30489166,6.03299682 3,6.98089278 3,8 Z M8,3 C6.98089278,3 6.03299682,3.30489166 5.24255219,3.8284349 L12.1715651,10.7574478 C12.6951083,9.96700318 13,9.01910722 13,8 C13,5.23857625 10.7614237,3 8,3 Z"></path> </g></svg></p>}
                         </div>
+                        {console.log('selected--',selected,'---eventDetails.eventType--',eventDetails.eventType)   }
                         {selected && eventDetails.eventType == 'BackPackingTrip' &&
                           <div>
                             <span className="details">Select Payment Type:<span style={{ 'color': 'red' }}> *</span></span>

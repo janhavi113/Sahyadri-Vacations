@@ -95,8 +95,7 @@ router.post("/schedule-event", async (req, res) => {
             tripalSharingNote,
             thirdAcUpgrate,
             thirdAcUpgrateNote,
-            note,
-			duration
+            note
 		} = req.body;
 
 		let scheduleRecordcount = 0;
@@ -138,7 +137,6 @@ router.post("/schedule-event", async (req, res) => {
 			thirdAcUpgrate: thirdAcUpgrate,
 			thirdAcUpgrateNote: thirdAcUpgrateNote,
 			note: note,
-			duration: duration,
 			Url: "/event-details?eventid=" +
 				(scheduleRecordcount + 1).toString() +
 				"/" +
@@ -254,10 +252,19 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
             tripalSharingNote,
             thirdAcUpgrate,
             thirdAcUpgrateNote,
-            note,
-			duration
+            note
 			
 		} = req.body;
+
+
+		let redirectionUrl;
+
+		if(notScheduleYet){
+           redirectionUrl = "/show-event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase();
+		}else{
+			redirectionUrl = "/event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase();
+		
+		}
 
 		// Update query
 		let myquery = { eventId: event_Id };
@@ -286,8 +293,7 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			thirdAcUpgrate: thirdAcUpgrate,
 			thirdAcUpgrateNote: thirdAcUpgrateNote,
 			note: note,
-			duration: duration,
-			Url: "/event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase(),
+			Url: redirectionUrl,
 			eventApi: eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase()
 		};
 

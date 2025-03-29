@@ -30,7 +30,6 @@ const scheduleBatchesSchema = new mongoose.Schema({
   thirdAcUpgrate: { type: Number , default: 0},
   thirdAcUpgrateNote : { type: String },
   note : { type: String },
-  duration: { type: String },
   sort: { type: Number, required: true }, // Field to hold the sort order
 }, { timestamps: true });
 

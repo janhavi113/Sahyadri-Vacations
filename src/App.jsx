@@ -8,6 +8,7 @@ import AllEvents from  "./components/admin-panel/All-Events/AllEvents";
 import ScheduledEvents from "./components/admin-panel/Scheduled_Events/ScheduledEvents";
 import ScheduledEventsDetails from "./components/admin-panel/Scheduled_Events/ScheduledEventsDetails";
 import ScheduleEvents from "./components/admin-panel/Schedule-Events/ScheduleEvents";
+import ShowDetailsNotSchedule from "./components/User-Panel/ShowEventDetails/ShowDetailsNotSchedule";
 import UpdateScheduleEvents from "./components/admin-panel/Schedule-Events/UpdateScheduleEvents";
 import CouponCode from "./components/admin-panel/CouponCode/CouponForm";
 import SortScheduleBatches from "./components/admin-panel/SortScheduleBatches/SortScheduleBatches";
@@ -109,6 +110,10 @@ function App() {
     {
       path: "/schedule-event",
       element: <ScheduleEvents />,
+    },
+    {
+      path: "/show-event-details",
+      element: <ShowDetailsNotSchedule />,
     },
     {
       path: "/update-schedule-events",
