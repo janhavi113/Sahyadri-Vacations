@@ -48,15 +48,32 @@ function Categories() {
     })
     let res = await r.json();
     console.log('res',res);
-    
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+       
     if (res.isSuccess == true) {
       setSuccess(res.isSuccess);
 
-      const eventOptions = res.scheduleBatches.map(event => (
-        {
-        value: event.eventId,
-        label: event.eventname + " " + event.duration ,
-      }));
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+      const eventOptions = res.scheduleBatches.map(event => {
+        let dateLabel = "";
+      
+        if (event.notScheduleYet) {
+          dateLabel = " (On Demand)";
+        } else if (!event.everyWeekend) {
+          const startDate = new Date(event.eventStartDate);
+          const endDate = new Date(event.eventEndDate);
+          
+          dateLabel = `${startDate.getDate()} ${months[startDate.getMonth()]} ${startDate.getFullYear()} - ` +
+                      `${endDate.getDate()} ${months[endDate.getMonth()]} ${endDate.getFullYear()}`;
+        }
+      
+        return {
+          value: event.eventId,
+          label: `${event.eventname} ${event.duration} ${dateLabel}`
+        };
+      });
+      
       setEventOptionsList(eventOptions);
     }
   }
