@@ -103,6 +103,7 @@ function ScheduleEvents() {
       formData.append("active", active);
       formData.append('eventname', search[0].name);
       formData.append('eventType', search[0].eventType);
+      formData.append('duration', search[0].duration);
       formData.append('scheduleEventId', search[0].eventId);
       formData.append('eventCostPerPerson', data.eventCostPerPerson);
       formData.append('eventCostPerPersonFromMumbai', data.eventCostPerPersonFromMumbai);

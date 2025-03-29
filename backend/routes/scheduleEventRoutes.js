@@ -95,7 +95,8 @@ router.post("/schedule-event", async (req, res) => {
             tripalSharingNote,
             thirdAcUpgrate,
             thirdAcUpgrateNote,
-            note
+            note,
+			duration
 		} = req.body;
 
 		let scheduleRecordcount = 0;
@@ -126,6 +127,7 @@ router.post("/schedule-event", async (req, res) => {
 			bookingTillDate: bookingTillDate,
 			bookingTillTime: bookingTillTime,
 			eventname: eventname,
+			duration:duration,
 			images: currUrl,
 			eventCostPerPersonFromMumbai: eventCostPerPersonFromMumbai,
 			specialOfferEvent: specialOfferEvent,
@@ -252,7 +254,8 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
             tripalSharingNote,
             thirdAcUpgrate,
             thirdAcUpgrateNote,
-            note
+            note,
+			duration,
 			
 		} = req.body;
 
@@ -282,6 +285,7 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			bookingTillTime: bookingTillTime,
 			eventname: eventname,
 			images: currUrl,
+			duration:duration,
 			specialOfferEvent: specialOfferEvent,
 			partialBookingAmount: partialBookingAmount,
 			eventType: eventType,

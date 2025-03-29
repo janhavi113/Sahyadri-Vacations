@@ -52,10 +52,10 @@ function Categories() {
     if (res.isSuccess == true) {
       setSuccess(res.isSuccess);
 
-      const eventOptions = res.scheduleBatches.map(event => ({
-
+      const eventOptions = res.scheduleBatches.map(event => (
+        {
         value: event.eventId,
-        label: event.eventname + " " + event.duration,
+        label: event.eventname + " " + event.duration ,
       }));
       setEventOptionsList(eventOptions);
     }

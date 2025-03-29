@@ -159,7 +159,8 @@ const UpdateScheduleEvents = () => {
       console.log('search--', (specialOfferEvent == 'on' || specialOfferEvent == true));
       let b2bValue = b2bPrice == null ? 0 : b2bPrice;
       formData.append('eventname', search[0].name);
-      formData.append('eventType', eventType);
+      formData.append('eventType', search[0].eventType);      
+      formData.append('duration', search[0].duration);
       formData.append('eventCostPerPerson', eventCostPerPerson);
       formData.append('eventEndDate', new Date(eventEndDate));
       formData.append('eventStartDate', new Date(eventStartDate));
