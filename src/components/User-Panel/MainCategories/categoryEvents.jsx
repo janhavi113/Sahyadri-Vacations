@@ -74,6 +74,11 @@ const CategoryEvents = () => {
                 eventCostPerPerson = event.eventCostPerPerson;
                 b2bPrice = event.b2bPrice;
                 eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
+            }else if(event.notScheduleYet == true){
+                batchdate = 'On Demand';
+                eventCostPerPerson = event.eventCostPerPerson;
+                b2bPrice = event.b2bPrice;
+                eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
             }
         }
         if (batchdate && eventCostPerPerson) {

@@ -52,7 +52,6 @@ const ShowDetailsNotSchedule = () => {
   const [currentEventId, setCurrentEventId] = useState();
   const [show, setShow] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState('false');
-  const [finalBatchesList, setFinalBatchesList] = useState();
   const [loading, setLoading] = useState(false);
   const[batchFull,setBatchFull] = useState(false);
  
@@ -288,18 +287,9 @@ const ShowDetailsNotSchedule = () => {
                               style={{ color: 'orange' }}
                             />
                             <span className="section-details-tag" style={{ marginTop: '-1px' }}>
-                              Upcoming Batch:
+                              Upcoming Batch: 
                             </span>
-                          </td>
-                        </tr> <tr>
-                          <td >
-                            <div className="section-details">
-                              <ul className="display-bulletin">
-                                {finalBatchesList && finalBatchesList.map((event, index) => (
-                                  <li key={index}><b>{event.batchdate}</b></li>
-                                ))}
-                              </ul>
-                            </div>
+                            <span>  On Demand</span>
                           </td>
                         </tr>
 
