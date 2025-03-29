@@ -289,7 +289,7 @@ const ShowDetailsNotSchedule = () => {
                             <span className="section-details-tag" style={{ marginTop: '-1px' }}>
                               Upcoming Batch: 
                             </span>
-                            <span>  On Demand</span>
+                            <span><b> On Demand</b></span>
                           </td>
                         </tr>
 
