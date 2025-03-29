@@ -195,7 +195,6 @@ const UpdateScheduleEvents = () => {
     }
   }
 
-
   return (
     <div>
       <AdminNavbar>
