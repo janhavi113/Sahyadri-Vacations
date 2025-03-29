@@ -157,20 +157,23 @@ const CustomerBookings = () => {
   const handlePaymentChange = (event) => {
     setPaymentOption(event.target.value);
     if (event.target.value == "partial") {
+     
       let price = Number(selectedBatch.partialBookingAmount) * Number(noOfTrekkers) + Number(addOn);
-      setConvenienceFee((Number(price) * 0.0199).toFixed(2));
+      let conF = (Number(price) * 0.0199).toFixed(2);
+      setConvenienceFee(conF);
       // price = price ;//+ (price * 0.0199);
-      //setPartialPayment(price);
-      setFinalPrice(Number(price)+((Number(price) * 0.0199).toFixed(2)));
+      setPartialPayment(price);
+      setFinalPrice(Number(price)+Number(conF));
       setDiscount(0);
       setCouponCode('');
       let final_price = 0;
       for (let i = 0; i < participants.length; i++) {
         final_price = Number(participants[i].price) + Number(final_price);
       }
-      final_price = final_price + Number(addOn) + Number(selectedBatch.eventCostPerPerson);
-      let remainingAmount = ( Number(final_price)  +(Number(final_price) * 0.0199).toFixed(2)) - ( Number(price)+(Number(price) * 0.0199).toFixed(2));
-      setRemainingAmount(remainingAmount);
+      let fCon = (Number(final_price) * 0.0199).toFixed(2);
+      final_price = Number(final_price) + Number(addOn) + Number(selectedBatch.eventCostPerPerson);
+      let remainingAmount = ( Number(final_price) +Number(fCon)) - ( Number(price)+(Number(fCon)));
+      setRemainingAmount(Number(remainingAmount));
       //  setPrice(Number(selectedBatch.partialBookingAmount));
 
     } else {
@@ -447,8 +450,15 @@ const CustomerBookings = () => {
     }
     myMap.set(e.target.id, { 'addOnFee': addOnFee, 'value': value });
     setAddOnMap(myMap);
-    let final_price = Number(actualPrice);
+    let final_price = 0;
+    if(paymentOption != 'partial'){
+     final_price = Number(actualPrice);
+    }else{
+      final_price = Number(partialPayment);
+    }
     let addOnTemp = 0;
+    console.log('final_price---',final_price);
+    
     myMap.forEach((addon, key) => {
       final_price = final_price + Number(addon.addOnFee) * Number(addon.value);
       addOnTemp = addOnTemp + Number(addon.addOnFee) * Number(addon.value);
