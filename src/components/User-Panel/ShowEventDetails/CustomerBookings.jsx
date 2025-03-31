@@ -60,7 +60,6 @@ const CustomerBookings = () => {
   const [additionalParticipantsList,setAdditionalParticipantsList]= useState([]);
   // For Join Us From selection
   const handleSelect = async (option) => {
-    alert(selected)
     setSelected(option);
     const foundRecord = await handleBookingSlot();
     let price = 0;
