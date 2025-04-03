@@ -195,7 +195,7 @@ const CustomerBookings = () => {
 
   const handleParticipantChange = (index, field, value) => {
     let price = 0;
-    let final_Price = Number(finalPrice);
+    let final_Price = Number(actualPrice);
     let pickupLocation = [];
     const addParticipantsList =[...additionalParticipantsList];
    
