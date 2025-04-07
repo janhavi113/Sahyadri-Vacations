@@ -43,7 +43,7 @@ router.post("/booking", async (req, res) => {
         let bookingIdVar = await generateBookingId(req.body.bookingDate);
 
       
-        console.log('bookingIdVar---', bookingIdVar);
+        console.log('req.body---', req.body);
 
         const booking = new Bookings({
             bookingId: bookingIdVar,
@@ -59,8 +59,16 @@ router.post("/booking", async (req, res) => {
             eventStartDate: eventStartDate,
             eventEndDate: eventEndDate,
         });
+      
         await booking.save();
-        //console.log("booking --", booking);
+        Bookings.deleteMany({ bookingId: { $exists: false } })
+        .then((result) => {
+          console.log("Deleted documents:", result.deletedCount);
+        })
+        .catch((err) => {
+          console.error("Error deleting documents:", err);
+        });
+      
         res.send({
             isSuccess: true,
             booking: booking
