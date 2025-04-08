@@ -259,10 +259,11 @@ router.post("/update-schedule-events/:eventId", async (req, res) => {
 			
 		} = req.body;
 
-
+        console.log('req.body---',req.body);
+		console.log('notScheduleYet--',notScheduleYet);
 		let redirectionUrl;
 
-		if(notScheduleYet){
+		if(notScheduleYet && notScheduleYet != 'false'){
            redirectionUrl = "/show-event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase();
 		}else{
 			redirectionUrl = "/event-details?eventid=" + event_Id.toString() + "/" + eventname.toString().replace(/\s/g, "-").replace(/-+/g, "-").toLowerCase();
