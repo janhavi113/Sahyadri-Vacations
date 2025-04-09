@@ -39,6 +39,7 @@ const DirectBookings = ({ onSendData }) => {
   const [eventType, setEventType] = useState();
   const [selectedBatch, setSelectedBatch]  = useState();
   const [participantsPickupPoints, setParticipantsPickupPoints] = useState([]);
+  const [additionalParticipantsList,setAdditionalParticipantsList]= useState([]);
   const {
     register,
     handleSubmit,
@@ -65,6 +66,15 @@ const DirectBookings = ({ onSendData }) => {
 
   const onSubmit = async (data) => {
     console.log('selectedBatch---',Number(selectedBatch.eventCostPerPerson));
+    if (!validateParticipants()) return;
+
+    const payload = {
+      ...data,
+      mobileNumber: data.whatsappNumber,
+      numberOfPeoples: participants.length + 1,
+      otherParticipants: participants,
+    };
+  
     const formData = new FormData();
     formData.append("fullName", data.fullName);
     formData.append("email", data.emailId);
@@ -118,6 +128,10 @@ const DirectBookings = ({ onSendData }) => {
         ...participants,
         { name: "", mobileNumber: "", pickupLocation: "" },
       ]);
+      setAdditionalParticipantsList([
+        ...additionalParticipantsList  ,
+      {pickupLocationList: "" },
+    ]);
     }
   };
 
@@ -132,25 +146,38 @@ const DirectBookings = ({ onSendData }) => {
       setNoOfTrekkers(count);
       setFinalPrice(final_Price);
       setParticipants(participants.slice(0, -1));
+      setAdditionalParticipantsList(additionalParticipantsList.slice(0, -1));
+
     }
   };
 
   const handleParticipantChange = (index, field, value) => {
-    if (field == 'locationCity') {
-      //console.log('pickupPoints---',pickupPoints);
-      if (value == 'Pune to Pune') {
-        setParticipantsPickupPoints(eventPickupPoints);
-      } else if (value == 'Mumbai to Mumbai') {
-        setParticipantsPickupPoints(pickupPointsfromMumbai);
-      } else {
-        setParticipantsPickupPoints([{ 'Id': 1, 'name': b2bLocation }]);
-      }
-    }
+    let price = 0;
+    let pickupLocation = [];
+    const addParticipantsList =[...additionalParticipantsList];
+   
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
+    if (field == 'locationCity') {
+      if (value == 'Pune to Pune') {
+        price = selectedBatch.eventCostPerPerson;
+        pickupLocation = eventPickupPoints ;
+      } else if (value == 'Mumbai to Mumbai') {
+        price = selectedBatch.eventCostPerPersonFromMumbai;
+        pickupLocation = pickupPointsfromMumbai;
+      } else {
+        price = selectedBatch.b2bPrice;
+        pickupLocation = [{ 'Id': 1, 'name': b2bLocation}];
+      }
+      newParticipants[index]['price'] = price;
+     
+      addParticipantsList[index]['pickupLocationList']= pickupLocation; 
+     
+     
+    }
     setParticipants(newParticipants);
+    setAdditionalParticipantsList(addParticipantsList);
   };
-
   const getNextBatchDate = (event) => {
     let batchdate;
     let batchSize = -1;
@@ -254,10 +281,13 @@ const DirectBookings = ({ onSendData }) => {
   };
 
   useEffect(() => {
+    if (errors.whatsappNumber) {
+      alert(errors.whatsappNumber.message);
+    }
     if (isSuccess == false) {
       getCurrentrecord();
     }
-  });
+  }, [errors.whatsappNumber]);
 
   function convertHtmlToJSON(htmlString) {
     const tempDiv = document.createElement("div");
@@ -335,6 +365,25 @@ const DirectBookings = ({ onSendData }) => {
     setShowLocations(tempLocations);
   }
 
+
+  const validateParticipants = () => {
+    for (let i = 0; i < participants.length; i++) {
+      const p = participants[i];
+  
+      if (!p.name || !p.mobileNumber || !p.locationCity || !p.pickupLocation) {
+        alert(`Please fill all fields for Participant ${i + 2}`);
+        return false;
+      }
+  
+      if (!/^[6-9]\d{9}$/.test(p.mobileNumber)) {
+        alert(`Invalid mobile number for Participant ${i + 2}: ${p.mobileNumber}`);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  
   return (
     <div>
       <form action="" onSubmit={handleSubmit(onSubmit)}>
@@ -415,6 +464,10 @@ const DirectBookings = ({ onSendData }) => {
                     required: {
                       value: true,
                       message: "This field is required",
+                    },
+                    pattern: {
+                      value: /^[6-9]\d{9}$/,
+                      message: "Please enter a valid 10-digit mobile number",
                     },
                   })}
                   type="tel"
@@ -534,13 +587,12 @@ const DirectBookings = ({ onSendData }) => {
                       type="text"
                       placeholder="WhatsApp Number"
                       value={participant.mobileNumber}
-                      onChange={(e) =>
-                        handleParticipantChange(
-                          index,
-                          "mobileNumber",
-                          e.target.value
-                        )
-                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d{0,10}$/.test(value)) {
+                          handleParticipantChange(index, "mobileNumber", value);
+                        }
+                      }}
                       required
                     />
                     {eventType != 'CampingEvent' &&
@@ -587,13 +639,13 @@ const DirectBookings = ({ onSendData }) => {
 
                         <option value="">Select Pickup Location</option>{" "}
                         {console.log('participantsPickupPoints-----', participantsPickupPoints)}
-                        {participantsPickupPoints.map((pickupPoint) => {
-                          return (
-                            <option value={pickupPoint.name} key={pickupPoint.id}>
-                              {pickupPoint.name}
-                            </option>
-                          );
-                        })}
+                        {additionalParticipantsList[index].pickupLocationList && additionalParticipantsList[index].pickupLocationList.map((pickupPoint) => {
+                                    return (
+                                      <option value={pickupPoint.name} key={pickupPoint.id}>
+                                        {pickupPoint.name}
+                                      </option>
+                                    );
+                                  })}
                       </select>
                     }
                   </div>
