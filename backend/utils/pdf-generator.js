@@ -16,11 +16,12 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
 
     // Construct the path to the logo
     const logo = getImageAsBase64(path.join(__dirname, '../../public/logo.jpg')); // Adjusted path to logo
-
-    const finalPrice = (bookingDetails.eventPrice * bookingDetails.numberOfPeoples ) + Number(bookingDetails.addedOn);
-    let convenienceFee = ((bookingDetails.eventPrice * bookingDetails.numberOfPeoples) + Number(bookingDetails.addedOn) ) * 0.0199;
-    convenienceFee = convenienceFee.toFixed(2);
-    const total_price = Number(finalPrice) - Number(bookingDetails.addedDiscount)
+    
+    let convenienceFee = bookingDetails.convenienceFee;
+    const total_price = Number(bookingDetails.amountPaid) + Number(bookingDetails.remainingAmount)
+    let actualPrice =  Number(total_price) - Number(bookingDetails.convenienceFee) - Number(bookingDetails.addedOn) + Number(bookingDetails.addedDiscount)
+    const finalPrice = Number(actualPrice ) + Number(bookingDetails.addedOn);
+    
     console.log('Booking Details:', bookingDetails);
     let company_className = 'company-info';
     if(bookingDetails.remainingAmount > 0){
@@ -179,9 +180,13 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
               <th>Details</th>
               <th style="text-align: right;">Amount</th>
             </tr>
-            <tr>
+             <tr>
               <td>Event Fees</td>
-              <td style="text-align: right;">${bookingDetails.numberOfPeoples} x ${bookingDetails.eventPrice}</td>
+              <td style="text-align: right;">${actualPrice} </td>
+            </tr>
+            <tr>
+              <td>Number of Participants</td>
+              <td style="text-align: right;">${bookingDetails.numberOfPeoples}</td>
             </tr>
              <tr>
                 <td>Add On</td>
@@ -194,10 +199,6 @@ export const generateInvoicePdf = async (bookingDetails, pdfPath) => {
             <tr>
               <td>Convenience Fee (1.99 %)</td>
               <td style="text-align: right;">${convenienceFee}</td>
-            </tr>
-           <tr>
-              <td>Discount</td>
-              <td style="text-align: right;">-${convenienceFee}</td>
             </tr>
               ${bookingDetails.addedDiscount > 0 ? `<tr>
                 <td>Added Discount</td>

@@ -6,6 +6,13 @@
 .button-group{
   padding: 10px;
 }
+.help-text {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 2px;
+  display: block;
+}
+
 .input-box select ,.input-box textarea{ 
     height: 65px;
     width: 100%;

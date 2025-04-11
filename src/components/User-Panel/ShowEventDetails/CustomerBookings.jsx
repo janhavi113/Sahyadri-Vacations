@@ -57,7 +57,7 @@ const CustomerBookings = () => {
   const [basetobasePrice, setBasetoBasePrice] = useState(0);
   const [addOn, setAddOn] = useState(0);
   const [addOnMap, setAddOnMap] = useState();
-  const [additionalParticipantsList,setAdditionalParticipantsList]= useState([]);
+  const [additionalParticipantsList, setAdditionalParticipantsList] = useState([]);
   // For Join Us From selection
   const handleSelect = async (option) => {
     setSelected(option);
@@ -73,12 +73,12 @@ const CustomerBookings = () => {
       setSelectedLocation(option);
       setShowTermsAndConditions(true);
       price = foundRecord.b2bPrice;
-    }   
+    }
     setActualPrice(Number(price));
     setBookingPrice(Number(price));
     let convenience_Fee = (Number(price) * 0.0199).toFixed(2);
     setConvenienceFee(convenience_Fee);
-    setFinalPrice(Number(price)+Number(convenience_Fee));
+    setFinalPrice(Number(price) + Number(convenience_Fee));
   }
 
   const handleBookingSlot = async () => {
@@ -90,7 +90,7 @@ const CustomerBookings = () => {
       setBookedSlot(foundRecord.bookedSize);
       if (finalPrice <= 0) {
         if (foundRecord.eventCostPerPerson) {
-          let price = foundRecord.eventCostPerPerson;         
+          let price = foundRecord.eventCostPerPerson;
           setActualPrice(Number(price));
           setBookingPrice(Number(price));
           setBookingPrice(Number(price));
@@ -125,11 +125,11 @@ const CustomerBookings = () => {
       setBookedSlot(foundRecord.bookedSize);
       if (finalPrice <= 0) {
         let price = foundRecord.eventCostPerPerson;
-       
+
         setActualPrice(Number(price));
         let convenience_Fee = (Number(price) * 0.0199).toFixed(2);
         setConvenienceFee(convenience_Fee);
-        setFinalPrice(Number(price)+Number(convenience_Fee));
+        setFinalPrice(Number(price) + Number(convenience_Fee));
       }
       return foundRecord;
     } else {
@@ -156,36 +156,36 @@ const CustomerBookings = () => {
   const handlePaymentChange = (event) => {
     setPaymentOption(event.target.value);
     if (event.target.value == "partial") {
-     
-      let price = Number(selectedBatch.partialBookingAmount) * Number(noOfTrekkers) + Number(addOn);
+
+      let price = (Number(selectedBatch.partialBookingAmount) * Number(noOfTrekkers)) + Number(addOn);
       let conF = (Number(price) * 0.0199).toFixed(2);
       setConvenienceFee(conF);
       // price = price ;//+ (price * 0.0199);
       setPartialPayment(price);
-      setFinalPrice(Number(price)+Number(conF));
+      setFinalPrice(Number(price) + Number(conF));
       setDiscount(0);
       setCouponCode('');
       let final_price = 0;
       for (let i = 0; i < participants.length; i++) {
         final_price = Number(participants[i].price) + Number(final_price);
       }
+      final_price = Number(final_price) + Number(addOn) + Number(bookingPrice);
       let fCon = (Number(final_price) * 0.0199).toFixed(2);
-      final_price = Number(final_price) + Number(addOn) + Number(selectedBatch.eventCostPerPerson);
-      let remainingAmount = ( Number(final_price) +Number(fCon)) - ( Number(price)+(Number(fCon)));
-      setRemainingAmount(Number(remainingAmount));
-      //  setPrice(Number(selectedBatch.partialBookingAmount));
 
+      let remainingAmount = (Number(final_price) + Number(fCon)) - (Number(price) + (Number(conF)));
+      setRemainingAmount(Number(remainingAmount).toFixed(2));
     } else {
       let final_price = 0;
       for (let i = 0; i < participants.length; i++) {
-        final_price = participants[i].price + final_price;
+        final_price = Number(participants[i].price) + Number(final_price);
       }
-      final_price = final_price + Number(selectedBatch.eventCostPerPerson);
-      let conv =(Number(final_price) * 0.0199).toFixed(2);
-      setConvenienceFee(conv);
-
-      setFinalPrice(Number(final_price) + Number(addOn)+Number(conv));
+      final_price = Number(final_price) + Number(bookingPrice);
       setActualPrice(Number(final_price));
+      final_price = Number(final_price) + Number(addOn)
+      let conv = (Number(final_price) * 0.0199).toFixed(2);
+      setConvenienceFee(conv);
+      setFinalPrice(Number(final_price) + Number(conv));
+
     }
   };
 
@@ -195,16 +195,14 @@ const CustomerBookings = () => {
 
   const handleParticipantChange = (index, field, value) => {
     let price = 0;
-    let final_Price = Number(actualPrice);
     let pickupLocation = [];
-    const addParticipantsList =[...additionalParticipantsList];
-   
+    const addParticipantsList = [...additionalParticipantsList];
     const newParticipants = [...participants];
     newParticipants[index][field] = value;
     if (field == 'locationCity') {
       if (value == 'Pune to Pune') {
         price = selectedBatch.eventCostPerPerson;
-        pickupLocation = pickupPoints ;
+        pickupLocation = pickupPoints;
       } else if (value == 'Mumbai to Mumbai') {
         price = selectedBatch.eventCostPerPersonFromMumbai;
         pickupLocation = pickupPointsfromMumbai;
@@ -213,15 +211,7 @@ const CustomerBookings = () => {
         pickupLocation = [{ 'Id': 1, 'name': eventDetails.b2bLocaion }];
       }
       newParticipants[index]['price'] = price;
-      final_Price = final_Price + price;
-     
-      addParticipantsList[index]['pickupLocationList']= pickupLocation; 
-      setActualPrice(final_Price);
-      let convenience_Fee = (Number(final_Price - discount) * 0.0199).toFixed(2);
-      setConvenienceFee(convenience_Fee);
-      let fprice = (Number(final_Price) +Number(convenience_Fee)) - Number(discount);
-      setFinalPrice(Number(fprice).toFixed(2));
-     
+      addParticipantsList[index]['pickupLocationList'] = pickupLocation;
     }
     setParticipants(newParticipants);
     setAdditionalParticipantsList(addParticipantsList);
@@ -259,9 +249,24 @@ const CustomerBookings = () => {
     }
   }
 
+  const paymentCalculation = () => {
+    let final_price = 0;
+    for (let i = 0; i < participants.length; i++) {
+      final_price = Number(participants[i].price) + Number(final_price);
+    }
+    final_price = Number(actualPrice) + Number(final_price)
+    setActualPrice(Number(final_price));
+    let conv = (Number(final_price) * 0.0199).toFixed(2);
+    setConvenienceFee(conv);
+    setFinalPrice(Number(final_price) + Number(conv));
+  }
+
   const onSubmit = async (data) => {
+    console.log('bookingId', bookingId);
+
     try {
       if (buttonClick == 'confirm-details') {
+        paymentCalculation();
         if (selectedLocation) {
           setButtonClick('pay-now');
         }
@@ -281,6 +286,7 @@ const CustomerBookings = () => {
         formData.append("tripalSharing", tripalSharingCount);
         formData.append("thirdAcUpgrate", thirdAcUpgrateCount);
         formData.append("specialNote", specialNote);
+        formData.append("convenienceFee", convenienceFee);
         let r = await fetch(`${apiUrl}confirmed-booking`, {
           method: "PUT",
           body: formData,
@@ -341,8 +347,8 @@ const CustomerBookings = () => {
       ]);
 
       setAdditionalParticipantsList([
-          ...additionalParticipantsList  ,
-        {pickupLocationList: "" },
+        ...additionalParticipantsList,
+        { pickupLocationList: "" },
       ]);
     } else {
       setBatchFull(true);
@@ -352,23 +358,10 @@ const CustomerBookings = () => {
 
   const decreaseCount = async () => {
     let count = 1;
-    let final_Price = 0;
-    if (noOfTrekkers > 1) {
+    if (Number(noOfTrekkers) >= 2) {
       count = noOfTrekkers;
       count--;
       setNoOfTrekkers(Number(count));
-      const lastRecord = participants[participants.length - 1];
-    
-      if (lastRecord?.price != null && lastRecord?.price != undefined && lastRecord?.price != '') {
-        final_Price = finalPrice - lastRecord?.price;
-      } else {
-        final_Price = bookingPrice;
-      }
-      
-      setActualPrice(Number(final_Price).toFixed(2));
-      let convenience_Fee = (Number(final_Price) * 0.0199).toFixed(2);
-      setConvenienceFee(convenience_Fee);
-      setFinalPrice(Number(final_Price)+Number(convenience_Fee));
       setParticipants(participants.slice(0, -1));
       setAdditionalParticipantsList(additionalParticipantsList.slice(0, -1));
     }
@@ -385,7 +378,7 @@ const CustomerBookings = () => {
 
   const handleCouponApply = async () => {
     try {
-     
+
       if (couponCode && paymentOption != 'partial') {
         if (!selectedBatch.specialOfferEvent) {
           const response = await fetch(`${apiUrl}api/validate-coupon`, {
@@ -409,21 +402,21 @@ const CustomerBookings = () => {
             }
             setShowDiscountStatus(true);
             setDiscount(Number(calculatedDiscount));
-            let fPrice = Number(final_price) + Number(addOn) ;
-            let con =  (Number(fPrice) * 0.0199).toFixed(2);
+            let fPrice = Number(final_price) + Number(addOn);
+            let con = (Number(fPrice) * 0.0199).toFixed(2);
             setConvenienceFee(con);
-            setFinalPrice(Number(fPrice)+Number(con) - Number(calculatedDiscount));
+            setFinalPrice(Number(fPrice) + Number(con) - Number(calculatedDiscount));
           } else {
             // setErrorMessage(data.message || 'Invalid coupon code.');
           }
         }
       } else {
         setDiscount(-1);
-        let con =  (Number(actualPrice) * 0.0199).toFixed(2);
+        let con = (Number(actualPrice) * 0.0199).toFixed(2);
         setFinalPrice(Number(actualPrice) + Number(con));
         setConvenienceFee(Number(con));
       }
-       
+
     } catch (error) {
       //setErrorMessage('An error occurred while applying the coupon.');
     }
@@ -450,18 +443,18 @@ const CustomerBookings = () => {
     myMap.set(e.target.id, { 'addOnFee': addOnFee, 'value': value });
     setAddOnMap(myMap);
     let final_price = 0;
-    if(paymentOption != 'partial'){
-     final_price = Number(actualPrice);
-    }else{
+    if (paymentOption != 'partial') {
+      final_price = Number(actualPrice);
+    } else {
       final_price = Number(partialPayment);
     }
     let addOnTemp = 0;
-   
+
     myMap.forEach((addon, key) => {
       final_price = final_price + Number(addon.addOnFee) * Number(addon.value);
       addOnTemp = addOnTemp + Number(addon.addOnFee) * Number(addon.value);
     });
-    let con =  (Number(final_price) * 0.0199).toFixed(2); 
+    let con = (Number(final_price) * 0.0199).toFixed(2);
     setFinalPrice(Number(final_price) + Number(con));
     setConvenienceFee(Number(con));
     setAddOn(Number(addOnTemp))

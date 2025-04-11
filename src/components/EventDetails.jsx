@@ -13,7 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "./admin-panel/CreateEvent/CreateEvents.css"
 import "./Modal.css";
 import Editor from "./Editor";
-
+import HelpTooltip from "./admin-panel/HelpTooltip/HelpTooltip";
 function EventDetails() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [modal, setModal] = useState(false);
@@ -390,21 +390,29 @@ function EventDetails() {
                   {isSubmitting && <div>Loading...</div>}
                   <div className="user-details">
                     <div className="input-box ">
-                      <span className="details">Event Name</span>
+                      <span className="details">Event Name
+                        <HelpTooltip text="Enter the official name of the event" />
+                      </span>
                       <input value={eventName} onChange={(e) => setEventName(e.target.value)} type="text" required />
                     </div>
 
                     <div className="input-box ">
-                      <span className="details">Event Details</span>
+                      <span className="details">Event Details
+                                      <HelpTooltip text="Provide a brief summary of the event" />
+                                    </span>
                       <textarea defaultValue={event.eventDetails}   {...register("eventDetails", { required: { value: true, message: "This field is required" }, })} type="text" required />
                     </div>
 
                     <div className="input-box">
-                      <span className="details">Itinerary</span>
+                      <span className="details">Itinerary
+                                      <HelpTooltip text="Include a day-wise plan for the event" />
+                                    </span>
                       <Editor value={itinerary} sendDataToParent={setItinerary} />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Event Type</span>
+                      <span className="details">Event Type
+                <HelpTooltip text="Select the type of event" />
+              </span>
                       <select  {...register("eventType", { required: { value: true, message: "This field is required" }, })} >
                         <option value={"TrekEvent"} >Trekking Event</option>
                         <option value={"CampingEvent"}>Camping Event</option>
@@ -413,79 +421,112 @@ function EventDetails() {
                       </select>
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Location</span>
+                      <span className="details">Location
+                <HelpTooltip text="Enter the location where the event will take place" />
+              </span>
                       <input value={locationValue} {...register("location", { required: { value: true, message: "This field is required" }, })} type="text" />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Type</span>
+                      <span className="details">Type
+                <HelpTooltip text="Type of activity or event style" />
+              </span>
                       <input value={typeValue} {...register("type")} type="text" onChange={(e) => setTypeValue(e.target.value)} />
                     </div>
 
                     <div className="input-select-box">
-                      <span className="details">Elevation</span>
+                      <span className="details">Elevation
+                <HelpTooltip text="Enter the highest altitude in meters" />
+              </span>
                       <input value={elevationValue} {...register("elevation",)} type="text" onChange={(e) => setElevationValue(e.target.value)} />
                     </div>
 
                     <div className="input-select-box">
-                      <span className="details">Difficulty</span>
+                      <span className="details">Difficulty
+                <HelpTooltip text="Describe how challenging the event is" />
+              </span>
                       <input value={difficultyValue} {...register("difficulty",)} type="text" onChange={(e) => setDifficultyValue(e.target.value)} />
                     </div>
 
                     <div className="input-select-box">
-                      <span className="details">Endurance</span>
+                      <span className="details">Endurance
+                <HelpTooltip text="Mention the stamina level required" />
+              </span>
                       <input value={enduranceValue} {...register("endurance",)} type="text" onChange={(e) => setEnduranceValue(e.target.value)} />
                     </div>
 
                     <div className="input-select-box">
-                      <span className="details">Duration</span>
+                      <span className="details">Duration
+                <HelpTooltip text="Provide the duration of the event in days" />
+              </span>
                       <input value={durationValue} {...register("duration",)} type="text" onChange={(e) => setDurationValue(e.target.value)} />
                     </div>
 
                     <div className="input-select-box">
-                      <span className="details">Total Distance</span>
+                      <span className="details">Total Distance
+                <HelpTooltip text="Total travel distance in kilometers" />
+              </span>
                       <input value={totalDistanceValue} {...register("totalDistance",)} type="text" onChange={(e) => setTrekDistanceValue(e.target.value)} />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Age Group</span>
+                      <span className="details">Age Group
+                <HelpTooltip text="Specify suitable age group for the event" />
+              </span>
                       <input value={ageGroupValue} {...register("ageGroup",)} type="text" onChange={(e) => setAgeGroupValue(e.target.value)} />
                     </div>
 
                     <div className="input-select-box">
-                      <span className="details">Trek Distance</span>
+                      <span className="details">Trek Distance
+                <HelpTooltip text="Distance to be trekked during event" />
+              </span>
                       <input value={trekDistanceValue} {...register("trekDistance",)} type="text" onChange={(e) => setTrekDistanceValue(e.target.value)} />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Highlights</span>
+                      <span className="details">Highlights
+                <HelpTooltip text="Main attractions or features of the event" />
+              </span>
                       <Editor value={highlights} sendDataToParent={setHighlights} />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Cost Includes</span>
+                      <span className="details">Cost Includes
+                <HelpTooltip text="Everything included in the event cost" />
+              </span>
                       <Editor value={costIncludes} sendDataToParent={setCostIncludes} />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Cost Excludes</span>
+                      <span className="details">Cost Excludes
+                <HelpTooltip text="Things not included in the cost" />
+              </span>
                       <Editor value={costExcludes} sendDataToParent={setCostExcludes} />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Things To Carry</span>
+                      <span className="details">Things To Carry
+                <HelpTooltip text="Checklist of things participants should bring" />
+              </span>
                       <Editor value={thingsToCarry} sendDataToParent={setThingsToCarry} />
                     </div>
 
                     <div className="input-select-box">
-                      <span className="details">B2B Location</span>
+                      <span className="details">B2B Location
+                <HelpTooltip text="Base toBase Pickup Location" />
+              </span>
                       <input value={b2bLocation} onChange={(e) => setB2BLocation(e.target.value)} type="text" />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">Pickup Points</span>
+                      <span className="details">Pickup Points from Pune
+                <HelpTooltip text="Enter all pickup locations from Pune" />
+              </span>
                       <Editor value={pickupPoints} sendDataToParent={setPickupPoints} />
                     </div>
 
                     <div className="input-select-box">
-                      <span className="details">Pickup Points from Mumbai</span>
+                      <span className="details">Pickup Points from Mumbai
+                <HelpTooltip text="Enter all pickup locations from Mumbai" />
+              </span>
                       <Editor value={pickupPointsfromMumbai} sendDataToParent={setPickupPointsfromMumbai} />
                     </div>
                     <div className="input-select-box">
-                      <span className="details">FAQ</span>
+                      <span className="details">FAQ
+                      <HelpTooltip text="Frequently Asked Questions" /></span>
                       <Editor value={FAQ} sendDataToParent={setFAQ} />
                     </div>
                     {/* Dropzone for file uploads */}

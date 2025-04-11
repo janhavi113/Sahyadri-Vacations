@@ -446,7 +446,7 @@ const ShowEventDetails = () => {
         selectedDate: selectedDate,
         isSuccess: true,
         bookingPhone: bookingIdVar.mobileNumber,
-        bookingId: bookingIdVar.bookingId,
+        bookingId: bookingIdVar._id,
         discountAvailable: discountAvailable,
         coupons: coupons
       },

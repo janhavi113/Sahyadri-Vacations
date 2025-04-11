@@ -108,11 +108,7 @@ const CouponForm = () => {
               {showForm ? 'Hide Form' : 'Create Coupon'}
             </button>
           </div>
-          <div className="coupon-list">
-            {coupons.map((coupon) => (
-              <CouponCard key={coupon._id} coupon={coupon} onDelete={handleDeleteCoupon} />
-            ))}
-          </div>
+         
 
           {showForm && (
             <div className="content">
@@ -197,6 +193,11 @@ const CouponForm = () => {
 
          
           {message && <p className='error-message'>{message}</p>}
+          <div className="coupon-list">
+            {coupons.map((coupon) => (
+              <CouponCard key={coupon._id} coupon={coupon} onDelete={handleDeleteCoupon} />
+            ))}
+          </div>
         </div>
       </AdminNavbar>
     </div>

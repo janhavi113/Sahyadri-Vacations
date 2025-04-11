@@ -15,6 +15,7 @@ const bookingsSchema = new mongoose.Schema({
     eventName: { type: String },
     numberOfPeoples: { type: Number, default: 1 },
     amountPaid: { type: Number, default: 0 },
+    convenienceFee : { type: Number, default: 0 },
     remainingAmount: { type: Number, default: 0 },
     packageGiven: { type: Number, default: 0 },
     pickupLocation: { type: String },

@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useForm } from "react-hook-form"
 import Dropzone from "react-dropzone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import HelpTooltip from "../HelpTooltip/HelpTooltip";
 import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -205,7 +206,9 @@ const UpdateScheduleEvents = () => {
               {isSuccess &&
                 <div className="user-details">
                   <div className="input-box ">
-                    <span className="details">Event Name<span style={{ 'color': 'red' }}>*</span></span>
+                    <span className="details">Event Name<span style={{ 'color': 'red' }}>*</span>
+                      <HelpTooltip text="Choose an event from the dropdown." />
+                    </span>
                     <select value={eventIsScheduled} onChange={(e) => setEventIsScheduled(e.target.value)} disabled >
                       {events.map(event => (
                         <option value={event.eventId} key={event.eventId}>{event.name}</option>
@@ -214,50 +217,60 @@ const UpdateScheduleEvents = () => {
                   </div>
 
                   <div className="input-box-column ">
-                    <span className="details">Start Date </span>
+                    <span className="details">Start Date 
+                    <HelpTooltip text="Select the starting date of the event" /></span>
                     <input type="date" value={eventStartDate} onChange={(e) => setEventStartDate(e.target.value)} />
                   </div>
                   <div className="input-box-column ">
-                    <span className="details">End Date </span>
+                    <span className="details">End Date 
+                    <HelpTooltip text="Choose the end date of the event." /></span>
                     <input type="date" value={eventEndDate} onChange={(e) => setEventEndDate(e.target.value)} />
                   </div>
                   <br />
                   <div className="input-box-column ">
-                    <span className="details">Booking Open Till Date </span>
+                    <span className="details">Booking Open Till Date
+                    <HelpTooltip text="Set the final date for accepting bookings." /></span>
                     <input type="date" value={bookingTillDate} onChange={(e) => setBookingTillDate(e.target.value)} />
                   </div>
                   <div className="input-box-column ">
-                    <span className="details">Booking Open Till Time</span>
+                    <span className="details">Booking Open Till Time
+                    <HelpTooltip text="Set the cut-off time for bookings." /></span>
                     <input type="time" value={bookingTillTime} onChange={(e) => setBookingTillTime(e.target.value)} />
                   </div>
 
                   {errors.dateError && <p className='show-error' >{errors.dateError.message}</p>}
                   <div className="input-box-column event-picker ">
-                    <span className="details">Every Weekend </span>
+                    <span className="details">Every Weekend
+                    <HelpTooltip text="Check if this event occurs every weekend." /></span>
                     <input type="checkbox" defaultChecked={everyWeekend} onChange={(e) => setEveryWeekend(e.target.checked)} />
                   </div>
 
                   <div className="input-box-column event-picker ">
-                    <span className="details">On Public Demand </span>
+                    <span className="details">On Public Demand 
+                    <HelpTooltip text="Check if this event is based on public demand." /></span>
                     <input type="checkbox" defaultChecked={notScheduleYet} onChange={(e) => setNotScheduleYet(e.target.checked)} />
                   </div>
                   {activeError.disply && <div className='errorMessage'>{activeError.message}</div>}
                   {eventType == 'BackPackingTrip' &&
                     <div className="input-box-column ">
-                      <span className="details">Partial Booking Amount Per Person </span>
+                      <span className="details">Partial Booking Amount Per Person 
+                      <HelpTooltip text="Amount required to reserve a spot." /> </span>
                       <input value={partialBookingAmount} onChange={(e) => setPartialBookingAmount(e.target.value)} type="text" />
                     </div>
                   }
                   <div className="input-box-column ">
-                    <span className="details">B2B Per Person </span>
+                    <span className="details">B2B Per Person 
+                    <HelpTooltip text="Enter the Base to Base pricing per person." /></span>
                     <input value={b2bPrice} onChange={(e) => setB2bPrice(e.target.value)} type="text" />
                   </div>
                   <div className="input-box-column">
-                    <span className="details">Cost Per Person from Pune<span style={{ 'color': 'red' }}>*</span></span>
+                    <span className="details">Cost Per Person from Pune<span style={{ 'color': 'red' }}>*</span>
+                    <HelpTooltip text="Enter the cost per person if travelling from Pune." /></span>
                     <input value={eventCostPerPerson} onChange={(e) => setEventCostPerPerson(e.target.value)} type="text" required />
                   </div>
                   <div className="input-box-column">
-                    <span className="details">Cost Per Person from Mumbai <span style={{ 'color': 'red' }}>*</span></span>
+                    <span className="details">Cost Per Person from Mumbai <span style={{ 'color': 'red' }}>*</span>   
+                    <HelpTooltip text="Enter the cost per person if travelling from Mumbai." /></span>                  
                     <input value={eventCostPerPersonFromMumbai} onChange={(e) => setEventCostPerPersonFromMumbai(e.target.value)} type="text" required />
                   </div>
 
@@ -265,6 +278,8 @@ const UpdateScheduleEvents = () => {
                   <div className="input-box-column">
                     <span className="details">
                       Double Sharing <span style={{ color: 'red' }}>*</span>
+                    
+                      <HelpTooltip text="Cost per person for double sharing." />
                     </span>
                     <input
                       type="number"
@@ -274,7 +289,8 @@ const UpdateScheduleEvents = () => {
                     />
                   </div>
                   <div className="input-box-column">
-                    <span className="details">Double Sharing Note</span>
+                    <span className="details">Double Sharing Note
+                      <HelpTooltip text="Additional notes for double sharing." /></span>
                     <textarea
                       value={doubleSharingNote}
                       onChange={(e) => setDoubleSharingNote(e.target.value)}
@@ -285,6 +301,7 @@ const UpdateScheduleEvents = () => {
                   <div className="input-box-column">
                     <span className="details">
                       Tripal Sharing <span style={{ color: 'red' }}>*</span>
+                      <HelpTooltip text="Cost per person for triple sharing." />
                     </span>
                     <input
                       type="number"
@@ -294,7 +311,8 @@ const UpdateScheduleEvents = () => {
                     />
                   </div>
                   <div className="input-box-column">
-                    <span className="details">Tripal Sharing Note</span>
+                    <span className="details">Tripal Sharing Note
+                    <HelpTooltip text="Additional notes for triple sharing." /></span>
                     <textarea
                       value={tripalSharingNote}
                       onChange={(e) => setTripalSharingNote(e.target.value)}
@@ -305,6 +323,7 @@ const UpdateScheduleEvents = () => {
                   <div className="input-box-column">
                     <span className="details">
                       Third AC Upgrade <span style={{ color: 'red' }}>*</span>
+                      <HelpTooltip text="Cost for upgrading to 3AC.<br /> (You can use same if any other additionl charges need to add )" />
                     </span>
                     <input
                       type="number"
@@ -314,7 +333,8 @@ const UpdateScheduleEvents = () => {
                     />
                   </div>
                   <div className="input-box-column">
-                    <span className="details">Third AC Upgrade Note</span>
+                    <span className="details">Third AC Upgrade Note 
+                      <HelpTooltip text="Notes related to 3AC.<br /> Upgrade option is required if Third AC Upgrade is filled" /></span>
                     <textarea
                       value={thirdAcUpgrateNote}
                       onChange={(e) => setThirdAcUpgrateNote(e.target.value)}
@@ -323,7 +343,8 @@ const UpdateScheduleEvents = () => {
 
                   {/* General Note */}
                   <div className="input-box-column">
-                    <span className="details">General Note</span>
+                    <span className="details">General Note
+                    <HelpTooltip text="Any general info you want to display." /></span>
                     <textarea
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
@@ -331,7 +352,8 @@ const UpdateScheduleEvents = () => {
                   </div>
                  
                   <div className="input-box-column ">
-                    <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span></span>
+                    <span className="details">Batch Size <span style={{ 'color': 'red' }}>*</span>
+                    <HelpTooltip text="Enter the max number of participants." /></span>
                     <input
                       value={eventBatchCount}
                       onChange={(e) => setEventBatchCount(e.target.value)}
@@ -341,18 +363,22 @@ const UpdateScheduleEvents = () => {
                     />
                   </div>
                   <div className="input-box-column ">
-                    <span className="details">Active</span>
+                    <span className="details">Active 
+                       <HelpTooltip text="Mark this to keep the event visible." /></span>
                     <input defaultChecked={isActive} onChange={(e) => setActive(e.target.checked)} type="checkbox" id="active" name="Active" />
                   </div>
                   <div className="input-box-column ">
-                    <span className="details">Special Offer Event</span>
+                    <span className="details">Special Offer Event 
+                      <HelpTooltip text="Highlight this as a special offer event." /></span>
                     <input defaultChecked={specialOfferEvent} onChange={(e) => setSpecialOfferEvent(e.target.checked)} type="checkbox" id="active" name="Active" />
                   </div>
                   <div className="input-box-column ">
                     <span className="details"></span>
                   </div>
                   <div className="input-box-column ">
-                    <span className="details">Upload Cover Photo <span style={{ 'color': 'red' }}>*</span></span>
+                    <span className="details">Upload Cover Photo <span style={{ 'color': 'red' }}>*</span>
+                    <HelpTooltip text="Upload a cover image (JPG/PNG)." />
+                    </span>
                   </div>
                   {/* Dropzone for file uploads */}
                   <Dropzone onDrop={onDrop} accept="image/jpeg, image/png">

@@ -3,6 +3,7 @@ import AdminNavbar from "../../AdminNavbar";
 import Editor from "../../Editor";
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
+import HelpTooltip from "../HelpTooltip/HelpTooltip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleXmark,
@@ -117,19 +118,27 @@ function CreateEvents() {
             {isSubmitting && <div>Loading...</div>}
             <div className="user-details addscroller">
               <div className="input-box ">
-                <span className="details">Event Name</span>
+                <span className="details">Event Name
+                <HelpTooltip text="Enter the official name of the event" />
+              </span>
                 <input {...register("eventName", { required: { value: true, message: "This field is required" }, })} type="text" required />
               </div>
               <div className="input-box ">
-                <span className="details">Overview</span>
+                <span className="details">Overview
+                <HelpTooltip text="Provide a brief summary of the event" />
+              </span>
                 <textarea {...register("eventDetails", { required: { value: true, message: "This field is required" }, })} type="text" required />
               </div>
               <div className="input-box ">
-                <span className="details">Itinerary</span>
+                <span className="details">Itinerary
+                <HelpTooltip text="Include a day-wise plan for the event" />
+              </span>
                 <Editor sendDataToParent={setItinerary} />
               </div>
               <div className="input-select-box ">
-                <span className="details">Event Type</span>
+                <span className="details">Event Type
+                <HelpTooltip text="Select the type of event" />
+              </span>
                 <select  {...register("eventType", { required: { value: true, message: "This field is required" }, })} >
                   <option value={"TrekEvent"} >Trekking Event</option>
                   <option value={"CampingEvent"}>Camping Event</option>
@@ -138,79 +147,112 @@ function CreateEvents() {
                 </select>
               </div>
               <div className="input-select-box">
-                <span className="details">Location</span>
+                <span className="details">Location
+                <HelpTooltip text="Enter the location where the event will take place" />
+              </span>
                 <input {...register("location", { required: { value: true, message: "This field is required" }, })} type="text" required />
               </div>
               <div className="input-select-box">
-                <span className="details">Type</span>
+                <span className="details">Type
+                <HelpTooltip text="Type of activity or event style" />
+              </span>
                 <input {...register("type",)} type="text"  />
               </div>
 
               <div className="input-select-box">
-                <span className="details">Elevation</span>
+                <span className="details">Elevation
+                <HelpTooltip text="Enter the highest altitude in meters" />
+              </span>
                 <input {...register("elevation",)} type="text"  />
               </div>
 
               <div className="input-select-box">
-                <span className="details">Difficulty</span>
+                <span className="details">Difficulty
+                <HelpTooltip text="Describe how challenging the event is" />
+              </span>
                 <input {...register("difficulty",)} type="text" />
               </div>
 
               <div className="input-select-box">
-                <span className="details">Endurance</span>
+                <span className="details">Endurance
+                <HelpTooltip text="Mention the stamina level required" />
+              </span>
                 <input {...register("endurance",)} type="text" />
               </div>
 
               <div className="input-select-box">
-                <span className="details">Duration</span>
+                <span className="details">Duration
+                <HelpTooltip text="Provide the duration of the event in days" />
+              </span>
                 <input {...register("duration",)} type="text" />
               </div>
 
               <div className="input-select-box">
-                <span className="details">Total Distance</span>
+                <span className="details">Total Distance
+                <HelpTooltip text="Total travel distance in kilometers" />
+              </span>
                 <input {...register("totalDistance",)} type="text"  />
               </div>
               <div className="input-select-box">
-                <span className="details">Age Group</span>
+                <span className="details">Age Group
+                <HelpTooltip text="Specify suitable age group for the event" />
+              </span>
                 <input {...register("ageGroup",)} type="text" />
               </div>
 
               <div className="input-select-box">
-                <span className="details">Trek Distance</span>
+                <span className="details">Trek Distance
+                <HelpTooltip text="Distance to be trekked during event" />
+              </span>
                 <input {...register("trekDistance",)} type="text" />
               </div>
               
               <div className="input-select-box">
-                <span className="details">B2B Location</span>
+                <span className="details">B2B Location
+                <HelpTooltip text="Base toBase Pickup Location" />
+              </span>
                 <input {...register("b2bLocation",)} type="text" />
               </div>
               <div className="input-select-box">
-                <span className="details">Pickup Points from Pune</span>
+                <span className="details">Pickup Points from Pune
+                <HelpTooltip text="Enter all pickup locations from Pune" />
+              </span>
                 <Editor sendDataToParent={setPickupPoints} />
               </div>
               <div className="input-select-box">
-                <span className="details">Pickup Points from Mumbai</span>
+                <span className="details">Pickup Points from Mumbai
+                <HelpTooltip text="Enter all pickup locations from Mumbai" />
+              </span>
                 <Editor sendDataToParent={setPickupPointsfromMumbai} />
               </div>
               <div className="input-select-box">
-                <span className="details">Highlights</span>
+                <span className="details">Highlights
+                <HelpTooltip text="Main attractions or features of the event" />
+              </span>
                 <Editor sendDataToParent={setHighlights} />
               </div>
               
               <div className="input-select-box">
-                <span className="details">Cost Includes</span>
+                <span className="details">Cost Includes
+                <HelpTooltip text="Everything included in the event cost" />
+              </span>
                 <Editor sendDataToParent={setCostIncludes} />
               </div>
               <div className="input-select-box">
-                <span className="details">Cost Excludes</span>
+                <span className="details">Cost Excludes
+                <HelpTooltip text="Things not included in the cost" />
+              </span>
                 <Editor sendDataToParent={setCostExcludes} />
               </div>
               <div className="input-select-box">
-                <span className="details">Things To Carry</span>
+                <span className="details">Things To Carry
+                <HelpTooltip text="Checklist of things participants should bring" />
+              </span>
                 <Editor sendDataToParent={setThingsToCarry} />
               </div>
               <div className="input-select-box">
-                <span className="details">FAQ</span>
+                <span className="details">FAQ 
+                   <HelpTooltip text="Frequently Asked Questions" /></span>
                 <Editor sendDataToParent={setFAQ} />
               </div>
             </div>

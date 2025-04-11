@@ -117,7 +117,8 @@ router.put("/confirmed-booking", async (req, res) => {
             doubleSharing,
             tripalSharing,
             thirdAcUpgrate,
-            specialNote
+            specialNote,
+            convenienceFee
         } = req.body;
 
 
@@ -128,7 +129,7 @@ router.put("/confirmed-booking", async (req, res) => {
         ////console.log("create req.body --", req.body);
 
         const updatedBooking = await Bookings.findOneAndUpdate(
-            { bookingId: bookingId }, // Filter
+            { _id: bookingId }, // Filter
             {
                 $set: {
                     numberOfPeoples: numberOfPeoples,
@@ -143,6 +144,8 @@ router.put("/confirmed-booking", async (req, res) => {
                     tripalSharing: tripalSharing,
                     thirdAcUpgrate: thirdAcUpgrate,
                     specialNote: specialNote,
+                    convenienceFee: convenienceFee
+
                 }
             },
             { new: true } // Return the updated document
@@ -180,7 +183,7 @@ router.put("/payment-confirmed", async (req, res) => {
         } = req.body;
 
         const updatedBooking = await Bookings.findOneAndUpdate(
-            { bookingId: bookingId }, // Filter
+            { _id: bookingId }, // Filter
             {
                 $set: {
                     transactionId: transactionId,
@@ -274,7 +277,7 @@ router.post("/sendInvoice", async (req, res) => {
             .then(async () => {
                 // Update the booking record after successful email delivery
                 const updatedBooking = await Bookings.findOneAndUpdate(
-                    { bookingId: bookingDetails.bookingId },
+                    { _id: bookingDetails._id },
                     { $set: { invoiceDelivered: true } },
                     { new: true }
                 );
