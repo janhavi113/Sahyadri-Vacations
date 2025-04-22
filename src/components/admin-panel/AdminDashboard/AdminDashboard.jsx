@@ -5,6 +5,7 @@ import "./AdminDashboard.css";
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { useNavigate } from "react-router-dom";
+import CollapsibleSection from '../../User-Panel/ShowEventDetails/CollapsibleSection';
 import logo from '../../Images/logo.png';
 import * as XLSX from 'xlsx';
 function AdminDashboard() {
@@ -88,9 +89,11 @@ function AdminDashboard() {
 
   const generateTablesFromMap = (eventMap) => {
     return Array.from(eventMap.entries()).map(([key, bookings]) => (
+    
       <div key={key} className="table-container">
+          <CollapsibleSection title={key}>
         <div className="container-table-header">
-          <div className="table-caption">{key}</div>
+          <div className="table-caption"></div>
           <button onClick={() => handleDownloadPDF(key)} className="download-button">Download PDF</button>
           <button onClick={() => handleDownloadExcel(key)} className="download-button">Download Excel</button>
         </div>
@@ -158,7 +161,10 @@ function AdminDashboard() {
             })()}
           </tbody>
         </table>
-      </div>
+      
+       </CollapsibleSection>
+       </div>
+      
     ));
   };
 
