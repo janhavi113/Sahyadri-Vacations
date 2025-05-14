@@ -96,7 +96,7 @@ const Events = () => {
                                             <h2 className='all-event-header event-card-header bg-transparent'><b>{event.eventname}</b></h2>
                                             <div className='all-event-card-footer event-card-footer'>
                                                 <div >{event.batchdate}</div>
-                                                <div ><strong className='price'>₹{Math.min(...[event.eventCostPerPerson, event.eventCostPerPersonFromMumbai, event.b2bPrice].filter(price => price > 0))} </strong><i>per person</i></div>
+                                                <div ><i>Strats From </i><strong className='price'>₹{Math.min(...[event.eventCostPerPerson, event.eventCostPerPersonFromMumbai, event.b2bPrice].filter(price => price > 0))} </strong>/-</div>
                                             </div>
                                         </div>
                                     </a>
