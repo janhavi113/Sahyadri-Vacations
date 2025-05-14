@@ -22,7 +22,8 @@ function card(props) {
                         </div>
                         <div className='event-card-footer'>
                             <div><b>{props.event.batchdate}</b></div>
-                            <div ><strong className='price'>₹{lowestPrice} </strong><i>per person</i></div>
+                            
+                            <div ><i>Starts From </i><strong className='price'>₹{lowestPrice} </strong>/-</div>
                         </div>
                     </div>
                 </a>
