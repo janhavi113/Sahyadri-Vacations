@@ -86,85 +86,142 @@ function AdminDashboard() {
       XLSX.writeFile(workbook, filename);
     }
   };
+  const handleCancelPerson = async (bookingId, participantId = null) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/admin-login");
+      return;
+    }
+
+    const confirmMsg = participantId
+      ? "Cancel this participant?"
+      : "Cancel the main booking?";
+    if (!window.confirm(confirmMsg)) return;
+
+    try {
+      const response = await fetch(`${apiUrl}cancel-person`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({
+          bookingId,
+          participantId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.isSuccess) {
+        alert("Cancellation successful");
+        fetchEvents(showOptions); // Refresh the list
+      } else {
+        alert("Failed to cancel");
+      }
+    } catch (err) {
+      console.error("Cancel error:", err);
+      alert("Something went wrong");
+    }
+  };
 
   const generateTablesFromMap = (eventMap) => {
     return Array.from(eventMap.entries()).map(([key, bookings]) => (
-    
+
       <div key={key} className="table-container">
-          <CollapsibleSection title={key}>
-        <div className="container-table-header">
-          <div className="table-caption"></div>
-          <button onClick={() => handleDownloadPDF(key)} className="download-button">Download PDF</button>
-          <button onClick={() => handleDownloadExcel(key)} className="download-button">Download Excel</button>
-        </div>
-        <table id={`table-${key}`} className="event-table">
-          <thead>
-            <tr>
-              <th>#</th> {/* Index column */}
-              <th>Booking ID</th>
-              <th>Name</th>
-              <th>Mobile Number</th>
-              <th>Number of People</th>
-              <th>Amount Paid</th>
-              <th>Pickup Location</th>
-              <th>Status</th>             
-              <th>Double Sharing</th>
-              <th>Tripal Sharing</th>
-              <th>ThirdAc / Sleeper Upgrate</th>
-              <th>Special Note</th>
-              <th>Booking Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(() => {
-              let globalIndex = 1; // Single global counter
-              return bookings.map((booking) => (
-                <React.Fragment key={booking._id}>
-                  {/* Main booking row */}
-                  <tr>
-                    <td>{globalIndex++}</td> {/* Increment global index */}
-                    <td>{booking.bookingId}</td>
-                    <td>{booking.name}</td>
-                    <td>{booking.mobileNumber}</td>
-                    <td>{booking.numberOfPeoples}</td>
-                    <td>{booking.amountPaid}</td>
-                    <td>{booking.pickupLocation}</td>
-                    <td>{booking.status}</td>
-                    <td>{booking.doubleSharing}</td>
-                    <td>{booking.tripalSharing}</td>
-                    <td>{booking.thirdAcUpgrate}</td>
-                    <td>{booking.specialNote}</td>
-                    <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
-                  </tr>
-                  {/* Rows for other participants */}
-                  {booking.otherParticipants &&
-                    booking.otherParticipants.length > 0 &&
-                    booking.otherParticipants.map((participant, index) => (
-                      <tr key={`${booking._id}-participant-${index}`} className="sub-row">
-                        <td>{globalIndex++}</td> {/* Increment global index */}
-                        <td></td> {/* Empty cell for Booking ID */}
-                        <td>{participant.name}</td>
-                        <td>{participant.mobileNumber}</td>
-                        <td></td> {/* Empty cell for Number of People */}
-                        <td></td> {/* Empty cell for Amount Paid */}
-                        <td>{participant.pickupLocation}</td>
-                        <td>{participant.status}</td>
-                        <td></td> {/* Empty cell for Booking Date */}
-                        <td></td> {/* Empty cell for Number of People */}
-                        <td></td> {/* Empty cell for Number of People */}
-                        <td></td> {/* Empty cell for Number of People */}
-                        <td></td> {/* Empty cell for Number of People */}
-                      </tr>
-                    ))}
-                </React.Fragment>
-              ));
-            })()}
-          </tbody>
-        </table>
-      
-       </CollapsibleSection>
-       </div>
-      
+        <CollapsibleSection title={key}>
+          <div className="container-table-header">
+            <div className="table-caption"></div>
+            <button onClick={() => handleDownloadPDF(key)} className="download-button">Download PDF</button>
+            <button onClick={() => handleDownloadExcel(key)} className="download-button">Download Excel</button>
+          </div>
+          <table id={`table-${key}`} className="event-table">
+            <thead>
+              <tr>
+                <th>#</th> {/* Index column */}
+                <th>Booking ID</th>
+                <th>Name</th>
+                <th>Mobile Number</th>
+                <th>Number of People</th>
+                <th>Amount Paid</th>
+                <th>Pickup Location</th>
+                <th>Status</th>
+                <th>Double Sharing</th>
+                <th>Tripal Sharing</th>
+                <th>ThirdAc / Sleeper Upgrate</th>
+                <th>Special Note</th>
+                <th>Booking Date</th>
+                <th>Cancel</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(() => {
+                let globalIndex = 1; // Single global counter
+                return bookings.map((booking) => (
+                  <React.Fragment key={booking._id}>
+                    {/* Main booking row */}
+                    <tr>
+                      <td>{globalIndex++}</td> {/* Increment global index */}
+                      <td>{booking.bookingId}</td>
+                      <td>{booking.name}</td>
+                      <td>{booking.mobileNumber}</td>
+                      <td>{booking.numberOfPeoples}</td>
+                      <td>{booking.amountPaid}</td>
+                      <td>{booking.pickupLocation}</td>
+                      <td>{booking.status}</td>
+                      <td>{booking.doubleSharing}</td>
+                      <td>{booking.tripalSharing}</td>
+                      <td>{booking.thirdAcUpgrate}</td>
+                      <td>{booking.specialNote}</td>
+                      <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
+                      <td>
+                      {booking.status === "Confirmed" && ( <button
+                          className="cancel-button"
+                          onClick={() => handleCancelPerson(booking._id, null)}
+                          disabled={booking.status === "Cancelled"}
+                        >
+                          Cancel
+                        </button>)}
+                      </td>
+                    </tr>
+                    {/* Rows for other participants */}
+                    {booking.otherParticipants &&
+                      booking.otherParticipants.length > 0 &&
+                      booking.otherParticipants.map((participant, index) => (
+                        <tr key={`${booking._id}-participant-${index}`} className="sub-row">
+                          <td>{globalIndex++}</td> {/* Increment global index */}
+                          <td></td> {/* Empty cell for Booking ID */}
+                          <td>{participant.name}</td>
+                          <td>{participant.mobileNumber}</td>
+                          <td></td> {/* Empty cell for Number of People */}
+                          <td></td> {/* Empty cell for Amount Paid */}
+                          <td>{participant.pickupLocation}</td>
+                          <td>{participant.status}</td>
+                          <td></td> {/* Empty cell for Booking Date */}
+                          <td></td> {/* Empty cell for Number of People */}
+                          <td></td> {/* Empty cell for Number of People */}
+                          <td></td> {/* Empty cell for Number of People */}
+                          <td></td> {/* Empty cell for Number of People */}
+                          <td>
+                          {participant.status === "Confirmed" && (<button
+                              className="cancel-button"
+                              onClick={() => handleCancelPerson(booking._id, participant._id)}
+                              disabled={participant.status === "Cancelled"}
+                            >
+                              Cancel
+                            </button>) }
+                          </td>
+                        </tr>
+                      ))}
+                  </React.Fragment>
+                ));
+              })()}
+            </tbody>
+          </table>
+
+        </CollapsibleSection>
+      </div>
+
     ));
   };
 
@@ -229,7 +286,7 @@ function AdminDashboard() {
               <select onChange={(e) => handleFilter(e.target.value)}>
                 <option value={'all'} >All</option>
                 <option value={'Pending'} >Pending</option>
-                <option value={'Confirmed'} >Confirmed</option>              
+                <option value={'Confirmed'} >Confirmed</option>
               </select>
             </div>
           </div>

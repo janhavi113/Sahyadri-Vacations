@@ -79,6 +79,19 @@
 .sub-row {
   background-color: #f1f1f1; /* Light grey background for the sub-rows */
 }
+.cancel-button {
+  background-color: #ff4d4f;
+  border: none;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
 
 /* Mobile View Styles */
 @media (max-width: 768px) {

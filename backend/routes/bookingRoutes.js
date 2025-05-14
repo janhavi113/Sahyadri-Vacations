@@ -125,7 +125,16 @@ router.put("/confirmed-booking", async (req, res) => {
         let parsedParticipants = [];
         if (typeof otherParticipants === 'string') {
             parsedParticipants = JSON.parse(otherParticipants);
+        }else if (Array.isArray(otherParticipants)) {
+            parsedParticipants = otherParticipants;
         }
+
+        
+        // Add/update status field for all participants
+        parsedParticipants = parsedParticipants.map((p) => ({
+            ...p,
+            status: p.status || "Pending" // Or "Pending" depending on your logic
+        }));
         ////console.log("create req.body --", req.body);
 
         const updatedBooking = await Bookings.findOneAndUpdate(
@@ -336,5 +345,112 @@ async function updateExpiredBookings() {
         console.error("Error updating records:", error);
     }
 }
+
+router.post("/cancel-person", async (req, res) => {
+    const { bookingId, participantId } = req.body;
+  
+    try {
+      const originalBooking = await Bookings.findById(bookingId);
+      if (!originalBooking) {
+        return res.status(404).json({ isSuccess: false, message: "Booking not found" });
+      }
+  
+      if (!participantId) {
+        // CASE: MAIN PERSON CANCELS
+        const mainPersonCancelled = new Bookings({
+          name: originalBooking.name,
+          mobileNumber: originalBooking.mobileNumber,
+          eventName: originalBooking.eventName,
+          batch: originalBooking.batch,
+          pickupLocation: originalBooking.pickupLocation,
+          status: "Cancelled",
+          bookingDate: new Date(),
+          numberOfPeoples: 1,
+          amountPaid: 0,
+          bookingId: originalBooking.bookingId + "-CANCELLED",
+          eventId: originalBooking.eventId,
+          scheduleEventId: originalBooking.scheduleEventId,
+          specialNote: "Main person cancelled",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+  
+        await mainPersonCancelled.save();
+  
+        // Create separate bookings for each other participant
+        const newConfirmedBookings = await Promise.all(
+          (originalBooking.otherParticipants || []).map((participant, index) => {
+            const newBooking = new Bookings({
+              name: participant.name,
+              mobileNumber: participant.mobileNumber,
+              eventName: originalBooking.eventName,
+              batch: originalBooking.batch,
+              pickupLocation: participant.pickupLocation,
+              status: "Confirmed",
+              bookingDate: new Date(),
+              numberOfPeoples: 1,
+              amountPaid: 0,
+              bookingId: originalBooking.bookingId + "-PART-" + index,
+              eventId: originalBooking.eventId,
+              scheduleEventId: originalBooking.scheduleEventId,
+              specialNote: "Re-created from original booking",
+              createdAt: new Date(),
+              updatedAt: new Date()
+            });
+            return newBooking.save();
+          })
+        );
+  
+        // Delete original record
+        await Bookings.findByIdAndDelete(bookingId);
+  
+        return res.json({
+          isSuccess: true,
+          message: "Main booking cancelled and new bookings created for participants"
+        });
+      } else {
+        // CASE: PARTICIPANT CANCELS
+  
+        // Find the participant
+        const participant = originalBooking.otherParticipants.find(p => p._id.toString() === participantId);
+        if (!participant) {
+          return res.status(404).json({ isSuccess: false, message: "Participant not found" });
+        }
+  
+        // Remove the participant
+        originalBooking.otherParticipants = originalBooking.otherParticipants.filter(
+          p => p._id.toString() !== participantId
+        );
+        await originalBooking.save();
+  
+        // Create new booking with cancelled status
+        const cancelledParticipant = new Bookings({
+          name: participant.name,
+          mobileNumber: participant.mobileNumber,
+          eventName: originalBooking.eventName,
+          batch: originalBooking.batch,
+          pickupLocation: participant.pickupLocation,
+          status: "Cancelled",
+          bookingDate: new Date(),
+          numberOfPeoples: 1,
+          amountPaid: 0,
+          bookingId: originalBooking.bookingId + "-PART-CANCELLED-" + participantId.substring(0, 6),
+          eventId: originalBooking.eventId,
+          scheduleEventId: originalBooking.scheduleEventId,
+          specialNote: "Participant record from cancelled booking",
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+  
+        await cancelledParticipant.save();
+  
+        return res.json({ isSuccess: true, message: "Participant cancelled" });
+      }
+    } catch (error) {
+      console.error("Cancellation error:", error);
+      return res.status(500).json({ isSuccess: false, message: error.message });
+    }
+  });
+  
 
 export default router;
