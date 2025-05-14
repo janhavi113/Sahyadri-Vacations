@@ -21,7 +21,7 @@ function card(props) {
                             {eventLabels[props.event.eventType] || 'Adventure Activity'}
                         </div>
                         <div className='event-card-footer'>
-                            <div><b>{props.event.batchdate}</b></div>
+                            <div>{props.event.batchdate}</div>
                             
                             <div ><i>Starts From </i><strong className='price'>₹{lowestPrice} </strong>/-</div>
                         </div>
