@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './AdminNavbar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faCalendar,faChartPie, faPlus, faBars, faClipboardList, faTag,faFire ,faBookOpen, faPenToSquare, faTable } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faCalendar,faChartPie, faPlus,faShuffle, faBars, faClipboardList, faTag,faFire ,faBookOpen, faPenToSquare, faTable } from '@fortawesome/free-solid-svg-icons';
 import expand from './Images/expand-nav.svg';
 const AdminNavbar = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -55,7 +55,7 @@ const AdminNavbar = ({ children }) => {
             {isExpanded && <span className="nav-text">Coupons</span>}
           </NavLink>
           <NavLink to="/sort-schedule-batches" className="nav-item">
-            <FontAwesomeIcon icon={faTag} className="nav-icon" />
+            <FontAwesomeIcon icon={faShuffle} className="nav-icon" />
             {isExpanded && <span className="nav-text">Sort Schedule Batches</span>}
           </NavLink>
           <NavLink to="/categories" className="nav-item">
