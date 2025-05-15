@@ -45,7 +45,8 @@ return (
 <p>No bookings found for this event and batch.</p>
 </div>
 ) : (
-                    <table className="checklist-table ">
+                   <div className="table-responsive">
+                   <table className="checklist-table ">
                         <thead>
                             <tr>
                                 <th>✔️</th>
@@ -115,6 +116,7 @@ return (
                             })()}
                         </tbody>
                     </table>
+                    </div>
                     )}
                 </div>
             </div>
