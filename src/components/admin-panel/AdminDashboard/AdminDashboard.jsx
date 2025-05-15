@@ -132,7 +132,19 @@ function AdminDashboard() {
         <CollapsibleSection title={key}>
           <div className="container-table-header">
             <div className="table-caption"></div>
-            <button onClick={() => handleDownloadPDF(key)} className="download-button">Download PDF</button>
+            <button
+              onClick={() => {
+                const [eventName, batch] = key.split(" : ");
+                const encodedEvent = encodeURIComponent(eventName);
+                const encodedBatch = encodeURIComponent(batch);
+                const checklistUrl = `/checklist-view/${encodedEvent}/${encodedBatch}`;
+                window.open(checklistUrl, "_blank");
+              }}
+              className="download-button"
+            >
+              View Checklist
+            </button>
+
             <button onClick={() => handleDownloadExcel(key)} className="download-button">Download Excel</button>
           </div>
           <table id={`table-${key}`} className="event-table">
@@ -175,7 +187,7 @@ function AdminDashboard() {
                       <td>{booking.specialNote}</td>
                       <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
                       <td>
-                      {booking.status === "Confirmed" && ( <button
+                        {booking.status === "Confirmed" && (<button
                           className="cancel-button"
                           onClick={() => handleCancelPerson(booking._id, null)}
                           disabled={booking.status === "Cancelled"}
@@ -203,13 +215,13 @@ function AdminDashboard() {
                           <td></td> {/* Empty cell for Number of People */}
                           <td></td> {/* Empty cell for Number of People */}
                           <td>
-                          {participant.status === "Confirmed" && (<button
+                            {participant.status === "Confirmed" && (<button
                               className="cancel-button"
                               onClick={() => handleCancelPerson(booking._id, participant._id)}
                               disabled={participant.status === "Cancelled"}
                             >
                               Cancel
-                            </button>) }
+                            </button>)}
                           </td>
                         </tr>
                       ))}

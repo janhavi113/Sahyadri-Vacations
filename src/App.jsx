@@ -3,6 +3,7 @@ import Login from "./components/Login";
 import About from "./components/User-Panel/AboutUs/About";
 import CustomisedTour from "./components/User-Panel/CustomiseTour/CustomisedTour";
 import AdminLogin from "./components/admin-panel/Admin-Login/AdminLogin";
+import ChecklistView from "./components/admin-panel/AdminDashboard/ChecklistView";
 import Dashboard from "./components/admin-panel/AdminDashboard/AdminDashboard";
 import AllEvents from  "./components/admin-panel/All-Events/AllEvents";     
 import ScheduledEvents from "./components/admin-panel/Scheduled_Events/ScheduledEvents";
@@ -41,6 +42,9 @@ function App() {
     {
       path: "/",
       element: <Home />,
+    },{
+      path: "/checklist-view/:eventName/:batch",
+      element: <ChecklistView />,
     },
     {
       path: "/login",
