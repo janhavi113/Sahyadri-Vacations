@@ -452,6 +452,24 @@ router.post("/cancel-person", async (req, res) => {
       return res.status(500).json({ isSuccess: false, message: error.message });
     }
   });
-  
+  // routes/report.js
+router.get("/booking-report", async (req, res) => {
+    try {
+        const allBookings = await Bookings.find();
+
+        const booked = allBookings.filter(b => b.status !== "New");
+        const notBooked = allBookings.filter(b => b.status === "New");
+
+        res.send({
+            isSuccess: true,
+            booked,
+            notBooked
+        });
+    } catch (error) {
+        console.error("Error generating report:", error);
+        res.status(500).send({ isSuccess: false, error: error.message });
+    }
+});
+
 
 export default router;
