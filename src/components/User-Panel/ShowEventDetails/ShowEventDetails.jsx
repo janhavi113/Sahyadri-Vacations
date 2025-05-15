@@ -404,6 +404,9 @@ const ShowEventDetails = () => {
       getNextBatchDate(res.ScheduleBatchesRecords);
   
       let currentScheduleBatch = res.ScheduleBatchesRecords.find(batch => batch['eventId'] == params[0]);
+    if(!currentScheduleBatch){
+      currentScheduleBatch = res.ScheduleBatchesRecords[0];
+    }
       getAvailableCoupons(currentScheduleBatch);
       handleShowLocation(res.events, currentScheduleBatch);
     }
@@ -456,7 +459,6 @@ const ShowEventDetails = () => {
   // get all available coupon code if it is available 
   const getAvailableCoupons = async (ScheduleBatchesRecords) => {
     let ScheduleBatchesRecord;
-
     if (Array.isArray(ScheduleBatchesRecords)) {
       ScheduleBatchesRecord = ScheduleBatchesRecords[0];
     } else {
