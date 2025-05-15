@@ -192,15 +192,16 @@ router.put("/payment-confirmed", async (req, res) => {
         } = req.body;
 
         const updatedBooking = await Bookings.findOneAndUpdate(
-            { _id: bookingId }, // Filter
+            { _id: bookingId },
             {
                 $set: {
-                    transactionId: transactionId,
-                    paymentMethod: paymentMethod,
+                    transactionId,
+                    paymentMethod,
                     status: "Confirmed",
+                    "otherParticipants.$[].status": "Confirmed", // ✅ update all participants' status
                 }
             },
-            { new: true } // Return the updated document
+            { new: true }
         );
 
         // Check if booking was found and updated
