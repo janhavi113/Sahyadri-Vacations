@@ -46,7 +46,9 @@ const ShowEventDetails = () => {
   const [pricePune, setPricePune] = useState(0);
   const [priceBase2Base, setPriceBase2Base] = useState(0);
   const [coupleRoom, setCoupleRoom] = useState(0);
+  const [coupleRoomNote, setCoupleRoomNote] = useState('');
   const [ACUpgrad, setACUpgrad] = useState(0);
+  const [ACUpgradNote, setACUpgradNote] = useState('');
   const [batchDate, setBatchDate] = useState();
   const [eventType, setEventType] = useState();
   const [currentEventId, setCurrentEventId] = useState();
@@ -321,6 +323,8 @@ const ShowEventDetails = () => {
     }
     let ACUpgradTemp = 0;
     let coupleRoomTemp = 0;
+    let ACUpgradTempNote = 0;
+    let coupleRoomTempNote = 0;
     let currentbatch = batchesList.find(batch => batch['eventId'] == currentEventId);
     if (currentbatch) {
       if (batchDates.length > 0 && currentbatch.batchdate != 'Available On All Weekends') {
@@ -331,6 +335,8 @@ const ShowEventDetails = () => {
       eventCostPerPersonFromMumbaiTemp = currentbatch.eventCostPerPersonFromMumbai;
       b2bPriceTemp = currentbatch.b2bPrice;
        coupleRoomTemp= currentbatch.doubleSharing;
+       coupleRoomTempNote = currentbatch.doubleSharingNote;
+       ACUpgradTempNote = currentbatch.thirdAcUpgrateNote;
        ACUpgradTemp =currentbatch.thirdAcUpgrate;
     } else if (batchesList.length > 0) {      
       if (batchDates.length > 0 && batchesList[0].batchdate != 'Available On All Weekends') {
@@ -345,6 +351,8 @@ const ShowEventDetails = () => {
       setSelectedStartDate(batchesList[0].eventStartDate);
       setSelectedEndDate(batchesList[0].eventEndDate);
       coupleRoomTemp = batchesList[0].doubleSharing;
+      coupleRoomTempNote = batchesList[0].doubleSharingNote;
+      ACUpgradTempNote = batchesList[0].thirdAcUpgrateNote;
       ACUpgradTemp = batchesList[0].thirdAcUpgrate;
     }
  
@@ -361,6 +369,8 @@ const ShowEventDetails = () => {
     setPricePune(eventCostPerPersonTemp); 
     setPriceBase2Base(b2bPriceTemp);
     setCoupleRoom(coupleRoomTemp);
+    setCoupleRoomNote(coupleRoomTempNote);
+    setACUpgradNote(ACUpgradTempNote);
     setACUpgrad(ACUpgradTemp);
     }
 
@@ -699,12 +709,12 @@ const ShowEventDetails = () => {
                         <td>{priceMumbai}</td>
                       </tr> }
                       {coupleRoom > 0 && <tr>
-                        <td> Separate Room for two people (AddOn) </td>
+                        <td> {coupleRoomNote != ''? coupleRoomNote +' (AddOn)':'Separate Room for two people (AddOn)' }</td>
                       <td>{coupleRoom}</td>
                       </tr> 
                         }
                         {ACUpgrad > 0 && <tr>
-                        <td> 3 Tier AC Train Travel (AddOn)  </td>
+                        <td>{ACUpgradNote!= ''? ACUpgradNote +' (AddOn)':'3 Tier AC Train Travel (AddOn)' }  </td>
                       <td>{ACUpgrad}</td>
                       </tr> }
                      </table>
