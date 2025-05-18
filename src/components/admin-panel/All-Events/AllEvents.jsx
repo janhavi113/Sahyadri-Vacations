@@ -57,7 +57,7 @@ const AllEvents = () => {
               <>
                 <div className="event-card card all-events-card">
                 
-                    <img className="event-card-image" src={event.images[0]} alt="Avatar" width="100%" />
+                    <img className="event-card-image" src={`${apiUrl}` + event.images[0]} alt="Avatar" width="100%" />
                     <div className="event-card-container">
                       <h2 className='all-event-header event-card-header bg-transparent'><b>{event.name}</b></h2>
                       <div className='show-event-card-footer event-card-footer'>
