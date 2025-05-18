@@ -63,7 +63,7 @@ const AllEvents = () => {
                       <div className='show-event-card-footer event-card-footer'>
                         <div className="button-edit-container">
                           <div className="button">
-                            <input type="submit" value="Edit Event" onClick={() => navigate(event.url.includes("http://localhost:5173") ? event.url.replace( "http://localhost:5173","") : event.url)}/>
+                            <input type="submit" value="Edit" onClick={() => navigate(event.url.includes("http://localhost:5173") ? event.url.replace( "http://localhost:5173","") : event.url)}/>
                             <input type="submit" value=" Schedule Event " onClick={() => navigate('/schedule-event')} />
                           </div>
                         </div>
