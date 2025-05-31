@@ -3,6 +3,7 @@ const otherParticipantsSchema = new mongoose.Schema({
     name: { type: String },
     mobileNumber: { type: Number },
     pickupLocation: { type: String },
+    pickupDone: { type: Boolean, default: false },
     status: { type: String }
 });
 
@@ -37,6 +38,7 @@ const bookingsSchema = new mongoose.Schema({
     tripalSharing: { type: Number, default: 0 },
     thirdAcUpgrate: { type: Number, default: 0 },
     specialNote: { type: String },
+    pickupDone: { type: Boolean, default: false }, 
     otherParticipants: [otherParticipantsSchema
     ]
 }, { strict: false });

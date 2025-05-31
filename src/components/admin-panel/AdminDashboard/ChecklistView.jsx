@@ -32,6 +32,43 @@ const fetchBookings = async () => {
     }
 };
 
+const handlePickupToggle = async (bookingId, participantIndex, newValue) => {
+  try {
+    const response = await fetch(`${apiUrl}update-pickup-status`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        bookingId,
+        participantIndex,
+        pickupDone: newValue,
+      }),
+    });
+
+    if (response.ok) {
+      // Update UI locally
+      setBookings((prevBookings) =>
+        prevBookings.map((b) => {
+          if (b._id !== bookingId) return b;
+
+          if (participantIndex === null) {
+            return { ...b, pickupDone: newValue };
+          } else {
+            const updatedParticipants = [...b.otherParticipants];
+            updatedParticipants[participantIndex].pickupDone = newValue;
+            return { ...b, otherParticipants: updatedParticipants };
+          }
+        })
+      );
+    } else {
+      console.error("Failed to update pickup status");
+    }
+  } catch (error) {
+    console.error("Error updating pickup status:", error);
+  }
+};
+
 return (
     <div className=" contentbody">
         <div className="container justify-content-center py-md-5">
@@ -73,7 +110,8 @@ return (
                                     <React.Fragment key={booking._id}>
                                         {/* Main booking row */}
                                         <tr>
-                                            <td><input type="checkbox" /></td>
+                                            <td><input type="checkbox" checked={booking.pickupDone}
+  onChange={() => handlePickupToggle(booking._id, null, !booking.pickupDone)} /></td>
                                             <td>{globalIndex++}</td> {/* Increment global index */}
                                             <td>{booking.bookingId}</td>
                                             <td>{booking.name}</td>
@@ -94,7 +132,10 @@ return (
                                             booking.otherParticipants.length > 0 &&
                                             booking.otherParticipants.map((participant, index) => (
                                                 <tr key={`${booking._id}-participant-${index}`} className="sub-row">
-                                                    <td><input type="checkbox" /></td>
+                                                    <td><input type="checkbox" checked={participant.pickupDone}
+  onChange={() =>
+    handlePickupToggle(booking._id, index, !participant.pickupDone)
+  }/></td>
                                                     <td>{globalIndex++}</td> {/* Increment global index */}
                                                     <td></td> {/* Empty cell for Booking ID */}
                                                     <td>{participant.name}</td>

@@ -471,5 +471,30 @@ router.get("/booking-report", async (req, res) => {
     }
 });
 
+router.put('/update-pickup-status', async (req, res) => {
+  const { bookingId, participantIndex, pickupDone } = req.body;
+
+  try {
+    if (participantIndex === null) {
+      // Update main booking's pickupDone
+      await Bookings.updateOne(
+        { _id: bookingId },
+        { $set: { pickupDone } }
+      );
+    } else {
+      // Update a specific participant's pickupDone
+      const updatePath = `otherParticipants.${participantIndex}.pickupDone`;
+      await Bookings.updateOne(
+        { _id: bookingId },
+        { $set: { [updatePath]: pickupDone } }
+      );
+    }
+
+    res.json({ isSuccess: true, message: "Pickup status updated." });
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).json({ isSuccess: false, message: "Update failed." });
+  }
+});
 
 export default router;
