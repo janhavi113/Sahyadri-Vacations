@@ -35,7 +35,7 @@ const MainCategoriesSection = () => {
     <>
      
         <div className="section-header px-heading">
-          <div className="col-7 row">
+          <div className="col-7 categories-row">
             <div className="col-lg-1 col-3">
                             <img
                               className="section-header-img"
@@ -49,7 +49,7 @@ const MainCategoriesSection = () => {
             </div>
           </div>
           <div className="mainSectionsCategories" >
-          <div className="row">
+          <div className="categories-row">
             {isSuccess && mainCategoriesRec && (
               mainCategoriesRec.map((event, index) => (
                 <MainCategoriesCard key={index} mainCategory={event} />

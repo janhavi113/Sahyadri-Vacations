@@ -10,7 +10,7 @@
     width: 100%;
 }
 
-.row {
+.categories-row {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
