@@ -97,7 +97,7 @@ function BookingReport() {
 
   const filteredBooked = applyFilters(booked);
   const filteredNotBooked = applyFilters(notBooked);
-
+  const filteredPendingBooking = applyFilters(pendingBookings);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
@@ -319,10 +319,10 @@ function BookingReport() {
               </tr>
             </thead>
             <tbody>
-              {pendingBookings.length > 0 ? (() => {
+              {filteredPendingBooking.length > 0 ? (() => {
                 let rowIndex = 1;
 
-                return pendingBookings.flatMap((b, i) => {
+                return filteredPendingBooking.flatMap((b, i) => {
                   const rows = [];
 
                   // Main person

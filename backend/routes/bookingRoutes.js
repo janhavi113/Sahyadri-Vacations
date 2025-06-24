@@ -307,16 +307,15 @@ router.get("/show-all-bookings/:showOptions", async (req, res) => {
         let query;
         console.log('req.params.showOptions--', req.params.showOptions);
         if (req.params.showOptions == 'all') {
-            query = {
-                eventName: "Harishchandragad and Kokankada",
-                batch: "21 Jun - 22 Jun 2025"
-            };
+            query = { active: true };
         } else {
             query = { active: true, status: req.params.showOptions };
         }
         let bookings = await Bookings.find(query);
+         console.log('bookings ',bookings);
         res.send({
-            bookings: bookings
+            bookings: bookings,
+            isSuccess: true
         });
 
     } catch (error) {
@@ -332,12 +331,12 @@ async function updateExpiredBookings() {
         // const result = await Bookings.deleteMany({ mobileNumber: '9922978022' });
         // console.log(`${result.deletedCount} booking(s) deleted successfully.`);
         const currentDate = new Date();
-        console.log('currentDate--', currentDate);
+        //console.log('currentDate--', currentDate);
 
         // Subtract one day from the current date
         const deactivateDate = new Date(currentDate);
         deactivateDate.setDate(currentDate.getDate() - 1); // Subtract 1 day
-        console.log('deactivateDate--', deactivateDate);
+        //console.log('deactivateDate--', deactivateDate);
 
         const result = await Bookings.updateMany(
             { eventEndDate: { $lt: deactivateDate }, active: true },

@@ -34,10 +34,10 @@ function AdminDashboard() {
     const response = await fetch(`${apiUrl}show-all-bookings/${filter}`, {
       headers: { Authorization: token },
     });
-
+       console.log('response--'+JSON.stringify(response));
     if (response.ok) {
       const data = await response.json();
-      // console.log('data--bookings--'+JSON.stringify(data));
+       console.log('data--bookings--'+JSON.stringify(data));
       // Create the map
       if (data.isSuccess) {
         setSuccess(true);
