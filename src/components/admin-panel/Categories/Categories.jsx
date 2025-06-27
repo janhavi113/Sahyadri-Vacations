@@ -3,6 +3,9 @@ import AdminNavbar from "../../AdminNavbar";
 import "../Schedule-Events/ScheduleEvents"
 import "../CreateEvent/CreateEvents.css"
 import "react-datepicker/dist/react-datepicker.css";
+import logo from '../../Images/logo.png';
+import MainCategoriesCard from "../../User-Panel/MainCategories/MainCategoriesCard";
+import CategoriesCard from "./CategoriesCard";
 import { useForm } from "react-hook-form"
 import Dropzone from "react-dropzone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
+import './Categories.css'
 import Select from 'react-select';
 function Categories() {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -18,8 +22,9 @@ function Categories() {
   const [eventList, setEventList] = useState();
   const [eventOptionsList, setEventOptionsList] = useState([]);
   const [activeError, setActiveError] = useState({ disply: false });
+  const [mainCategoriesRec, setMainCategoriesRec] = useState();
   const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
-  const [search, setSearch] = useState();
+  const [addNew, setAddNew] = useState(false);
   const [startingPrice, setStartingPrice] = useState();
   const [title, setTitle] = useState('');
   const navigate = useNavigate();
@@ -38,6 +43,7 @@ function Categories() {
       return;
     }
     getCurrentrecord();
+    getMainCategoriesEvent();
   }, [navigate]);
 
   const getCurrentrecord = async () => {
@@ -47,9 +53,9 @@ function Categories() {
       }
     })
     let res = await r.json();
-    console.log('res',res);
+    console.log('res', res);
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-       
+
     if (res.isSuccess == true) {
       setSuccess(res.isSuccess);
 
@@ -57,27 +63,42 @@ function Categories() {
 
       const eventOptions = res.scheduleBatches.map(event => {
         let dateLabel = "";
-      
+
         if (event.notScheduleYet) {
           dateLabel = " (On Demand)";
         } else if (!event.everyWeekend) {
           const startDate = new Date(event.eventStartDate);
           const endDate = new Date(event.eventEndDate);
-          
+
           dateLabel = `${startDate.getDate()} ${months[startDate.getMonth()]} ${startDate.getFullYear()} - ` +
-                      `${endDate.getDate()} ${months[endDate.getMonth()]} ${endDate.getFullYear()}`;
+            `${endDate.getDate()} ${months[endDate.getMonth()]} ${endDate.getFullYear()}`;
         }
-      
+
         return {
           value: event.eventId,
           label: `${event.eventname} ${event.duration} ${dateLabel}`
         };
       });
-      
+
       setEventOptionsList(eventOptions);
     }
   }
 
+  const getMainCategoriesEvent = async () => {
+    //console.log('record found');
+    let r = await fetch(`${apiUrl}getMainCategoriesEvent`, {
+      method: "GET", headers: {
+        "Content-Type": "application/json",
+      }
+    })
+
+    let res = await r.json()
+    if (r.ok) {
+      setSuccess(true);
+      setMainCategoriesRec(res.mainCategories);
+      console.log('record found', res.mainCategories);
+    }
+  }
 
   const onDrop = (acceptedFiles) => {
     const newFiles = acceptedFiles.map((file) =>
@@ -118,11 +139,10 @@ function Categories() {
     })
     let res = await r.json()
     if (res.isSuccess == true) {
-    console.log('res--',res);
-    
+      console.log('res--', res);
+
     }
   }
-
 
   const handleEventChange = (selectedOption) => {
     var eventIdSet = [];
@@ -132,18 +152,30 @@ function Categories() {
     });
     console.log('eventIdSet', eventIdSet);
     setEventList(eventIdSet);
-    // if (selectedOption) {
-    //   handleSelectEvent(selectedOption.value);
-    // }
   };
 
+  const handleCreateCategory = (event) => {
+    const buttonValue = event.target.value;
+    if (buttonValue === "Create Categories") {
+      setAddNew(true);
+    } else if (buttonValue === "Cancel") {
+      setAddNew(false);
+    }
+  };
   return (
     <div>
       <AdminNavbar>
-
-        < form action="" onSubmit={handleSubmit(onSubmit)}>
+        <div className='button-group'>
+          <div className="button-edit-container">
+            <div className="button">
+              <input type="submit" onClick={(e) => handleCreateCategory(e)} value="Create Categories" />
+              <input type="submit" onClick={(e) => handleCreateCategory(e)} value="Cancel" />
+            </div>
+          </div>
+        </div>
+        {addNew && < form action="" onSubmit={handleSubmit(onSubmit)}>
           <div className="schedule-form container">
-            <div className="title-header">Schedule Event</div>
+            <div className="title-header">Create Catlog</div>
 
             <div className="content">
               {isSuccess &&
@@ -184,7 +216,7 @@ function Categories() {
                   </div>
                   <div className="input-box">
                     <span className="details">
-                    Starting Price <span style={{ color: 'red' }}>*</span>
+                      Starting Price <span style={{ color: 'red' }}>*</span>
                     </span>
                     <input
                       type="text"
@@ -243,12 +275,34 @@ function Categories() {
             <div className='button-group'>
               <div className="button-edit-container">
                 <div className="button">
-                  <input type="submit" value="Create Categories" />
+                  <input type="submit" value="Save" />
                 </div>
               </div>
             </div>
           </div>
-        </form>
+        </form>}
+    
+  <div className=" contentbody">
+        <div className="container justify-content-center py-md-5">
+          <h1><b>Listed Catlogs</b></h1>
+          <div className="row justify-content- py-4" >
+
+            {isSuccess && mainCategoriesRec.map((event, index) => (
+              <>
+                <div className="categories-event-card event-card card all-events-card">
+                    <div className="category-top-right"><img src={logo} /></div>
+                    <img className="category-event-card-image" src={event.imagePath}  alt="Avatar" width="100%" />
+                     <div className="centered">{event.title}</div>
+                     { event.startingPrice &&
+                        <div className="category-bottom-left" >Starting Price @{event.startingPrice}/-</div>
+                    }
+                </div>
+              </>
+            ))}
+          </div>
+        </div>
+      </div>
+    
       </AdminNavbar>
     </div>
 
