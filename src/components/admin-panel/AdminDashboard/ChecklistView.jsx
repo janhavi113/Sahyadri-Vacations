@@ -139,7 +139,7 @@ return (
                                                     <td>{globalIndex++}</td> {/* Increment global index */}
                                                     <td></td> {/* Empty cell for Booking ID */}
                                                     <td>{participant.name}</td>
-                                                    <td className="phone-link"> <a href={`tel:${booking.mobileNumber}`}>{booking.mobileNumber}</a></td>
+                                                    <td className="phone-link"> <a href={`tel:${participant.mobileNumber}`}>{participant.mobileNumber}</a></td>
                                                     <td></td> {/* Empty cell for Number of People */}
                                                     <td></td> {/* Empty cell for Amount Paid */}
                                                     <td>{participant.pickupLocation}</td>
