@@ -95,7 +95,7 @@ router.post('/direct-booking', async (req, res) => {
         });
     }
 });
-ß
+
 // Function to generate a unique Booking ID
 const generateBookingId = async (bookingDate) => {
     const formattedDate = convertDateToCustomFormat(new Date(bookingDate).toLocaleDateString());
