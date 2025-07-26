@@ -3,13 +3,7 @@ import express from 'express';
 import path from 'path';
 import { DirectBookings } from '../models/DirectBooking.js';
 import { Bookings } from '../models/Bookings.js';
-import fileUpload from 'express-fileupload';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
-import {
-    ScheduleBatches
-} from '../models/ScheduleBatches.js';
-import { log } from 'console';
 const router = express.Router();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -102,19 +96,6 @@ router.post('/direct-booking', async (req, res) => {
     }
 });
 
-// Function to check if the date is today
-function isBookingDateToday(dateString) {
-    const [month, day, year] = dateString.split("/").map(Number);
-    const booking = new Date(year, month - 1, day);
-
-    const today = new Date();
-    return (
-        booking.getDate() === today.getDate() &&
-        booking.getMonth() === today.getMonth() &&
-        booking.getFullYear() === today.getFullYear()
-    );
-}
-
 // Function to generate a unique Booking ID
 const generateBookingId = async (bookingDate) => {
     const formattedDate = convertDateToCustomFormat(new Date(bookingDate).toLocaleDateString());
@@ -147,10 +128,17 @@ router.post('/confirm-booking/:id', async (req, res) => {
     try {
         // Find the booking in DirectBookings
         const directBooking = await DirectBookings.findById(id);
-       // console.log('directBooking--', directBooking);
+        console.log('directBooking--', directBooking);
         let confirmedBookings = await Bookings.findOne({ bookingDate: directBooking.bookingDate }).sort({ _id: -1 });//.find({ bookingDate: new Date(req.body.bookingDate).toLocaleDateString() });
-       // console.log('confirmedBookings--', confirmedBookings);
-        let bookingIdVar = await generateBookingId(confirmedBookings.bookingDate);
+        console.log('confirmedBookings--', confirmedBookings);
+        var bookDate ;
+        if(confirmedBookings){
+             bookDate=confirmedBookings.bookingDate;
+        }else{
+            const today = new Date();
+           bookDate = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+        }
+        let bookingIdVar = await generateBookingId(bookDate);
        // console.log('bookingIdVar--', bookingIdVar);
         if (!directBooking) {
             return res.status(404).json({ message: "Booking not found." });
@@ -185,7 +173,7 @@ router.post('/confirm-booking/:id', async (req, res) => {
             eventEndDate: directBooking.eventEndDate,
         });
 
-        await newBooking.save();
+       await newBooking.save();
 
         //Delete the booking from DirectBookings
         await DirectBookings.findByIdAndDelete(id);
