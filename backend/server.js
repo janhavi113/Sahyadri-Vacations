@@ -122,28 +122,32 @@ app.post('/register', async (req, res) => {
 // Login route
 
 app.post('/admin-login', async (req, res) => {
-	const {
-		username,
-		password
-	} = req.body;
-	let userDetails = await Employee.findOne({
-		Username: username
-	});
+  const { username, password } = req.body;
 
-	if (!userDetails) {
-		return res.status(400).send('Invalid credentials');
-	} else {
-		let userPassword = JSON.parse(JSON.stringify(userDetails)).Password;
-		const isPasswordValid = await bcrypt.compare(password, userPassword);
-		if (!isPasswordValid) return res.status(400).send('Invalid credentials');
-		const token = jwt.sign({
-			userId: userDetails._id
-		}, process.env.JWT_SECRET);
+  try {
+    const userDetails = await Employee.findOne({ Username: username });
 
-		res.json({
-			token
-		});
-	}
+    if (!userDetails) {
+      return res.status(401).json({ message: 'Invalid username ' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, userDetails.Password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+
+    const token = jwt.sign(
+      { userId: userDetails._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' } // optional: token expires in 1 day
+    );
+
+    return res.status(200).json({ token });
+  } catch (error) {
+    console.error('Login error:', error);
+    return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
+  }
 });
 
 // Set up storage engine
