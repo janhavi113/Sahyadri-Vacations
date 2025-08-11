@@ -1,5 +1,5 @@
 import React from 'react'
-import slide1 from '../../Images/backgrround (1).jpg';
+import slide1 from '../../Images/about.jpg';
 import '../../Home_Header/Sidebar.css'
 import '../ShowAllEvents/Events.css'
 

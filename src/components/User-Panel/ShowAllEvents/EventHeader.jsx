@@ -1,5 +1,5 @@
 import React from 'react'
-import slide1 from '../../Images/backgrround (3).jpg';
+import slide1 from '../../Images/vasota-1.webp';
 import '../../Home_Header/Sidebar.css'
 const EventHeader = ({name}) => {
     return (
