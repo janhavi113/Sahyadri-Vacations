@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import './ContactForm.css';
-import { faLocationDot, faEnvelope, faPhone ,faPhoneVolume} from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faEnvelope, faPhone, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import sadface from '../../Images/sad-face.svg'
 const Contact_Us = () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const [formData, setFormData] = useState({
-        name: '',
-        phone: '',
-        email: '',
-        message: ''
-      });
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    message: ''
+  });
   const [isSubmitting, setSubmitting] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,87 +22,90 @@ const Contact_Us = () => {
     e.preventDefault();
     // Add your logic for form submission here
     console.log(formData);
-    let r = await fetch(`${apiUrl}contact-us`,{
+    let r = await fetch(`${apiUrl}contact-us`, {
       method: "POST", headers: {
-          "Content-Type": "application/json",
+        "Content-Type": "application/json",
       }, body: JSON.stringify(formData)
-  })
-  let res = await r.json()
-  console.log('res', JSON.stringify(res));
-  if (res.isSuccess == true) {
+    })
+    let res = await r.json()
+    console.log('res', JSON.stringify(res));
+    if (res.isSuccess == true) {
       setSuccess(true);
-  }else{
+    } else {
       setSuccess(false);
-  }
+    }
   };
   const [isSuccess, setSuccess] = useState('');
   return (
     <div>
-   
+
       <div className='contact-us-container'>
         <div className="container-top container">
           <div className="user-details">
-          {!isSubmitting && <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="name">Name:</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="phone">Phone:</label>
-                <input
-                  type="text"
-                  id="phone"
-                  name="phone"
-                  value={formData.Phone}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="email">Email:</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="message">Message:</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                ></textarea>
-              </div>
-              <div className="button-edit-container">
-                <div className="contact-button button">
-                  <input disabled={isSubmitting} type="submit" value="Submit" />
-                </div>
-              </div>
-            </form>}
+            {!isSubmitting &&
+              <section className="py-12 px-8 md:px-20 text-center">
+                <form className="max-w-5xl mx-auto grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
+
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Name"
+                    className="border p-3 rounded-lg md:col-span-2"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                
+                    <input
+                      type="text"
+                      id="phone"
+                      name="phone"
+                        placeholder="Phone"
+                            className="border p-3 rounded-lg md:col-span-2"
+                      value={formData.Phone}
+                      onChange={handleChange}
+                      required
+                    />
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                       placeholder="Email"
+                            className="border p-3 rounded-lg md:col-span-2"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  <textarea
+                    id="message"
+                    placeholder="Message"
+                    name="message"
+                    placeholder="Message"
+                    className="border p-3 rounded-lg md:col-span-2"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                  ></textarea>
+                  
+                  <div className="button-edit-container">
+                    <div className="contact-button button">
+                      <input disabled={isSubmitting} type="submit" value="Submit" />
+                    </div>
+                  </div>
+                </form>
+              </section>}
             {isSubmitting && isSuccess &&
-                <div className="container">
-                    <h2 className='thicker'> Thank you ! </h2>
-                    <p className='customised-message '> Your interest is greatly appreciated, and we're thrilled to assist you in planning your ideal travel experience. Our dedicated team will be in touch with you very soon to discuss your preferences and craft a personalized itinerary that perfectly suits your needs. We can't wait to embark on this journey with you!</p>
-                </div>
+              <div className="container">
+                <h2 className='thicker'> Thank you ! </h2>
+                <p className='customised-message '> Your interest is greatly appreciated, and we're thrilled to assist you in planning your ideal travel experience. Our dedicated team will be in touch with you very soon to discuss your preferences and craft a personalized itinerary that perfectly suits your needs. We can't wait to embark on this journey with you!</p>
+              </div>
             }
             {isSubmitting && !isSuccess &&
-                <div className="container">
-                    <h2 className='thicker'> Try again ! </h2>
-                    <div > <img style={{ margin: '12px 0px 0 46%' }} loading="lazy" src={sadface} /> </div>
-                </div>
+              <div className="container">
+                <h2 className='thicker'> Try again ! </h2>
+                <div > <img style={{ margin: '12px 0px 0 46%' }} loading="lazy" src={sadface} /> </div>
+              </div>
             }
           </div>
         </div>
