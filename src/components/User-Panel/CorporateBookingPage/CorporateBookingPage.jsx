@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import '../Contact_Us/ContactForm.css';
 import Footer from "../../footer";
-import Navbar from "../../Navbar";
-import Contact_Us from "../Contact_Us/Contact_Us";
+import Contact_Us from "./CorporateBookingForm";
 import EventHeader from './CorporateBookingPageHeader'
 const CorporateBookingPage = () => {
   const [formData, setFormData] = useState({
@@ -26,9 +25,7 @@ const CorporateBookingPage = () => {
 
   return (
     <>
-      <Navbar />
-     <EventHeader/>
-     <br />
+    
      <div className="contentbody-CorporateBookingPage">
       <Contact_Us/>
       </div>

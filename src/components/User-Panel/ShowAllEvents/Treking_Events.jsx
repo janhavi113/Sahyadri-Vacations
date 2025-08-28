@@ -79,7 +79,6 @@ const Treking_Events = () => {
     const navigate = useNavigate();
     return (
         <div >
-            <Navbar />
             <EventHeader name='Trek Events' />
             <div className="all-event-contentbody">
                 <div className="team justify-content-center">

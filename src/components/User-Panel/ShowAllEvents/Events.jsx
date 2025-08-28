@@ -82,7 +82,6 @@ const Events = () => {
     const navigate = useNavigate();
     return (
         <div >
-            <Navbar />
             <EventHeader name='Upcoming Events' />
             <div className="all-event-contentbody">
                 <div className="team justify-content-center">

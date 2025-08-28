@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Footer from "../../footer";
-import Navbar from "../../Navbar";
+
 import './AboutUs.css'
 import EventHeader from './AboutUsHeader'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,8 +24,7 @@ const About = () => {
   return (
     <>
       <EventHeader />
-      <Navbar />
-      <div className="contentbody-about-us">
+      <div className="contentbody-about-us all-event-contentbody">
         <div className='about'>
           <div className="aboutus-container">
             <h2 >Who We Are ?</h2>
