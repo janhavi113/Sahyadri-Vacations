@@ -33,32 +33,35 @@ const MainCategoriesSection = () => {
 
   return (
     <>
-     
-        <div className="section-header px-heading">
-          <div className="col-7 categories-row">
-            <div className="col-lg-1 col-3">
-                            <img
-                              className="section-header-img"
-                              loading="lazy"
-                              src={categories}
-                              alt="Upcoming Events Icon"
-                            />
-                          </div>
-            <div className="col-lg-11 col-9">
-              <h3 className="home-thicker home-header-text">Honeymoon & Family Trips</h3>
-            </div>
+
+      <section className="py-16 px-6 md:px-20 ">
+        <div className="col-7 categories-row">
+          <div className="col-lg-1 col-3">
+            <img
+              className="section-header-img"
+              loading="lazy"
+              src={categories}
+              alt="Upcoming Events Icon"
+            />
           </div>
-          <div className="mainSectionsCategories" >
-          <div className="categories-row">
-            {isSuccess && mainCategoriesRec && (
-              mainCategoriesRec.map((event, index) => (
-                <MainCategoriesCard key={index} mainCategory={event} />
-              ))
-            )
-            }
+          <div className="col-lg-11 col-9">
+            <h3 className="home-thicker home-header-text">Honeymoon & Family Trips</h3>
           </div>
         </div>
+        <br></br>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
+
+          {isSuccess && mainCategoriesRec && (
+            mainCategoriesRec.map((event, index) => (
+              <MainCategoriesCard key={index} mainCategory={event} />
+            ))
+          )
+          }
+          {/* Repeat other cards with same classes */}
         </div>
+      </section>
+
+
     </>
   )
 }
