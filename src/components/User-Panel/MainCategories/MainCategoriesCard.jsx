@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import './mainCategories.css'
 import logo from '../../Images/logo.png';
 const MainCategoriesCard = ({ mainCategory }) => {
-    console.log('mainCategory---', mainCategory.imagePath);
     const apiUrl = import.meta.env.VITE_API_URL;
     const [isHovered, setIsHovered] = useState(false);
     const url = 'category?eventname=' + mainCategory.title.toLowerCase().replaceAll(" ", "-") + '/' + +mainCategory.categoryId;
