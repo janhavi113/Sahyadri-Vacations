@@ -22,3 +22,18 @@
   display: block;
   margin: 0 auto;
 }
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  width: max-content;
+  animation: scroll 12s linear infinite;
+  animation-delay: 3s; /* starts after 3 seconds */
+}

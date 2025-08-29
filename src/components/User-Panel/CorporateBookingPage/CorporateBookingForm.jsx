@@ -1,14 +1,20 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../Contact_Us/ContactForm.css';
 import BIGBUSK from '../../Images/CorporateClients/bigbucks.webp';
 import TBWES from '../../Images/CorporateClients/Tbwes.jpg';
 import JSPM from '../../Images/CorporateClients/JSPM.png';
+import ENZIGMA from '../../Images/CorporateClients/enzigma.png';
+import FITNESS from '../../Images/CorporateClients/FITNESS.png';
+import INFINITY from '../../Images/CorporateClients/infinity.png';
+import BEAST from '../../Images/CorporateClients/GOLD.png';
+import MDI from '../../Images/CorporateClients/MDI.jpeg';
 import './CorporateBooking.css'
-import slide1 from "../../Images/contact-us.jpg";
+import slide1 from "../../Images/corporate.png";
 import Navbar from "../../Navbar";
 import { faLocationDot, faEnvelope, faPhone, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import sadface from '../../Images/sad-face.svg'
+const logos = [TBWES, BIGBUSK, JSPM, ENZIGMA, INFINITY, BEAST, FITNESS, MDI];
 const CorporateBookingForm = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [formData, setFormData] = useState({
@@ -42,10 +48,24 @@ const CorporateBookingForm = () => {
         }
     };
     const [isSuccess, setSuccess] = useState('');
-    const inquiryRef = useRef(null);
 
+    const inquiryRef = useRef(null);
     const scrollToInquiry = () => {
         inquiryRef.current.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % (logos.length - 2));
+        }, 3000); // move every 3s
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const handleDotClick = (index) => {
+        setCurrentIndex(index);
     };
     return (
         <div>
@@ -63,7 +83,7 @@ const CorporateBookingForm = () => {
                 <div className="bg-black/30 bg-opacity-40 absolute inset-0"></div>
                 <div className="relative z-10 text-center">
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                        Plan Your Corporate Trek with Us
+                        Custom Corporate Outings
                     </h1>
                     <button onClick={scrollToInquiry} className="px-8 py-3 bg-orange-600 hover:bg-orange-700 rounded-xl shadow-lg text-lg font-semibold">
                         Request a Quote
@@ -75,72 +95,65 @@ const CorporateBookingForm = () => {
 
                 <section className="py-12 px-6 md:px-20 text-center">
                     <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                        About Corporate Treks
+                        About Corporate Events
                     </h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto mb-6">
-                        Corporate treks are more than just outdoor adventures—they are carefully
-                        curated experiences designed to boost team spirit, improve collaboration,
-                        and create lasting memories. Stepping out of the office and into nature
-                        helps employees recharge mentally and physically while strengthening
-                        workplace relationships.
+                    <p className="text-gray-600 max-w-6xl mx-auto mb-6">
+                        At Sahyadri Vacations, we believe that corporate events are more than just gatherings – they are powerful opportunities to build stronger teams, celebrate achievements, and create unforgettable memories. Whether it’s an offsite team outing, an incentive tour to reward top performers, a high-energy adventure for team bonding, or a well-planned conference in a serene setting, we design customized experiences that perfectly align with your company’s goals. With our expertise in corporate tours and MICE (Meetings, Incentives, Conferences, Exhibitions), we ensure seamless planning, professional execution, and a touch of leisure that keeps your team refreshed and motivated. From travel arrangements to unique destinations, we take care of everything so you can focus on what matters most – connecting, collaborating, and growing together.
                     </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 max-w-5xl mx-auto">
-                        <div className="p-6 bg-white shadow-md rounded-2xl">
-                            <h3 className="text-xl font-semibold mb-3">🌿 Stress Relief</h3>
-                            <p className="text-gray-600">
-                                Time in nature helps employees disconnect from routine work pressure
-                                and return refreshed with renewed focus.
-                            </p>
-                        </div>
-
-                        <div className="p-6 bg-white shadow-md rounded-2xl">
-                            <h3 className="text-xl font-semibold mb-3">🤝 Team Bonding</h3>
-                            <p className="text-gray-600">
-                                Outdoor challenges encourage teamwork, problem-solving, and
-                                better communication among colleagues.
-                            </p>
-                        </div>
-
-                        <div className="p-6 bg-white shadow-md rounded-2xl">
-                            <h3 className="text-xl font-semibold mb-3">💡 Skill Building</h3>
-                            <p className="text-gray-600">
-                                Activities promote leadership, adaptability, and decision-making skills
-                                that employees carry back to the workplace.
-                            </p>
-                        </div>
-                    </div>
                 </section>
 
-                {/* Trusted by Section */}
-                <section className="py-12 px-8 md:px-20 text-center">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                        Trusted by
-                    </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-8xl mx-auto">
-                        <div >
-                            <img src={TBWES} alt="TBWES" className="corporate-logo-img " />
-                        </div>
-                        <div>
-                            <img src={BIGBUSK} alt="BIGBUSK" className="corporate-logo-img " />
-                        </div>
-                        <div>
-                            <img src={JSPM} alt="JSPM" className="corporate-logo-img " />
-                        </div>
 
-
-                    </div>
-                </section>
                 {/* What We Offer */}
-                <section className="py-12 px-8 md:px-20 bg-gray-50 text-center">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-8">What We Offer</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-8xl mx-auto">
-                        <div>✔ Team-building treks</div>
-                        <div>✔ Customised itineraries</div>
-                        <div>✔ Safety & experienced trek leaders</div>
-                        <div>✔ Transport, food & stay included</div>
+                <section className="py-12 px-6 md:px-20 text-center ">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-8">
+                        What We Offer
+                    </h2>
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-5xl mx-auto">
+
+                        <div>
+                            <span className="text-3xl">🚌</span>
+                            <p className="font-semibold mt-2">End-to-End Travel Management</p>
+                            <p className="text-gray-600 text-sm mt-1">
+                                Transport, stay, meals, activities, and logistics handled smoothly.
+                            </p>
+                        </div>
+
+                        <div>
+                            <span className="text-3xl">🤝</span>
+                            <p className="font-semibold mt-2">Team Building & Engagement</p>
+                            <p className="text-gray-600 text-sm mt-1">
+                                Trekking, adventure sports, group games, bonfire nights, and workshops.
+                            </p>
+                        </div>
+
+                        <div>
+                            <span className="text-3xl">🎉</span>
+                            <p className="font-semibold mt-2">Reward & Recognition Tours</p>
+                            <p className="text-gray-600 text-sm mt-1">
+                                Incentive trips to motivate and celebrate employees.
+                            </p>
+                        </div>
+
+                        <div>
+                            <span className="text-3xl">🛡️</span>
+                            <p className="font-semibold mt-2">Safety & Comfort First</p>
+                            <p className="text-gray-600 text-sm mt-1">
+                                Certified vehicles, trained leaders, first-aid support & 24/7 assistance.
+                            </p>
+                        </div>
+
+                        <div>
+                            <span className="text-3xl">🌍</span>
+                            <p className="font-semibold mt-2">Pan-India Destinations</p>
+                            <p className="text-gray-600 text-sm mt-1">
+                                From Sahyadri treks to Shimla-Manali, Goa, Kerala, and beyond.
+                            </p>
+                        </div>
+
                     </div>
                 </section>
+
+
 
                 {/* Why Choose Us */}
                 <section className="py-16 px-6 md:px-20 text-center bg-gray-50">
@@ -151,46 +164,82 @@ const CorporateBookingForm = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
                         {/* Card 1 */}
                         <div className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300">
-                            <span className="text-5xl">⛰️</span>
-                            <h3 className="text-lg md:text-xl font-semibold mt-4">Local Expertise</h3>
+                            <span className="text-5xl">🧑‍🏫</span>
+                            <h3 className="text-lg md:text-xl font-semibold mt-4">Expert Team</h3>
                             <p className="text-gray-600 mt-2 text-sm md:text-base">
-                                With years of experience in the Sahyadris, we know the best trails,
-                                hidden gems, and safe routes to make your trek unforgettable.
+                                Our team of professionals ensures you have the best adventure experience.
                             </p>
                         </div>
 
                         {/* Card 2 */}
-                        <div className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300">
-                            <span className="text-5xl">🌟</span>
-                            <h3 className="text-lg md:text-xl font-semibold mt-4">100+ Treks Organized</h3>
+                          <div className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300">
+                            <span className="text-5xl">📋</span>
+                            <h3 className="text-lg md:text-xl font-semibold mt-4">Perfect Planning & Execution</h3>
                             <p className="text-gray-600 mt-2 text-sm md:text-base">
-                                Successfully hosted over 100 corporate and group treks with a
-                                proven track record of safety, fun, and adventure.
+                                From travel to stay to meals — our meticulous planning ensures smooth and stress-free experiences.
                             </p>
                         </div>
 
                         {/* Card 3 */}
                         <div className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300">
                             <span className="text-5xl">🏢</span>
-                            <h3 className="text-lg md:text-xl font-semibold mt-4">Trusted by Companies</h3>
+                            <h3 className="text-lg md:text-xl font-semibold mt-4">Proven Corporate Trust</h3>
                             <p className="text-gray-600 mt-2 text-sm md:text-base">
-                                Partnered with top organizations to deliver customized trekking
+                                Partnered with top organizations to deliver customized
                                 experiences that boost teamwork and employee morale.
                             </p>
                         </div>
 
                         {/* Card 4 */}
+                      
                         <div className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300">
-                            <span className="text-5xl">🌍</span>
-                            <h3 className="text-lg md:text-xl font-semibold mt-4">Sustainable Tourism</h3>
+                            <span className="text-5xl">🌟</span>
+                            <h3 className="text-lg md:text-xl font-semibold mt-4">50+ Events Organized</h3>
                             <p className="text-gray-600 mt-2 text-sm md:text-base">
-                                We promote eco-friendly trekking practices and leave no trace
-                                to preserve nature for future generations.
+                                Successfully hosted over 50 corporate group events with a
+                                proven track record of safety, fun, and adventure.
                             </p>
                         </div>
                     </div>
                 </section>
 
+                {/* Trusted by Section */}
+                <section className="py-12 px-8 md:px-20 text-center">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-8">Trusted by</h2>
+
+                    {/* Carousel Wrapper */}
+                    <div className="overflow-hidden max-w-5xl mx-auto">
+                        <div
+                            className="flex transition-transform duration-700 ease-in-out"
+                            style={{ transform: `translateX(-${currentIndex * (100 / 3)}%)` }}
+                        >
+                            {logos.map((logo, i) => (
+                                <div
+                                    key={i}
+                                    className="flex-shrink-0 w-1/3 flex justify-center items-center"
+                                >
+                                    <img src={logo} alt={`Logo-${i}`} className="h-24 md:h-28" />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Clickable Dots */}
+                    <div className="flex justify-center mt-6 space-x-2">
+                        {Array.from({ length: logos.length - 2 }).map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => handleDotClick(i)}
+                                className={`h-2 w-2 rounded-full cursor-pointer border-0 p-0 
+        ${i === currentIndex ? "bg-blue-600" : "bg-gray-300"}`}
+                                style={{ appearance: "none" }}
+                            ></button>
+                        ))}
+                    </div>
+
+
+
+                </section>
                 {/* Inquiry Form */}
                 <section ref={inquiryRef} className="py-12 px-8 md:px-20 text-center">
                     <h2 className="text-2xl md:text-3xl font-bold mb-6">Inquire Now</h2>
@@ -248,7 +297,7 @@ const CorporateBookingForm = () => {
                             type="submit"
                             className="bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg md:col-span-2 font-semibold"
                         >
-                            Submit Inquiry
+                            Request a Proposal
                         </button>
                     </form>
                 </section>

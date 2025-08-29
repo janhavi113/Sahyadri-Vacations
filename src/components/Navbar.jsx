@@ -40,7 +40,7 @@ const searchText = () => {
         <NavLink className='navlink-hover' to="/events"><li className="info-block">Events</li></NavLink>
         <NavLink className='navlink-hover' to="/gallery"><li className="info-block">Gallery</li></NavLink>
         <NavLink className='navlink-hover' to="/about"><li className="info-block">About</li></NavLink>
-        <NavLink className='navlink-hover' to="/corporate-booking"><li className="info-block">Corporate Booking</li></NavLink>
+        <NavLink className='navlink-hover' to="/corporate-events"><li className="info-block">Corporate Events</li></NavLink>
                <NavLink className='navlink-hover' to="/contact-us"><li className="info-block">Contact Us</li></NavLink>
         <NavLink className='navlink-hover-icon' onClick={toggleNavbar}><li className="info-block"><FontAwesomeIcon className='header-icon' icon={faBars} size="lg" /></li></NavLink>
         <NavLink className={isSearch ? ' input-style navlink-hover' : 'navlink-hover' } >

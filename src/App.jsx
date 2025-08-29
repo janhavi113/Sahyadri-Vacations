@@ -161,7 +161,7 @@ function App() {
       element: <ContactUs />,
     },
     {
-      path: "/corporate-booking",
+      path: "/corporate-events",
       element: <CorporateBookingPage />,
     },
     {
