@@ -43,7 +43,7 @@ const Contact_Us = () => {
         <div className="container-top container">
           <div className="user-details">
             {!isSubmitting &&
-              <section className="py-12 px-8 md:px-20 text-center">
+              <section className="py-12 text-center">
                 <form className="max-w-5xl mx-auto grid grid-cols-1 gap-6" onSubmit={handleSubmit}>
 
                   <input
