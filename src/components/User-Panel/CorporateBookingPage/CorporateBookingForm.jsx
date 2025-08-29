@@ -9,7 +9,7 @@ import INFINITY from '../../Images/CorporateClients/infinity.png';
 import BEAST from '../../Images/CorporateClients/GOLD.png';
 import MDI from '../../Images/CorporateClients/MDI.jpeg';
 import './CorporateBooking.css'
-import slide1 from "../../Images/corporate.png";
+import slide1 from "../../Images/corporate.jpeg";
 import Navbar from "../../Navbar";
 import TrustedBy from './TrustedBy';
 import { faLocationDot, faEnvelope, faPhone, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
