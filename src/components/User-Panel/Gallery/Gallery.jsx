@@ -44,7 +44,7 @@ export default function Gallery() {
 
   return (
     <>  
-    <div className="contentbody">
+    <div className="contentbody all-event-contentbody">
       <div className="gallery">
         <div className="col-md-3">
           <a href="" target="_blank">

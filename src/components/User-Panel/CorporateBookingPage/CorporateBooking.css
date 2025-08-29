@@ -1,0 +1,41 @@
+/* @media screen and (min-width: 768px) {
+    .contactimg img {
+        height: 600px !important;
+        width: 100%;
+    }
+} */
+ .corporateContainer{
+  margin-top: -30px !important;
+}
+ .corporate-container{
+        max-width: 95%;
+        margin: auto;
+       
+ }
+ .corporate-button {
+    display: block !important; 
+ }
+ .corporate-logo-img {
+  max-height: 120px;  /* adjust as needed */
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  width: max-content;
+  animation: scroll 12s linear infinite;
+  animation-delay: 3s; /* starts after 3 seconds */
+}
+
+

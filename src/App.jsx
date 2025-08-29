@@ -27,6 +27,7 @@ import CancellationPolicy from "./components/User-Panel/UserAgreement/Cancellati
 import PrivacyPolicy from "./components/User-Panel/UserAgreement/PrivacyPolicy";
 import Gallery from "./components/User-Panel/Gallery/PhotoGallery" ;
 import ContactUs from "./components/User-Panel/Contact_Us/ContactUs" ;
+import CorporateBookingPage from "./components/User-Panel/CorporateBookingPage/CorporateBookingPage" ;
 import Register from './components/Register/Register';
 import CategoryEvents from './components/User-Panel/MainCategories/categoryEvents'
 import CustomerBookings from "./components/User-Panel/ShowEventDetails/CustomerBookings";
@@ -158,6 +159,10 @@ function App() {
     {
       path: "/contact-us",
       element: <ContactUs />,
+    },
+    {
+      path: "/corporate-events",
+      element: <CorporateBookingPage />,
     },
     {
       path: "/customised-tour",

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Footer from "../../footer";
-import Navbar from "../../Navbar";
 import EventHeader from './EventHeader'
 import { useNavigate } from "react-router-dom";
 import "../../card.css"
@@ -81,7 +80,6 @@ const BackPacking_Event = () => {
   const navigate = useNavigate();
   return (
       <div >
-          <Navbar />
           <EventHeader name='BackPacking Events'/>
           <div className="all-event-contentbody">
               <div className="team justify-content-center">

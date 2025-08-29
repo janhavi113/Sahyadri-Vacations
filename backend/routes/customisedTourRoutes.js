@@ -2,42 +2,42 @@
 import express from 'express';
 import path from 'path';
 import {
-	CustomisedRequest
+    CustomisedRequest
 } from '../models/CustomisedRequest.js';
 import { sendEmail } from '../utils/api.js';
 const router = express.Router();
 // Customised Tour
 router.post("/customised-tour", async (req, res) => {
-    console.log('customised-tour',req.body);
-	try {
-		const {
-			name,
-			phone,
-			traveldate,
-			durationoftour,
-			numberofpeople,
-			email,
-			message,
+    console.log('customised-tour', req.body);
+    try {
+        const {
+            name,
+            phone,
+            traveldate,
+            durationoftour,
+            numberofpeople,
+            email,
+            message,
             preferedlocation,
-		} = req.body;
+        } = req.body;
 
-		const customisedRequest = new CustomisedRequest({
-			name: name,
-			phone: phone,
-			traveldate: traveldate,
-			durationoftour: durationoftour,
-			numberofpeople: numberofpeople,
-			email: email,
-			message: message,
+        const customisedRequest = new CustomisedRequest({
+            name: name,
+            phone: phone,
+            traveldate: traveldate,
+            durationoftour: durationoftour,
+            numberofpeople: numberofpeople,
+            email: email,
+            message: message,
             preferedlocation: preferedlocation,
-		});
+        });
 
-		customisedRequest.save();
+        customisedRequest.save();
         res.send({
-			isSuccess: true
-		});
+            isSuccess: true
+        });
         const subjectEmail = 'Received Your Custom Event Inquiry';
-        const emailBody =  `<!DOCTYPE html>
+        const emailBody = `<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
@@ -102,8 +102,8 @@ router.post("/customised-tour", async (req, res) => {
         </body>
         </html>`;
 
-        await sendEmail(email,emailBody, subjectEmail);
-        const adminSubjectEmail = 'Received Your Custom Event Inquiry on '+ new Date(traveldate).toDateString() +' for Duration of Tour';
+        await sendEmail(email, emailBody, subjectEmail);
+        const adminSubjectEmail = 'Received Your Custom Event Inquiry on ' + new Date(traveldate).toDateString() + ' for Duration of Tour';
         const adminEmailBody = ` <h3>New Custom Event Inquiry</h3>
                 <p><strong>Name:</strong> ${name}</p>
                 <p><strong>Phone:</strong> ${phone}</p>
@@ -114,41 +114,51 @@ router.post("/customised-tour", async (req, res) => {
                 <p><strong>Preferred Location:</strong> ${preferedlocation}</p>
                 <p><strong>Message:</strong> ${message}</p>`;
 
-        await sendEmail(process.env.HOSTINGER_EMAIL_USERNAME,adminEmailBody, adminSubjectEmail);
+        await sendEmail(process.env.HOSTINGER_EMAIL_USERNAME, adminEmailBody, adminSubjectEmail);
 
-		
-	} catch (error) {
-		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
-	}
+
+    } catch (error) {
+        console.error(error);
+        res.send({
+            isSuccess: false,
+            error: error
+        });
+    }
 });
 router.post("/contact-us", async (req, res) => {
-    console.log('customised-tour',req.body);
-	try {
-		const {
-			name,
-			phone,
-			email,
-			message,
-		} = req.body;
+    console.log('customised-tour', req.body);
+    try {
+        const {
+            name,
+            company,
+            phone,
+            budgetPerPerson,
+            traveldate,
+            numberofpeople,
+            email,
+            preferedLocation,
+            message
+        } = req.body;
 
-		const customisedRequest = new CustomisedRequest({
-			name: name,
-			phone: phone,
-			email: email,
-			message: message,
-		});
+        const customisedRequest = new CustomisedRequest({
+            name: name,
+            company: company,
+            phone: phone,
+            budgetPerPerson: budgetPerPerson,
+            traveldate: traveldate,
+            numberofpeople: numberofpeople,
+            email: email,
+            preferedLocation: preferedLocation,
+            message: message,
+        });
 
-		customisedRequest.save();
+        customisedRequest.save();
         res.send({
-			isSuccess: true
-		});
+            isSuccess: true
+        });
 
         const subjectEmail = 'Thank You for Contacting Sahyadri Vacations & Adventure ';
-        const emailBody =  `<!DOCTYPE html>
+        const emailBody = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -216,7 +226,7 @@ router.post("/contact-us", async (req, res) => {
 </html>
 `;
 
-        await sendEmail(email,emailBody, subjectEmail);
+        await sendEmail(email, emailBody, subjectEmail);
 
         const adminSubjectEmail = `${name} contact from website`;
         const adminEmailBody = ` <h3>New Custom Event Inquiry</h3>
@@ -225,13 +235,13 @@ router.post("/contact-us", async (req, res) => {
                 <p><strong>Email:</strong> ${email}</p>
                 <p><strong>Message:</strong> ${message}</p>`;
 
-        await sendEmail(process.env.HOSTINGER_EMAIL_USERNAME,adminEmailBody, adminSubjectEmail);
+        await sendEmail(process.env.HOSTINGER_EMAIL_USERNAME, adminEmailBody, adminSubjectEmail);
     } catch (error) {
-		console.error(error);
-		res.send({
-			isSuccess: false,
-			error: error
-		});
-	}
+        console.error(error);
+        res.send({
+            isSuccess: false,
+            error: error
+        });
+    }
 });
 export default router;

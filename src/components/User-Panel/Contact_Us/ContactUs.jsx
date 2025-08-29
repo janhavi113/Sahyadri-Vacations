@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ContactForm.css';
 import Footer from "../../footer";
-import Navbar from "../../Navbar";
+
 import Contact_Us from "./Contact_Us";
 import EventHeader from './ContactUsHeader'
 const ContactUs = () => {
@@ -26,10 +26,10 @@ const ContactUs = () => {
 
   return (
     <>
-      <Navbar />
      <EventHeader/>
+     
      <br />
-     <div className="contentbody-contactUs">
+     <div className="contentbody-contactUs all-event-contentbody">
       <Contact_Us/>
       </div>
       <Footer />
