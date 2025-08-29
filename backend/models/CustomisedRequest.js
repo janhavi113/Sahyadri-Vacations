@@ -6,7 +6,9 @@ const autoIncrement = _autoIncrement(mongoose);
 
 const customisedRequestSchema = new mongoose.Schema({
     name: { type: String },
+    company: { type: String },
     phone: { type: Number },
+    budgetPerPerson: { type: Number },
     traveldate: { type: Date },
     durationoftour: { type: String },
     numberofpeople: { type: Number },

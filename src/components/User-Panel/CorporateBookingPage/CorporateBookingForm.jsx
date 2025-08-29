@@ -173,7 +173,7 @@ const CorporateBookingForm = () => {
                         </div>
 
                         {/* Card 2 */}
-                          <div className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300">
+                        <div className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300">
                             <span className="text-5xl">📋</span>
                             <h3 className="text-lg md:text-xl font-semibold mt-4">Perfect Planning & Execution</h3>
                             <p className="text-gray-600 mt-2 text-sm md:text-base">
@@ -192,7 +192,7 @@ const CorporateBookingForm = () => {
                         </div>
 
                         {/* Card 4 */}
-                      
+
                         <div className="p-6 bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300">
                             <span className="text-5xl">🌟</span>
                             <h3 className="text-lg md:text-xl font-semibold mt-4">50+ Events Organized</h3>
@@ -203,40 +203,58 @@ const CorporateBookingForm = () => {
                         </div>
                     </div>
                 </section>
-                <TrustedBy/>
-               
+                <TrustedBy />
+
                 {/* Inquiry Form */}
-                <section ref={inquiryRef} className="py-12 px-8 md:px-20 text-center">
+                {!isSubmitting && <section ref={inquiryRef} className="py-12 px-8 md:px-20 text-center">
                     <h2 className="text-2xl md:text-3xl font-bold mb-6">Inquire Now</h2>
-                    <form className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <form className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
                         <input
                             type="text"
                             placeholder="Name"
+                            Name="name"
+                            value={formData.name}
+                            onChange={handleChange}
                             className="border p-3 rounded-lg"
                         />
                         <input
                             type="text"
                             placeholder="Company"
+                            Name="company"
+                            value={formData.company}
+                            onChange={handleChange}
                             className="border p-3 rounded-lg"
                         />
                         <input
                             type="text"
                             placeholder="Phone"
+                            Name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
                             className="border p-3 rounded-lg"
                         />
                         <input
                             type="text"
                             placeholder="Email"
+                            Name="email"
+                            value={formData.email}
+                            onChange={handleChange}
                             className="border p-3 rounded-lg"
                         />
                         <input
                             type="number"
                             placeholder="Group Size"
+                            Name="numberofpeople"
+                            value={formData.numberofpeople}
+                            onChange={handleChange}
                             className="border p-3 rounded-lg"
                         />
                         <input
                             type="text"
                             placeholder="Preferred Date"
+                            Name="traveldate"
+                            value={formData.traveldate}
+                            onChange={handleChange}
                             onFocus={(e) => (e.target.type = "date")}
                             onBlur={(e) => {
                                 if (!e.target.value) e.target.type = "text";
@@ -246,27 +264,48 @@ const CorporateBookingForm = () => {
 
                         <input
                             type="text"
+                            Name="budgetPerPerson"
+                            value={formData.budgetPerPerson}
+                            onChange={handleChange}
                             placeholder="Budget Per Person"
                             className="border p-3 rounded-lg"
                         />
                         <input
                             type="text"
+                            Name="preferedLocation"
+                            value={formData.preferedLocation}
+                            onChange={handleChange}
                             placeholder="Preferred Destination"
                             className="border p-3 rounded-lg"
                         />
                         <textarea
                             placeholder="Message"
+                            Name="message"
+                            value={formData.message}
+                            onChange={handleChange}
                             className="border p-3 rounded-lg md:col-span-2"
                         />
                         <button
                             type="submit"
+                            disabled={isSubmitting}
                             className="bg-orange-600 hover:bg-orange-700 text-white py-3 rounded-lg md:col-span-2 font-semibold"
                         >
                             Request a Proposal
                         </button>
                     </form>
-                </section>
-
+                </section>}
+{isSubmitting && isSuccess &&
+              <div className="container">
+                <h2 className='thicker'> Thank you ! </h2>
+                <p className='customised-message '> Your interest is greatly appreciated, and we're thrilled to assist you in planning your ideal travel experience. Our dedicated team will be in touch with you very soon to discuss your preferences and craft a personalized itinerary that perfectly suits your needs. We can't wait to embark on this journey with you!</p>
+              </div>
+            }
+            {isSubmitting && !isSuccess &&
+              <div className="container">
+                <h2 className='thicker'> Try again ! </h2>
+                <div > <img style={{ margin: '12px 0px 0 46%' }} loading="lazy" src={sadface} /> </div>
+              </div>
+            }
                 <section className="py-12 px-8 md:px-20 text-center">
                     <h2 className="text-2xl md:text-3xl font-bold mb-4">
                         Find us here!

@@ -63,7 +63,7 @@ const Contact_Us = () => {
                       name="phone"
                         placeholder="Phone"
                             className="border p-3 rounded-lg md:col-span-2"
-                      value={formData.Phone}
+                      value={formData.phone}
                       onChange={handleChange}
                       required
                     />
@@ -81,7 +81,6 @@ const Contact_Us = () => {
                     id="message"
                     placeholder="Message"
                     name="message"
-                    placeholder="Message"
                     className="border p-3 rounded-lg md:col-span-2"
                     value={formData.message}
                     onChange={handleChange}
