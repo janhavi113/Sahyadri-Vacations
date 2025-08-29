@@ -11,6 +11,7 @@ import MDI from '../../Images/CorporateClients/MDI.jpeg';
 import './CorporateBooking.css'
 import slide1 from "../../Images/corporate.png";
 import Navbar from "../../Navbar";
+import TrustedBy from './TrustedBy';
 import { faLocationDot, faEnvelope, faPhone, faPhoneVolume } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import sadface from '../../Images/sad-face.svg'
@@ -202,44 +203,8 @@ const CorporateBookingForm = () => {
                         </div>
                     </div>
                 </section>
-
-                {/* Trusted by Section */}
-                <section className="py-12 px-8 md:px-20 text-center">
-                    <h2 className="text-2xl md:text-3xl font-bold mb-8">Trusted by</h2>
-
-                    {/* Carousel Wrapper */}
-                    <div className="overflow-hidden max-w-5xl mx-auto">
-                        <div
-                            className="flex transition-transform duration-700 ease-in-out"
-                            style={{ transform: `translateX(-${currentIndex * (100 / 3)}%)` }}
-                        >
-                            {logos.map((logo, i) => (
-                                <div
-                                    key={i}
-                                    className="flex-shrink-0 w-1/3 flex justify-center items-center"
-                                >
-                                    <img src={logo} alt={`Logo-${i}`} className="h-24 md:h-28" />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Clickable Dots */}
-                    <div className="flex justify-center mt-6 space-x-2">
-                        {Array.from({ length: logos.length - 2 }).map((_, i) => (
-                            <button
-                                key={i}
-                                onClick={() => handleDotClick(i)}
-                                className={`h-2 w-2 rounded-full cursor-pointer border-0 p-0 
-        ${i === currentIndex ? "bg-blue-600" : "bg-gray-300"}`}
-                                style={{ appearance: "none" }}
-                            ></button>
-                        ))}
-                    </div>
-
-
-
-                </section>
+                <TrustedBy/>
+               
                 {/* Inquiry Form */}
                 <section ref={inquiryRef} className="py-12 px-8 md:px-20 text-center">
                     <h2 className="text-2xl md:text-3xl font-bold mb-6">Inquire Now</h2>
