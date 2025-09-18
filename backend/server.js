@@ -43,6 +43,7 @@ import customisedTourRoutes from './routes/customisedTourRoutes.js'
 import specialOfferRoutes from './routes/specialOfferRoutes.js'
 import categoryEventsRoutes from './routes/categoryRoutes.js';
 import './cron/specialOfferCleanup.js';
+import { log } from 'console';
  
 dotenv.config();
 let clientSecret = process.env.MONGOODB_CLIENT_SECRET; // Fixed typo in variable name
@@ -378,6 +379,7 @@ app.post("/event-details/eventid/:eventId/:apiName", async (req, res) => {
 // Get All Event
 app.get("/all-events", async (req, res) => {
 	try {
+		console.log('in server');
 		var events = await Events.find({});
 		res.send({
 			isSuccess: true,

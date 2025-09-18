@@ -13,12 +13,13 @@ const customisedRequestSchema = new mongoose.Schema({
     durationoftour: { type: String },
     numberofpeople: { type: Number },
     email: { type: String },
-    preferedLocation: { type: String },
+    preferredLocation: { type: String },
     message: { type: String },
     inquireydate: { 
         type: Date, 
         default: Date.now // Sets the default value to the current date
     },
+    eventId: { type :Number},
     status: { 
         type: String,
         enum: ['new', 'In process', 'Cancel', 'Hold', 'Complete'], // Allowed values

@@ -58,6 +58,10 @@ const AdminNavbar = ({ children }) => {
             <FontAwesomeIcon icon={faShuffle} className="nav-icon" />
             {isExpanded && <span className="nav-text">Sort Schedule Batches</span>}
           </NavLink>
+           <NavLink to="/customised-tour" className="nav-item">
+            <FontAwesomeIcon icon={faFire} className="nav-icon" />
+            {isExpanded && <span className="nav-text">Customise Inquiry</span>}
+          </NavLink>
           <NavLink to="/categories" className="nav-item">
             <FontAwesomeIcon icon={faFire} className="nav-icon" />
             {isExpanded && <span className="nav-text">Honey Moon Categories</span>}

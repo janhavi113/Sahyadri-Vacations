@@ -103,10 +103,10 @@ const CustomisedTour = () => {
                                 {errors.numberofpeople && <div className='red'>{errors.numberofpeople.message}</div>}
                             </div>
                             <div className="form-group">
-                                <label htmlFor="preferedlocation">Prefered Location</label>
+                                <label htmlFor="preferredLocation">Prefered Location</label>
                                 <input
                                     type="text"
-                                    {...register("preferedlocation")}
+                                    {...register("preferredLocation")}
                                 />
                             </div>
                             <div className="form-group">

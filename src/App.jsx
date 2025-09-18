@@ -1,7 +1,7 @@
 import Home from "./components/Home";
 import Login from "./components/Login";
 import About from "./components/User-Panel/AboutUs/About";
-import CustomisedTour from "./components/User-Panel/CustomiseTour/CustomisedTour";
+import CustomisedTour from "./components/admin-panel/CustomiseTour/CustomisedTour";
 import AdminLogin from "./components/admin-panel/Admin-Login/AdminLogin";
 import ChecklistView from "./components/admin-panel/AdminDashboard/ChecklistView";
 import BookingReport from "./components/admin-panel/BookingReport/BookingReport";
@@ -9,6 +9,7 @@ import Dashboard from "./components/admin-panel/AdminDashboard/AdminDashboard";
 import AllEvents from  "./components/admin-panel/All-Events/AllEvents";     
 import ScheduledEvents from "./components/admin-panel/Scheduled_Events/ScheduledEvents";
 import ScheduledEventsDetails from "./components/admin-panel/Scheduled_Events/ScheduledEventsDetails";
+import CustomTourDetails from "./components/admin-panel/CustomiseTour/CustomTourDetails";
 import ScheduleEvents from "./components/admin-panel/Schedule-Events/ScheduleEvents";
 import ShowDetailsNotSchedule from "./components/User-Panel/ShowEventDetails/ShowDetailsNotSchedule";
 import UpdateScheduleEvents from "./components/admin-panel/Schedule-Events/UpdateScheduleEvents";
@@ -60,7 +61,13 @@ function App() {
     {
       path: "/category",
       element: <CategoryEvents />,
+    },
+    {
+      path: "/custom-tour-details",
+      element: < CustomTourDetails />,
     }, 
+
+   
     {
       path: "/sort-schedule-batches",
       element: <SortScheduleBatches/>,

@@ -1,0 +1,81 @@
+/* COVER PAGE STYLE */
+.cover-page {
+  height: 100vh; /* 👈 good for preview */
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.6)
+    ),
+    url("../../Images/corporate.jpeg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+
+/* 👇 Special class for PDF rendering */
+.cover-page.pdf-mode {
+  width: 454px;   /* A4 width */
+  height: 423px; /* A4 height */
+  position: relative; /* keep logo absolute positioning working */
+  overflow: hidden;   /* make sure nothing spills */
+}
+
+/* Quill content styles */
+.ql-p,
+.display-bulletin p,
+.display-bulletin li {
+  text-align: left !important;
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #374151; /* Tailwind text-gray-700 */
+}
+
+/* Lists */
+.display-bulletin ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+  padding-left: 0.5rem;
+}
+.display-bulletin ol {
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+  padding-left: 0.5rem;
+}
+
+/* Section headers */
+section h3 {
+  border-left: 4px solid #16a34a; /* green accent */
+  padding-left: 0.5rem;
+}
+
+/* Watermark logo faint in background */
+.watermark-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;        /* adjust size */
+  opacity: 0.08;       /* faint effect */
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+@media print {
+  .cover-page {
+    page-break-after: always;
+  }
+
+  .watermark-logo {
+    opacity: 0.1;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+  }
+}
