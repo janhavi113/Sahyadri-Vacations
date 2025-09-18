@@ -1,6 +1,6 @@
 /* COVER PAGE STYLE */
 .cover-page {
-  height: 100vh; /* 👈 good for preview */
+  height: 70vh; /* 👈 good for preview */
   background: linear-gradient(
       rgba(0, 0, 0, 0.4),
       rgba(0, 0, 0, 0.6)
