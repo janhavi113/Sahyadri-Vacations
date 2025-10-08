@@ -3,6 +3,7 @@ import AdminNavbar from "../../AdminNavbar";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import '../../User-Panel/ShowEventDetails/ShowEventDetails.css'
 import './ScheduledEvents.css'
+import GenerateBrochure from "./GenerateBrochure";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarDays, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { Modal, Button } from "react-bootstrap";
@@ -22,7 +23,8 @@ const ScheduledEventsDetails = () => {
   const [isSuccess, setSuccess] = useState(false);
   const [eventDetails, setEventDetails] = useState();
   const [scheduleBatch, setScheduleBatch] = useState();
-
+  const [showBrochure, setShowBrochure] = useState(false);
+  const [showBrochureForm, setShowBrochureForm] = useState(false);
   const [everyWeekend, setEveryWeekend] = useState(false);
   const [noOfTrekkers, setNoOfTrekkers] = useState(1);
   const [finalPrice, setFinalPrice] = useState(0);
@@ -31,7 +33,9 @@ const ScheduledEventsDetails = () => {
   const [batchDate, setBatchDate] = useState();
   const [availableSlot, setAvailableSlot] = useState();
   const [inquery, setInquery] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const navigateUrl = useNavigate();
+  const [showDialog, setShowDialog] = useState(false);
   useEffect(() => {
 
     if (isSuccess == false && type && params) {
@@ -47,59 +51,59 @@ const ScheduledEventsDetails = () => {
     //let eventType = event.eventType;
     const Q = new Date("2024-04-09");
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    if (event.batches) {
+    if (eventDetails.batches) {
       for (let i = 0; i < event.batches.length; i++) {
         console.log('event.batches[' + i + ']--', event.batches[i]);
-        if (event.batches[i].everyWeekend == true) {
+        if (eventDetails.batches[i].everyWeekend == true) {
           batchdate = 'Available On All Weekends';
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           batchSize = event.batches[i].eventBatchCount;
           setEveryWeekend(true);
         }
-        else if (event.batches[i].notScheduleYet == true) {
+        else if (eventDetails.batches[i].notScheduleYet == true) {
           batchdate = 'On Demand';
           setInquery(true);
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           batchSize = event.batches[i].eventBatchCount;
         }
         else {
-          batchdate = batchdate + new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear() + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear() + ' | ';
+          batchdate = batchdate + new Date(eventDetails.batches[i].eventStartDate).getDate() + ' ' + months[new Date(eventDetails.batches[i].eventStartDate).getMonth()] + ' ' + new Date(eventDetails.batches[i].eventStartDate).getFullYear() + ' - ' + new Date(eventDetails.batches[i].eventEndDate).getDate() + ' ' + months[new Date(eventDetails.batches[i].eventEndDate).getMonth()] + ' ' + new Date(eventDetails.batches[i].eventStartDate).getFullYear() + ' | ';
           eventCostPerPerson = event.batches[i].eventCostPerPerson;
           batchSize = event.batches[i].eventBatchCount;
         }
 
-        if (event.batches[i].everyWeekend == false && event.batches[i].notScheduleYet == false) {
-          batchDates.push(new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventStartDate).getFullYear());
-        } else if (event.batches[i].notScheduleYet == true) {
+        if (eventDetails.batches[i].everyWeekend == false && event.batches[i].notScheduleYet == false) {
+          batchDates.push(new Date(eventDetails.batches[i].eventStartDate).getDate() + ' ' + months[new Date(eventDetails.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(eventDetails.batches[i].eventEndDate).getDate() + ' ' + months[new Date(eventDetails.batches[i].eventEndDate).getMonth()] + ' ' + new Date(eventDetails.batches[i].eventStartDate).getFullYear());
+        } else if (eventDetails.batches[i].notScheduleYet == true) {
           batchDates.push('On Demand');
-        } else if (event.batches[i].everyWeekend == true) {
+        } else if (eventDetails.batches[i].everyWeekend == true) {
           batchDates.push('Available On All Weekends');
         }
       }
     } else {
-      if (event.everyWeekend == true) {
+      if (eventDetails.everyWeekend == true) {
         batchdate = 'Available On All Weekends';
         eventCostPerPerson = event.eventCostPerPerson;
         batchSize = event.eventBatchCount;
         setEveryWeekend(true);
       }
-      else if (event.notScheduleYet == true) {
+      else if (eventDetails.notScheduleYet == true) {
         batchdate = 'On Demand';
         setInquery(true);
         eventCostPerPerson = event.eventCostPerPerson;
         batchSize = event.eventBatchCount;
       }
       else {
-        batchdate = batchdate + new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear() + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear() + ' | ';
+        batchdate = batchdate + new Date(eventDetails.eventStartDate).getDate() + ' ' + months[new Date(eventDetails.eventStartDate).getMonth()] + ' ' + new Date(eventDetails.eventStartDate).getFullYear() + ' - ' + new Date(eventDetails.eventEndDate).getDate() + ' ' + months[new Date(eventDetails.eventEndDate).getMonth()] + ' ' + new Date(eventDetails.eventStartDate).getFullYear() + ' | ';
         eventCostPerPerson = event.eventCostPerPerson;
         batchSize = event.eventBatchCount;
       }
 
-      if (event.everyWeekend == false && event.notScheduleYet == false) {
-        batchDates.push(new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventStartDate).getFullYear());
-      } else if (event.notScheduleYet == true) {
+      if (eventDetails.everyWeekend == false && event.notScheduleYet == false) {
+        batchDates.push(new Date(eventDetails.eventStartDate).getDate() + ' ' + months[new Date(eventDetails.eventStartDate).getMonth()] + ' - ' + new Date(eventDetails.eventEndDate).getDate() + ' ' + months[new Date(eventDetails.eventEndDate).getMonth()] + ' ' + new Date(eventDetails.eventStartDate).getFullYear());
+      } else if (eventDetails.notScheduleYet == true) {
         batchDates.push('On Demand');
-      } else if (event.everyWeekend == true) {
+      } else if (eventDetails.everyWeekend == true) {
         batchDates.push('Available On All Weekends');
       }
     }
@@ -152,6 +156,8 @@ const ScheduledEventsDetails = () => {
     navigateUrl(`/update-schedule-events?eventid=${params[0]}`);
   };
   const displayList = (data) => {
+    console.log('-=-data', data);
+
     var splitedList = data.replaceAll('<p class="ql-align-justify">', '<p class="ql-align-justify ql-p">');
     splitedList = splitedList.replaceAll('<ul>', '<ul class="display-bulletin">');
     splitedList = splitedList.replaceAll('<ol>', '<ol class="display-bulletin">');
@@ -165,160 +171,215 @@ const ScheduledEventsDetails = () => {
   return (
     <div>
       <AdminNavbar>
-        <div>
-          <Swiper
-            spaceBetween={50}
-            slidesPerView={1}
-            centeredSlides={true}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
+        <div className="contentbody">
+          <div className="container justify-content-center py-md-5">
+            <div className="row justify-content- py-4">
+              <section className="py-16 px-6 md:px-20 text-center bg-gray-50">
+                <div className="flex flex-col md:flex-row gap-6 justify-between items-center">
+                  <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-0">
+                    Schedule Batch Details
+                  </h2>
 
-            modules={[Autoplay, Pagination, Navigation]}
-            onAutoplayTimeLeft={onAutoplayTimeLeft}
-          >
-            {isSuccess && console.log('eventDetails.images-- ' + eventDetails.images)}
-            {isSuccess && eventDetails.images.map((event, index) => (
+                  {/* Action Buttons */}
+                  <div className="flex gap-4">
+                    <button onClick={editScheduleEvent} type="button" className="px-4 py-2 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-700"> <strong>EDIT</strong> </button>
+                    <button onClick={() => setShowDialog(true)} type="button" className="px-4 py-2 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-700"> <strong>DELETE</strong> </button>
+                    <button
+                      onClick={() => setShowBrochure(true)}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700"
+                    >
+                      {showBrochureForm ? "Close Brochure Form" : "Generate Brochure PDF"}
+                    </button>
 
-              <SwiperSlide key={index}><img className='event-schedule-section-header-img' loading="lazy" src={`${apiUrl}` + scheduleBatch.images} />
-                <div className="inner-content">
-                  <h3>{eventDetails.name}</h3>
-                </div>
-              </SwiperSlide>
-            ))}
-
-          </Swiper>
-        </div>
-        {isSuccess &&
-          <div>
-            <div className="content-row row2">
-              <div>
-
-                <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example  p-3 rounded-2" tabindex="0">
-                  <div className='pt-4 pb-1 px-2'>
-
-                    <div className='section-details'>
-                      <div >
-                        <h2 className='schedule-section-header'>Event Details </h2>
-                        {availableBatches && console.log('availableBatches ' + availableBatches)}
-                        {availableBatches && availableBatches.map((event, index) => (
-                          <div key={index}><b> Upcoming Batches  Batch {index + 1} :</b> {event}</div>
-                        ))}
-                      </div>
-                      <div id="scrollspyHeading1">
-
-                        <div className='scheduled-flex'>
-                          <div ><b>eventApi: </b>{scheduleBatch.eventApi}</div>
-                          <div id="scrollspyHeading5"><b>eventType: </b>{scheduleBatch.eventType}</div>
-                        </div>
-                        <div className='scheduled-flex'>
-                          <div ><b>Event Cost Per Person from Pune: </b>{scheduleBatch.eventCostPerPerson}</div>
-                          <div ><b>Base to Base Price: </b>{scheduleBatch.b2bPrice}</div>
-                        </div>
-                        <div className='scheduled-flex'>
-                          <div ><b>Event Cost Per Person from Mumbai: </b>{scheduleBatch.eventCostPerPersonFromMumbai}</div>
-                        </div>
-                        <div className='scheduled-flex'>
-                          {scheduleBatch.eventStartDate && <div><b>eventStartDate: </b>{new Date(scheduleBatch.eventStartDate).toISOString().split('T')[0]}</div>}
-                          {scheduleBatch.eventEndDate && <div><b>eventEndDate: </b>{new Date(scheduleBatch.eventEndDate).toISOString().split('T')[0]}</div>}
-                        </div>
-                      </div>
-                      <hr />
-                      <div id="scrollspyHeading2" >
-                        <h2 className='schedule-section-header'>Booking Open Details </h2>
-                        <div className='scheduled-flex'>
-                          <div><b>bookingTillDate: </b>{scheduleBatch.bookingTillDate}</div>
-                          <div><b>bookingTillTime: </b>{scheduleBatch.bookingTillTime}</div>
-                        </div>
-                      </div>
-                      <div className='scheduled-flex'>
-                        <div><b>everyWeekend: </b>{scheduleBatch.everyWeekend == true ? 'true' : 'false'}</div>
-                        <div><b>notScheduleYet: </b>{scheduleBatch.notScheduleYet == true ? 'true' : 'false'}</div>
-                      </div>
-                      <hr />
-                      <h2 className='schedule-section-header'>Booking Count Details </h2>
-                      <div className='scheduled-flex'>
-                        <div><b>eventBatchCount: </b>{scheduleBatch.eventBatchCount}</div>
-                        <div><b>alreadyBoockedCount: </b>{scheduleBatch.alreadyBoockedCount}</div>
-                      </div>
-                      <hr />
-                      <h2 className='schedule-section-header'>Booking Count Details </h2>
-                      <div><b>specialOfferEvent: </b>{scheduleBatch.specialOfferEvent == true ? 'true' : 'false'}</div>
-
-                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-xl-4 ">
-                <div className="container sticky-top" >
-                  <div >
-                    <div >
-                      <div className="booking-card mb-3 " >
-                        <div className="card-body text-dark">
-                          <h4 className="card-title"><center>
-                            <b className='event-price'>₹{price} /- </b>
-                            <sub >Per Person</sub>
-                          </center>
-                          </h4>
-                          {!inquery && <> <div>
-                            <center> {batchDate} </center></div>
+                         {showBrochure && (
+                                <GenerateBrochure
+                                    event={eventDetails}
+                                    inquiry={scheduleBatch}
+                                    onClose={() => setShowBrochure(false)}
+                                />
+                            )}
+                {/* Show Info OR Forms */}
+                {scheduleBatch && (
+                  <div className="mt-8 text-left">
+                    <div className="bg-white shadow-lg rounded-xl p-6 space-y-8">
 
-                            <div className="button-margin button button-group-box">
-                              {/* <input onClick={handleShow} type="submit" value="BOOK NOW" /> */}
-                              <button onClick={editScheduleEvent} type="button"> <strong>EDIT</strong> </button>
-                              <button onClick={openConfirmPopup} type="button"> <strong>DELETE</strong> </button>
-                            </div></>}
+                      {/* Event Details Section */}
+                      <section>
+                        <h3 className="text-xl font-semibold mb-4 border-b pb-2">Event Details</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Event Name:</span> {scheduleBatch.eventname}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Event API:</span> {scheduleBatch.eventApi}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Event ID:</span> {scheduleBatch.eventId}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Event Type:</span> {scheduleBatch.eventType}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Start Date:</span> {new Date(scheduleBatch.eventStartDate).toLocaleDateString()}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">End Date:</span> {new Date(scheduleBatch.eventEndDate).toLocaleDateString()}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Duration:</span> {scheduleBatch.duration}
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="d-sm-block d-md-none d-lg-none fixed-bottom">
-              <div className="booking-card-mb mb-0 " style={{ "width": "100%;" }}>
-                <div className="card-body text-dark">
-                  <div className="booking-section d-scheduled-flex justify-content-between align-items-center">
-                    <h4 className="card-title"><center>
-                      <b className='event-price'>₹{price} /- </b>
-                      <sub >Per Person</sub>
-                    </center>
-                    </h4>
-                    <div>
-                      <center> {batchDate} </center>
-                    </div>
-                  </div>
-                  <div className="button-edit-container">
-                    <div className="button button-margin ">
-                      { /* <input className="button-input" disabled={isSubmitting} type="submit" onClick={handleShow} value="BOOK NOW" /> */}
+                      </section>
 
-                      <button type="button"> <strong>EDIT</strong> </button>
+                      {/* Pricing Section */}
+                      <section>
+                        <h3 className="text-xl font-semibold mb-4 border-b pb-2">Pricing</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Cost/Person (Pune):</span> ₹{scheduleBatch.eventCostPerPerson}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Mumbai Cost/Person:</span> ₹{scheduleBatch.eventCostPerPersonFromMumbai}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">B2B Price:</span> ₹{scheduleBatch.b2bPrice}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Partial Booking Amount:</span> ₹{scheduleBatch.partialBookingAmount}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Special Offer:</span> {scheduleBatch.specialOfferEvent ? "Yes" : "No"}
+                          </div>
+                        </div>
+                      </section>
 
-                      <button onClick={openConfirmPopup} type="button"><strong>&nbsp;DELETE </strong> </button>
+                      {/* Sharing Options */}
+                      <section>
+                        <h3 className="text-xl font-semibold mb-4 border-b pb-2">Sharing & Upgrades</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Double Sharing:</span> ₹{scheduleBatch.doubleSharing}
+                            <div className="text-sm text-gray-600">{scheduleBatch.doubleSharingNote}</div>
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Triple Sharing:</span> ₹{scheduleBatch.tripalSharing}
+                            <div className="text-sm text-gray-600">{scheduleBatch.tripalSharingNote}</div>
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">3rd AC Upgrade:</span> ₹{scheduleBatch.thirdAcUpgrate}
+                            <div className="text-sm text-gray-600">{scheduleBatch.thirdAcUpgrateNote}</div>
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Booking Info */}
+                      <section>
+                        <h3 className="text-xl font-semibold mb-4 border-b pb-2">Booking Info</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Booking Till:</span> {scheduleBatch.bookingTillDate} {scheduleBatch.bookingTillTime}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Batch Count:</span> {scheduleBatch.eventBatchCount}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Already Booked:</span> {scheduleBatch.alreadyBoockedCount}
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Status Section */}
+                      <section>
+                        <h3 className="text-xl font-semibold mb-4 border-b pb-2">Status</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Active:</span> {scheduleBatch.active ? "Yes" : "No"}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Every Weekend:</span> {scheduleBatch.everyWeekend ? "Yes" : "No"}
+                          </div>
+                          <div className="p-2 bg-gray-50">
+                            <span className="font-bold capitalize">Not Scheduled Yet:</span> {scheduleBatch.notScheduleYet ? "Yes" : "No"}
+                          </div>
+                        </div>
+                      </section>
+
+                      {/* Note */}
+                      {scheduleBatch.note && (
+                        <section>
+                          <h3 className="text-xl font-semibold mb-4 border-b pb-2">Note</h3>
+                          <div className="p-2 bg-gray-50">{scheduleBatch.note}</div>
+                        </section>
+                      )}
+
+                      {/* Images */}
+                      {scheduleBatch.images && (
+                        <section>
+                          <h3 className="text-xl font-semibold mb-4 border-b pb-2">Images</h3>
+                          <div className="flex gap-4 flex-wrap">
+                            {scheduleBatch.images.split(",").map((img, idx) => (
+                              <img
+                                key={idx}
+                                src={img}
+                                alt={`batch-img-${idx}`}
+                                className="w-40 h-32 object-cover rounded-lg shadow"
+                              />
+                            ))}
+                          </div>
+                        </section>
+                      )}
+
+                      {/* Scheduled Batches */}
+                      {availableBatches && (
+                        <section>
+                          <h3 className="text-xl font-semibold mb-4 border-b pb-2">Scheduled Batches</h3>
+                          {availableBatches.map((event, index) => (
+                            <div key={index} className="p-2 bg-gray-50 rounded">
+                              <b>Upcoming Batch {index + 1}:</b> {event}
+                            </div>
+                          ))}
+                        </section>
+                      )}
+
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <Modal show={showConfirm} >
-                <Modal.Header closeButton>
+                )}
 
-                </Modal.Header>
-                <Modal.Body> <center><div>Do you want to delete event ?</div></center></Modal.Body>
-                <Modal.Footer>
-                  <div className="button-edit-container">
-                    <div className="button">
-                      <input type="submit" value=" Delete " onClick={deleteScheduleEvents} />
-                      <input type="submit" value=" Cancel " onClick={() => setShowConfirm(false)} />
+                {showDialog && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-xl shadow-lg w-96">
+                      <>
+                        <h3 className="text-lg font-bold mb-4">Do you want to delete event ?</h3>
+                        <div className="flex justify-between">
+                          <button
+                            className="bg-green-500 text-white px-4 py-2 rounded"
+                            onClick={deleteScheduleEvents}
+                          >
+                            Delete
+                          </button>
+                          <button
+                            className="bg-orange-500 text-white px-4 py-2 rounded"
+                            onClick={() => {
+                              setShowConfirm(false);
+                              setShowDialog(false);
+                            }}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </>
+
+
                     </div>
                   </div>
-                </Modal.Footer>
-              </Modal>
+                )}
+
+              </section>
             </div>
           </div>
-        }
+        </div>
       </AdminNavbar>
     </div>
   )
