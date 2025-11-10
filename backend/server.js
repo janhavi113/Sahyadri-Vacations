@@ -42,6 +42,8 @@ import couponRoutes from './routes/couponRoutes.js';
 import customisedTourRoutes from './routes/customisedTourRoutes.js'
 import specialOfferRoutes from './routes/specialOfferRoutes.js'
 import categoryEventsRoutes from './routes/categoryRoutes.js';
+import phonepeWebhook from "./routes/phonepeWebhook.js";
+import "./routes/cronJob.js"; 
 import './cron/specialOfferCleanup.js';
 import { log } from 'console';
  
@@ -411,6 +413,7 @@ app.use(couponRoutes);
 // Use the payment route
 app.use('/api', paymentRoutes);
 app.use('/api', paymentCallbackRoutes);
+app.use('/api',phonepeWebhook);
 
 // Handle all other routes and serve index.html
 app.get("*", (req, res) => {
