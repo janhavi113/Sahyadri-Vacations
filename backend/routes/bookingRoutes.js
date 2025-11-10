@@ -250,57 +250,27 @@ function convertDateToCustomFormat(dateString) {
     return `${parseInt(day) < 10 ? '0' + day : day}${parseInt(month) < 10 ? '0' + month : month}${year}`;
 }
 
-
+  // 🧾 Send invoice automatically (non-blocking)
 router.post("/sendInvoice", async (req, res) => {
+  try {
     const bookingDetails = req.body;
-    console.log('sendInvoice req.body----', req.body);
+    console.log("sendInvoice req.body----", req.body);
 
-    if (!bookingDetails.bookingId) {
-        return res.status(400).send('Booking ID is required');
+    if (!bookingDetails.bookingId && !bookingDetails._id) {
+      return res.status(400).send("Booking ID is required");
     }
 
-    let pdfPath;
-    if (process.env.NODE_ENV === 'production') {
-        console.log('in iff');
-        pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
-        console.log("Attempting to save PDF at:", pdfPath);
-    } else {
-        pdfPath = path.resolve(`./invoices/${bookingDetails.bookingId}.pdf`);
-        console.log("Attempting to save PDF at:", pdfPath);
-    }
+    // Respond quickly to client
+    res.status(200).send("Invoice generation and email sending in progress...");
 
-    try {
-        // Generate the invoice PDF
-        await generateInvoicePdf(bookingDetails, pdfPath);
-
-        // Ensure the file exists
-        if (!fs.existsSync(pdfPath)) {
-            console.error('PDF file was not found:', pdfPath);
-            return res.status(500).send('Error generating PDF');
-        }
-
-        // Respond quickly to the client
-        res.status(200).send('Invoice generation in progress and email will be sent shortly.');
-
-        // Send email asynchronously
-        sendInvoiceEmail(bookingDetails.email, bookingDetails, pdfPath)
-            .then(async () => {
-                // Update the booking record after successful email delivery
-                const updatedBooking = await Bookings.findOneAndUpdate(
-                    { _id: bookingDetails._id },
-                    { $set: { invoiceDelivered: true } },
-                    { new: true }
-                );
-                console.log('Invoice email sent and booking updated:', updatedBooking);
-            })
-            .catch(err => {
-                console.error('Error sending invoice email:', err);
-            });
-    } catch (err) {
-        console.error('Error generating PDF or processing invoice:', err);
-        return res.status(500).send('Error processing invoice');
-    }
+    // Run invoice logic asynchronously
+    await sendInvoiceForBooking(bookingDetails);
+  } catch (err) {
+    console.error("Error in sendInvoice route:", err);
+    res.status(500).send("Error processing invoice");
+  }
 });
+
 router.get("/show-all-bookings/:showOptions", async (req, res) => {
     try {
         updateExpiredBookings();

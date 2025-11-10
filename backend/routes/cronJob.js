@@ -66,7 +66,7 @@ cron.schedule("*/30 * * * *", async () => {
               console.error(`❌ Failed to send invoice:`, err.message)
             );
         } else {
-           await Bookings.findByIdAndUpdate(
+          await Bookings.findByIdAndUpdate(
             booking._id,
             {
               $set: {
