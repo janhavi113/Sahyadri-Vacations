@@ -43,7 +43,7 @@ router.post("/booking", async (req, res) => {
         let bookingIdVar = await generateBookingId(req.body.bookingDate);
 
 
-        console.log('req.body---', req.body);
+        //console.log('req.body---', req.body);
 
         const booking = new Bookings({
             bookingId: bookingIdVar,
@@ -63,7 +63,7 @@ router.post("/booking", async (req, res) => {
         await booking.save();
         Bookings.deleteMany({ bookingId: { $exists: false } })
             .then((result) => {
-                console.log("Deleted documents:", result.deletedCount);
+                //console.log("Deleted documents:", result.deletedCount);
             })
             .catch((err) => {
                 console.error("Error deleting documents:", err);
@@ -88,7 +88,7 @@ router.delete('/delete-bookings', async (req, res) => {
     try {
         // Deleting records with the name "Janhavi Jadhav"
         const result = await Bookings.deleteMany({ mobileNumber: 9922978022 });
-        console.log('result---', result);
+        //console.log('result---', result);
         res.status(200).json({
             message: `${result.deletedCount} booking(s) deleted successfully.`,
         });
@@ -103,7 +103,7 @@ router.delete('/delete-bookings', async (req, res) => {
 
 router.put("/confirmed-booking", async (req, res) => {
     try {
-        console.log("create req.body --", req.body);
+        //console.log("create req.body --", req.body);
 
         const {
             amountPaid,
@@ -135,7 +135,7 @@ router.put("/confirmed-booking", async (req, res) => {
             ...p,
             status: p.status || "Pending" // Or "Pending" depending on your logic
         }));
-        ////console.log("create req.body --", req.body);
+        //////console.log("create req.body --", req.body);
 
         const updatedBooking = await Bookings.findOneAndUpdate(
             { _id: bookingId }, // Filter
@@ -183,7 +183,7 @@ router.put("/confirmed-booking", async (req, res) => {
 });
 
 router.put("/payment-confirmed", async (req, res) => {
-    console.log('payment req.body---', req.body);
+    //console.log('payment req.body---', req.body);
     try {
         const {
             paymentMethod,
@@ -211,7 +211,7 @@ router.put("/payment-confirmed", async (req, res) => {
                 message: "Booking not found"
             });
         }
-        console.log('payment req.body---', updatedBooking);
+        //console.log('payment req.body---', updatedBooking);
         res.send({
             isSuccess: true,
             booking: updatedBooking
@@ -254,7 +254,7 @@ function convertDateToCustomFormat(dateString) {
 router.post("/sendInvoice", async (req, res) => {
   try {
     const bookingDetails = req.body;
-    console.log("sendInvoice req.body----", req.body);
+    //console.log("sendInvoice req.body----", req.body);
 
     if (!bookingDetails.bookingId && !bookingDetails._id) {
       return res.status(400).send("Booking ID is required");
@@ -275,14 +275,14 @@ router.get("/show-all-bookings/:showOptions", async (req, res) => {
     try {
         updateExpiredBookings();
         let query;
-        console.log('req.params.showOptions--', req.params.showOptions);
+     //   //console.log('req.params.showOptions--', req.params.showOptions);
         if (req.params.showOptions == 'all') {
             query = { active: true };
         } else {
             query = { active: true, status: req.params.showOptions };
         }
         let bookings = await Bookings.find(query);
-         console.log('bookings ',bookings);
+     //    //console.log('bookings ',bookings);
         res.send({
             bookings: bookings,
             isSuccess: true
@@ -299,20 +299,19 @@ router.get("/show-all-bookings/:showOptions", async (req, res) => {
 async function updateExpiredBookings() {
     try {
         // const result = await Bookings.deleteMany({ mobileNumber: '9922978022' });
-        // console.log(`${result.deletedCount} booking(s) deleted successfully.`);
+        // //console.log(`${result.deletedCount} booking(s) deleted successfully.`);
         const currentDate = new Date();
-        //console.log('currentDate--', currentDate);
+        console.log('currentDate--', currentDate);
 
         // Subtract one day from the current date
         const deactivateDate = new Date(currentDate);
         deactivateDate.setDate(currentDate.getDate() - 1); // Subtract 1 day
-        //console.log('deactivateDate--', deactivateDate);
-
+        console.log('deactivateDate--', deactivateDate);
         const result = await Bookings.updateMany(
             { eventEndDate: { $lt: deactivateDate }, active: true },
             { $set: { active: false } }
         );
-        console.log('result---', result);
+        
     } catch (error) {
         console.error("Error updating records:", error);
     }
@@ -363,6 +362,7 @@ router.post("/cancel-person", async (req, res) => {
                 name: originalBooking.name,
                 mobileNumber: originalBooking.mobileNumber,
                 eventName: originalBooking.eventName,
+                eventEndDate: originalBooking.eventEndDate,
                 batch: originalBooking.batch,
                 pickupLocation: originalBooking.pickupLocation,
                 status: "Cancelled",
