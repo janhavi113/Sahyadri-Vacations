@@ -8,6 +8,7 @@ import '../../home.css'
 import './Events.css'
 import "react-multi-carousel/lib/styles.css";
 import './Camping_Event.css';
+import { getUpcomingEvents } from '../../utils/eventUtils';
 const Treking_Events = () => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const [isSuccess, setSuccess] = useState(false);
@@ -19,7 +20,6 @@ const Treking_Events = () => {
         }
     })
     const getAllRecord = async () => {
-        let trekkingEvents = [];
         let r = await fetch(`${apiUrl}show-all-events`, {
             method: "GET", headers: {
                 "Content-Type": "application/json",
@@ -29,53 +29,17 @@ const Treking_Events = () => {
         let res = await r.json();
         if (res.isSuccess == true) {
             setSuccess(true);
-            for (let i = 0; i < res.events.length; i++) {
-                if (res.events[i].eventType == 'TrekEvent' || res.events[i].eventType == 'AdventureActivity') {
-                    trekkingEvents.push(getNextBatchDate(res.events[i]));
-                }
-            }
-            setTrekkingEvents(trekkingEvents);
+             const filtered = getUpcomingEvents(
+                            res.events,
+                            apiUrl,
+                            ["TrekEvent", "AdventureActivity"]
+                        );
+                        setTrekkingEvents(filtered);
+                        setLoaded(true);
         }
 
     }
-    const getNextBatchDate = (event) => {
-        var liveEvent = '';
-        let batchdate;
-        let eventCostPerPerson;
-        let eventCostPerPersonFromMumbai;
-        let b2bPrice;
-        const Q = new Date();
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        if (event.batches) {
-            for (let i = 0; i < event.batches.length; i++) {
-                if (new Date(event.batches[i].eventStartDate) - Q >= 0) {
-                    batchdate = new Date(event.batches[i].eventStartDate).getDate() + ' ' + months[new Date(event.batches[i].eventStartDate).getMonth()] + ' - ' + new Date(event.batches[i].eventEndDate).getDate() + ' ' + months[new Date(event.batches[i].eventEndDate).getMonth()] + ' ' + new Date(event.batches[i].eventEndDate).getFullYear();
-                    eventCostPerPerson = event.batches[i].eventCostPerPerson;
-                }
-            }
-        } else {
-            if (new Date(event.eventStartDate) - Q >= 0) {
-                batchdate = new Date(event.eventStartDate).getDate() + ' ' + months[new Date(event.eventStartDate).getMonth()] + ' - ' + new Date(event.eventEndDate).getDate() + ' ' + months[new Date(event.eventEndDate).getMonth()] + ' ' + new Date(event.eventEndDate).getFullYear();
-                eventCostPerPerson = event.eventCostPerPerson;
-                b2bPrice = event.b2bPrice;
-                eventCostPerPersonFromMumbai = event.eventCostPerPersonFromMumbai;
-            }
-        }
-        if (batchdate && eventCostPerPerson) {
-            liveEvent = {
-                eventId: event.eventId,
-                eventname: event.eventname,
-                eventType: event.eventType,
-                url: event.Url,
-                images: `${apiUrl}` + event.images,
-                batchdate: batchdate,
-                eventCostPerPerson: eventCostPerPerson,
-                eventCostPerPersonFromMumbai: eventCostPerPersonFromMumbai,
-                b2bPrice: b2bPrice,
-            }
-        }
-        return liveEvent;
-    }
+
     const navigate = useNavigate();
     return (
         <div >
@@ -83,7 +47,7 @@ const Treking_Events = () => {
             <div className="all-event-contentbody">
                 <div className="team justify-content-center">
                     <div className="row">
-                        {isSuccess && trekkingEvents.map((event, index) => (
+                        {isSuccess && trekkingEvents && trekkingEvents.map((event, index) => (
                             <div key={index} className="mt-2 col-lg-3 col-md-3 col-sm-3">
                                 <div className="event-card card all-events-card">
                                     <a onClick={() => navigate(event.url)}>

@@ -6,3 +6,8 @@
     background-color: white;
     padding: 16px 8px;
 }
+.on-demand-section{
+    background-color: #d3d3d373;
+    border-radius: 0 !important;
+    box-shadow: 0px 6px 20px #0000006a;
+}
