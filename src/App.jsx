@@ -8,6 +8,8 @@ import BookingReport from "./components/admin-panel/BookingReport/BookingReport"
 import Dashboard from "./components/admin-panel/AdminDashboard/AdminDashboard";
 import AllEvents from  "./components/admin-panel/All-Events/AllEvents";     
 import ScheduledEvents from "./components/admin-panel/Scheduled_Events/ScheduledEvents";
+import EmployeeOnboarding from "./components/admin-panel/EmployeeOnboarding/EmployeeOnboarding";
+import SetPassword from "./components/admin-panel/EmployeeOnboarding/SetPassword";
 import ScheduledEventsDetails from "./components/admin-panel/Scheduled_Events/ScheduledEventsDetails";
 import CustomTourDetails from "./components/admin-panel/CustomiseTour/CustomTourDetails";
 import ScheduleEvents from "./components/admin-panel/Schedule-Events/ScheduleEvents";
@@ -56,6 +58,14 @@ function App() {
     {
       path: "/booking-report",
       element: <BookingReport />,
+    }
+    ,{
+      path: "/employee-onboarding",
+      element: <EmployeeOnboarding />,
+    }
+   ,{
+      path: "/set-password",
+      element: <SetPassword />,
     }
     ,
     {

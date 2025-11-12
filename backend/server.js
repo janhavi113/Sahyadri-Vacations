@@ -43,6 +43,7 @@ import customisedTourRoutes from './routes/customisedTourRoutes.js'
 import specialOfferRoutes from './routes/specialOfferRoutes.js'
 import categoryEventsRoutes from './routes/categoryRoutes.js';
 import phonepeWebhook from "./routes/phonepeWebhook.js";
+import EmployeeOnboarding from "./routes/employeeOnboarding.js";
 import "./routes/cronJob.js"; 
 import './cron/specialOfferCleanup.js';
 import { log } from 'console';
@@ -146,7 +147,15 @@ app.post('/admin-login', async (req, res) => {
       { expiresIn: '1d' } // optional: token expires in 1 day
     );
 
-    return res.status(200).json({ token });
+    return res.status(200).json({ token ,
+		user: {
+        id: userDetails._id,
+        username: userDetails.Username,
+        name: userDetails.Name,
+        role: userDetails.Role,
+        email: userDetails.Email,
+      }
+	 });
   } catch (error) {
     console.error('Login error:', error);
     return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
@@ -409,7 +418,7 @@ app.use(specialOfferRoutes);
 // Use the route
 app.use(directBookingRoutes);
 app.use(couponRoutes);
-
+app.use(EmployeeOnboarding);
 // Use the payment route
 app.use('/api', paymentRoutes);
 app.use('/api', paymentCallbackRoutes);

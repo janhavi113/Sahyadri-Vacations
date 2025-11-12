@@ -26,18 +26,27 @@ function AdminDashboard() {
   }
   const fetchEvents = async (filter) => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log('user.role--', user.role, '----user.name---', user.name);
+    console.log('token--', token);
+    if (!token || !user) {
       navigate("/admin-login");
       return;
     }
-
+   
+    // Role-based access
+  if (!["admin", "manager"].includes(user.role)) {
+    navigate("/admin-login");
+    return;
+  }
+ 
     const response = await fetch(`${apiUrl}show-all-bookings/${filter}`, {
       headers: { Authorization: token },
     });
-       console.log('response--'+JSON.stringify(response));
+    console.log('response--' + JSON.stringify(response));
     if (response.ok) {
       const data = await response.json();
-       console.log('data--bookings--'+JSON.stringify(data));
+      console.log('data--bookings--' + JSON.stringify(data));
       // Create the map
       if (data.isSuccess) {
         setSuccess(true);
