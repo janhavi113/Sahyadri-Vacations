@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import { generateInvoicePdf } from '../utils/pdf-generator.js';
 import { sendInvoiceEmail } from '../utils/email-sender.js';
 import { log } from 'console';
+import { sendInvoiceForBooking } from "../utils/sendInvoiceHelper.js";
 const router = express.Router();
 
 const __filename = fileURLToPath(import.meta.url);
